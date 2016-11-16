@@ -15,7 +15,6 @@ namespace MeesGame
 
         public MeesGame()
         {
-            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
         
