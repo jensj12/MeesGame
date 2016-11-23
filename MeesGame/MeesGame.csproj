@@ -75,7 +75,7 @@
     <Content Include="Gameplay\Content\player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\dat_boi.png">
+    <Content Include="Gameplay\Content\player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Gameplay\Content\end_door.png">
