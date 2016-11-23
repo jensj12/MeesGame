@@ -69,21 +69,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Gameplay\Content\blackwall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Gameplay\Content\black.png" />
     <Content Include="Gameplay\Content\end_door.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\heeyyy_show_me_the_money.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Gameplay\Content\floor.png" />
     <Content Include="Gameplay\Content\key.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\tilefloor_nowall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Gameplay\Content\moneybag.png" />
+    <Content Include="Gameplay\Content\player.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
             {
                 for (int y = 0; y < 12; y++)
                 {
-                    tiles.Add(new Tile("tilefloor_nowall"), x, y);
+                    tiles.Add(new Tile("floor"), x, y);
                 }
             }
         }
