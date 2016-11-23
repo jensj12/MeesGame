@@ -71,7 +71,7 @@
     <Content Include="Gameplay\Content\cornerwall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\dat_boi.png">
+    <Content Include="Gameplay\Content\player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Gameplay\Content\end_door.png">
@@ -80,16 +80,16 @@
     <Content Include="Gameplay\Content\floor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\heeyyy_show_me_the_money.png">
+    <Content Include="Gameplay\Content\moneybag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\hello_darkness_my_old_friend.png">
+    <Content Include="Gameplay\Content\black.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Gameplay\Content\key.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Gameplay\Content\knappeknop.png">
+    <Content Include="Gameplay\Content\testbutton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Gameplay\Content\oppositewalls.png">
