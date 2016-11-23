@@ -38,23 +38,26 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Gameplay\GameObjects\Tile.cs" />
+    <Compile Include="Gameplay\GameObjects\TileField.cs" />
+    <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="MeesGame.cs" />
-    <Compile Include="GameManagement\AnimatedGameObject.cs" />
-    <Compile Include="GameManagement\Animation.cs" />
-    <Compile Include="GameManagement\AssetManager.cs" />
-    <Compile Include="GameManagement\Collision.cs" />
-    <Compile Include="GameManagement\DrawingHelper.cs" />
-    <Compile Include="GameManagement\GameEnvironment.cs" />
-    <Compile Include="GameManagement\GameObject.cs" />
-    <Compile Include="GameManagement\GameObjectGrid.cs" />
-    <Compile Include="GameManagement\GameObjectlist.cs" />
-    <Compile Include="GameManagement\GameSettingsManager.cs" />
-    <Compile Include="GameManagement\GameStateManager.cs" />
-    <Compile Include="GameManagement\IGameLoopObject.cs" />
-    <Compile Include="GameManagement\InputHelper.cs" />
-    <Compile Include="GameManagement\SpriteGameObject.cs" />
-    <Compile Include="GameManagement\SpriteSheet.cs" />
-    <Compile Include="GameManagement\TextGameObject.cs" />
+    <Compile Include="Gameplay\GameManagement\AnimatedGameObject.cs" />
+    <Compile Include="Gameplay\GameManagement\Animation.cs" />
+    <Compile Include="Gameplay\GameManagement\AssetManager.cs" />
+    <Compile Include="Gameplay\GameManagement\Collision.cs" />
+    <Compile Include="Gameplay\GameManagement\DrawingHelper.cs" />
+    <Compile Include="Gameplay\GameManagement\GameEnvironment.cs" />
+    <Compile Include="Gameplay\GameManagement\GameObject.cs" />
+    <Compile Include="Gameplay\GameManagement\GameObjectGrid.cs" />
+    <Compile Include="Gameplay\GameManagement\GameObjectlist.cs" />
+    <Compile Include="Gameplay\GameManagement\GameSettingsManager.cs" />
+    <Compile Include="Gameplay\GameManagement\GameStateManager.cs" />
+    <Compile Include="Gameplay\GameManagement\IGameLoopObject.cs" />
+    <Compile Include="Gameplay\GameManagement\InputHelper.cs" />
+    <Compile Include="Gameplay\GameManagement\SpriteGameObject.cs" />
+    <Compile Include="Gameplay\GameManagement\SpriteSheet.cs" />
+    <Compile Include="Gameplay\GameManagement\TextGameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +71,12 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
+    <MonoGameContentReference Include="Gameplay\Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AI\" />
+    <Folder Include="Gameplay\Editor\" />
+    <Folder Include="Gameplay\Menu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

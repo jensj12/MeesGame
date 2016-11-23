@@ -4,16 +4,16 @@ using System;
 
 namespace MeesGame
 {
-    public class MeesGame : GameEnvironment
+    public class BasicMeesGame : GameEnvironment
     {
         [STAThread]
         static void Main()
         {
-            using (var game = new MeesGame())
+            using (var game = new BasicMeesGame())
                 game.Run();
         }
 
-        public MeesGame()
+        public BasicMeesGame()
         {
             Content.RootDirectory = "Content";
         }
@@ -24,6 +24,7 @@ namespace MeesGame
             screen = new Point(1440, 825);
             windowSize = new Point(1024, 586);
             FullScreen = false;
+            gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState(Content));
             /* uncomment to add gamestates
             gameStateManager.AddGameState("titleMenu", new TitleMenuState());
             gameStateManager.AddGameState("helpState", new HelpState());
