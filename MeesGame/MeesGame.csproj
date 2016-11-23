@@ -58,6 +58,7 @@
     <Compile Include="Gameplay\GameManagement\SpriteGameObject.cs" />
     <Compile Include="Gameplay\GameManagement\SpriteSheet.cs" />
     <Compile Include="Gameplay\GameManagement\TextGameObject.cs" />
+    <Compile Include="Gameplay\Level\Level.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
