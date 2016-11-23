@@ -1,11 +1,23 @@
 ﻿namespace MeesGame
 {
+    enum TileType
+    {
+        floor,
+        wall
+    }
+
     class Tile : SpriteGameObject
     {
-        protected int TileType;
-        public Tile (string assetName, int TileType, int layer = 0, string id = "") : base(assetName, layer, id)
+        protected TileType tileType;
+
+        public Tile (string assetName = "", TileType tt = TileType.floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            this.TileType = TileType;
+            tileType = tt;
+        }
+
+        public TileType TileType
+        {
+            get { return TileType; }
         }
     }
 }

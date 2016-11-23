@@ -31,8 +31,8 @@ namespace MeesGame
             gameStateManager.AddGameState("playingState", new PlayingState(Content));
             gameStateManager.AddGameState("levelMenu", new LevelMenuState());
             gameStateManager.AddGameState("gameOverState", new GameOverState());
-            gameStateManager.AddGameState("levelFinishedState", new LevelFinishedState());
-            gameStateManager.SwitchTo("titleMenu");//*/
+            gameStateManager.AddGameState("levelFinishedState", new LevelFinishedState());//*/
+            gameStateManager.SwitchTo("PlayingLevelState");
         }
     }
 }
