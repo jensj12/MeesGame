@@ -17,7 +17,13 @@ namespace MeesGame
         {
             Content.RootDirectory = "Content";
         }
-        
+
+        protected override void Initialize()
+        {
+            this.IsMouseVisible = true;
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
@@ -25,14 +31,16 @@ namespace MeesGame
             windowSize = new Point(1024, 586);
             FullScreen = false;
             gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState(Content));
-            /* uncomment to add gamestates
-            gameStateManager.AddGameState("titleMenu", new TitleMenuState());
-            gameStateManager.AddGameState("helpState", new HelpState());
-            gameStateManager.AddGameState("playingState", new PlayingState(Content));
-            gameStateManager.AddGameState("levelMenu", new LevelMenuState());
-            gameStateManager.AddGameState("gameOverState", new GameOverState());
-            gameStateManager.AddGameState("levelFinishedState", new LevelFinishedState());//*/
-            gameStateManager.SwitchTo("PlayingLevelState");
+            //uncomment to add gamestates
+            gameStateManager.AddGameState("TitleMenuState", new TitleMenuState(this));
+            gameStateManager.AddGameState("EditorState", new LevelEditorState());
+            gameStateManager.AddGameState("LoadMenuState", new LoadMenuState(Content));
+            //gameStateManager.AddGameState("helpState", new HelpState());
+            //gameStateManager.AddGameState("playingState", new PlayingState(Content));
+            //gameStateManager.AddGameState("levelMenu", new LevelMenuState());
+            //gameStateManager.AddGameState("gameOverState", new GameOverState());
+            //gameStateManager.AddGameState("levelFinishedState", new LevelFinishedState());//*/
+            gameStateManager.SwitchTo("TitleMenuState");
         }
     }
 }
