@@ -3,6 +3,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
@@ -25,6 +26,8 @@ namespace MeesGame
 
         private TextureGenerator boxTextureGenerator;
 
+        private ScrollBar scrollBar;
+
         //returns the selected variable
         private int selected = 0;
 
@@ -45,6 +48,18 @@ namespace MeesGame
             fileExplorerBackground = content.Load<Texture2D>("floor");
 
             generateFileList();
+            if (ButtonsList.Children.Count > 0)
+            {
+                scrollBar = new ScrollBar(new Point(rectangle.Right, rectangle.Bottom), rectangle.Height, ((ListButton)(ButtonsList.Children[ButtonsList.Children.Count - 1])).Rectangle.Bottom, MoveDistanceDown);
+            } else
+            {
+                scrollBar = new ScrollBar(new Point(rectangle.Right, rectangle.Bottom), rectangle.Height, 0, MoveDistanceDown);
+            }
+        }
+
+        public void MoveDistanceDown(int distance)
+        {
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -59,12 +74,18 @@ namespace MeesGame
                 currentTexture = boxTextureGenerator.Render(gameTime, ButtonsList.Draw);
             }
             spriteBatch.Draw(currentTexture, rectangle, Color.White);
+            scrollBar.Draw(gameTime, spriteBatch);
         }
 
         public override void HandleInput(InputHelper inputHelper)
         {
             base.HandleInput(inputHelper);
+            if (scrollBar.BarRectangle.Contains(inputHelper.MousePosition) || scrollBar.BeingDragged) {
+                scrollBar.HandleInput(inputHelper);
+            }
+            else
             ButtonsList.HandleInput(inputHelper);
+
             currentTexture = null;
         }
 

@@ -42,6 +42,7 @@
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
+    <Compile Include="Gameplay\UIObjects\ScrollBar.cs" />
     <Compile Include="Gameplay\UIObjects\TextureGenerator.cs" />
     <Compile Include="Gameplay\UIObjects\Button.cs" />
     <Compile Include="Gameplay\GameStates\LevelEditorState.cs" />
