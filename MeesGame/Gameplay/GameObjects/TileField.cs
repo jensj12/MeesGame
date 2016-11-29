@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
@@ -11,7 +12,7 @@ namespace MeesGame
 
         public TileType GetType(int x, int y)
         {
-            if (x < 0 || y < 0 || x > Columns || y > Rows)
+            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
             {
                 return TileType.Wall;
             }
@@ -66,6 +67,16 @@ namespace MeesGame
             {
                 return TileType.Unknown;
             }
+        }
+
+        public Vector2 GetAnchorPosition(GameObject obj)
+        {
+            return tileField.GetAnchorPosition(obj);
+        }
+
+        public Vector2 GetAnchorPosition(Point location)
+        {
+            return tileField.GetAnchorPosition(location);
         }
     }
 }

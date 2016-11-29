@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace MeesGame
 {
@@ -8,12 +9,13 @@ namespace MeesGame
         protected const int NUM_COLUMNS = 22;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
+        protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
         protected Point start;
         protected Player player;
         protected TileFieldView tiles;
         public Level(int levelindex = 0)
         {
-            start = new Point(0, 0);
+            start = new Point(1, 1);
             
             TileField tileField = new TileField(NUM_ROWS, NUM_COLUMNS, 0, "tiles");
             tileField.CellHeight = CELL_HEIGHT;
@@ -28,7 +30,7 @@ namespace MeesGame
                 }
             }
 
-            this.player = new Player(this,start);
+            this.player = new Player(this,tileField,start);
             this.tiles = new TileFieldView(player, tileField);
             Add(this.tiles);
             Add(this.player);
@@ -39,6 +41,14 @@ namespace MeesGame
             get
             {
                 return tiles;
+            }
+        }
+
+        public TimeSpan TimeBetweenActions
+        {
+            get
+            {
+                return timeBetweenActions;
             }
         }
     }
