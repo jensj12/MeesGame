@@ -50,6 +50,9 @@
     <Compile Include="Gameplay\UIObjects\FileExplorer.cs" />
     <Compile Include="Gameplay\UIObjects\ListButton.cs" />
     <Compile Include="Gameplay\Level\PlayerAction.cs" />
+    <Compile Include="Gameplay\UIObjects\UIList.cs" />
+    <Compile Include="Gameplay\UIObjects\UIObject.cs" />
+    <Compile Include="Gameplay\UIObjects\UIObjectList.cs" />
     <Compile Include="MeesGame.cs" />
     <Compile Include="Gameplay\GameManagement\AnimatedGameObject.cs" />
     <Compile Include="Gameplay\GameManagement\Animation.cs" />
