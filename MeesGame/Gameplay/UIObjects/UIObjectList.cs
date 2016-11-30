@@ -1,29 +1,54 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MeesGame.Gameplay.UIObjects;
+using MeesGame;
+using System.Collections;
 
-namespace MeesGame.Gameplay.UIObjects
+namespace MeesGame
 {
-    class UIObjectList : GameObject
+    public class UIObjectList<Type> : GameObject, IList<Type> where Type : UIObject
     {
-        protected List<UIObject> children;
+        protected List<Type> children = new List<Type>();
 
         public UIObjectList()
         {
         }
 
-        public List<UIObject> Children
+        public int Count
         {
-            get { return children; }
+            get
+            {
+                return ((ICollection<Type>)children).Count;
+            }
         }
 
-        public void Add(UIObject obj)
+        public bool IsReadOnly
+        {
+            get
+            {
+                return ((ICollection<Type>)children).IsReadOnly;
+            }
+        }
+
+        public Type this[int index]
+        {
+            get
+            {
+                return ((IList<Type>)children)[index];
+            }
+
+            set
+            {
+                ((IList<Type>)children)[index] = value;
+            }
+        }
+
+        public void Add(Type obj)
         {
             children.Add(obj);
         }
 
-        public void Remove(UIObject obj)
+        public void Remove(Type obj)
         {
             children.Remove(obj);
             obj.Parent = null;
@@ -39,7 +64,7 @@ namespace MeesGame.Gameplay.UIObjects
 
         public override void Update(GameTime gameTime)
         {
-            foreach (UIObject obj in children)
+            foreach (Type obj in children)
             {
                 obj.Update(gameTime);
             }
@@ -51,7 +76,7 @@ namespace MeesGame.Gameplay.UIObjects
             {
                 return;
             }
-            List<UIObject>.Enumerator e = children.GetEnumerator();
+            List<Type>.Enumerator e = children.GetEnumerator();
             while (e.MoveNext())
             {
                 e.Current.Draw(gameTime, spriteBatch);
@@ -61,10 +86,55 @@ namespace MeesGame.Gameplay.UIObjects
         public override void Reset()
         {
             base.Reset();
-            foreach (UIObject obj in children)
+            foreach (Type obj in children)
             {
                 obj.Reset();
             }
+        }
+
+        public void Clear()
+        {
+            ((ICollection<Type>)children).Clear();
+        }
+
+        public bool Contains(Type item)
+        {
+            return ((ICollection<Type>)children).Contains(item);
+        }
+
+        public void CopyTo(Type[] array, int arrayIndex)
+        {
+            ((ICollection<Type>)children).CopyTo(array, arrayIndex);
+        }
+
+        bool ICollection<Type>.Remove(Type item)
+        {
+            return ((ICollection<Type>)children).Remove(item);
+        }
+
+        public IEnumerator<Type> GetEnumerator()
+        {
+            return ((ICollection<Type>)children).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((ICollection<Type>)children).GetEnumerator();
+        }
+
+        public int IndexOf(Type item)
+        {
+            return ((IList<Type>)children).IndexOf(item);
+        }
+
+        public void Insert(int index, Type item)
+        {
+            ((IList<Type>)children).Insert(index, item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            ((IList<Type>)children).RemoveAt(index);
         }
     }
 }

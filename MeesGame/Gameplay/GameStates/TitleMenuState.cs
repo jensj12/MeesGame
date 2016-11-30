@@ -1,27 +1,28 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MeesGame;
 
 namespace MeesGame
 {
     internal class TitleMenuState : IGameLoopObject
     {
-        private GameObjectList gameObjectList;
+        private UIObjectList<UIObject> gameObjectList;
         private GameEnvironment game;
 
         public TitleMenuState(GameEnvironment game)
         {
             this.game = game;
-            gameObjectList = new GameObjectList();
-            gameObjectList.Add(new Button(game.Content, Strings.begin, new Vector2(10, 10), (Object o) =>
+            gameObjectList = new UIObjectList<UIObject>();
+            gameObjectList.Add(new Button(new Vector2(10, 10), new Vector2(100, 100), null, game.Content, Strings.begin, (Object o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
            }));
-            gameObjectList.Add(new Button(game.Content, Strings.map_editor, new Vector2(10, 120), (Object o) =>
+            gameObjectList.Add(new Button(new Vector2(10, 120), Vector2.Zero, null, game.Content, Strings.map_editor, (Object o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
-            gameObjectList.Add(new Button(game.Content, Strings.exit, new Vector2(10, 230), (Object o) =>
+            gameObjectList.Add(new Button(new Vector2(10, 230), Vector2.Zero, null, game.Content, Strings.exit, (Object o) =>
             {
                 //very crude, but effectively gets the job done ;) (this is actually a paradox).
                 game.Exit();

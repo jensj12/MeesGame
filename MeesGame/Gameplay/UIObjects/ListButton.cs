@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MeesGame;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class ListButton : Button
+    public class ListButton : Button
     {
         //this variable has to be publicly changeable in case we want to display a list with a default option
         protected bool selected = false;
@@ -21,40 +22,46 @@ namespace MeesGame
             set { index = value; }
         }
 
-
-
         private Texture2D selectedBackground;
-        private Vector2 anchorPoint;
 
-        public ListButton(ContentManager content, string text, Vector2 myLocation, UIList, parentLocation, int width, int index, ClickEventHandler onClick, string backgroundName = "floor", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(content, text, myLocation, onClick, backgroundName, hoverBackgroundName, textFont)
+        public ListButton(Vector2 location, Vector2 dimensions, UIList parent, ContentManager content, string text, int index, ClickEventHandler onClick, string backgroundName = "floor", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(location, dimensions, parent, content, text, onClick)
         {
-            this.rectangle.Width = width;
-            this.anchorPoint = parentLocation;
             this.index = index;
             this.selectedBackground = content.Load<Texture2D>(selectedBackgroundName);
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override Vector2 Location
         {
-            if (!selected)
-                base.Draw(gameTime, spriteBatch);
-            else
+            get { return base.Location - new Vector2(0, ParentList.ElementsOffset); }
+        }
+
+        public override Vector2 RelativeLocation
+        {
+            get { return location + new Vector2(0, ParentList.ElementsOffset); }
+        }
+
+        public UIList ParentList
+        {
+            get
             {
-                spriteBatch.Draw(selectedBackground, rectangle, Color.White);
-                spriteBatch.DrawString(spriteFont, text, rectangle.Location.ToVector2(), Color.White);
+                return (UIList)base.Parent;
+            }
+
+            set
+            {
+                base.Parent = value;
             }
         }
 
-        //a list button always remembers its position in a list, so it is of paramount importance to normalize it's location temporarily when no
-        public override void HandleInput(InputHelper inputHelper)
+        public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //we need to normalize our location
-            this.rectangle.Location = (rectangle.Location.ToVector2() + parentLocation).ToPoint();
             if (!selected)
-                base.HandleInput(inputHelper);
-            //go back to local coordinates to ensure we don't draw out of our box
-            this.rectangle.Location = (rectangle.Location.ToVector2() - parentLocation).ToPoint();
-
+                base.DrawSelf(gameTime, spriteBatch);
+            else
+            {
+                spriteBatch.Draw(selectedBackground, Rectangle, Color.White);
+                spriteBatch.DrawString(spriteFont, text, Location, Color.White);
+            }
         }
     }
 }

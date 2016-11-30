@@ -3,28 +3,20 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
-using MeesGame.Gameplay.UIObjects;
+using MeesGame;
 
 namespace MeesGame
 {
-    class FileExplorer : GameObject
+    public class FileExplorer : UIList
     {
         private readonly Color BACKGROUND = Color.Wheat;
 
-        private int buttonDistance;
-
-        private GameObjectList ButtonsList;
-
         private ContentManager content;
 
-        private Rectangle rectangle;
+        private int buttonDistance = 10;
+
         private String fileExtension;
         private Texture2D fileExplorerBackground;
-
-        //we store a texture in order to not constantly render the same image;
-        private RenderTarget2D currentTexture;
-
-        private TextureGenerator boxTextureGenerator;
 
         private ScrollBar scrollBar;
 
@@ -35,76 +27,82 @@ namespace MeesGame
         private String currentDirectory;
 
 
-        public FileExplorer(ContentManager content, Rectangle rectangle, String fileExtension, string path, int buttonDistance = 10)
+        public FileExplorer(Vector2 location, Vector2 dimensions, UIObject parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
         {
-            ButtonsList = new GameObjectList();
-
             currentDirectory = path;
-
-            this.buttonDistance = buttonDistance;
             this.content = content;
-            this.rectangle = rectangle;
             this.fileExtension = fileExtension;
-            fileExplorerBackground = content.Load<Texture2D>("floor");
 
             generateFileList();
-            if (ButtonsList.Children.Count > 0)
+            if (children.Count > 0)
             {
-                scrollBar = new ScrollBar(new Point(rectangle.Right, rectangle.Bottom), rectangle.Height, ((ListButton)(ButtonsList.Children[ButtonsList.Children.Count - 1])).Rectangle.Bottom, MoveDistanceDown);
-            } else
+                scrollBar = new ScrollBar(this, ((ListButton)(children[children.Count - 1])).Rectangle.Bottom, MoveDistanceDown);
+            }
+            else
             {
-                scrollBar = new ScrollBar(new Point(rectangle.Right, rectangle.Bottom), rectangle.Height, 0, MoveDistanceDown);
+                scrollBar = new ScrollBar(this, 0, MoveDistanceDown);
             }
         }
 
         public void MoveDistanceDown(int distance)
         {
-
+            elementsOffset = distance;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
-            if (currentTexture == null)
-            {
-                if (boxTextureGenerator == null)
-                {
-                    boxTextureGenerator = new TextureGenerator(spriteBatch.GraphicsDevice, rectangle.Width, rectangle.Height, BACKGROUND);
-                }
-                currentTexture = boxTextureGenerator.Render(gameTime, ButtonsList.Draw);
-            }
-            spriteBatch.Draw(currentTexture, rectangle, Color.White);
             scrollBar.Draw(gameTime, spriteBatch);
+        }
+
+        public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (fileExplorerBackground == null)
+            {
+                Color[] colordata = new Color[1];
+                colordata[0] = BACKGROUND;
+                fileExplorerBackground = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+                fileExplorerBackground.SetData(colordata);
+            }
+
+            spriteBatch.Draw(fileExplorerBackground, Rectangle, Color.White);
         }
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            base.HandleInput(inputHelper);
-            if (scrollBar.BarRectangle.Contains(inputHelper.MousePosition) || scrollBar.BeingDragged) {
-                scrollBar.HandleInput(inputHelper);
+            if (Rectangle.Contains(inputHelper.MousePosition))
+            {
+                if (scrollBar.BarRectangle.Contains(inputHelper.MousePosition) || scrollBar.BeingDragged)
+                {
+                    scrollBar.HandleInput(inputHelper);
+                }
+                else
+                    children.HandleInput(inputHelper);
             }
-            else
-            ButtonsList.HandleInput(inputHelper);
+        }
 
-            currentTexture = null;
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            scrollBar.Update(gameTime);
         }
 
         public void generateFileList()
         {
-            ButtonsList.Reset();
+            children.Reset();
             String[] tmpFileList = Directory.GetFiles(currentDirectory);
             int index = 0;
             for (int i = 0; i < tmpFileList.Length; i++)
             {
                 if (tmpFileList[i].EndsWith("." + fileExtension))
                 {
-                    if (ButtonsList.Children.Count == 0)
+                    if (i == 0)
                     {
-                        ButtonsList.Add(new ListButton(content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), new Vector2(0, 0), rectangle.Location.ToVector2(), rectangle.Width, index, ItemSelect));
+                        children.Add(new ListButton(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), index, ItemSelect));
                     }
                     else
                     {
-                        ButtonsList.Add(new ListButton(content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), new Vector2(0, buttonDistance + ((ListButton)ButtonsList.Children[index - 1]).Rectangle.Bottom), rectangle.Location.ToVector2(), rectangle.Width, index, ItemSelect));
+                        children.Add(new ListButton(new Vector2(0, buttonDistance + ((ListButton)children[index - 1]).Rectangle.Height + (int)((ListButton)children[index - 1]).RelativeLocation.Y), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), index, ItemSelect));
                     }
                     index++;
                 }
@@ -114,7 +112,7 @@ namespace MeesGame
         public void ItemSelect(Object o)
         {
             ListButton listbutton = (ListButton)o;
-            ((ListButton)ButtonsList.Children[selected]).Selected = false;
+            ((ListButton)children[selected]).Selected = false;
             listbutton.Selected = true;
             selected = listbutton.Index;
         }

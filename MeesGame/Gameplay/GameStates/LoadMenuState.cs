@@ -19,9 +19,9 @@ namespace MeesGame
             //the reading does work, you can check by adding a .lvl (left collum) or a .ai (right collum) to the \levels directory. Just make sure it isn't a txt file
             string directory = content.RootDirectory + "/levels";
             DirectoryInfo info = Directory.CreateDirectory(directory);
-            levelExplorer = new FileExplorer(content, new Rectangle(100, 100, 500, 500), "lvl", directory);
-            aiExplorer = new FileExplorer(content, new Rectangle(700, 100, 500, 500), "ai", directory);
-            startButton = new Button(content, Strings.ok, new Vector2(700, 700), (Object o) =>
+            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), null, content, "lvl", directory);
+            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), null, content, "ai", directory);
+            startButton = new Button(new Vector2(700, 700), Vector2.Zero, null, content, Strings.ok, (Object o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
@@ -47,6 +47,8 @@ namespace MeesGame
 
         public void Update(GameTime gameTime)
         {
+            levelExplorer.Update(gameTime);
+            aiExplorer.Update(gameTime);
         }
     }
 }
