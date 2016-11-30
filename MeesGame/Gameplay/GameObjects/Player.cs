@@ -110,20 +110,83 @@ namespace MeesGame
 
             this.location = GetLocationAfterAction(action);
         }
+    }
+
+    /// <summary>
+    /// An exception that is thrown when a Player tries to perform an Action that is not allowed.
+    /// </summary>
+    class PlayerActionNotAllowedException : Exception
+    {
+        
+    }
+
+    class TimedPlayer : Player
+    {
+        public TimedPlayer(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        {
+        }
 
         public override void Update(GameTime gameTime)
         {
             //if enough time has elapsed since the previous action, perform the selected action
-            if (gameTime.TotalGameTime - lastActionTime >= level.TimeBetweenActions && CanPerformAction(nextAction))
+            if (gameTime.TotalGameTime - lastActionTime >= level.TimeBetweenActions)
             {
-                PerformAction(nextAction);
-                lastActionTime = gameTime.TotalGameTime;
-                nextAction = NONE;
-            }
 
-            //no animation yet
-            position = level.Tiles.GetAnchorPosition(location);
+                if (CanPerformAction(nextAction) && nextAction != NONE)
+                {
+                    //important for smooth movement
+                    velocity = CalculateVelocityVector(nextAction);
+                    PerformAction(nextAction);
+                    lastActionTime = gameTime.TotalGameTime;
+                }
+                else
+                {
+                    //stop moving
+                    velocity = Vector2.Zero;
+
+                    //put the player exactly at the middle of the square
+                    position = level.Tiles.GetAnchorPosition(location);
+                }
+            }
             base.Update(gameTime);
+        }
+
+        private Vector2 CalculateVelocityVector(PlayerAction action)
+        {
+            Vector2 direction = GetDirectionVector(action);
+            float speed = Speed;
+            return new Vector2(direction.X * speed, direction.Y * speed);
+        }
+
+        private Vector2 GetDirectionVector(PlayerAction action)
+        {
+            switch (action)
+            {
+                case NORTH:
+                    return new Vector2(0, -1);
+                case EAST:
+                    return new Vector2(1, 0);
+                case SOUTH:
+                    return new Vector2(0, 1);
+                case WEST:
+                    return new Vector2(-1, 0);
+            }
+            return new Vector2(0, 0);
+        }
+
+        private float Speed
+        {
+            get
+            {
+                return (float)(level.Tiles.CellHeight / level.TimeBetweenActions.TotalSeconds);
+            }
+        }
+    }
+
+    class HumanPlayer : TimedPlayer
+    {
+        public HumanPlayer(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        {
         }
 
         public override void HandleInput(InputHelper inputHelper)
@@ -144,14 +207,10 @@ namespace MeesGame
             {
                 nextAction = WEST;
             }
+            else
+            {
+                nextAction = NONE;
+            }
         }
-    }
-
-    /// <summary>
-    /// An exception that is thrown when a Player tries to perform an Action that is not allowed.
-    /// </summary>
-    class PlayerActionNotAllowedException : Exception
-    {
-
     }
 }

@@ -10,7 +10,7 @@ namespace MeesGame
         protected int numColumns = 30;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
-        protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
+        protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(300);
         protected Point start;
         protected Player player;
         protected TileField tiles;
@@ -31,7 +31,7 @@ namespace MeesGame
                 }
             }
 
-            this.player = new Player(this,tiles,start);
+            this.player = new HumanPlayer(this,tiles,start);
             Camera camera = new Camera(player);
             Add(camera);
             camera.Add(this.tiles);
