@@ -14,7 +14,7 @@ namespace MeesGame
         protected TimeSpan lastActionTime;
         protected PlayerAction nextAction = NONE;
 
-        public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player",layer, id)
+        public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
         {
             this.score = score;
             this.level = level;
@@ -54,7 +54,7 @@ namespace MeesGame
             get
             {
                 List<PlayerAction> actions = new List<PlayerAction>();
-                foreach(PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
+                foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
                 {
                     if (CanPerformAction(action)) actions.Add(action);
                 }
@@ -112,13 +112,13 @@ namespace MeesGame
         public override void Update(GameTime gameTime)
         {
             //if enough time has elapsed since the previous action, perform the selected action
-            if(gameTime.TotalGameTime-lastActionTime>=level.TimeBetweenActions && CanPerformAction(nextAction))
+            if (gameTime.TotalGameTime - lastActionTime >= level.TimeBetweenActions && CanPerformAction(nextAction))
             {
                 PerformAction(nextAction);
                 lastActionTime = gameTime.TotalGameTime;
                 nextAction = NONE;
             }
-                
+
             //no animation yet
             position = level.Tiles.GetAnchorPosition(location);
             base.Update(gameTime);
@@ -126,19 +126,19 @@ namespace MeesGame
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            if (inputHelper.IsKeyDown(Keys.W))
+            if (inputHelper.IsKeyDown(Keys.W) || inputHelper.IsKeyDown(Keys.Up))
             {
                 nextAction = NORTH;
             }
-            else if (inputHelper.IsKeyDown(Keys.D))
+            else if (inputHelper.IsKeyDown(Keys.D) || inputHelper.IsKeyDown(Keys.Right))
             {
                 nextAction = EAST;
             }
-            else if (inputHelper.IsKeyDown(Keys.S))
+            else if (inputHelper.IsKeyDown(Keys.S) || inputHelper.IsKeyDown(Keys.Down))
             {
                 nextAction = SOUTH;
             }
-            else if (inputHelper.IsKeyDown(Keys.A))
+            else if (inputHelper.IsKeyDown(Keys.A) || inputHelper.IsKeyDown(Keys.Left))
             {
                 nextAction = WEST;
             }
