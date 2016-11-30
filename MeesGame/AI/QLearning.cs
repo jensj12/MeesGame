@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AI
 {
+    // Tijdelijk type om errors te voorkomen, moet uiteindelijk ergens in de MeesGame namespace worden gedefiniëerd.
     class ILevelState
     {
 
@@ -16,7 +14,7 @@ namespace AI
         /// <summary>
         /// beginState is the state in which the agent begins a maze.
         /// </summary>
-        private ILevelState beginState; 
+        private ILevelState beginState;
 
         /// <summary>
         /// discountFactor is a number that determines how much more important earlier rewards are. 
@@ -28,7 +26,7 @@ namespace AI
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
         /// Everytime the Q function receives an ILevelState and a PlayerAction, it updates qValues to the new value.
         /// </summary>
-        private Dictionary<Tuple<ILevelState, MeesGame.PlayerAction>, double> qValues; 
+        private Dictionary<Tuple<ILevelState, MeesGame.PlayerAction>, double> qValues;
 
         public QLearning(double learningRate, double discountFactor, Dictionary<Tuple<ILevelState, MeesGame.PlayerAction>, double> qValues)
         {
