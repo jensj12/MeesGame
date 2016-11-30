@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace AI
 {
-    
+    class ILevelState
+    {
+
+    }
+
     class QLearning
     {
         /// <summary>
@@ -24,9 +28,9 @@ namespace AI
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
         /// Everytime the Q function receives an ILevelState and a PlayerAction, it updates qValues to the new value.
         /// </summary>
-        private Dictionary<Tuple<ILevelState, PlayerAction>, double> qValues; 
+        private Dictionary<Tuple<ILevelState, MeesGame.PlayerAction>, double> qValues; 
 
-        public QLearning(double learningRate, double discountFactor, Dictionary<Tuple<ILevelState, PlayerAction>, double> qValues)
+        public QLearning(double learningRate, double discountFactor, Dictionary<Tuple<ILevelState, MeesGame.PlayerAction>, double> qValues)
         {
             this.learningRate = learningRate;
             this.discountFactor = discountFactor;
@@ -66,9 +70,9 @@ namespace AI
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private int GetResultOfAction(ILevelState s, PlayerAction a)
+        private int GetResultOfAction(ILevelState s, MeesGame.PlayerAction a)
         {
-            
+            return 0;
         }
 
         /// <summary>
@@ -77,9 +81,9 @@ namespace AI
         /// <param name="s"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        private double EstimatedOptimalFutureValue(ILevelState s, PlayerAction a)
+        private double EstimatedOptimalFutureValue(ILevelState s, MeesGame.PlayerAction a)
         {
-
+            return 0;
         }
 
         /// <summary>
@@ -88,9 +92,9 @@ namespace AI
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private void Q(ILevelState s, PlayerAction a)
+        private void Q(ILevelState s, MeesGame.PlayerAction a)
         {
-            Tuple<ILevelState, PlayerAction> StateAndAction = new Tuple<ILevelState, PlayerAction>(s, a);
+            Tuple<ILevelState, MeesGame.PlayerAction> StateAndAction = new Tuple<ILevelState, MeesGame.PlayerAction>(s, a);
             qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(s, a) + discountFactor * EstimatedOptimalFutureValue(s, a) - qValues[StateAndAction]);
         }
     }
