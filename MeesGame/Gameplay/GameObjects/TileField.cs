@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
@@ -11,12 +12,33 @@ namespace MeesGame
 
         public TileType GetType(int x, int y)
         {
-            if (x < 0 || y < 0 || x > Columns || y > Rows)
+            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
             {
                 return TileType.Wall;
             }
             Tile tile = Get(x, y) as Tile;
             return tile.TileType;
+        }
+
+        /// <summary>
+        /// Resizes the grid to the given values. Meant for use in editor only.
+        /// </summary>
+        /// <param name="rows">Number of rows in the resized grid</param>
+        /// <param name="columns">Number of columns in the resized grid</param>
+        public void Resize(int rows, int columns)
+        {
+            GameObject[,] oldGrid = grid;
+            grid = new GameObject[columns, rows];
+            for (int x = 0;  x < columns; x++)
+            {
+                for (int y = 0; y < rows; y++)
+                {
+                    if (y < oldGrid.GetLength(1) && x < oldGrid.GetLength(0))
+                        grid[x, y] = oldGrid[x, y];
+                    else
+                        Add(new Tile("floor"), x, y);
+                }
+            }
         }
     }
 
@@ -66,6 +88,16 @@ namespace MeesGame
             {
                 return TileType.Unknown;
             }
+        }
+
+        public Vector2 GetAnchorPosition(GameObject obj)
+        {
+            return tileField.GetAnchorPosition(obj);
+        }
+
+        public Vector2 GetAnchorPosition(Point location)
+        {
+            return tileField.GetAnchorPosition(location);
         }
     }
 }

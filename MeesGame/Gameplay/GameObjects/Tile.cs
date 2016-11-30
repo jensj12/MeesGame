@@ -18,7 +18,7 @@
 
         public TileType TileType
         {
-            get { return TileType; }
+            get { return tileType; }
         }
     }
 }
