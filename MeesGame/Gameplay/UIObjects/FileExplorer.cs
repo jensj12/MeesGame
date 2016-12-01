@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
-using MeesGame;
 
 namespace MeesGame
 {
@@ -41,7 +39,7 @@ namespace MeesGame
             {
                 if (tmpFileList[i].EndsWith("." + fileExtension))
                 {
-                    if (i == 0)
+                    if (index == 0)
                     {
                         children.Add(new ListButton(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), index, ItemSelect));
                     }

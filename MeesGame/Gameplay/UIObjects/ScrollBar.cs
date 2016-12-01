@@ -17,8 +17,24 @@ namespace MeesGame
         //initialize scrollbar on top
         private int scolldistanceStartDrag;
         private int ScrollDistance {
+<<<<<<< HEAD
             get { return ((UIList)parent).ElementsOffset * (Rectangle.Height - (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height)) / (totalElementsSize - Rectangle.Height); }
             set { ((UIList)parent).ElementsOffset = (int) (value * (totalElementsSize - Rectangle.Height) / (double)(Rectangle.Height - BarRectangle.Height)); }
+=======
+            get
+            {
+                if (totalElementsSize - Rectangle.Height != 0)
+                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height)) / (totalElementsSize - Rectangle.Height);
+                return 0;
+            }
+            set
+            {
+                if (totalElementsSize - Rectangle.Height != 0)
+                    ((UIList)parent).ElementsOffset = (int)(value * (totalElementsSize - Rectangle.Height) / (double)(Rectangle.Height - BarRectangle.Height));
+                else
+                    ((UIList)parent).ElementsOffset = 0;
+            }
+>>>>>>> refs/remotes/origin/ui-update
         }
         //a solid color is inserted into this texture for painting a solid color
         private Texture2D emptyTexture;
