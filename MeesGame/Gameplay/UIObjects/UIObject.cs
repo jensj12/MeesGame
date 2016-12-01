@@ -73,6 +73,11 @@ namespace MeesGame
             set { parent = value; }
         }
 
+        public UIObjectList<UIObject> Children
+        {
+            get { return children; }
+        }
+
         public bool HideOverflow
         {
             get { return hideOverflow; }
@@ -104,7 +109,10 @@ namespace MeesGame
 
         }
 
-        public abstract void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch);
+        public virtual void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+
+        }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

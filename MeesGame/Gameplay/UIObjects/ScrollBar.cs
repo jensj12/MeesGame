@@ -10,17 +10,30 @@ namespace MeesGame
 {
     public class ScrollBar : UIObject
     {
-        public delegate void ScrollDistance(int distance);
         private readonly Color barColor = Color.Aqua;
         private readonly Color backColor = Color.Beige;
         //stores the total length of the scrollbar.
         private int totalElementsSize;
         //initialize scrollbar on top
         private int scolldistanceStartDrag;
-        private int scrolldistance = 0;
-        private ScrollDistance callback;
+        private int ScrollDistance {
+            get
+            {
+                if (totalElementsSize - Rectangle.Height != 0)
+                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height)) / (totalElementsSize - Rectangle.Height);
+                return 0;
+            }
+            set
+            {
+                if (totalElementsSize - Rectangle.Height != 0)
+                    ((UIList)parent).ElementsOffset = (int)(value * (totalElementsSize - Rectangle.Height) / (double)(Rectangle.Height - BarRectangle.Height));
+                else
+                    ((UIList)parent).ElementsOffset = 0;
+            }
+        }
         //a solid color is inserted into this texture for painting a solid color
         private Texture2D emptyTexture;
+
         public Rectangle BarRectangle
         {
             get
@@ -29,7 +42,7 @@ namespace MeesGame
                     return Rectangle;
                 else
                 {
-                    return new Rectangle(Rectangle.X, Rectangle.Y + scrolldistance, Rectangle.Width, (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height));
+                    return new Rectangle(Rectangle.X, Rectangle.Y + ScrollDistance, Rectangle.Width, (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height));
                 }
             }
         }
@@ -45,10 +58,21 @@ namespace MeesGame
 
 
 
-        public ScrollBar(UIList parent, int totalElementsHeight, ScrollDistance action, int width = 20) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), parent)
+        public ScrollBar(UIList parent, int width = 20) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), parent)
         {
-            this.totalElementsSize = totalElementsHeight;
-            this.callback = action;
+        }
+
+        public void ChangeTotalElementsSize()
+        {
+            if (parent.Children.Count > 0)
+                totalElementsSize = parent.Children[parent.Children.Count - 1].Rectangle.Bottom - parent.Children[0].Rectangle.Top;
+            else
+                totalElementsSize = parent.Rectangle.Height;
+            if (totalElementsSize < Rectangle.Height )
+            {
+                totalElementsSize = Rectangle.Height;
+            }
+
         }
 
         public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
@@ -71,7 +95,7 @@ namespace MeesGame
             if (!beingDragged && inputHelper.MouseLeftButtonDown() && hovering)
             {
                 mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
-                scolldistanceStartDrag = scrolldistance;
+                scolldistanceStartDrag = ScrollDistance;
                 beingDragged = true;
             }
         }
@@ -85,12 +109,11 @@ namespace MeesGame
 
                 if (inputHelper.MouseLeftButtonDown())
                 {
-                    scrolldistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
+                    ScrollDistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
                     if (BarRectangle.Bottom > Rectangle.Bottom)
-                        scrolldistance = Rectangle.Height - BarRectangle.Height;
-                    if (BarRectangle.Top < Rectangle.Top)
-                        scrolldistance = 0;
-                    callback(scrolldistance);
+                        ScrollDistance = Rectangle.Height - BarRectangle.Height;
+                    if (ScrollDistance < 0)
+                        ScrollDistance = 0;
                 }
                 else
                 {
