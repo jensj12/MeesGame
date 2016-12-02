@@ -54,11 +54,16 @@ public class GameObjectGrid : GameObject
             {
                 if (grid[x, y] == s)
                 {
-                    return new Vector2(x * cellWidth, y * cellHeight);
+                    return GetAnchorPosition(new Point(x, y));
                 }
             }
         }
         return Vector2.Zero;
+    }
+
+    public Vector2 GetAnchorPosition(Point location)
+    {
+        return new Vector2(location.X * cellWidth, location.Y * cellHeight);
     }
 
     public int Rows
