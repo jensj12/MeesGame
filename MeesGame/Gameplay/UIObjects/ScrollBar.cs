@@ -16,7 +16,8 @@ namespace MeesGame
         private int totalElementsSize;
         //initialize scrollbar on top
         private int scolldistanceStartDrag;
-        private int ScrollDistance {
+        private int ScrollDistance
+        {
             get
             {
                 if (totalElementsSize - Rectangle.Height != 0)
@@ -68,7 +69,7 @@ namespace MeesGame
                 totalElementsSize = parent.Children[parent.Children.Count - 1].Rectangle.Bottom - parent.Children[0].Rectangle.Top;
             else
                 totalElementsSize = parent.Rectangle.Height;
-            if (totalElementsSize < Rectangle.Height )
+            if (totalElementsSize < Rectangle.Height)
             {
                 totalElementsSize = Rectangle.Height;
             }
