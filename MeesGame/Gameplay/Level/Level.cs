@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
     class Level : GameObjectList
     {
-        protected int numRows = 12;
-        protected int numColumns = 22;
+        protected int numRows = 30;
+        protected int numColumns = 30;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
@@ -32,8 +33,10 @@ namespace MeesGame
 
             this.player = new Player(this,tileField,start);
             this.tiles = new TileFieldView(player, tileField);
-            Add(this.tiles);
-            Add(this.player);
+            Camera camera = new Camera(player);
+            Add(camera);
+            camera.Add(this.tiles);
+            camera.Add(this.player);
         }
 
         public TileFieldView Tiles
@@ -50,6 +53,14 @@ namespace MeesGame
             {
                 return timeBetweenActions;
             }
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            Camera camera = Find("camera") as Camera;
+            camera.UpdateCamera();
+            base.Draw(gameTime, spriteBatch);
+            camera.ResetCamera();
         }
     }
 }
