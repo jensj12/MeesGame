@@ -40,7 +40,6 @@
   <ItemGroup>
     <Compile Include="Gameplay\GameObjects\Character.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
-    <Compile Include="AI\QLearning.cs" />
     <Compile Include="Gameplay\GameObjects\QLearningAI.cs" />
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
@@ -106,6 +105,7 @@
     <MonoGameContentReference Include="Gameplay\Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AI\" />
     <Folder Include="Gameplay\Editor\" />
     <Folder Include="Gameplay\Menu\" />
   </ItemGroup>
