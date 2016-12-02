@@ -10,6 +10,7 @@ namespace MeesGame
         GameEnvironment game;
         private UIObjectList<UIObject> gameObjectList;
         private ImageList imageList;
+        private 
 
         public LevelEditorState(GameEnvironment game)
         {
