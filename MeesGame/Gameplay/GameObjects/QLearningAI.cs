@@ -10,33 +10,28 @@ using static MeesGame.CharacterAction;
 
 namespace MeesGame.Gameplay.GameObjects
 {
-    class ILevelState
-    {
-
-    }
-
     class QLearningAI : Character
     {
 
         /// <summary>
         /// beginState is the state in which the agent begins a maze.
         /// </summary>
-        private ILevelState beginState;
+        private Level beginState;
 
         /// <summary>
         /// discountFactor is a number that determines how much more important earlier rewards are. 
-        /// The lower discountFactor is, the more important it is to the Q function to get rewards as soon as possible.
+        /// The lower the discountFactor is, the more important it is to the Q function to get rewards as soon as possible.
         /// </summary>
         private double learningRate, discountFactor;
 
         /// <summary>
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
-        /// Everytime the Q function receives an ILevelState and a PlayerAction, it updates qValues to the new value.
+        /// Everytime the Q function receives an Level and a PlayerAction, it updates qValues to the new value.
         /// </summary>
-        private Dictionary<Tuple<ILevelState, MeesGame.CharacterAction>, double> qValues;
+        private Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues;
 
 
-        public QLearningAI(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0, double learningRate, double discountFactor, Dictionary<Tuple<ILevelState, MeesGame.CharacterAction>, double> qValues) : base(level, tileField, location, layer, id, score)
+        public QLearningAI(Level level, TileField tileField, Point location, double learningRate, double discountFactor, Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
         {
             this.score = score;
             this.level = level;
@@ -46,6 +41,9 @@ namespace MeesGame.Gameplay.GameObjects
             this.learningRate = learningRate;
             this.discountFactor = discountFactor;
             this.qValues = qValues;
+
+            //beginState is nodig elke keer dat er opnieuw wordt begonnen en wanneer het leren klaar is
+            this.beginState = level;
         }
 
         public override void HandleInput(InputHelper inputHelper)
@@ -54,11 +52,11 @@ namespace MeesGame.Gameplay.GameObjects
             {
                 AIStartTrainingMode();
             }
-            else if (inputHelper.IsKeyDown(Keys.W))
+            else if (inputHelper.IsKeyDown(Keys.S))
             {
                 //stop met leren, ook het level 'resetten'
             }
-            else if (inputHelper.IsKeyDown(Keys.E))
+            else if (inputHelper.IsKeyDown(Keys.G))
             {
                 //doe het voor het echie, misschien learning rate op 1 zetten zoat hij neit gekke dingen gaat doen
             }
@@ -74,12 +72,12 @@ namespace MeesGame.Gameplay.GameObjects
 
         /// <summary>
         /// This function picks an action to perform during the trainins phase. 
-        /// It receives an ILevelState s and semi-randomly (depending on the learningRate) chooses an PlayerAction a to perform.
+        /// It receives an Level s and semi-randomly (depending on the learningRate) chooses an PlayerAction a to perform.
         /// It performs the action and calls the Q function to update the qValues entry for (s, a). 
         /// </summary>
         /// <param name="s"></param>
         /// <param name="learningRate"></param>
-        public void AITrainingModeDoMove(ILevelState s)
+        public void AITrainingPerformAction(Level s)
         {
 
         }
@@ -87,41 +85,42 @@ namespace MeesGame.Gameplay.GameObjects
         /// <summary>
         /// AIDecideAction receives ILevelStates, determines which action it wants to perform and then performs this action.
         /// </summary>
+        //waarom performt deze methode de action al als er een methode AITrainingPerformAction is?
         public void AIDecideAction()
         {
 
         }
 
         /// <summary>
-        /// Returns the score of the performed action a on the ILevelSTate s.
+        /// Returns the score of the performed action a on the Level s.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private int GetResultOfAction(ILevelState s, MeesGame.CharacterAction a)
+        private int GetResultOfAction(Level s, MeesGame.CharacterAction a)
         {
             return 0;
         }
 
         /// <summary>
-        /// This function estimates the best qValue that can be obtained by performing an action in the new ILevelState s' that is reached by performing PlayerAction a in ILevelState s. 
+        /// This function estimates the best qValue that can be obtained by performing an action in the new Level s' that is reached by performing PlayerAction a in Level s. 
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        private double EstimatedOptimalFutureValue(ILevelState s, MeesGame.CharacterAction a)
+        private double EstimatedOptimalFutureValue(Level s, MeesGame.CharacterAction a)
         {
             return 0;
         }
 
         /// <summary>
-        /// The Q function receives a ILevelState s and a to be performed PlayerAction a. 
+        /// The Q function receives a Level s and a to be performed PlayerAction a. 
         /// It determines what the result is of this action and then updates the entry for (s, a) in the qValues library.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private void Q(ILevelState s, MeesGame.CharacterAction a)
+        private void Q(Level s, MeesGame.CharacterAction a)
         {
-            Tuple<ILevelState, MeesGame.CharacterAction> StateAndAction = new Tuple<ILevelState, MeesGame.CharacterAction>(s, a);
+            Tuple<Level, MeesGame.CharacterAction> StateAndAction = new Tuple<Level, MeesGame.CharacterAction>(s, a);
             qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(s, a) + discountFactor * EstimatedOptimalFutureValue(s, a) - qValues[StateAndAction]);
         }
     }
