@@ -38,8 +38,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Gameplay\GameObjects\Character.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />
+    <Compile Include="Gameplay\GameObjects\QLearningAI.cs" />
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
@@ -49,7 +51,7 @@
     <Compile Include="Gameplay\GameStates\LoadMenuState.cs" />
     <Compile Include="Gameplay\UIObjects\FileExplorer.cs" />
     <Compile Include="Gameplay\UIObjects\ListButton.cs" />
-    <Compile Include="Gameplay\Level\PlayerAction.cs" />
+    <Compile Include="Gameplay\Level\CharacterAction.cs" />
     <Compile Include="MeesGame.cs" />
     <Compile Include="Gameplay\GameManagement\AnimatedGameObject.cs" />
     <Compile Include="Gameplay\GameManagement\Animation.cs" />

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace MeesGame
 {
-    enum PlayerAction
+    enum CharacterAction
     {
         NORTH, EAST, SOUTH, WEST, SPECIAL, NONE
     }
