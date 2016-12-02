@@ -26,7 +26,7 @@ namespace MeesGame
             {
                 for (int y = 0; y < numRows; y++)
                 {
-                    tileField.Add(new Tile("floor"), x, y);
+                    tileField.Add(new Tile("floorTile"), x, y);
                 }
             }
 

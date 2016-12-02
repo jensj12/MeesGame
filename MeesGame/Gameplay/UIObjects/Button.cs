@@ -2,12 +2,13 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
     public class Button : UIObject
     {
-        public delegate void ClickEventHandler(Object o);
+        public delegate void ClickEventHandler(Button button);
         public event ClickEventHandler OnClick;
 
         protected String text;
@@ -15,21 +16,34 @@ namespace MeesGame
         protected Texture2D background;
         protected Texture2D hoverBackground;
 
-        public Button(Vector2 location, Vector2 dimensions, UIObject parent, ContentManager content, String text, ClickEventHandler onClick = null, bool autoDimensions = true, bool hideOverflow = false, string backgroundName = "floor", string hoverBackgroundName = "key", string textFont = "menufont") : base(location, dimensions, parent, hideOverflow)
+        protected bool selected = false;
+        public bool Selected
+        {
+            get { return selected; }
+            set { selected = value; }
+        }
+
+        private Texture2D selectedBackground;
+
+        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, string text, ClickEventHandler onClick, bool autoDimensions = true, bool hideOverflow = false, string backgroundName = "floorTile", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(location, dimensions, parent, hideOverflow)
         {
             spriteFont = content.Load<SpriteFont>(textFont);
             background = content.Load<Texture2D>(backgroundName);
             hoverBackground = content.Load<Texture2D>(hoverBackgroundName);
+            selectedBackground = content.Load<Texture2D>(selectedBackgroundName);
+
             this.text = text;
             if (autoDimensions)
                 this.dimensions = spriteFont.MeasureString(text);
             OnClick += onClick;
         }
 
-        public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(background, Rectangle, Color.White);
-            if (hovering)
+            if (selected)
+                spriteBatch.Draw(selectedBackground, Rectangle, Color.White);
+            else if (Hovering)
                 spriteBatch.Draw(hoverBackground, Rectangle, Color.White);
             spriteBatch.DrawString(spriteFont, text, Location, Color.White);
         }
@@ -37,12 +51,9 @@ namespace MeesGame
         public override void HandleInput(InputHelper inputHelper)
         {
             base.HandleInput(inputHelper);
-            if (hovering)
+            if (Clicked)
             {
-                if (inputHelper.MouseLeftButtonPressed())
-                {
-                    OnClick?.Invoke(this);
-                }
+                OnClick?.Invoke(this);
             }
 
         }

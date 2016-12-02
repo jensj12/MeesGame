@@ -53,14 +53,21 @@ namespace MeesGame
         {
             get { return beingDragged; }
         }
-        //this class has it's own inputhelper because it needs to keep scrolling while dragged
-        //regardless of the mouseposition
-        InputHelper inputHelper;
 
+        private int width;
 
 
         public ScrollBar(UIList parent, int width = 20) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), parent)
         {
+            this.width = width;
+        }
+
+        public override Vector2 Location
+        {
+            get
+            {
+                return parent.Location + new Vector2(parent.Dimensions.X - width, 0);
+            }
         }
 
         public void ChangeTotalElementsSize()
@@ -76,7 +83,7 @@ namespace MeesGame
 
         }
 
-        public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (emptyTexture == null)
             {
@@ -91,23 +98,18 @@ namespace MeesGame
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            base.HandleInput(inputHelper);
-            this.inputHelper = inputHelper;
-            if (!beingDragged && inputHelper.MouseLeftButtonDown() && hovering)
+            if (!parent.InputEaten && Rectangle.Contains(inputHelper.MousePosition))
             {
-                mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
-                scolldistanceStartDrag = ScrollDistance;
-                beingDragged = true;
+                parent.InputEater = this;
+                if (inputHelper.MouseLeftButtonDown())
+                {
+                   mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
+                   scolldistanceStartDrag = ScrollDistance;
+                   beingDragged = true;
+                }
             }
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            if (beingDragged)
+            else if (beingDragged)
             {
-                inputHelper.Update();
-
                 if (inputHelper.MouseLeftButtonDown())
                 {
                     ScrollDistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
@@ -121,7 +123,15 @@ namespace MeesGame
                     beingDragged = false;
                 }
             }
+        }
 
+        //the scrollbar wants to eat untill we drop the mousebutton
+        public override bool WantsToEatInput
+        {
+            get
+            {
+                return beingDragged;
+            }
         }
     }
 }

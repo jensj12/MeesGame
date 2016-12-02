@@ -1,48 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
-    public abstract class UIList : UIObject
+    public class UIList : UIContainer
     {
+        public delegate void OnItemClick(UIObject o);
+        public event OnItemClick onItemClick;
+
         private readonly Color BACKGROUND = Color.Wheat;
         private Texture2D Background;
 
+        //distance each of the following elements has
         private int elementsDistance;
         public int ElementsDistance
         {
             get { return elementsDistance;}
         }
+
+        //in retrospect, this is only usefull for the scrollbar
         protected int elementsOffset;
         public int ElementsOffset
         {
             get { return elementsOffset; }
             set { elementsOffset = value; }
-        }
+        }       
+
         protected ScrollBar scrollBar;
 
-        public UIList(Vector2 location, Vector2 dimensions, UIObject parent, int elementsDistance = 10) : base(location, dimensions, parent, true)
+        public UIList(Vector2 location, Vector2 dimensions, UIContainer parent, int elementsDistance = 10) : base(location, dimensions, parent, true)
         {
+            this.elementsDistance = elementsDistance;
             scrollBar = new ScrollBar(this);
         }
 
-        public void MoveDistanceDown(int distance)
+        public override Vector2 GetChildAnchorPoint(UIObject uiObject)
         {
-            elementsOffset = distance;
+            int objectIndex = children.IndexOf(uiObject);
+
+            if(objectIndex > 0)
+                return new Vector2(base.GetChildAnchorPoint(this).X, elementsDistance + children[objectIndex - 1].Rectangle.Bottom);
+
+            return base.GetChildAnchorPoint(this) + new Vector2(0, -elementsOffset);
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
-            scrollBar.Draw(gameTime, spriteBatch);
-        }
-
-        public override void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (Background == null)
             {
@@ -53,19 +56,14 @@ namespace MeesGame
             }
 
             spriteBatch.Draw(Background, Rectangle, Color.White);
+            base.DrawTask(gameTime, spriteBatch);
+            scrollBar.Draw(gameTime, spriteBatch);
         }
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            if (Rectangle.Contains(inputHelper.MousePosition))
-            {
-                if (scrollBar.BarRectangle.Contains(inputHelper.MousePosition) || scrollBar.BeingDragged)
-                {
-                    scrollBar.HandleInput(inputHelper);
-                }
-                else
-                    children.HandleInput(inputHelper);
-            }
+            scrollBar.HandleInput(inputHelper);
+            base.HandleInput(inputHelper);
         }
 
         public override void Update(GameTime gameTime)
