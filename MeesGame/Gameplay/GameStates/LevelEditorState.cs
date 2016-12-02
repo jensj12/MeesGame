@@ -5,12 +5,11 @@ using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
-    internal class LevelEditorState : IGameLoopObject
+/*    internal class LevelEditorState : IGameLoopObject
     {
         GameEnvironment game;
         private UIObjectList<UIObject> gameObjectList;
         private ImageList imageList;
-        private 
 
         public LevelEditorState(GameEnvironment game)
         {
@@ -46,4 +45,5 @@ namespace MeesGame
             gameObjectList.Update(gameTime);
         }
     }
+    */
 }

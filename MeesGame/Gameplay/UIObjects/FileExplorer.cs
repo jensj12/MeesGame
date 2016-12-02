@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
@@ -20,7 +21,7 @@ namespace MeesGame
         private String currentDirectory;
 
 
-        public FileExplorer(Vector2 location, Vector2 dimensions, UIObject parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
+        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
         {
             currentDirectory = path;
             this.content = content;
@@ -41,23 +42,22 @@ namespace MeesGame
                 {
                     if (index == 0)
                     {
-                        children.Add(new ListButton(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), index, ItemSelect));
+                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     else
                     {
-                        children.Add(new ListButton(new Vector2(0, buttonDistance + ((ListButton)children[index - 1]).Rectangle.Height + (int)((ListButton)children[index - 1]).RelativeLocation.Y), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), index, ItemSelect));
+                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     index++;
                 }
             }
         }
 
-        public void ItemSelect(Object o)
+        public void ItemSelect(Button button)
         {
-            ListButton listbutton = (ListButton)o;
-            ((ListButton)children[selected]).Selected = false;
-            listbutton.Selected = true;
-            selected = listbutton.Index;
+            ((Button)children[selected]).Selected = false;
+            button.Selected = true;
+            selected = children.IndexOf(button);
         }
     }
 }

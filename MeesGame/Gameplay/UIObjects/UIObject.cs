@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MeesGame.Gameplay.UIObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
@@ -7,23 +8,36 @@ namespace MeesGame
     {
         protected Vector2 location;
         protected Vector2 dimensions;
-        protected UIObject parent;
-        protected UIObjectList<UIObject> children;
+        protected UIContainer parent;
         protected bool hideOverflow;
         protected TextureGenerator textureGenerator;
         protected RenderTarget2D renderTarget;
         //because the input is eaten after an element uses it we keep track of wether the elements
         //have received an input and allow them to act accordingly in the update method
-        protected bool receivedInput;
-        protected bool hovering;
+        private bool hovering;
+        private bool mouseDown;
+        private bool clicked;
 
-        public UIObject(Vector2 location, Vector2 dimensions, UIObject parent, bool hideOverflow = false)
+        public bool Hovering
+        {
+            get { return hovering; }
+        }
+        public bool MouseDown
+        {
+            get { return mouseDown; }
+        }
+        public bool Clicked
+        {
+            get { return clicked; }
+        }
+
+
+        public UIObject(Vector2 location, Vector2 dimensions, UIContainer parent, bool hideOverflow = false)
         {
             this.location = location;
             this.dimensions = dimensions;
             this.parent = parent;
             this.hideOverflow = hideOverflow;
-            children = new UIObjectList<UIObject>();
         }
 
         public virtual Vector2 Location
@@ -32,21 +46,16 @@ namespace MeesGame
             {
                 if (parent != null)
                 {
-                    return location + parent.Location;
+                    return location + parent.GetChildAnchorPoint(this);
                 }
+
                 return location;
             }
-            set { location = value; }
         }
 
         public virtual Vector2 RelativeLocation
         {
             get { return location; }
-        }
-
-        public bool Hovering
-        {
-            get { return hovering; }
         }
 
         public Vector2 Dimensions
@@ -61,15 +70,10 @@ namespace MeesGame
             get { return new Rectangle(Location.ToPoint(), Dimensions.ToPoint()); }
         }
 
-        public UIObject Parent
+        public UIContainer Parent
         {
             get { return parent; }
             set { parent = value; }
-        }
-
-        public UIObjectList<UIObject> Children
-        {
-            get { return children; }
         }
 
         public bool HideOverflow
@@ -78,37 +82,44 @@ namespace MeesGame
             set { hideOverflow = value; }
         }
 
+        //if this 
         public virtual void HandleInput(InputHelper inputHelper)
         {
-            receivedInput = true;
-            if (Rectangle.Contains(inputHelper.MousePosition))
-                hovering = true;
-            else
-                hovering = false;
-            if (hideOverflow)
+            hovering = false;
+            mouseDown = false;
+            clicked = false;
+
+            if (parent == null || !parent.InputEaten)
             {
                 if (Rectangle.Contains(inputHelper.MousePosition))
-                    children.HandleInput(inputHelper);
+                {
+                    hovering = true;
+                    if(parent != null)
+                        parent.InputEater = this;
+                    if (inputHelper.MouseLeftButtonDown())
+                    {
+                        mouseDown = true;
+                    }
+                    if (inputHelper.MouseLeftButtonPressed())
+                    {
+                        clicked = true;
+                    }
+                }
             }
-            else
-                children.HandleInput(inputHelper);
+        }
+
+
+        //if a component such as the scroll bar wants to eat the input it can remain eaten
+        public virtual bool WantsToEatInput
+        {
+            get { return false; }
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            if (!receivedInput)
-                hovering = false;
-            receivedInput = false;
-            children.Update(gameTime);
-
         }
 
-        public virtual void DrawSelf(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-
-        }
-
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (hideOverflow)
             {
@@ -118,26 +129,21 @@ namespace MeesGame
                 }
 
                 Vector2 myLocation = location;
+                UIContainer myParent = parent;
                 location = Vector2.Zero;
-                renderTarget = textureGenerator.Render(gameTime, RenderTask);
+                renderTarget = textureGenerator.Render(gameTime, DrawTask);
                 location = myLocation;
+                parent = myParent;
                 spriteBatch.Draw(renderTarget, Rectangle, Color.White);
             }
             else
             {
-                RenderTask(gameTime, spriteBatch);
+                DrawTask(gameTime, spriteBatch);
             }
         }
 
-        private void RenderTask(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            DrawSelf(gameTime, spriteBatch);
-            children.Draw(gameTime, spriteBatch);
-        }
-
-        public virtual void Reset()
-        {
-            children.Reset();
-        }
+        // we need to use a rendertask to make sure no object can get out of overflow
+        public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
+        public virtual void Reset() { }
     }
 }
