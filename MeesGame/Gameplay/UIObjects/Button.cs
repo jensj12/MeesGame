@@ -25,7 +25,7 @@ namespace MeesGame
 
         private Texture2D selectedBackground;
 
-        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, string text, ClickEventHandler onClick, bool autoDimensions = true, bool hideOverflow = false, string backgroundName = "floor", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(location, dimensions, parent, hideOverflow)
+        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, string text, ClickEventHandler onClick, bool autoDimensions = true, bool hideOverflow = false, string backgroundName = "floorTile", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(location, dimensions, parent, hideOverflow)
         {
             spriteFont = content.Load<SpriteFont>(textFont);
             background = content.Load<Texture2D>(backgroundName);

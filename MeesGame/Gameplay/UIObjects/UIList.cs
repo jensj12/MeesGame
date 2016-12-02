@@ -6,6 +6,9 @@ namespace MeesGame
 {
     public class UIList : UIContainer
     {
+        public delegate void OnItemClick(UIObject o);
+        public event OnItemClick onItemClick;
+
         private readonly Color BACKGROUND = Color.Wheat;
         private Texture2D Background;
 
