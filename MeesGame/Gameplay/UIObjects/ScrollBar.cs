@@ -16,24 +16,33 @@ namespace MeesGame
         private int totalElementsSize;
         //initialize scrollbar on top
         private int scolldistanceStartDrag;
+
+        //a solid color is inserted into this texture for painting a solid color
+        private Texture2D solidColorTexture;
+
+        //how big the offset it from the scrollbar to the top of the parent element is. gets and set it
         private int ScrollDistance
         {
             get
             {
-                if (totalElementsSize - Rectangle.Height != 0)
-                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height)) / (totalElementsSize - Rectangle.Height);
+                if (totalElementsSize != Rectangle.Height)
+                    ///a simple way to picture this calculation is to think that the maximum distance of the elementsoffset is equal to totalElementsSize - Rectangle.Height 
+                    ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
+                    ///offset distance
+                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - Barheight) / (totalElementsSize - Rectangle.Height);
                 return 0;
             }
             set
             {
                 if (totalElementsSize - Rectangle.Height != 0)
+                    ///the ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
+                    ///and the maximum distance the scrollbar can travel
+                    ///
                     ((UIList)parent).ElementsOffset = (int)(value * (totalElementsSize - Rectangle.Height) / (double)(Rectangle.Height - BarRectangle.Height));
                 else
                     ((UIList)parent).ElementsOffset = 0;
             }
         }
-        //a solid color is inserted into this texture for painting a solid color
-        private Texture2D emptyTexture;
 
         public Rectangle BarRectangle
         {
@@ -43,10 +52,16 @@ namespace MeesGame
                     return Rectangle;
                 else
                 {
-                    return new Rectangle(Rectangle.X, Rectangle.Y + ScrollDistance, Rectangle.Width, (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height));
+                    return new Rectangle(Rectangle.X, Rectangle.Y + ScrollDistance, Rectangle.Width, Barheight);
                 }
             }
         }
+
+        private int Barheight
+        {
+            get { return (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height); }
+        }
+
         private Point mouseStartDragLocation = new Point();
         private bool beingDragged = false;
         public bool BeingDragged
@@ -85,15 +100,15 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (emptyTexture == null)
+            if (solidColorTexture == null)
             {
                 Color[] colordata = new Color[1];
                 colordata[0] = Color.White;
-                emptyTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-                emptyTexture.SetData(colordata);
+                solidColorTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+                solidColorTexture.SetData(colordata);
             }
-            spriteBatch.Draw(emptyTexture, Rectangle, backColor);
-            spriteBatch.Draw(emptyTexture, BarRectangle, barColor);
+            spriteBatch.Draw(solidColorTexture, Rectangle, backColor);
+            spriteBatch.Draw(solidColorTexture, BarRectangle, barColor);
         }
 
         public override void HandleInput(InputHelper inputHelper)
@@ -112,6 +127,7 @@ namespace MeesGame
             {
                 if (inputHelper.MouseLeftButtonDown())
                 {
+                    //distance the mouse has moved since initially held down
                     ScrollDistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
                     if (BarRectangle.Bottom > Rectangle.Bottom)
                         ScrollDistance = Rectangle.Height - BarRectangle.Height;
