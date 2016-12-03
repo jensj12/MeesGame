@@ -28,9 +28,9 @@ namespace MeesGame.Gameplay.GameObjects
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
         /// Everytime the Q function receives a Level and a PlayerAction, it updates qValues to the new value.
         /// </summary>
-        private Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues;
+        private Dictionary<Tuple<string, MeesGame.CharacterAction>, double> qValues;
 
-        public QLearningAI(Level level, TileField tileField, Point location, double learningRate, double discountFactor, Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        public QLearningAI(Level level, TileField tileField, Point location, double learningRate, double discountFactor, Dictionary<Tuple<string, MeesGame.CharacterAction>, double> qValues, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
         {
             this.score = score;
             this.level = level;
@@ -119,7 +119,7 @@ namespace MeesGame.Gameplay.GameObjects
         /// <param name="a"></param>
         private void Q(Level s, MeesGame.CharacterAction a)
         {
-            Tuple<Level, MeesGame.CharacterAction> StateAndAction = new Tuple<Level, MeesGame.CharacterAction>(s, a);
+            Tuple<string, MeesGame.CharacterAction> StateAndAction = new Tuple<string, MeesGame.CharacterAction>(s.Serialize(), a);
             qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(s, a) + discountFactor * EstimatedOptimalFutureValue(s, a) - qValues[StateAndAction]);
         }
     }
