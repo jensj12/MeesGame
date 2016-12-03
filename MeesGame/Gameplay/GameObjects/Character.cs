@@ -126,5 +126,10 @@ namespace MeesGame.Gameplay.GameObjects
             position = level.Tiles.GetAnchorPosition(location);
             base.Update(gameTime);
         }
+
+        public string Serialize()
+        {
+            return score + "\t" + location;
+        }
     }
 }

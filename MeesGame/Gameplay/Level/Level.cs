@@ -51,5 +51,10 @@ namespace MeesGame
                 return timeBetweenActions;
             }
         }
+
+        public string Serialize()
+        {
+            return this.character.Serialize() + "\n" + this.tiles.TileField.Serialize();
+        }
     }
 }

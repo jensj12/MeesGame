@@ -40,12 +40,36 @@ namespace MeesGame
                 }
             }
         }
+
+        public string Serialize()
+        {
+            string res = "";
+
+            for(int i = 0; i < Rows; i++)
+            {
+                for(int j = 0; j < Columns; j++)
+                {
+                    res += GetType(i, j).ToString() + "\t";
+                }
+            }
+
+            return res;
+        }
     }
 
     class TileFieldView : GameObjectList
     {
         TileField tileField;
         Character pov;
+        
+        public TileField TileField
+        {
+            get
+            {
+                return tileField;
+            }
+        }
+
         public TileFieldView(Character pov, TileField tileField, string id = "")
         {
             Add(tileField);
