@@ -129,6 +129,8 @@ namespace MeesGame
                 }
 
                 Vector2 myLocation = location;
+                //if we draw an object in a seperate container to hide the overflow we need to make sure the object get's drawn that is 0,0 relative to the parent.
+                //thus we temporarily move the parent to 0,0 so that it get's drawn there. For now no other way (perhaps with scissor rectangles in the future
                 UIContainer myParent = parent;
                 location = Vector2.Zero;
                 renderTarget = textureGenerator.Render(gameTime, DrawTask);
@@ -142,7 +144,8 @@ namespace MeesGame
             }
         }
 
-        // we need to use a rendertask to make sure no object can get out of overflow
+        // the way an object should draw itself. We have to make the object draw itself in a sepperate method from the draw call because
+        // we need to do some prelimary work to help the object hide its overflow
         public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
         public virtual void Reset() { }
     }
