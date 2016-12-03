@@ -42,7 +42,7 @@ namespace MeesGame
             this.content = content;
             this.rectangle = rectangle;
             this.fileExtension = fileExtension;
-            fileExplorerBackground = content.Load<Texture2D>("floor");
+            fileExplorerBackground = content.Load<Texture2D>("floorTile");
 
             generateFileList();
         }

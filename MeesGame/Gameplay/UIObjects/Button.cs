@@ -22,7 +22,7 @@ namespace MeesGame
         protected Texture2D background;
         protected Texture2D hoverBackground;
 
-        public Button(ContentManager content, String text, Vector2 location, ClickEventHandler onClick, string backgroundName = "floor", string hoverBackgroundName = "key", string textFont = "menufont")
+        public Button(ContentManager content, String text, Vector2 location, ClickEventHandler onClick, string backgroundName = "floorTile", string hoverBackgroundName = "key", string textFont = "menufont")
         {
             spriteFont = content.Load<SpriteFont>(textFont);
             background = content.Load<Texture2D>(backgroundName);

@@ -36,7 +36,7 @@ namespace MeesGame
                     if (y < oldGrid.GetLength(1) && x < oldGrid.GetLength(0))
                         grid[x, y] = oldGrid[x, y];
                     else
-                        Add(new Tile("floor"), x, y);
+                        Add(new Tile("floorTile"), x, y);
                 }
             }
         }
