@@ -5,8 +5,8 @@ namespace MeesGame
 {
     class Level : GameObjectList
     {
-        protected const int NUM_ROWS = 12;
-        protected const int NUM_COLUMNS = 22;
+        protected int numRows = 12;
+        protected int numColumns = 22;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
@@ -17,14 +17,14 @@ namespace MeesGame
         {
             start = new Point(1, 1);
             
-            TileField tileField = new TileField(NUM_ROWS, NUM_COLUMNS, 0, "tiles");
+            TileField tileField = new TileField(numRows, numColumns, 0, "tiles");
             tileField.CellHeight = CELL_HEIGHT;
             tileField.CellWidth = CELL_WIDTH;
 
             //Temporary initialisation of empty tiles
-            for (int x = 0; x < NUM_COLUMNS; x++)
+            for (int x = 0; x < numColumns; x++)
             {
-                for (int y = 0; y < NUM_ROWS; y++)
+                for (int y = 0; y < numRows; y++)
                 {
                     tileField.Add(new Tile("floor"), x, y);
                 }
