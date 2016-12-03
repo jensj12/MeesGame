@@ -5,15 +5,15 @@ namespace MeesGame
     class Camera : GameObjectList
     {
         GameObject objectToFollow;
-        int tolerance;
+        float tolerance;
 
         /// <summary>
         /// Creates a camara object which tracks the specified object
         /// </summary>
         /// <param name="objectToFollow">The camera will be centered above this object</param>
-        /// <param name="tolerace">Distance the object the camera follows can go from the middle of the screen before the camera starts tracking</param>
+        /// <param name="tolerace">Constant defining the tracking speed of the camera. the higher the slowe it tracks. Below 1 obviously causes graphical glitches (it always overshoots)</param>
 
-        public Camera(GameObject objectToFollow = null, int tolerance = 2) : base(0, "camera")
+        public Camera(GameObject objectToFollow = null, float tolerance = 8f) : base(0, "camera")
         {
             this.objectToFollow = objectToFollow;
             this.tolerance = tolerance;
@@ -31,7 +31,7 @@ namespace MeesGame
                 return;
             }
             Rectangle rect = objectToFollow.BoundingBox;
-            rect.Location = objectToFollow.GlobalPosition.ToPoint();
+            rect.Location = objectToFollow.Position.ToPoint();
             float preferredX = rect.Center.X - GameEnvironment.Screen.X / 2;
             float preferredY = rect.Center.Y - GameEnvironment.Screen.Y / 2;
             TileField tiles = Find("tiles") as TileField;
