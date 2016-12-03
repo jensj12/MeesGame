@@ -45,8 +45,8 @@ namespace MeesGame
     class TileFieldView : GameObjectList
     {
         TileField tileField;
-        Player pov;
-        public TileFieldView(Player pov, TileField tileField, string id = "")
+        Character pov;
+        public TileFieldView(Character pov, TileField tileField, string id = "")
         {
             Add(tileField);
             Add(pov);

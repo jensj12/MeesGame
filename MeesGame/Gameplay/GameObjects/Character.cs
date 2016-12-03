@@ -16,7 +16,8 @@ namespace MeesGame.Gameplay.GameObjects
         protected TimeSpan lastActionTime;
         protected CharacterAction nextAction = NONE;
 
-        public Character(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("character", layer, id)
+        //base met player omdat de psrite nog player heet en Content.mgcb doet raar
+        public Character(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
         {
             this.score = score;
             this.level = level;

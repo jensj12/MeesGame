@@ -26,10 +26,9 @@ namespace MeesGame.Gameplay.GameObjects
 
         /// <summary>
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
-        /// Everytime the Q function receives an Level and a PlayerAction, it updates qValues to the new value.
+        /// Everytime the Q function receives a Level and a PlayerAction, it updates qValues to the new value.
         /// </summary>
         private Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues;
-
 
         public QLearningAI(Level level, TileField tileField, Point location, double learningRate, double discountFactor, Dictionary<Tuple<Level, MeesGame.CharacterAction>, double> qValues, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
         {
@@ -81,7 +80,7 @@ namespace MeesGame.Gameplay.GameObjects
         {
 
         }
-
+        
         /// <summary>
         /// AIDecideAction receives ILevelStates, determines which action it wants to perform and then performs this action.
         /// </summary>

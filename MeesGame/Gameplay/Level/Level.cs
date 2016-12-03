@@ -11,7 +11,7 @@ namespace MeesGame
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
         protected Point start;
-        protected Player player;
+        protected Character character;
         protected TileFieldView tiles;
         public Level(int levelindex = 0)
         {
@@ -30,10 +30,10 @@ namespace MeesGame
                 }
             }
 
-            this.player = new Player(this,tileField,start);
-            this.tiles = new TileFieldView(player, tileField);
+            this.character = new Character(this,tileField,start);
+            this.tiles = new TileFieldView(character, tileField);
             Add(this.tiles);
-            Add(this.player);
+            Add(this.character);
         }
 
         public TileFieldView Tiles

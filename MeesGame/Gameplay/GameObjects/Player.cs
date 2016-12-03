@@ -7,9 +7,9 @@ using static MeesGame.CharacterAction;
 
 namespace MeesGame
 {
-    class Player : Character
+    class Character : Gameplay.GameObjects.Character
     {
-        public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        public Character(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
         {
             this.score = score;
             this.level = level;
