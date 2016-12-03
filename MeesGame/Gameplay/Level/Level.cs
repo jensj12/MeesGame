@@ -60,7 +60,6 @@ namespace MeesGame
             Camera camera = Find("camera") as Camera;
             camera.UpdateCamera();
             base.Draw(gameTime, spriteBatch);
-            camera.ResetCamera();
         }
     }
 }
