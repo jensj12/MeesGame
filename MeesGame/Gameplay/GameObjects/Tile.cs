@@ -11,6 +11,8 @@ namespace MeesGame
 
     abstract class Tile : SpriteGameObject
     {
+        public abstract string[] textureNames { get; }
+
         protected TileType tileType;
 
         public Tile (string assetName = "", int layer = 0, string id = "") : base(assetName, layer, id)
@@ -32,7 +34,17 @@ namespace MeesGame
                 case TileType.Wall:
                     return new WallTile();    
             }
-            return null;
+            return new UnknownTile();
+        }
+
+        public virtual SpriteSheet GetSpriteSheet()
+        {
+            return new SpriteSheet(textureNames[0]);
+        }
+
+        public static SpriteSheet GetDefaultSpriteSheetFromType(TileType tt)
+        {
+            return GetTileFromTileType(tt).GetSpriteSheet();
         }
     }
 }

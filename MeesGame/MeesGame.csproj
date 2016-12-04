@@ -44,6 +44,7 @@
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
     <Compile Include="Gameplay\GameObjects\Tiles\FloorTile.cs" />
+    <Compile Include="Gameplay\GameObjects\Tiles\UnknownTile.cs" />
     <Compile Include="Gameplay\GameObjects\Tiles\WallTile.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="Gameplay\UIObjects\ScrollBar.cs" />

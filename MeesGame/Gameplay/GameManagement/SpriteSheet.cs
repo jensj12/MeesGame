@@ -10,8 +10,9 @@ public class SpriteSheet
     protected int sheetColumns;
     protected int sheetRows;
     protected bool mirror;
+    protected float rotation;
 
-    public SpriteSheet(string assetname, int sheetIndex = 0)
+    public SpriteSheet(string assetname, int sheetIndex = 0, float rotation = 0)
     {
         // retrieve the sprite
         sprite = GameEnvironment.AssetManager.GetSprite(assetname);
@@ -26,6 +27,7 @@ public class SpriteSheet
         }
 
         this.sheetIndex = sheetIndex;
+        this.rotation = rotation;
         sheetColumns = 1;
         sheetRows = 1;
 
@@ -56,7 +58,7 @@ public class SpriteSheet
             spriteEffects = SpriteEffects.FlipHorizontally;
         }
         spriteBatch.Draw(sprite, position, spritePart, Color.White,
-            0.0f, origin, 1.0f, spriteEffects, 0.0f);
+            rotation, origin, 1.0f, spriteEffects, 0.0f);
     }
 
     public bool IsTranslucent(int x, int y)

@@ -41,7 +41,6 @@ namespace MeesGame
 
         private void FillImageList()
         {
-            throw new NotImplementedException();
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

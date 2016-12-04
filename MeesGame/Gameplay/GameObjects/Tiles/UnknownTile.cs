@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MeesGame.Gameplay.GameObjects.Tiles
 {
-    class FloorTile : Tile
+    class UnknownTile : Tile
     {
         public override string[] textureNames
         {
@@ -14,7 +14,7 @@ namespace MeesGame.Gameplay.GameObjects.Tiles
             {
                 return new string[]
                 {
-                    "floorTile"
+                    ""
                 };
             }
         }
