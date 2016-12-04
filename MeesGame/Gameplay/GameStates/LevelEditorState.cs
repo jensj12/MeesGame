@@ -8,7 +8,7 @@ namespace MeesGame
 {
     internal class LevelEditorState : IGameLoopObject
     {
-        const int leftBarWidth = 100;
+        const int leftBarWidth = 150;
         const int rightBarWidth = 200;
 
 
@@ -19,6 +19,8 @@ namespace MeesGame
         private UIContainer UIContainer; 
         private UIList imageList;
         private UIList itemPropertiesList;
+
+        int selectedIndex;
 
         public LevelEditorState(GameEnvironment game)
         {
@@ -41,6 +43,11 @@ namespace MeesGame
 
         private void FillImageList()
         {
+            foreach (TileType tt in Enum.GetValues(typeof(TileType)))
+            {
+                imageList.AddChild(new Button(Vector2.Zero, new Vector2(leftBarWidth - 50), imageList, "", OnItemSelect, false, false, Tile.GetTileFromTileType(tt).textureNames[0]));
+            }
+            ((Button)imageList.Children[0]).Selected = true;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -49,16 +56,22 @@ namespace MeesGame
             UIContainer.Draw(gameTime, spriteBatch);
         }
 
-        public void OnItemSelect(Object o)
+        public void OnItemSelect(UIObject o)
         {
-
-            throw new NotImplementedException();
+            ((Button)imageList.Children[selectedIndex]).Selected = false;
+            selectedIndex = imageList.Children.IndexOf(o);
+            ((Button)imageList.Children[selectedIndex]).Selected = true;
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
             level[currentLevelIndex].HandleInput(inputHelper);
             UIContainer.HandleInput(inputHelper);
+            if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+            {
+                Point playerLocation = level[0].Player.Location;
+                level[0].Tiles.TileField.Add(Tile.GetTileFromTileType(TileType.Wall), playerLocation.X, playerLocation.Y);
+            }
         }
 
         public void Reset()

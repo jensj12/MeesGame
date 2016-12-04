@@ -14,7 +14,7 @@ namespace MeesGame.Gameplay.GameObjects.Tiles
             {
                 return new string[]
                 {
-                    ""
+                    "fourWayWallTile"
                 };
             }
         }

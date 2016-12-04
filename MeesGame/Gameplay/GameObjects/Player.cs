@@ -41,6 +41,11 @@ namespace MeesGame
                 level = value;
             }
         }
+        
+        public Point Location
+        {
+            get { return location; }
+        }
 
         //this is just a simple implementation
         //an action is allowed if and only if it is a direction

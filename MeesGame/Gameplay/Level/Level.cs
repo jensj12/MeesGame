@@ -14,6 +14,7 @@ namespace MeesGame
         protected Point start;
         protected Player player;
         protected TileFieldView tiles;
+
         public Level(Point fieldSize, int levelindex = 0)
         {
             start = new Point(1, 1);
@@ -53,6 +54,11 @@ namespace MeesGame
             {
                 return timeBetweenActions;
             }
+        }
+
+        public Player Player
+        {
+            get { return player; }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

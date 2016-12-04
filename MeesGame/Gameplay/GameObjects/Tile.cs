@@ -17,7 +17,7 @@ namespace MeesGame
 
         public Tile (string assetName = "", int layer = 0, string id = "") : base(assetName, layer, id)
         {
-
+            sprite = this.GetSpriteSheet();
         }
 
         public TileType TileType

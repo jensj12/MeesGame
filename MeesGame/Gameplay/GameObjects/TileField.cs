@@ -54,6 +54,11 @@ namespace MeesGame
             this.tileField = tileField;
         }
 
+        public TileField TileField
+        {
+            get { return tileField; }
+        }
+
         public bool IsVisible(Point location)
         {
             return IsVisible(location.X, location.Y);

@@ -8,8 +8,6 @@ namespace MeesGame
 {
     public class FileExplorer : UIList
     {
-        private ContentManager content;
-
         private int buttonDistance = 10;
 
         private String fileExtension;
@@ -21,10 +19,9 @@ namespace MeesGame
         private String currentDirectory;
 
 
-        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
+        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, String fileExtension, string path) : base(location, dimensions, parent)
         {
             currentDirectory = path;
-            this.content = content;
             this.fileExtension = fileExtension;
 
             generateFileList();
@@ -42,11 +39,11 @@ namespace MeesGame
                 {
                     if (index == 0)
                     {
-                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     else
                     {
-                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     index++;
                 }
