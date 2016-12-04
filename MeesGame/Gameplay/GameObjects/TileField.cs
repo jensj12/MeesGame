@@ -36,68 +36,18 @@ namespace MeesGame
                     if (y < oldGrid.GetLength(1) && x < oldGrid.GetLength(0))
                         grid[x, y] = oldGrid[x, y];
                     else
-                        Add(new Tile("floorTile"), x, y);
+                        Add(new FloorTile(), x, y);
                 }
             }
         }
-    }
 
-    class TileFieldView : GameObjectList
-    {
-        TileField tileField;
-        Player pov;
-        public TileFieldView(Player pov, TileField tileField, string id = "")
+        public Tile Get(Point location)
         {
-            Add(tileField);
-            Add(pov);
-            this.pov = pov;
-            this.tileField = tileField;
-        }
-
-        public bool IsVisible(Point location)
-        {
-            return IsVisible(location.X, location.Y);
-        }
-
-        public bool IsVisible(int x, int y)
-        {
-            //for now, this function will always return true
-            //we might change this behaviour later
-            return true;
-        }
-
-        public Tile Get(int x, int y)
-        {
-            if (IsVisible(x, y))
+            if (location.X < 0 || location.Y < 0 || location.X >= Columns || location.Y >= Rows)
             {
-                return (Tile)tileField.Get(x, y);
+                return new WallTile();
             }
-            else
-            {
-                return null;
-            }
-        }
-
-        public TileType GetType(Point location)
-        {
-            if (IsVisible(location))
-            {
-                return tileField.GetType(location.X, location.Y);
-            }
-            else
-            {
-                return TileType.Unknown;
-            }
-        }
-
-        public Vector2 GetAnchorPosition(GameObject obj)
-        {
-            return tileField.GetAnchorPosition(obj);
-        }
-
-        public Vector2 GetAnchorPosition(Point location)
-        {
-            return tileField.GetAnchorPosition(location);
+            return (Tile)Get(location.X, location.Y);
         }
     }
 }

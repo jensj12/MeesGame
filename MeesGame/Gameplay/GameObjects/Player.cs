@@ -69,12 +69,14 @@ namespace MeesGame
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
         public bool CanPerformAction(PlayerAction action)
         {
-            //for now, special actions are never allowed
-            if (action == SPECIAL) return false;
+            
+            if (level.Tiles.Get(location).IsActionForbiddenFromHere(this,action)) return false;
 
-            //movements are allowed as long as the new tile is of type floor
+            
+
+            //movements are
             Point newLocation = GetLocationAfterAction(action);
-            return level.Tiles.GetType(newLocation) == TileType.Floor;
+            return level.Tiles.Get(newLocation).CanPlayerMoveHere(this);
         }
 
         public Point GetLocationAfterAction(PlayerAction action)

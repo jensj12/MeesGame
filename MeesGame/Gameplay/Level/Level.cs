@@ -13,33 +13,32 @@ namespace MeesGame
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(200);
         protected Point start;
         protected Player player;
-        protected TileFieldView tiles;
+        protected TileField tiles;
         public Level(int levelindex = 0)
         {
             start = new Point(1, 1);
             
-            TileField tileField = new TileField(numRows, numColumns, 0, "tiles");
-            tileField.CellHeight = CELL_HEIGHT;
-            tileField.CellWidth = CELL_WIDTH;
+            tiles = new TileField(numRows, numColumns, 0, "tiles");
+            tiles.CellHeight = CELL_HEIGHT;
+            tiles.CellWidth = CELL_WIDTH;
 
             //Temporary initialisation of empty tiles
             for (int x = 0; x < numColumns; x++)
             {
                 for (int y = 0; y < numRows; y++)
                 {
-                    tileField.Add(new Tile("floorTile"), x, y);
+                    tiles.Add(new FloorTile(), x, y);
                 }
             }
 
-            this.player = new Player(this,tileField,start);
-            this.tiles = new TileFieldView(player, tileField);
+            this.player = new Player(this,tiles,start);
             Camera camera = new Camera(player);
             Add(camera);
             camera.Add(this.tiles);
             camera.Add(this.player);
         }
 
-        public TileFieldView Tiles
+        public TileField Tiles
         {
             get
             {
