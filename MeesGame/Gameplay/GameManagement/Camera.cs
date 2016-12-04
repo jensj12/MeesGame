@@ -7,14 +7,18 @@ namespace MeesGame
         GameObject objectToFollow;
         float tolerance;
 
+        //because the size of the game window doesn't have to fill the entire screen, for example when editing
+        Point screenSize;
+
         /// <summary>
         /// Creates a camara object which tracks the specified object
         /// </summary>
         /// <param name="objectToFollow">The camera will be centered above this object</param>
         /// <param name="tolerace">Constant defining the tracking speed of the camera. the higher the slowe it tracks. Below 1 obviously causes graphical glitches (it always overshoots)</param>
 
-        public Camera(GameObject objectToFollow = null, float tolerance = 8f) : base(0, "camera")
+        public Camera(Point screenSize, GameObject objectToFollow = null, float tolerance = 8f) : base(0, "camera")
         {
+            this.screenSize = screenSize;
             this.objectToFollow = objectToFollow;
             this.tolerance = tolerance;
         }
@@ -32,11 +36,11 @@ namespace MeesGame
             }
             Rectangle rect = objectToFollow.BoundingBox;
             rect.Location = objectToFollow.Position.ToPoint();
-            float preferredX = rect.Center.X - GameEnvironment.Screen.X / 2;
-            float preferredY = rect.Center.Y - GameEnvironment.Screen.Y / 2;
+            float preferredX = rect.Center.X - screenSize.X / 2;
+            float preferredY = rect.Center.Y - screenSize.Y / 2;
             TileField tiles = Find("tiles") as TileField;
-            preferredX = -MathHelper.Clamp(preferredX, 0, tiles.CellWidth * tiles.Columns - GameEnvironment.Screen.X);
-            preferredY = -MathHelper.Clamp(preferredY, 0, tiles.CellHeight * tiles.Rows - GameEnvironment.Screen.Y);
+            preferredX = -MathHelper.Clamp(preferredX, 0, tiles.CellWidth * tiles.Columns - screenSize.X);
+            preferredY = -MathHelper.Clamp(preferredY, 0, tiles.CellHeight * tiles.Rows - screenSize.Y);
             position.X += InterpolerisationToPoint(preferredX, position.X);
             position.Y += InterpolerisationToPoint(preferredY, position.Y);
 

@@ -15,7 +15,7 @@ namespace MeesGame
         {
             this.content = content;
             level = new List<Level>();
-            level.Add(new Level());
+            level.Add(new Level(GameEnvironment.Screen));
             currentLevelIndex = 0;
         }
 

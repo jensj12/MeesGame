@@ -14,7 +14,7 @@ namespace MeesGame
         protected Point start;
         protected Player player;
         protected TileFieldView tiles;
-        public Level(int levelindex = 0)
+        public Level(Point fieldSize, int levelindex = 0)
         {
             start = new Point(1, 1);
             
@@ -33,7 +33,7 @@ namespace MeesGame
 
             this.player = new Player(this,tileField,start);
             this.tiles = new TileFieldView(player, tileField);
-            Camera camera = new Camera(player);
+            Camera camera = new Camera(fieldSize, player);
             Add(camera);
             camera.Add(this.tiles);
             camera.Add(this.player);

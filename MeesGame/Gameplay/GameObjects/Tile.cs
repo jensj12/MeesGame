@@ -1,4 +1,6 @@
-﻿namespace MeesGame
+﻿using MeesGame.Gameplay.GameObjects.Tiles;
+
+namespace MeesGame
 {
     enum TileType
     {
@@ -7,18 +9,30 @@
         Unknown
     }
 
-    class Tile : SpriteGameObject
+    abstract class Tile : SpriteGameObject
     {
         protected TileType tileType;
 
-        public Tile (string assetName = "", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
+        public Tile (string assetName = "", int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            tileType = tt;
+
         }
 
         public TileType TileType
         {
             get { return tileType; }
+        }
+
+        public static Tile GetTileFromTileType(TileType tt)
+        {
+            switch (tt)
+            {
+                case TileType.Floor:
+                    return new FloorTile();
+                case TileType.Wall:
+                    return new WallTile();    
+            }
+            return null;
         }
     }
 }
