@@ -8,6 +8,7 @@ This is gonna "git" gud
  - BRANCH OFF!!!
  - Work
  - Commit
+ - Format using Ctrl+K Ctrl+D
  - Submit pull request
  - Wait for others to review and eventually merge it
  - If there are merge conflicts, (git shell) [git checkout master] git pull, [git checkout your branch] git rebase master -i
