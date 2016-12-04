@@ -81,8 +81,7 @@ namespace MeesGame
             get { return hideOverflow; }
             set { hideOverflow = value; }
         }
-
-        //if this 
+        
         public virtual void HandleInput(InputHelper inputHelper)
         {
             hovering = false;

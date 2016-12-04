@@ -1,22 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MeesGame.Gameplay.UIObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
     public class UIList : UIContainer
     {
         public delegate void OnItemClick(UIObject o);
-        public event OnItemClick onItemClick;
 
         private readonly Color BACKGROUND = Color.Wheat;
         private Texture2D Background;
-
-        //distance each of the following elements has
-        private int elementsDistance;
-        public int ElementsDistance
+        
+        /// <summary>
+        /// Distance between the elements in the list
+        /// </summary>
+        private int distanceBetweenElements;
+        public int DistanceBetweenElements
         {
-            get { return elementsDistance;}
+            get { return distanceBetweenElements; }
         }
 
         //in retrospect, this is only usefull for the scrollbar
@@ -25,13 +26,13 @@ namespace MeesGame
         {
             get { return elementsOffset; }
             set { elementsOffset = value; }
-        }       
+        }
 
         protected ScrollBar scrollBar;
 
         public UIList(Vector2 location, Vector2 dimensions, UIContainer parent, int elementsDistance = 10) : base(location, dimensions, parent, true)
         {
-            this.elementsDistance = elementsDistance;
+            this.distanceBetweenElements = elementsDistance;
             scrollBar = new ScrollBar(this);
         }
 
@@ -39,8 +40,8 @@ namespace MeesGame
         {
             int objectIndex = children.IndexOf(uiObject);
 
-            if(objectIndex > 0)
-                return new Vector2(base.GetChildAnchorPoint(this).X, elementsDistance + children[objectIndex - 1].Rectangle.Bottom);
+            if (objectIndex > 0)
+                return new Vector2(base.GetChildAnchorPoint(this).X, distanceBetweenElements + children[objectIndex - 1].Rectangle.Bottom);
 
             return base.GetChildAnchorPoint(this) + new Vector2(0, -elementsOffset);
         }
@@ -71,6 +72,5 @@ namespace MeesGame
             base.Update(gameTime);
             scrollBar.Update(gameTime);
         }
-
     }
 }

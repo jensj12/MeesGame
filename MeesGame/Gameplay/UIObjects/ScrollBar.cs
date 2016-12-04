@@ -19,22 +19,25 @@ namespace MeesGame
 
         //a solid color is inserted into this texture for painting a solid color
         private Texture2D solidColorTexture;
-
-        //how big the offset it from the scrollbar to the top of the parent element is. gets and set it
+        
+        /// <summary>
+        /// The distance from the scrollbar to the top of the parent element.
+        /// </summary>
         private int ScrollDistance
         {
             get
             {
-                if (totalElementsSize != Rectangle.Height)
+                //if the scrollbar fills the entire parent height, it cannot be moved.
+                if (totalElementsSize <= Rectangle.Height) return 0;
+                else
                     ///a simple way to picture this calculation is to think that the maximum distance of the elementsoffset is equal to totalElementsSize - Rectangle.Height 
                     ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
                     ///offset distance
-                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - Barheight) / (totalElementsSize - Rectangle.Height);
-                return 0;
+                    return ((UIList)parent).ElementsOffset * (Rectangle.Height - BarHeight) / (totalElementsSize - Rectangle.Height);
             }
             set
             {
-                if (totalElementsSize - Rectangle.Height != 0)
+                if (totalElementsSize != Rectangle.Height)
                     ///the ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
                     ///and the maximum distance the scrollbar can travel
                     ///
@@ -52,12 +55,12 @@ namespace MeesGame
                     return Rectangle;
                 else
                 {
-                    return new Rectangle(Rectangle.X, Rectangle.Y + ScrollDistance, Rectangle.Width, Barheight);
+                    return new Rectangle(Rectangle.X, Rectangle.Y + ScrollDistance, Rectangle.Width, BarHeight);
                 }
             }
         }
 
-        private int Barheight
+        private int BarHeight
         {
             get { return (int)(Rectangle.Height / (double)totalElementsSize * Rectangle.Height); }
         }

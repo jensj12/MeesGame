@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,10 +13,12 @@ namespace MeesGame.Gameplay.UIObjects
 
         public UIObject InputEater
         {
-            get { if (parent == null)
+            get
+            {
+                if (parent == null)
                     return this.inputEater;
                 return parent.inputEater;
-                }
+            }
             set
             {
                 if (parent == null)
@@ -33,7 +31,7 @@ namespace MeesGame.Gameplay.UIObjects
         //we use this boolean if we have our overflow hidden and the cursor is out to show that our children can't use this input
         private bool inputStopped = false;
 
-        public Boolean InputEaten
+        public bool InputEaten
         {
             get { return InputEater != null || inputStopped; }
         }
