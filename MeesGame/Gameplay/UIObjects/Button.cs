@@ -2,62 +2,75 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
-    class Button : GameObject
+    public class Button : UIObject
     {
-        public delegate void ClickEventHandler(Object o);
+        public delegate void ClickEventHandler(Button button);
         public event ClickEventHandler OnClick;
 
         protected String text;
-        protected Rectangle rectangle;
-        public Rectangle Rectangle
-        {
-            get { return rectangle; }
-            set { rectangle = value; }
-        }
         protected SpriteFont spriteFont;
-        protected bool hovering = false;
         protected Texture2D background;
         protected Texture2D hoverBackground;
 
-        public Button(ContentManager content, String text, Vector2 location, ClickEventHandler onClick, string backgroundName = "floorTile", string hoverBackgroundName = "key", string textFont = "menufont")
+        protected bool selected = false;
+        public bool Selected
+        {
+            get { return selected; }
+            set { selected = value; }
+        }
+
+        private Texture2D selectedBackground;
+
+        /// <summary>
+        /// method used to create a customizable button
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="dimensions"></param>
+        /// <param name="parent"></param>
+        /// <param name="content"></param>
+        /// <param name="text">text the button displays</param>
+        /// <param name="onClick">action when the button is pressed</param>
+        /// <param name="autoDimensions">scale the button automatically to the size of the text</param>
+        /// <param name="hideOverflow">when autodimensions is off and the dimensions smaller than the text, hide the excess text</param>
+        /// <param name="backgroundName">the background for the button by its name in the contentmanager</param>
+        /// <param name="hoverBackgroundName">the texture that overlays the background when the mouse is hovering over the button</param>
+        /// <param name="selectedBackgroundName">the texture that overlays the background when the button is selected</param>
+        /// <param name="textFont">the name of the textfont used for the text as in the contenmanager</param>
+        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, string text, ClickEventHandler onClick, bool autoDimensions = true, bool hideOverflow = false, string backgroundName = "floorTile", string hoverBackgroundName = "key", string selectedBackgroundName = "end_door", string textFont = "menufont") : base(location, dimensions, parent, hideOverflow)
         {
             spriteFont = content.Load<SpriteFont>(textFont);
             background = content.Load<Texture2D>(backgroundName);
             hoverBackground = content.Load<Texture2D>(hoverBackgroundName);
+            selectedBackground = content.Load<Texture2D>(selectedBackgroundName);
+
             this.text = text;
-            Vector2 dimen = spriteFont.MeasureString(text);
-            this.rectangle = new Rectangle(location.ToPoint(), dimen.ToPoint());
+            if (autoDimensions)
+                this.dimensions = spriteFont.MeasureString(text);
             OnClick += onClick;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background, rectangle, Color.White);
-            if (hovering)
-                spriteBatch.Draw(hoverBackground, rectangle, Color.White);
-            spriteBatch.DrawString(spriteFont, text, rectangle.Location.ToVector2(), Color.White);
+            spriteBatch.Draw(background, Rectangle, Color.White);
+            if (selected)
+                spriteBatch.Draw(selectedBackground, Rectangle, Color.White);
+            else if (Hovering)
+                spriteBatch.Draw(hoverBackground, Rectangle, Color.White);
+            spriteBatch.DrawString(spriteFont, text, Location, Color.White);
         }
 
         public override void HandleInput(InputHelper inputHelper)
         {
             base.HandleInput(inputHelper);
-            if (rectangle.Contains(inputHelper.MousePosition))
+            if (Clicked)
             {
-                hovering = true;
-                if (inputHelper.MouseLeftButtonPressed())
-                {
-                    OnClick?.Invoke(this);
-                }
-            }
-            else
-            {
-                hovering = false;
+                OnClick?.Invoke(this);
             }
 
         }
-
     }
 }

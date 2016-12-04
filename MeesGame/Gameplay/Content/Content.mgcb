@@ -91,18 +91,6 @@
 /processorParam:TextureFormat=Color
 /build:endWallTile.png
 
-#begin floorTile.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:floorTile.png
-
 #begin fourWayWallTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -138,4 +126,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:threeWayWallTile.png
+
+#begin floorTile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floorTile.png
 

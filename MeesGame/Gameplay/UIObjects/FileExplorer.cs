@@ -1,29 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
-    class FileExplorer : GameObject
+    public class FileExplorer : UIList
     {
-        private readonly Color BACKGROUND = Color.Wheat;
-
-        private int buttonDistance;
-
-        private GameObjectList ButtonsList;
-
         private ContentManager content;
 
-        private Rectangle rectangle;
+        private int buttonDistance = 10;
+
         private String fileExtension;
-        private Texture2D fileExplorerBackground;
-
-        //we store a texture in order to not constantly render the same image;
-        private RenderTarget2D currentTexture;
-
-        private TextureGenerator boxTextureGenerator;
 
         //returns the selected variable
         private int selected = 0;
@@ -32,70 +21,43 @@ namespace MeesGame
         private String currentDirectory;
 
 
-        public FileExplorer(ContentManager content, Rectangle rectangle, String fileExtension, string path, int buttonDistance = 10)
+        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
         {
-            ButtonsList = new GameObjectList();
-
             currentDirectory = path;
-
-            this.buttonDistance = buttonDistance;
             this.content = content;
-            this.rectangle = rectangle;
             this.fileExtension = fileExtension;
-            fileExplorerBackground = content.Load<Texture2D>("floorTile");
 
             generateFileList();
-        }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
-            if (currentTexture == null)
-            {
-                if (boxTextureGenerator == null)
-                {
-                    boxTextureGenerator = new TextureGenerator(spriteBatch.GraphicsDevice, rectangle.Width, rectangle.Height, BACKGROUND);
-                }
-                currentTexture = boxTextureGenerator.Render(gameTime, ButtonsList.Draw);
-            }
-            spriteBatch.Draw(currentTexture, rectangle, Color.White);
-        }
-
-        public override void HandleInput(InputHelper inputHelper)
-        {
-            base.HandleInput(inputHelper);
-            ButtonsList.HandleInput(inputHelper);
-            currentTexture = null;
+            scrollBar.ChangeTotalElementsSize();
         }
 
         public void generateFileList()
         {
-            ButtonsList.Reset();
+            children.Reset();
             String[] tmpFileList = Directory.GetFiles(currentDirectory);
             int index = 0;
             for (int i = 0; i < tmpFileList.Length; i++)
             {
                 if (tmpFileList[i].EndsWith("." + fileExtension))
                 {
-                    if (ButtonsList.Children.Count == 0)
+                    if (index == 0)
                     {
-                        ButtonsList.Add(new ListButton(content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), new Vector2(0, 0), rectangle.Location.ToVector2(), rectangle.Width, index, ItemSelect));
+                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     else
                     {
-                        ButtonsList.Add(new ListButton(content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), new Vector2(0, buttonDistance + ((ListButton)ButtonsList.Children[index - 1]).Rectangle.Bottom), rectangle.Location.ToVector2(), rectangle.Width, index, ItemSelect));
+                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     index++;
                 }
             }
         }
 
-        public void ItemSelect(Object o)
+        public void ItemSelect(Button button)
         {
-            ListButton listbutton = (ListButton)o;
-            ((ListButton)ButtonsList.Children[selected]).Selected = false;
-            listbutton.Selected = true;
-            selected = listbutton.Index;
+            ((Button)children[selected]).Selected = false;
+            button.Selected = true;
+            selected = children.IndexOf(button);
         }
     }
 }
