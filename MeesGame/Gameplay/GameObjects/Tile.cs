@@ -6,6 +6,8 @@ namespace MeesGame
     {
         Floor,
         Wall,
+        Door,
+        Key,
         Unknown
     }
 
@@ -13,7 +15,7 @@ namespace MeesGame
     {
         protected TileType tileType;
 
-        public Tile (string assetName = "", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
+        public Tile(string assetName = "", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
             tileType = tt;
         }
@@ -29,7 +31,7 @@ namespace MeesGame
         /// <param name="player">The player at this Tile that wants to perform the action</param>
         /// <param name="action">The action to check</param>
         /// <returns>true if the action is forbidden by this Tile. false otherwise.</returns>
-        public abstract bool IsActionForbiddenFromHere(Player player,PlayerAction action);
+        public abstract bool IsActionForbiddenFromHere(Player player, PlayerAction action);
 
         /// <summary>
         /// Checks if the player can move to this tile when he is next to it.
@@ -41,6 +43,11 @@ namespace MeesGame
 
     class FloorTile : Tile
     {
+        protected FloorTile(string assetName = "floorTile", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        {
+
+        }
+
         public FloorTile(int layer = 0, string id = "") : base("floorTile", TileType.Floor, layer, id)
         {
 
@@ -54,24 +61,42 @@ namespace MeesGame
 
         public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
         {
-            //special actions are not allowed on floor tiles, because there is no special action available.
-            return action == PlayerAction.SPECIAL;
+            //A player can move into all directions from a floor tile.
+            //Special actions are allowed on floor tiles, if there is a tile which allows a special action next to it.
+            if (IsNextToSpecialTile())
+            {
+                return false;
+            }
+            //Special actions are not allowed on a floor tile, if it is surrounded by tiles that don't allow special actions. 
+            else
+                return action == PlayerAction.SPECIAL;
+        }
+
+        //TODO
+        public bool IsNextToSpecialTile()
+        {
+            return false;
         }
     }
 
     class WallTile : Tile
     {
-        public WallTile(int layer = 0, string id = "") : base("wall", TileType.Wall, layer, id)
+        protected WallTile(string assetName = "fourWayWallTile", TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
 
         }
-        
+
+        public WallTile(int layer = 0, string id = "") : base("fourWayWallTile", TileType.Wall, layer, id)
+        {
+
+        }
+
         public override bool CanPlayerMoveHere(Player player)
         {
             //A player can never walk onto a wall
             return false;
         }
-        
+
         public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
         {
             //A player should never even be on a Wall Tile

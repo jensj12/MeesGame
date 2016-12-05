@@ -9,10 +9,13 @@ namespace MeesGame
     class Player : SpriteGameObject
     {
         protected Level level;
+        protected TileField tileField;
         protected int score = 0;
         protected Point location;
         protected TimeSpan lastActionTime;
         protected PlayerAction nextAction = NONE;
+        protected PlayerAction lastAction;
+        protected List<Tile> visitedTiles = new List<Tile>();
 
         public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
         {
@@ -20,6 +23,7 @@ namespace MeesGame
             this.level = level;
             this.location = location;
             this.position = tileField.GetAnchorPosition(location);
+            this.tileField = tileField;
         }
 
         public int Score
@@ -42,9 +46,13 @@ namespace MeesGame
             }
         }
 
-        //this is just a simple implementation
-        //an action is allowed if and only if it is a direction
-        //we might change this later
+        public PlayerAction LastAction
+        {
+            get
+            {
+                return lastAction;
+            }
+        }
 
         /// <summary>
         /// A list of all possible actions the player can take at the current stage of the game
@@ -69,10 +77,10 @@ namespace MeesGame
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
         public bool CanPerformAction(PlayerAction action)
         {
-            
-            if (level.Tiles.Get(location).IsActionForbiddenFromHere(this,action)) return false;
 
-            
+            if (level.Tiles.Get(location).IsActionForbiddenFromHere(this, action)) return false;
+
+
 
             //movements are
             Point newLocation = GetLocationAfterAction(action);
@@ -107,8 +115,19 @@ namespace MeesGame
         public void PerformAction(PlayerAction action)
         {
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
+            lastAction = action;
 
             this.location = GetLocationAfterAction(action);
+        }
+
+        public bool HasKey()
+        {
+            foreach (Tile tile in visitedTiles)
+            {
+                if (tile.TileType == TileType.Key)
+                    return true;
+            }
+            return false;
         }
     }
 
@@ -131,13 +150,14 @@ namespace MeesGame
             //if enough time has elapsed since the previous action, perform the selected action
             if (gameTime.TotalGameTime - lastActionTime >= level.TimeBetweenActions)
             {
-
                 if (CanPerformAction(nextAction) && nextAction != NONE)
                 {
                     //important for smooth movement
                     velocity = CalculateVelocityVector(nextAction);
                     PerformAction(nextAction);
                     lastActionTime = gameTime.TotalGameTime;
+                    nextAction = NONE;
+                    visitedTiles.Add(tileField.Get(location));
                 }
                 else
                 {
