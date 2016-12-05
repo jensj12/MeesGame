@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace MeesGame
 {
@@ -14,6 +15,7 @@ namespace MeesGame
     abstract class Tile : SpriteGameObject
     {
         protected TileType tileType;
+        protected Point gridPosition;
 
         public Tile(string assetName = "", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
@@ -23,6 +25,12 @@ namespace MeesGame
         public TileType TileType
         {
             get { return tileType; }
+        }
+
+        public Point GridPosition
+        {
+            get { return gridPosition; }
+            set { gridPosition = value; }
         }
 
         /// <summary>

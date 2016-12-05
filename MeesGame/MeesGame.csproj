@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
@@ -110,7 +111,6 @@
     <MonoGameContentReference Include="Gameplay\Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Gameplay\Editor\" />
     <Folder Include="Gameplay\Menu\" />
   </ItemGroup>
   <ItemGroup>

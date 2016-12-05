@@ -78,13 +78,13 @@ namespace MeesGame
         public bool CanPerformAction(PlayerAction action)
         {
 
-            if (level.Tiles.Get(location).IsActionForbiddenFromHere(this, action)) return false;
+            if (level.Tiles.GetTile(location).IsActionForbiddenFromHere(this, action)) return false;
 
 
 
             //movements are
             Point newLocation = GetLocationAfterAction(action);
-            return level.Tiles.Get(newLocation).CanPlayerMoveHere(this);
+            return level.Tiles.GetTile(newLocation).CanPlayerMoveHere(this);
         }
 
         public Point GetLocationAfterAction(PlayerAction action)

@@ -38,6 +38,11 @@ public class GameObjectGrid : GameObject
         }
     }
 
+    public GameObject Get(Point position)
+    {
+        return Get(position.X, position.Y);
+    }
+
     public GameObject[,] Objects
     {
         get

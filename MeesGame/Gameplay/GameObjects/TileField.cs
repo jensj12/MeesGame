@@ -20,6 +20,12 @@ namespace MeesGame
             return tile.TileType;
         }
 
+        public void Add(Tile obj, int x, int y)
+        {
+            base.Add(obj, x, y);
+            obj.GridPosition = new Point(x, y);
+        }
+
         /// <summary>
         /// Resizes the grid to the given values. Meant for use in editor only.
         /// </summary>
@@ -41,7 +47,7 @@ namespace MeesGame
             }
         }
 
-        public Tile Get(Point location)
+        public Tile GetTile(Point location)
         {
             if (location.X < 0 || location.Y < 0 || location.X >= Columns || location.Y >= Rows)
             {
