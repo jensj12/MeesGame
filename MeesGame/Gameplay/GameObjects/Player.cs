@@ -157,7 +157,7 @@ namespace MeesGame
                     PerformAction(nextAction);
                     lastActionTime = gameTime.TotalGameTime;
                     nextAction = NONE;
-                    visitedTiles.Add(tileField.Get(location));
+                    visitedTiles.Add(tileField.GetTile(location));
                 }
                 else
                 {
