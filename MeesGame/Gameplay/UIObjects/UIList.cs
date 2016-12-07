@@ -29,7 +29,7 @@ namespace MeesGame
 
         protected ScrollBar scrollBar;
 
-        public UIList(Vector2 location, Vector2 dimensions, UIContainer parent, int elementsDistance = 10) : base(location, dimensions, parent, true)
+        public UIList(Vector2 location, Vector2 dimensions, UIContainer parent, int elementsDistance = 10) : base(location, dimensions, parent)
         {
             this.elementsDistance = elementsDistance;
             scrollBar = new ScrollBar(this);
@@ -40,9 +40,10 @@ namespace MeesGame
             int objectIndex = children.IndexOf(uiObject);
 
             if(objectIndex > 0)
-                return new Vector2(base.GetChildAnchorPoint(this).X, elementsDistance + children[objectIndex - 1].Rectangle.Bottom);
+                return new Vector2(0, elementsDistance + children[objectIndex - 1].RelativeRectangle.Bottom);
 
-            return base.GetChildAnchorPoint(this) + new Vector2(0, -elementsOffset);
+            //if we only scale the first element, the rest will follow.
+            return new Vector2(0, -elementsOffset);
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
@@ -55,7 +56,7 @@ namespace MeesGame
                 Background.SetData(colordata);
             }
 
-            spriteBatch.Draw(Background, Rectangle, Color.White);
+            spriteBatch.Draw(Background, OriginLocationRectangle, Color.White);
             base.DrawTask(gameTime, spriteBatch);
             scrollBar.Draw(gameTime, spriteBatch);
         }

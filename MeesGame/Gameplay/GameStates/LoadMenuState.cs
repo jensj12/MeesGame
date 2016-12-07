@@ -25,10 +25,10 @@ namespace MeesGame
             DirectoryInfo info = Directory.CreateDirectory(directory);
 
             //we don't need to inser a valid size because we don't hide the overflow. I can't give a valid one yet because I can't get the correct dimensions of the window
-            uiContainer = new UIContainer(Vector2.Zero, Vector2.Zero, null);
-            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), uiContainer, content, "lvl", directory);
-            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), uiContainer, content, "ai", directory);
-            startButton = new Button(new Vector2(700, 700), Vector2.Zero, uiContainer, content, Strings.ok, (Button o) =>
+            uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2(), null);
+            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), uiContainer, "lvl", directory);
+            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), uiContainer, "ai", directory);
+            startButton = new Button(new Vector2(700, 700), Vector2.Zero, uiContainer, Strings.ok, (Button o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });

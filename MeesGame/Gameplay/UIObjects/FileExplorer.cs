@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using Microsoft.Xna.Framework.Content;
 using System.IO;
 using MeesGame.Gameplay.UIObjects;
 
@@ -8,29 +7,42 @@ namespace MeesGame
 {
     public class FileExplorer : UIList
     {
-        private ContentManager content;
-
+        /// <summary>
+        /// distance between each of the buttons in the file explorer
+        /// </summary>
         private int buttonDistance = 10;
 
         private String fileExtension;
 
-        //returns the selected variable
+        ///returns the index of the selected button
         private int selected = 0;
 
-        //for now this is one directory, but it should be well doable to allow for a folder structure
+        /// <summary>
+        /// directory the file explorer is displaying
+        /// </summary>
         private String currentDirectory;
 
-
-        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, ContentManager content, String fileExtension, string path) : base(location, dimensions, parent)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="dimensions"></param>
+        /// <param name="parent"></param>
+        /// <param name="content"></param>
+        /// <param name="fileExtension">extensions the file explorer looks for, for example .lvl</param>
+        /// <param name="path">path of the folder the files are located in</param>
+        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, String fileExtension, string path) : base(location, dimensions, parent)
         {
             currentDirectory = path;
-            this.content = content;
             this.fileExtension = fileExtension;
 
             generateFileList();
             scrollBar.ChangeTotalElementsSize();
         }
 
+        /// <summary>
+        /// lists the file in the directory and puts them into buttons for the file explorer
+        /// </summary>
         public void generateFileList()
         {
             children.Reset();
@@ -42,17 +54,22 @@ namespace MeesGame
                 {
                     if (index == 0)
                     {
-                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     else
                     {
-                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, content, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
                     }
                     index++;
                 }
             }
         }
 
+        /// <summary>
+        /// method called when a button is pressed. Changes the selected item in the list and
+        /// updates the selected variable
+        /// </summary>
+        /// <param name="button">Button that was just pressed</param>
         public void ItemSelect(Button button)
         {
             ((Button)children[selected]).Selected = false;

@@ -48,7 +48,7 @@
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />
     <Compile Include="Gameplay\UIObjects\ScrollBar.cs" />
-    <Compile Include="Gameplay\UIObjects\TextureGenerator.cs" />
+    <Compile Include="Gameplay\UIObjects\TextureRenderer.cs" />
     <Compile Include="Gameplay\UIObjects\Button.cs" />
     <Compile Include="Gameplay\GameStates\LevelEditorState.cs" />
     <Compile Include="Gameplay\GameStates\LoadMenuState.cs" />

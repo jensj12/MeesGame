@@ -6,14 +6,22 @@ namespace MeesGame
 {
     public abstract class UIObject : IGameLoopObject
     {
-        protected Vector2 location;
-        protected Vector2 dimensions;
+        /// <summary>
+        /// location = relative location to the parent of the object
+        /// dimensions = size of the element, used for input and for rendering when overflow is hidden
+        /// parent = the parent of the object
+        /// renderTarget = the texture of the ui element, so that we can render it when it is updated and disposed when not needed anymore
+        /// invaalidated = determines if the rendertarget needs updating
+        /// </summary>
+        private Vector2 relativeLocation;
+        private Vector2 dimensions;
         protected UIContainer parent;
-        protected bool hideOverflow;
-        protected TextureGenerator textureGenerator;
         protected RenderTarget2D renderTarget;
-        //because the input is eaten after an element uses it we keep track of wether the elements
-        //have received an input and allow them to act accordingly in the update method
+        protected bool invalidated = true;
+        protected TextureRenderer textureRenderer;
+        
+        ///because the input is eaten after an element uses it we keep track of wether the elements
+        ///have received an input and allow them to act accordingly in the update method
         private bool hovering;
         private bool mouseDown;
         private bool clicked;
@@ -22,52 +30,81 @@ namespace MeesGame
         {
             get { return hovering; }
         }
+
         public bool MouseDown
         {
             get { return mouseDown; }
         }
+
         public bool Clicked
         {
             get { return clicked; }
         }
 
-
-        public UIObject(Vector2 location, Vector2 dimensions, UIContainer parent, bool hideOverflow = false)
+        public bool Invalidate
         {
-            this.location = location;
-            this.dimensions = dimensions;
-            this.parent = parent;
-            this.hideOverflow = hideOverflow;
+            get { return invalidated; }
+            set {invalidated = value;
+                if(parent != null)
+                    parent.Invalidate = value;
+            }
         }
 
-        public virtual Vector2 Location
+        public virtual Vector2 AbsoluteLocation
         {
             get
             {
                 if (parent != null)
                 {
-                    return location + parent.GetChildAnchorPoint(this);
+                    return RelativeLocation + parent.AbsoluteLocation;
                 }
 
-                return location;
+                return RelativeLocation;
             }
         }
 
+        ///location relative to the location of its parent 
         public virtual Vector2 RelativeLocation
         {
-            get { return location; }
+            get
+            {
+                if (parent != null)
+                    return relativeLocation + parent.GetChildAnchorPoint(this);
+                return relativeLocation;
+            }
         }
 
-        public Vector2 Dimensions
+        public virtual Vector2 Dimensions
         {
             get { return dimensions; }
             set { dimensions = value; }
         }
 
-        //the rectangle gives the absolute location and dimensions of the uiobject
-        public Rectangle Rectangle
+        /// <summary>
+        /// gives the absolute location of the rectangle compared to the origin of the screen, 0,0
+        /// usefully for inputchecking
+        /// </summary>
+        public Rectangle AbsoluteRectangle
         {
-            get { return new Rectangle(Location.ToPoint(), Dimensions.ToPoint()); }
+            get { return new Rectangle(AbsoluteLocation.ToPoint(), Dimensions.ToPoint()); }
+        }
+
+        /// <summary>
+        /// gives the position relative to the parent
+        /// usefull for drawing the texture we generate of the objkect
+        /// </summary>
+        public Rectangle RelativeRectangle
+        {
+            get { return new Rectangle(RelativeLocation.ToPoint(), Dimensions.ToPoint()); }
+        }
+
+        /// <summary>
+        /// gives the object with the location 0
+        /// usefull for rendering the texture
+        /// </summary>
+        public Rectangle OriginLocationRectangle
+        {
+            get { return new Rectangle(0, 0, (int)dimensions.X, (int)dimensions.Y); }
         }
 
         public UIContainer Parent
@@ -76,13 +113,25 @@ namespace MeesGame
             set { parent = value; }
         }
 
-        public bool HideOverflow
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location">location relative to the parent</param>
+        /// <param name="dimensions">size of the object</param>
+        /// <param name="parent">parent of the object</param>
+        public UIObject(Vector2 location, Vector2 dimensions, UIContainer parent)
         {
-            get { return hideOverflow; }
-            set { hideOverflow = value; }
+            this.relativeLocation = location;
+            this.dimensions = dimensions;
+            this.parent = parent;
+            this.textureRenderer = new TextureRenderer();
         }
 
-        //if this 
+
+        /// <summary>
+        /// We read the input to determine if the ui element is being pointed at
+        /// </summary>
+        /// <param name="inputHelper"></param>
         public virtual void HandleInput(InputHelper inputHelper)
         {
             hovering = false;
@@ -91,7 +140,7 @@ namespace MeesGame
 
             if (parent == null || !parent.InputEaten)
             {
-                if (Rectangle.Contains(inputHelper.MousePosition))
+                if (AbsoluteRectangle.Contains(inputHelper.MousePosition))
                 {
                     hovering = true;
                     if(parent != null)
@@ -109,44 +158,46 @@ namespace MeesGame
         }
 
 
-        //if a component such as the scroll bar wants to eat the input it can remain eaten
+        ///allows a component to use the imput in the UI untill it doesn't need the input anymore. If we wouldn't use this method, than dragging any element
+        ///would result in the input being registered ny every element not in range
         public virtual bool WantsToEatInput
         {
-            get { return false; }
+            get {
+                this.Invalidate = true;
+                return false; }
         }
 
+        /// <summary>
+        /// Ui elents are able to override this at will, for example if the ui changes over time
+        /// </summary>
+        /// <param name="gameTime">current time</param>
         public virtual void Update(GameTime gameTime)
         {
         }
 
+        /// <summary>
+        /// draws the UIel
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (hideOverflow)
+            if (Invalidate == true)
             {
-                if (textureGenerator == null)
-                {
-                    textureGenerator = new TextureGenerator(spriteBatch.GraphicsDevice, (int)dimensions.X, (int)dimensions.Y);
-                }
-
-                Vector2 myLocation = location;
-                //if we draw an object in a seperate container to hide the overflow we need to make sure the object get's drawn that is 0,0 relative to the parent.
-                //thus we temporarily move the parent to 0,0 so that it get's drawn there. For now no other way (perhaps with scissor rectangles in the future
-                UIContainer myParent = parent;
-                location = Vector2.Zero;
-                renderTarget = textureGenerator.Render(gameTime, DrawTask);
-                location = myLocation;
-                parent = myParent;
-                spriteBatch.Draw(renderTarget, Rectangle, Color.White);
+                renderTarget?.Dispose();
+                textureRenderer.Render(gameTime, spriteBatch.GraphicsDevice, DrawTask, dimensions, out renderTarget);
+                invalidated = false;
             }
-            else
-            {
-                DrawTask(gameTime, spriteBatch);
-            }
+            spriteBatch.Draw(renderTarget, RelativeRectangle, Color.White);
         }
 
-        // the way an object should draw itself. We have to make the object draw itself in a sepperate method from the draw call because
-        // we need to do some prelimary work to help the object hide its overflow
+        /// <summary>
+        /// the draw task is basically the draw call, but with the added bonus of allowing the class to makeup the spritebatch using a scissor rectange for example
+        /// </summary>
+        /// <param name="gameTime">the current gametime</param>
+        /// <param name="spriteBatch">a spritebatch to draw in</param>
         public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
+
         public virtual void Reset() { }
     }
 }
