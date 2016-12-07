@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MeesGame.Gameplay.UIObjects;
@@ -7,6 +8,7 @@ namespace MeesGame
 {
     internal class LevelEditorState : IGameLoopObject
     {
+        TileField tileField;
 
         public LevelEditorState(GameEnvironment game)
         {

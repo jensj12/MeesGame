@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.IO;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Schema;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class Level : GameObjectList
+    class Level : GameObjectList, IXmlSerializable
     {
         protected int numRows = 31;
         protected int numColumns = 31;
@@ -53,6 +57,21 @@ namespace MeesGame
             {
                 return timeBetweenActions;
             }
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
