@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 
 namespace MeesGame
 {
@@ -47,6 +46,11 @@ namespace MeesGame
         /// <param name="player"></param>
         /// <returns>true if the player can move here. false otherwise.</returns>
         public abstract bool CanPlayerMoveHere(Player player);
+
+        /// <summary>
+        /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField
+        /// </summary>
+        public abstract void UpdateGraphicsToMatchSurroundings();
     }
 
     class FloorTile : Tile
@@ -80,6 +84,10 @@ namespace MeesGame
                 return action == PlayerAction.SPECIAL;
         }
 
+        public override void UpdateGraphicsToMatchSurroundings()
+        {
+        }
+
         //TODO
         public bool IsNextToSpecialTile()
         {
@@ -89,12 +97,12 @@ namespace MeesGame
 
     class WallTile : Tile
     {
-        protected WallTile(string assetName = "fourWayWallTile", TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        protected WallTile(string assetName = "walls@16", TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
 
         }
 
-        public WallTile(int layer = 0, string id = "") : base("fourWayWallTile", TileType.Wall, layer, id)
+        public WallTile(int layer = 0, string id = "") : base("walls@16", TileType.Wall, layer, id)
         {
 
         }
@@ -109,6 +117,19 @@ namespace MeesGame
         {
             //A player should never even be on a Wall Tile
             return true;
+        }
+
+        public override void UpdateGraphicsToMatchSurroundings()
+        {
+            int sheetIndex = 0;
+            int x = gridPosition.X;
+            int y = gridPosition.Y;
+            TileField tileField = Parent as TileField;
+            if (tileField.GetTile(x, y - 1) is WallTile) sheetIndex += 1;
+            if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
+            if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
+            if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
+            sprite = new SpriteSheet("walls@16", sheetIndex);
         }
     }
 }

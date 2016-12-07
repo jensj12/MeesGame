@@ -94,12 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gameplay\Content\floorTile.png" />
-    <Content Include="Gameplay\Content\fourWayWallTile.png" />
     <Content Include="Gameplay\Content\horizontalDoorOverlay.png" />
     <Content Include="Gameplay\Content\horizontalEnd.png" />
     <Content Include="Gameplay\Content\keyOverlay.png" />
     <Content Include="Gameplay\Content\player.png" />
-    <Content Include="Gameplay\Content\spritesheet.png" />
+    <Content Include="Gameplay\Content\walls@16.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Icon.ico" />

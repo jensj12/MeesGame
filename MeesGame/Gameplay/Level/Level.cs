@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Schema;
@@ -24,17 +23,9 @@ namespace MeesGame
             tiles.CellHeight = CELL_HEIGHT;
             tiles.CellWidth = CELL_WIDTH;
 
-            /*/Temporary initialisation of empty tiles
-            for (int x = 0; x < numColumns; x++)
-            {
-                for (int y = 0; y < numRows; y++)
-                {
-                    tiles.Add(new FloorTile(), x, y);
-                }
-            }//*/
-
             start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
             tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
+            tiles.UpdateGraphicsToMatchSurroundings();
 
             this.player = new HumanPlayer(this, tiles, start);
             Camera camera = new Camera(player);

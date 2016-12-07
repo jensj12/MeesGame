@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
@@ -35,7 +34,7 @@ namespace MeesGame
         {
             GameObject[,] oldGrid = grid;
             grid = new GameObject[columns, rows];
-            for (int x = 0;  x < columns; x++)
+            for (int x = 0; x < columns; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {
@@ -47,13 +46,26 @@ namespace MeesGame
             }
         }
 
-        public Tile GetTile(Point location)
+        public Tile GetTile(int x, int y)
         {
-            if (location.X < 0 || location.Y < 0 || location.X >= Columns || location.Y >= Rows)
+            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
             {
                 return new WallTile();
             }
-            return (Tile)Get(location.X, location.Y);
+            return (Tile)Get(x, y);
+        }
+
+        public Tile GetTile(Point location)
+        {
+            return GetTile(location.X, location.Y);
+        }
+
+        public void UpdateGraphicsToMatchSurroundings()
+        {
+            foreach (Tile tile in Objects)
+            {
+                tile.UpdateGraphicsToMatchSurroundings();
+            }
         }
     }
 }
