@@ -22,7 +22,7 @@ namespace MeesGame
         public void Add(Tile obj, int x, int y)
         {
             base.Add(obj, x, y);
-            obj.GridPosition = new Point(x, y);
+            obj.Location = new Point(x, y);
         }
 
         /// <summary>

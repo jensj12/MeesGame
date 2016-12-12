@@ -17,7 +17,7 @@ namespace MeesGame
         protected Point start;
         protected Player player;
         protected TileField tiles;
-        public Level(int levelindex = 0)
+        public Level(int levelindex = 0, bool human = true)
         {
             tiles = new TileField(numRows, numColumns, 0, "tiles");
             tiles.CellHeight = CELL_HEIGHT;
@@ -26,12 +26,10 @@ namespace MeesGame
             start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
             tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
             tiles.UpdateGraphicsToMatchSurroundings();
-
-            this.player = new HumanPlayer(this, tiles, start);
-            Camera camera = new Camera(player);
-            Add(camera);
-            camera.Add(this.tiles);
-            camera.Add(this.player);
+            if (human)
+            {
+                UseHumanPlayer();
+            }
         }
 
         public TileField Tiles
@@ -71,6 +69,30 @@ namespace MeesGame
             camera.UpdateCamera();
             base.Draw(gameTime, spriteBatch);
             camera.ResetCamera();
+        }
+
+        private void usePlayer(Player player)
+        {
+            this.player = player;
+            Camera camera = new Camera(player);
+            Add(camera);
+            camera.Add(this.tiles);
+            camera.Add(this.player);
+        }
+
+        public void UseHumanPlayer()
+        {
+            usePlayer(new HumanPlayer(this, start));
+        }
+
+        public void UseTimedPlayer()
+        {
+            usePlayer(new TimedPlayer(this, start));
+        }
+
+        public void UseUntimedPlayer()
+        {
+            usePlayer(new Player(this, start));
         }
     }
 }

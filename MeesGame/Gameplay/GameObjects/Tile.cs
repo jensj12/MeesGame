@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -14,22 +15,28 @@ namespace MeesGame
     abstract class Tile : SpriteGameObject
     {
         protected TileType tileType;
-        protected Point gridPosition;
+        protected Point location = Point.Zero;
 
-        public Tile(string assetName = "", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
+        protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            tileType = tt;
+            this.tileType = tileType;
         }
 
+        /// <summary>
+        /// The type of Tile
+        /// </summary>
         public TileType TileType
         {
             get { return tileType; }
         }
 
-        public Point GridPosition
+        /// <summary>
+        /// The location on the TileField
+        /// </summary>
+        public Point Location
         {
-            get { return gridPosition; }
-            set { gridPosition = value; }
+            get { return location; }
+            set { location = value; }
         }
 
         /// <summary>
@@ -46,6 +53,75 @@ namespace MeesGame
         /// <param name="player"></param>
         /// <returns>true if the player can move here. false otherwise.</returns>
         public abstract bool CanPlayerMoveHere(Player player);
+
+        /// <summary>
+        /// The location that the player will be on after performing the specified action
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public Point GetLocationAfterAction(PlayerAction action)
+        {
+            Point newLocation = this.location;
+            switch (action)
+            {
+                case PlayerAction.NORTH:
+                    newLocation.Y--;
+                    break;
+                case PlayerAction.EAST:
+                    newLocation.X++;
+                    break;
+                case PlayerAction.SOUTH:
+                    newLocation.Y++;
+                    break;
+                case PlayerAction.WEST:
+                    newLocation.X--;
+                    break;
+            }
+            return newLocation;
+        }
+
+        /// <summary>
+        /// Perform an action for the player. Modifies the PlayerState appropriately
+        /// </summary>
+        /// <param name="player">The player that is performing the action</param>
+        /// <param name="state">The state of the player to be modified by this function</param>
+        /// <param name="action">The action to perform</param>
+        public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
+        {
+            state.Location = GetLocationAfterAction(action);
+        }
+
+        /// <summary>
+        /// The TileField this tile is in
+        /// </summary>
+        public TileField TileField
+        {
+            get
+            {
+                return (TileField)parent;
+            }
+
+            set
+            {
+                parent = value;
+            }
+        }
+
+        /// <summary>
+        /// The four direct neighbours of this Tile
+        /// </summary>
+        public ICollection<Tile> Neighbours
+        {
+            get
+            {
+                List<Tile> neighbours = new List<Tile>();
+                foreach (PlayerAction action in Player.MOVEMENT_ACTIONS)
+                {
+                    neighbours.Add(TileField.GetTile(GetLocationAfterAction(action)));
+                }
+                return neighbours;
+            }
+        }
 
         /// <summary>
         /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField
@@ -122,8 +198,8 @@ namespace MeesGame
         public override void UpdateGraphicsToMatchSurroundings()
         {
             int sheetIndex = 0;
-            int x = gridPosition.X;
-            int y = gridPosition.Y;
+            int x = Location.X;
+            int y = Location.Y;
             TileField tileField = Parent as TileField;
             if (tileField.GetTile(x, y - 1) is WallTile) sheetIndex += 1;
             if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
