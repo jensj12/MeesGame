@@ -32,7 +32,8 @@ namespace MeesGame
 
     class PlayerState
     {
-        public Inventory Inventory{
+        public Inventory Inventory
+        {
             get;
         }
 
