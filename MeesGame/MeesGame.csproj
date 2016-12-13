@@ -94,14 +94,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Gameplay\Content\backplayer.png" />
     <Content Include="Gameplay\Content\floorTile.png" />
+    <Content Include="Gameplay\Content\guard.png" />
     <Content Include="Gameplay\Content\horizontalDoorOverlay.png" />
     <Content Include="Gameplay\Content\horizontalEnd.png" />
     <Content Include="Gameplay\Content\keyOverlay.png" />
+    <Content Include="Gameplay\Content\leftplayer.png" />
     <Content Include="Gameplay\Content\player.png" />
-    <Content Include="Gameplay\Content\walls@16.png" />
+    <Content Include="Gameplay\Content\rightplayer.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
+    <Content Include="Gameplay\Content\walls%4016.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
