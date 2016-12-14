@@ -86,7 +86,8 @@ namespace MeesGen
                     if (!(tiles.GetTile(next) is MeesGame.WallTile))
                     {
                         if (random.Next(BIGINT) < loopChance * BIGINT)
-                            tiles.Add(new MeesGame.FloorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                            if(tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is MeesGame.WallTile)
+                                tiles.Add(new MeesGame.DoorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                         continue;
                     }
 

@@ -5,7 +5,7 @@ namespace MeesGame
     class DoorTile : WallTile
     {
         //TODO: Pair a door with a specific key.
-        public DoorTile(int layer = 0, string id = "") : base("doorTile", TileType.Door, layer, id)
+        public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)
         {
 
         }
@@ -50,6 +50,10 @@ namespace MeesGame
             return false;
         }*/
 
+        public override void UpdateGraphicsToMatchSurroundings()
+        {
+            //TODO: choose hor/ver wall
+        }
     }
 
 
