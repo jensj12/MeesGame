@@ -4,6 +4,8 @@ namespace MeesGame
 {
     class DoorTile : WallTile
     {
+        public const string defaultAssetName = "horizontalDoorOverlay";
+
         //TODO: Pair a door with a specific key.
         public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)
         {
@@ -59,6 +61,7 @@ namespace MeesGame
 
     class KeyTile : FloorTile
     {
+        public const string defaultAssetName = "keyOverlay";
 
         public KeyTile(int layer = 0, string id = "") : base("keyTile", TileType.Key, layer, id)
         {

@@ -11,6 +11,7 @@ namespace MeesGame
         const int leftBarWidth = 150;
         const int rightBarWidth = 200;
         const int buttonDistanceFromRightWall = 20;
+        readonly Color listsBackgroundColor = new Color(122, 122, 122, 255);
 
         List<Level> level;
 
@@ -46,8 +47,8 @@ namespace MeesGame
         private void InitUI()
         {
             overlay = new GUIContainer(null, GameEnvironment.Screen.ToVector2());
-            tilesList = new GUIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: new Color(122, 122, 122, 122));
-            tilesPropertiesList = new GUIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: new Color(122, 122, 122, 122));
+            tilesList = new GUIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            tilesPropertiesList = new GUIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
 
             overlay.AddChild(tilesList);
             overlay.AddChild(tilesPropertiesList);

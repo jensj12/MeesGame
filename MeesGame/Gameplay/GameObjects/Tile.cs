@@ -142,6 +142,10 @@ namespace MeesGame
                     return new FloorTile();
                 case TileType.Wall:
                     return new WallTile();
+                case TileType.Door:
+                    return new DoorTile();
+                case TileType.Key:
+                    return new KeyTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
@@ -160,6 +164,10 @@ namespace MeesGame
                     return FloorTile.defaultAssetName;
                 case TileType.Wall:
                     return WallTile.defaultAssetName;
+                case TileType.Door:
+                    return DoorTile.defaultAssetName;
+                case TileType.Key:
+                    return KeyTile.defaultAssetName;
             }
             //If no Tile can be made of the specified tiletype, return an empty string
             return "";
