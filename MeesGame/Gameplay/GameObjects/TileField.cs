@@ -1,10 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid, ITileField
+    public class TileField : GameObjectGrid, ITileField, IXmlSerializable
     {
         protected bool fogOfWar;
+
+        public TileField() : base(0, 0, 0, "")
+        {
+        }
 
         public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "") : base(rows, columns, layer, id)
         {
@@ -97,6 +105,29 @@ namespace MeesGame
                 for(int j = a.Y - 1; j <= a.Y + 1; j++)
                 {
                     if(i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
+                }
+            }
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            new XmlSerializer(typeof(int)).Serialize(writer, Columns);
+            new XmlSerializer(typeof(int)).Serialize(writer, Rows);
+            for(int x = 0; x<=Columns; x++)
+            {
+                for (int y = 0; y<=Rows; y++)
+                {
+                    new XmlSerializer(typeof(Tile)).Serialize(writer, GetTile(new Point(x, y)));
                 }
             }
         }

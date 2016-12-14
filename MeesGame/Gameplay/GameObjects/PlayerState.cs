@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    enum InventoryItemType
+    public enum InventoryItemType
     {
         Key
     }
 
-    abstract class InventoryItem
+    public abstract class InventoryItem
     {
         public InventoryItemType type
         {
@@ -39,7 +39,7 @@ namespace MeesGame
         }
     }
 
-    class PlayerState
+    public class PlayerState
     {
         public Inventory Inventory
         {

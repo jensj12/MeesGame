@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace MeesGame
 {
@@ -10,29 +11,34 @@ namespace MeesGame
         /// <summary>
         /// Saves the level to a file with the specified name.
         /// </summary>
-        /// <param name="obj"> Dummy variable. </param>
-        /// <param name="ea"> Dummy variable. </param>
-        public void Save(object obj, EventArgs ea)
+        /// <param name="level"> The level being saved. </param>
+        /// <param name="filename"> The name of the file the level is being saved to. </param>
+        public static void Save(Level level)
         {
             string fileName = null;
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "txt Files (*.txt) | *.txt | All Files (*.*) | *.*";
+            saveFileDialog.Filter = "txt Files (*.txt) | *.txt ";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                fileName = saveFileDialog.FileName;
                 Stream stream = new FileStream(fileName, FileMode.Create);
-                XmlWriter.Create(stream);
-                //doe iets
+                XmlWriter writer = XmlWriter.Create(stream);
+                new XmlSerializer(typeof(TileField)).Serialize(writer, level.Tiles);
+                writer.Close();
             }
         }
 
         /// <summary>
         /// Loads a level from a file with the specified name.
         /// </summary>
-        /// <param name="obj"> Dummy variable. </param>
-        /// <param name="ea"> Dummy variable. </param>
-        public void Load(object obj, EventArgs ea)
+        public static void Load(string filename)
         {
-            //iets
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "txt Files|*.txt ";
+            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Lees het bestand uit en construeer een TileField hieruit.
+            }
         }
     }
 }

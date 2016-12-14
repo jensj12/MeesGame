@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace MeesGame
 {
-    class Level : GameObjectList, IXmlSerializable
+   public class Level : GameObjectList, IXmlSerializable
     {
         protected int numRows = 31;
         protected int numColumns = 31;
@@ -55,7 +55,9 @@ namespace MeesGame
 
         public void WriteXml(XmlWriter writer)
         {
-            throw new NotImplementedException();
+            XmlSerializer intSerializer = new XmlSerializer(typeof(int));
+            intSerializer.Serialize(writer,  numColumns);
+            intSerializer.Serialize(writer,  numRows);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

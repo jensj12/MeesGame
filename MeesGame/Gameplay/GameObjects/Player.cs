@@ -6,7 +6,7 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
-    class Player : SpriteGameObject
+    public class Player : SpriteGameObject
     {
         /// <summary>
         /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.

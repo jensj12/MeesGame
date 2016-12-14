@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace MeesGame
 {
-    enum TileType
+    public enum TileType
     {
         Floor,
         Wall,
@@ -13,11 +17,15 @@ namespace MeesGame
         Unknown
     }
 
-    abstract class Tile : SpriteGameObject
+    public abstract class Tile : SpriteGameObject, IXmlSerializable
     {
-        protected TileType tileType;
-        protected Point location = Point.Zero;
+        public TileType tileType;
+        public Point location = Point.Zero;
         protected bool revealed = false;
+
+        public Tile() : base("")
+        {
+        }
 
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
@@ -75,7 +83,7 @@ namespace MeesGame
         /// <param name="player"></param>
         /// <returns>true if the player can move here. false otherwise.</returns>
         public abstract bool CanPlayerMoveHere(Player player);
-
+        
         /// <summary>
         /// The location that the player will be on after performing the specified action
         /// </summary>
@@ -204,6 +212,30 @@ namespace MeesGame
         public virtual InventoryItem GetItem()
         {
             return null;
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            string type="";
+            switch(this.tileType)
+            {
+                case (TileType.Floor): type="Floor"; break;
+                case (TileType.Wall): type = "Wall"; break;
+                case (TileType.Door): type = "Door";break;
+                case (TileType.Key): type = "Key"; break;
+                    default: type = ""; break;
+            }
+            new XmlSerializer(typeof(string)).Serialize(writer, type);
         }
     }
 
