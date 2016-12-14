@@ -42,13 +42,14 @@ namespace MeesGame
             get; set;
         }
 
-        public Point Location
+        public SmoothlyMovingGameObject Character
         {
-            get; set;
+            get;
         }
 
-        public PlayerState()
+        public PlayerState(SmoothlyMovingGameObject character)
         {
+            Character = character;
             Inventory = new Inventory();
         }
     }

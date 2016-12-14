@@ -3,22 +3,24 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using static MeesGame.PlayerAction;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class Player : SpriteGameObject
+    class Player : GameObjectList
     {
         /// <summary>
         /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
         /// </summary>
-        private PlayerState state = new PlayerState();
+        private PlayerState state;
 
-        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
+        public Player(Level level, Point location, int score = 0)
         {
+            state = new PlayerState(new SmoothlyMovingGameObject(level.Tiles, level.TimeBetweenActions, "player", 100));
             Score = score;
             Level = level;
-            Location = location;
-            position = Level.Tiles.GetAnchorPosition(location);
+            state.Character.Teleport(location);
+            Add(Character);
         }
 
         /// <summary>
@@ -113,11 +115,7 @@ namespace MeesGame
         {
             get
             {
-                return state.Location;
-            }
-            private set
-            {
-                state.Location = value;
+                return state.Character.Location;
             }
         }
 
@@ -125,6 +123,14 @@ namespace MeesGame
         {
             // TODO
             return false;
+        }
+
+        protected SmoothlyMovingGameObject Character
+        {
+            get
+            {
+                return state.Character;
+            }
         }
 
         /// <summary>
@@ -148,76 +154,22 @@ namespace MeesGame
         /// </summary>
         protected TimeSpan lastActionTime;
 
-        public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, score)
         {
         }
 
         public override void Update(GameTime gameTime)
         {
-            //if enough time has elapsed since the previous action, perform the selected action
-            if (gameTime.TotalGameTime - lastActionTime >= Level.TimeBetweenActions)
+            base.Update(gameTime);
+
+            if (!Character.IsMoving)
             {
                 if (CanPerformAction(NextAction) && NextAction != NONE)
-                {
-                    //important for smooth movement
-                    velocity = CalculateVelocityVector(NextAction);
+                { 
                     PerformAction(NextAction);
                     lastActionTime = gameTime.TotalGameTime;
                     NextAction = NONE;
                 }
-                else
-                {
-                    //stop moving
-                    velocity = Vector2.Zero;
-
-                    //put the player exactly at the middle of the square
-                    position = Level.Tiles.GetAnchorPosition(Location);
-                }
-            }
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Calculates a Vector for the animation velocity of the player so that the player removes smoothly between tiles
-        /// </summary>
-        /// <param name="action">The action that should be animated</param>
-        /// <returns></returns>
-        private Vector2 CalculateVelocityVector(PlayerAction action)
-        {
-            Vector2 direction = GetDirectionVector(action);
-            float speed = Speed;
-            return new Vector2(direction.X * speed, direction.Y * speed);
-        }
-
-        /// <summary>
-        /// Gets a direction vector based on the action of the player
-        /// </summary>
-        /// <param name="action">The action that the direction vector should represent</param>
-        /// <returns>A Vector with absolute value of 1 in the direction of movement associated with the action</returns>
-        private Vector2 GetDirectionVector(PlayerAction action)
-        {
-            switch (action)
-            {
-                case NORTH:
-                    return new Vector2(0, -1);
-                case EAST:
-                    return new Vector2(1, 0);
-                case SOUTH:
-                    return new Vector2(0, 1);
-                case WEST:
-                    return new Vector2(-1, 0);
-            }
-            return new Vector2(0, 0);
-        }
-
-        /// <summary>
-        /// The speed of the player for animation in px per seconds
-        /// </summary>
-        private float Speed
-        {
-            get
-            {
-                return (float)(Level.Tiles.CellHeight / Level.TimeBetweenActions.TotalSeconds);
             }
         }
 
@@ -227,6 +179,14 @@ namespace MeesGame
         public PlayerAction NextAction
         {
             get; set;
+        }
+
+        public override Rectangle BoundingBox
+        {
+            get
+            {
+                return Character.BoundingBox;
+            }
         }
     }
 

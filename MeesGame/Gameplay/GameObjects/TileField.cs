@@ -2,7 +2,7 @@
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid
+    class TileField : GameObjectGrid, DiscreteField
     {
         public TileField(int rows, int columns, int layer = 0, string id = "") : base(rows, columns, layer, id)
         {
@@ -65,6 +65,14 @@ namespace MeesGame
             foreach (Tile tile in Objects)
             {
                 tile.UpdateGraphicsToMatchSurroundings();
+            }
+        }
+
+        public Vector2 CellDimensions
+        {
+            get
+            {
+                return new Vector2(CellWidth, CellHeight);
             }
         }
     }

@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
+    <Compile Include="Gameplay\GameObjects\SmoothMovement.cs" />
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />

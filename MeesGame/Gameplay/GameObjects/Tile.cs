@@ -88,7 +88,8 @@ namespace MeesGame
         /// <param name="action">The action to perform</param>
         public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
         {
-            state.Location = GetLocationAfterAction(action);
+            if (action.IsDirection())
+                state.Character.MoveSmoothly(action.ToDirection());
         }
 
         /// <summary>
