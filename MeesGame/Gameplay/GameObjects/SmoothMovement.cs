@@ -77,7 +77,7 @@ namespace MeesGame
         }
     }
 
-    interface DiscreteField
+    interface IDiscreteField
     {
         Vector2 GetAnchorPosition(Point location);
         Vector2 CellDimensions { get; }
@@ -101,9 +101,9 @@ namespace MeesGame
         /// <summary>
         /// The field that this object is moving on
         /// </summary>
-        private DiscreteField field;
+        private IDiscreteField field;
 
-        public SmoothlyMovingGameObject(DiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(assetName, layer, id, sheetIndex)
+        public SmoothlyMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(assetName, layer, id, sheetIndex)
         {
             this.field = field;
             TravelTime = travelTime;
