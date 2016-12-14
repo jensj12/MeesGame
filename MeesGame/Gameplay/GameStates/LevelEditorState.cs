@@ -1,11 +1,17 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
     internal class LevelEditorState : IGameLoopObject
     {
+
+        public LevelEditorState(GameEnvironment game)
+        {
+        }
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             throw new NotImplementedException();

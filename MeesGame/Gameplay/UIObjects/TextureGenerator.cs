@@ -3,18 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class TextureGenerator
+    public class TextureGenerator
     {
         public delegate void RenderTask(GameTime gameTime, SpriteBatch spriteBatch);
 
         //for performance reasons we keep the texture in memory and just overwrite it when it is needed
         private RenderTarget2D renderTarget;
         private SpriteBatch tmpSpriteBatch;
-        private Color backgroundColor;
+        private Color backgroundColor = Color.White;
 
-        public TextureGenerator(GraphicsDevice device, int width, int height, Color backgroundColor)
+        public TextureGenerator(GraphicsDevice device, int width, int height)
         {
-            this.backgroundColor = backgroundColor;
             renderTarget = new RenderTarget2D(device, width, height, false,
                 device.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             tmpSpriteBatch = new SpriteBatch(device);

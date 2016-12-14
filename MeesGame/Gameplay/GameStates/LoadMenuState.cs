@@ -3,11 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
+using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {
     internal class LoadMenuState : IGameLoopObject
     {
+        //we need to use a container, because only elements in a container can eat the input of the other elements
+        private UIContainer uiContainer;
+
         private FileExplorer levelExplorer;
         private FileExplorer aiExplorer;
         private Button startButton;
@@ -19,26 +23,30 @@ namespace MeesGame
             //the reading does work, you can check by adding a .lvl (left collum) or a .ai (right collum) to the \levels directory. Just make sure it isn't a txt file
             string directory = content.RootDirectory + "/levels";
             DirectoryInfo info = Directory.CreateDirectory(directory);
-            levelExplorer = new FileExplorer(content, new Rectangle(100, 100, 500, 500), "lvl", directory);
-            aiExplorer = new FileExplorer(content, new Rectangle(700, 100, 500, 500), "ai", directory);
-            startButton = new Button(content, Strings.ok, new Vector2(700, 700), (Object o) =>
+
+            //we don't need to inser a valid size because we don't hide the overflow. I can't give a valid one yet because I can't get the correct dimensions of the window
+            uiContainer = new UIContainer(Vector2.Zero, Vector2.Zero, null);
+            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), uiContainer, content, "lvl", directory);
+            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), uiContainer, content, "ai", directory);
+            startButton = new Button(new Vector2(700, 700), Vector2.Zero, uiContainer, content, Strings.ok, (Button o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
+
+            uiContainer.AddChild(levelExplorer);
+            uiContainer.AddChild(aiExplorer);
+            uiContainer.AddChild(startButton);
+
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            levelExplorer.Draw(gameTime, spriteBatch);
-            aiExplorer.Draw(gameTime, spriteBatch);
-            startButton.Draw(gameTime, spriteBatch);
+            uiContainer.Draw(gameTime, spriteBatch);
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
-            levelExplorer.HandleInput(inputHelper);
-            aiExplorer.HandleInput(inputHelper);
-            startButton.HandleInput(inputHelper);
+            uiContainer.HandleInput(inputHelper);
         }
 
         public void Reset()
@@ -47,6 +55,7 @@ namespace MeesGame
 
         public void Update(GameTime gameTime)
         {
+            uiContainer.Update(gameTime);
         }
     }
 }

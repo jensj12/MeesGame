@@ -9,17 +9,21 @@ namespace MeesGame
     class Player : SpriteGameObject
     {
         protected Level level;
+        protected TileField tileField;
         protected int score = 0;
         protected Point location;
         protected TimeSpan lastActionTime;
         protected PlayerAction nextAction = NONE;
+        protected PlayerAction lastAction;
+        protected List<Tile> visitedTiles = new List<Tile>();
 
-        public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player",layer, id)
+        public Player(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
         {
             this.score = score;
             this.level = level;
             this.location = location;
             this.position = tileField.GetAnchorPosition(location);
+            this.tileField = tileField;
         }
 
         public int Score
@@ -42,9 +46,13 @@ namespace MeesGame
             }
         }
 
-        //this is just a simple implementation
-        //an action is allowed if and only if it is a direction
-        //we might change this later
+        public PlayerAction LastAction
+        {
+            get
+            {
+                return lastAction;
+            }
+        }
 
         /// <summary>
         /// A list of all possible actions the player can take at the current stage of the game
@@ -54,7 +62,7 @@ namespace MeesGame
             get
             {
                 List<PlayerAction> actions = new List<PlayerAction>();
-                foreach(PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
+                foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
                 {
                     if (CanPerformAction(action)) actions.Add(action);
                 }
@@ -69,12 +77,14 @@ namespace MeesGame
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
         public bool CanPerformAction(PlayerAction action)
         {
-            //for now, special actions are never allowed
-            if (action == SPECIAL) return false;
 
-            //movements are allowed as long as the new tile is of type floor
+            if (level.Tiles.GetTile(location).IsActionForbiddenFromHere(this, action)) return false;
+
+
+
+            //movements are
             Point newLocation = GetLocationAfterAction(action);
-            return level.Tiles.GetType(newLocation) == TileType.Floor;
+            return level.Tiles.GetTile(newLocation).CanPlayerMoveHere(this);
         }
 
         public Point GetLocationAfterAction(PlayerAction action)
@@ -105,43 +115,19 @@ namespace MeesGame
         public void PerformAction(PlayerAction action)
         {
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
+            lastAction = action;
 
             this.location = GetLocationAfterAction(action);
         }
 
-        public override void Update(GameTime gameTime)
+        public bool HasKey()
         {
-            //if enough time has elapsed since the previous action, perform the selected action
-            if(gameTime.TotalGameTime-lastActionTime>=level.TimeBetweenActions && CanPerformAction(nextAction))
+            foreach (Tile tile in visitedTiles)
             {
-                PerformAction(nextAction);
-                lastActionTime = gameTime.TotalGameTime;
-                nextAction = NONE;
+                if (tile.TileType == TileType.Key)
+                    return true;
             }
-                
-            //no animation yet
-            position = level.Tiles.GetAnchorPosition(location);
-            base.Update(gameTime);
-        }
-
-        public override void HandleInput(InputHelper inputHelper)
-        {
-            if (inputHelper.IsKeyDown(Keys.W))
-            {
-                nextAction = NORTH;
-            }
-            else if (inputHelper.IsKeyDown(Keys.D))
-            {
-                nextAction = EAST;
-            }
-            else if (inputHelper.IsKeyDown(Keys.S))
-            {
-                nextAction = SOUTH;
-            }
-            else if (inputHelper.IsKeyDown(Keys.A))
-            {
-                nextAction = WEST;
-            }
+            return false;
         }
     }
 
@@ -150,6 +136,101 @@ namespace MeesGame
     /// </summary>
     class PlayerActionNotAllowedException : Exception
     {
+        
+    }
 
+    class TimedPlayer : Player
+    {
+        public TimedPlayer(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        {
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //if enough time has elapsed since the previous action, perform the selected action
+            if (gameTime.TotalGameTime - lastActionTime >= level.TimeBetweenActions)
+            {
+                if (CanPerformAction(nextAction) && nextAction != NONE)
+                {
+                    //important for smooth movement
+                    velocity = CalculateVelocityVector(nextAction);
+                    PerformAction(nextAction);
+                    lastActionTime = gameTime.TotalGameTime;
+                    nextAction = NONE;
+                    visitedTiles.Add(tileField.GetTile(location));
+                }
+                else
+                {
+                    //stop moving
+                    velocity = Vector2.Zero;
+
+                    //put the player exactly at the middle of the square
+                    position = level.Tiles.GetAnchorPosition(location);
+                }
+            }
+            base.Update(gameTime);
+        }
+
+        private Vector2 CalculateVelocityVector(PlayerAction action)
+        {
+            Vector2 direction = GetDirectionVector(action);
+            float speed = Speed;
+            return new Vector2(direction.X * speed, direction.Y * speed);
+        }
+
+        private Vector2 GetDirectionVector(PlayerAction action)
+        {
+            switch (action)
+            {
+                case NORTH:
+                    return new Vector2(0, -1);
+                case EAST:
+                    return new Vector2(1, 0);
+                case SOUTH:
+                    return new Vector2(0, 1);
+                case WEST:
+                    return new Vector2(-1, 0);
+            }
+            return new Vector2(0, 0);
+        }
+
+        private float Speed
+        {
+            get
+            {
+                return (float)(level.Tiles.CellHeight / level.TimeBetweenActions.TotalSeconds);
+            }
+        }
+    }
+
+    class HumanPlayer : TimedPlayer
+    {
+        public HumanPlayer(Level level, TileField tileField, Point location, int layer = 0, string id = "", int score = 0) : base(level, tileField, location, layer, id, score)
+        {
+        }
+
+        public override void HandleInput(InputHelper inputHelper)
+        {
+            if (inputHelper.IsKeyDown(Keys.W) || inputHelper.IsKeyDown(Keys.Up))
+            {
+                nextAction = NORTH;
+            }
+            else if (inputHelper.IsKeyDown(Keys.D) || inputHelper.IsKeyDown(Keys.Right))
+            {
+                nextAction = EAST;
+            }
+            else if (inputHelper.IsKeyDown(Keys.S) || inputHelper.IsKeyDown(Keys.Down))
+            {
+                nextAction = SOUTH;
+            }
+            else if (inputHelper.IsKeyDown(Keys.A) || inputHelper.IsKeyDown(Keys.Left))
+            {
+                nextAction = WEST;
+            }
+            else
+            {
+                nextAction = NONE;
+            }
+        }
     }
 }
