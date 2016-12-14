@@ -17,7 +17,7 @@ namespace MeesGame
             gameObjectList.Add(new Button(new Vector2(10, 10), new Vector2(100, 100), null, Strings.begin, (Button o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
-           }));
+            }));
             gameObjectList.Add(new Button(new Vector2(10, 120), Vector2.Zero, null, Strings.map_editor, (Button o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
@@ -25,7 +25,7 @@ namespace MeesGame
             gameObjectList.Add(new Button(new Vector2(10, 230), Vector2.Zero, null, Strings.exit, (Button o) =>
             {
                 game.Exit();
-                }));
+            }));
 
         }
 

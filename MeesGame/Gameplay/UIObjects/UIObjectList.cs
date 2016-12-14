@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
-using MeesGame.Gameplay.UIObjects;
 
 namespace MeesGame
 {

@@ -48,11 +48,19 @@ namespace MeesGame
 
         public Tile GetTile(int x, int y)
         {
+            if (OutOfTileField(x, y))
+                return new WallTile();
+            return (Tile)Get(x, y);
+        }
+
+        ///this bool returns if the x and y are outside the bounds of the tilefield
+        public bool OutOfTileField(int x, int y)
+        {
             if (x < 0 || y < 0 || x >= Columns || y >= Rows)
             {
-                return new WallTile();
+                return true;
             }
-            return (Tile)Get(x, y);
+            return false;
         }
 
         public Tile GetTile(Point location)

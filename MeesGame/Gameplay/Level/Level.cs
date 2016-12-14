@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Schema;
-using Microsoft.Xna.Framework.Graphics;
+using System.Xml.Serialization;
 
 namespace MeesGame
 {
@@ -17,19 +17,17 @@ namespace MeesGame
         protected Point start;
         protected Player player;
         protected TileField tiles;
-        public Level(int levelindex = 0, bool human = true)
+
+        public Level()
         {
             tiles = new TileField(numRows, numColumns, 0, "tiles");
             tiles.CellHeight = CELL_HEIGHT;
             tiles.CellWidth = CELL_WIDTH;
+        }
 
-            start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
-            tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
-            tiles.UpdateGraphicsToMatchSurroundings();
-            if (human)
-            {
-                UseHumanPlayer();
-            }
+        public Player Player
+        {
+            get { return player; }
         }
 
         public TileField Tiles
@@ -71,28 +69,18 @@ namespace MeesGame
             camera.ResetCamera();
         }
 
-        private void usePlayer(Player player)
+        protected void usePlayer(Player player, int screenWidth = -1, int screenHeight = -1)
         {
             this.player = player;
-            Camera camera = new Camera(player);
+
+            if (screenWidth == -1) screenWidth = GameEnvironment.Screen.X;
+            if (screenHeight == -1) screenHeight = GameEnvironment.Screen.Y;
+
+
+            Camera camera = new Camera(new Point(screenWidth, screenHeight), player);
             Add(camera);
             camera.Add(this.tiles);
             camera.Add(this.player);
-        }
-
-        public void UseHumanPlayer()
-        {
-            usePlayer(new HumanPlayer(this, start));
-        }
-
-        public void UseTimedPlayer()
-        {
-            usePlayer(new TimedPlayer(this, start));
-        }
-
-        public void UseUntimedPlayer()
-        {
-            usePlayer(new Player(this, start));
         }
     }
 }

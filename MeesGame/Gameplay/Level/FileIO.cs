@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml;
 
-namespace MeesGame.Gameplay.Level
+namespace MeesGame
 {
     class FileIO
     {

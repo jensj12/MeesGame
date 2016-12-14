@@ -2,20 +2,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MeesGame.Gameplay.UIObjects
+namespace MeesGame
 {
     public class UIContainer : UIObject
     {
-        //list of the uiobjects contained in the container
         protected UIObjectList<UIObject> children;
 
-        //when the input is permamenteaten the input doesn't reset after an inputloop
+        //Object that is using the input. This also gets asked if it wants to keep eating input
         private UIObject inputEater = null;
 
         /// <summary>
-        /// returns which object is using the input.
-        /// seet which object is using the input.
-        /// because in each UI hirarchy we only want one object to use the input we call the parent
+        /// Because in each UI hierarchy we only want one object to use the input, we call the parent.
         /// </summary>
         public UIObject InputEater
         {
@@ -32,7 +29,7 @@ namespace MeesGame.Gameplay.UIObjects
             }
         }
 
-        //this method is for the children. Every child might have a different anchor point in a sorted list.
+        //This method is for the children. Every child might have a different anchor point in a sorted list.
         public virtual Vector2 GetChildAnchorPoint(UIObject uiObject)
         {
             return Vector2.Zero;
@@ -49,7 +46,7 @@ namespace MeesGame.Gameplay.UIObjects
         }
 
         /// <summary>
-        /// contains UI elements
+        /// Contains UI elements
         /// </summary>
         /// <param name="location"></param>
         /// <param name="dimensions"></param>
@@ -67,8 +64,7 @@ namespace MeesGame.Gameplay.UIObjects
         public override void HandleInput(InputHelper inputHelper)
         {
             //we check if the inputEater wants to keep eating our input
-            //we can safely ask if the inputeater wants to use the input because inputeaten checks
-            //if an element is eating the input
+            //we can safely ask if the inputeater wants to use the input.
             if (parent == null && InputEaten && !InputEater.WantsToEatInput)
             {
                 InputEater = null;

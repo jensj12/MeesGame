@@ -1,5 +1,4 @@
-﻿using System;
-using static MeesGame.PlayerAction;
+﻿using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {

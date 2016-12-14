@@ -1,5 +1,4 @@
-﻿using MeesGame.Gameplay.UIObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
@@ -11,7 +10,7 @@ namespace MeesGame
         /// dimensions = size of the element, used for input and for rendering when overflow is hidden
         /// parent = the parent of the object
         /// renderTarget = the texture of the ui element, so that we can render it when it is updated and disposed when not needed anymore
-        /// invaalidated = determines if the rendertarget needs updating
+        /// invalidated = determines if the rendertarget needs updating
         /// </summary>
         private Vector2 relativeLocation;
         private Vector2 dimensions;
@@ -20,7 +19,7 @@ namespace MeesGame
         protected bool invalidated = true;
         protected TextureRenderer textureRenderer;
         
-        ///because the input is eaten after an element uses it we keep track of wether the elements
+        ///because the input is eaten after an element uses it we keep track of whether the elements
         ///have received an input and allow them to act accordingly in the update method
         private bool hovering;
         private bool mouseDown;
@@ -81,8 +80,8 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives the absolute location of the rectangle compared to the origin of the screen, 0,0
-        /// usefully for inputchecking
+        /// Gives the absolute location of the rectangle compared to the origin of the screen, 0,0
+        /// useful for input checking
         /// </summary>
         public Rectangle AbsoluteRectangle
         {
@@ -90,8 +89,8 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives the position relative to the parent
-        /// usefull for drawing the texture we generate of the objkect
+        /// Gives the position relative to the parent
+        /// Useful for drawing the texture we generate of the object
         /// </summary>
         public Rectangle RelativeRectangle
         {
@@ -99,8 +98,8 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives the object with the location 0
-        /// usefull for rendering the texture
+        /// Gives the object with the location 0
+        /// Useful for rendering the texture
         /// </summary>
         public Rectangle OriginLocationRectangle
         {
@@ -158,8 +157,8 @@ namespace MeesGame
         }
 
 
-        ///allows a component to use the imput in the UI untill it doesn't need the input anymore. If we wouldn't use this method, than dragging any element
-        ///would result in the input being registered ny every element not in range
+        ///allows a component to use the input in the UI until it doesn't need the input anymore. If we wouldn't use this method, dragging any element
+        ///would result in the input being registered for every element. Multiple buttons hovering at the same time for example
         public virtual bool WantsToEatInput
         {
             get {
@@ -168,7 +167,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Ui elents are able to override this at will, for example if the ui changes over time
+        /// Ui elements are able to override this at will, for example if the ui changes over time
         /// </summary>
         /// <param name="gameTime">current time</param>
         public virtual void Update(GameTime gameTime)

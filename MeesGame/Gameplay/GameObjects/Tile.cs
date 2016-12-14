@@ -108,7 +108,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// The four direct neighbours of this Tile
+        /// The four direct neighbors of this Tile
         /// </summary>
         public ICollection<Tile> Neighbours
         {
@@ -127,23 +127,62 @@ namespace MeesGame
         /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField
         /// </summary>
         public abstract void UpdateGraphicsToMatchSurroundings();
+
+
+        /// <summary>
+        /// Used to create Tiles solemnly on a tileType
+        /// </summary>
+        /// <param name="tt">Specifies which Tile we want to get</param>
+        /// <returns></returns>
+        public static Tile CreateTileFromTileType(TileType tt)
+        {
+            switch (tt)
+            {
+                case TileType.Floor:
+                    return new FloorTile();
+                case TileType.Wall:
+                    return new WallTile();
+            }
+            //If no Tile can be made of the specified tiletype, return a floortile
+            return new FloorTile();
+        }
+
+        /// <summary>
+        /// Returns the default asset name of the specified tileType. If the specified tileType doesn't have a default assetName, returns ""
+        /// </summary>
+        /// <param name="tt"></param>
+        /// <returns></returns>
+        public static string GetAssetNameFromTileType(TileType tt)
+        {
+            switch (tt)
+            {
+                case TileType.Floor:
+                    return FloorTile.defaultAssetName;
+                case TileType.Wall:
+                    return WallTile.defaultAssetName;
+            }
+            //If no Tile can be made of the specified tiletype, return an empty string
+            return "";
+        }
     }
 
     class FloorTile : Tile
     {
-        protected FloorTile(string assetName = "floorTile", TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        public const string defaultAssetName = "floorTile";
+
+        protected FloorTile(string assetName = defaultAssetName, TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
 
         }
 
-        public FloorTile(int layer = 0, string id = "") : base("floorTile", TileType.Floor, layer, id)
+        public FloorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Floor, layer, id)
         {
 
         }
 
         public override bool CanPlayerMoveHere(Player player)
         {
-            //a player is allowed to move onto floors
+            //A player is allowed to move onto floors
             return true;
         }
 
@@ -173,12 +212,15 @@ namespace MeesGame
 
     class WallTile : Tile
     {
-        protected WallTile(string assetName = "walls@16", TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        public const string defaultAssetName = "walls@16";
+
+
+        protected WallTile(string assetName = defaultAssetName, TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
 
         }
 
-        public WallTile(int layer = 0, string id = "") : base("walls@16", TileType.Wall, layer, id)
+        public WallTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Wall, layer, id)
         {
 
         }
@@ -205,7 +247,7 @@ namespace MeesGame
             if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
-            sprite = new SpriteSheet("walls@16", sheetIndex);
+            sprite = new SpriteSheet(defaultAssetName, sheetIndex);
         }
     }
 }
