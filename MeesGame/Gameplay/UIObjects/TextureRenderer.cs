@@ -29,9 +29,9 @@ namespace MeesGame
                 mSpriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
             mSpriteBatch.GraphicsDevice.SetRenderTarget(renderTarget);
-            mSpriteBatch.GraphicsDevice.Clear(Color.Black);
             mSpriteBatch.Begin();
             task(gameTime, mSpriteBatch);
+            mSpriteBatch.GraphicsDevice.Clear(Color.Transparent);
             mSpriteBatch.End();
             mSpriteBatch.GraphicsDevice.SetRenderTargets(oldTargets);
             }

@@ -1,5 +1,4 @@
-﻿using MeesGame.Gameplay.Level;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {

@@ -7,24 +7,22 @@ namespace MeesGame
 {
     internal class TitleMenuState : IGameLoopObject
     {
-        private UIObjectList<UIObject> gameObjectList;
-        private GameEnvironment game;
+        private GUIObjectList<GUIObject> gameObjectList;
 
-        public TitleMenuState(GameEnvironment game)
+        public TitleMenuState()
         {
-            this.game = game;
-            gameObjectList = new UIObjectList<UIObject>();
-            gameObjectList.Add(new Button(new Vector2(10, 10), new Vector2(100, 100), null, Strings.begin, (Button o) =>
+            gameObjectList = new GUIObjectList<GUIObject>();
+            gameObjectList.Add(new Button(new Vector2(10, 10), null, Strings.begin, (GUIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 120), Vector2.Zero, null, Strings.map_editor, (Button o) =>
+            gameObjectList.Add(new Button(new Vector2(10, 120), null, Strings.map_editor, (GUIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 230), Vector2.Zero, null, Strings.exit, (Button o) =>
+            gameObjectList.Add(new Button(new Vector2(10, 230), null, Strings.exit, (GUIObject o) =>
             {
-                game.Exit();
+                GameEnvironment.GetGameEnvironment.Exit();
             }));
 
         }

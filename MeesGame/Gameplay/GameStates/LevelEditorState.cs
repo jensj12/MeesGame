@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using MeesGame.Gameplay.Level;
 
 namespace MeesGame
 {
@@ -11,6 +10,7 @@ namespace MeesGame
         //The width of the bars with buttons the editor can click to place certain tiles
         const int leftBarWidth = 150;
         const int rightBarWidth = 200;
+        const int buttonDistanceFromRightWall = 20;
 
         List<Level> level;
 
@@ -18,8 +18,9 @@ namespace MeesGame
         List<TileType> tileTypes;
         int currentLevelIndex;
 
-        private UIList tilesList;
-        private UIList tilesPropertiesList;
+        private GUIContainer overlay;
+        private GUIList tilesList;
+        private GUIList tilesPropertiesList;
 
         int selectedTileIndex;
 
@@ -44,8 +45,13 @@ namespace MeesGame
         /// </summary>
         private void InitUI()
         {
-            tilesList = new UIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), null);
-            tilesPropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), null);
+            overlay = new GUIContainer(null, GameEnvironment.Screen.ToVector2());
+            tilesList = new GUIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: new Color(122, 122, 122, 122));
+            tilesPropertiesList = new GUIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: new Color(122, 122, 122, 122));
+
+            overlay.AddChild(tilesList);
+            overlay.AddChild(tilesPropertiesList);
+
             tilesList.onItemClick += OnItemSelect;
 
             FillTilesList();
@@ -64,7 +70,7 @@ namespace MeesGame
                 string assetName = Tile.GetAssetNameFromTileType(tt);
                 if (assetName != "")
                 {
-                    Button newButton = new Button(Vector2.Zero, new Vector2(leftBarWidth - 50), tilesList, "", OnItemSelect, false, assetName);
+                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(leftBarWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, assetName);
                     tilesList.AddChild(newButton);
                 }
             }
@@ -74,15 +80,14 @@ namespace MeesGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             level[currentLevelIndex].Draw(gameTime, spriteBatch);
-            tilesList.Draw(gameTime, spriteBatch);
-            tilesPropertiesList.Draw(gameTime, spriteBatch);
+            overlay.Draw(gameTime, spriteBatch);
         }
 
         /// <summary>
         /// Method called when an object in the tilesList is selected. For now, only buttons can be clicked.
         /// </summary>
         /// <param name="o">The button that was clicked</param>
-        public void OnItemSelect(UIObject o)
+        public void OnItemSelect(GUIObject o)
         {
             ((Button)tilesList.Children[selectedTileIndex]).Selected = false;
             selectedTileIndex = tilesList.Children.IndexOf(o);
@@ -92,8 +97,7 @@ namespace MeesGame
         public void HandleInput(InputHelper inputHelper)
         {
             level[currentLevelIndex].HandleInput(inputHelper);
-            tilesList.HandleInput(inputHelper);
-            tilesPropertiesList.HandleInput(inputHelper);
+            overlay.HandleInput(inputHelper);
 
             //When space is pressed, we set a tile
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
@@ -111,13 +115,13 @@ namespace MeesGame
         public void Reset()
         {
             level[currentLevelIndex].Reset();
+            overlay.Reset();
         }
 
         public void Update(GameTime gameTime)
         {
             level[currentLevelIndex].Update(gameTime);
-            tilesList.Update(gameTime);
-            tilesPropertiesList.Update(gameTime);
+            overlay.Update(gameTime);
         }
     }
 }

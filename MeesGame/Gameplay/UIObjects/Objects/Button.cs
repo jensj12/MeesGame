@@ -4,11 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    public class Button : UIObject
+    public class Button : GUIObject
     {
-        public delegate void ClickEventHandler(Button button);
-        public event ClickEventHandler OnClick;
-
         /// <summary>
         /// Text = the text the button displays
         /// Spritefont = the font used for the image
@@ -27,12 +24,6 @@ namespace MeesGame
         /// </summary>
         protected bool selected = false;
 
-        public bool Selected
-        {
-            get { return selected; }
-            set { selected = value; }
-        }
-
         /// <summary>
         /// Method used to create a customizable button
         /// </summary>
@@ -47,7 +38,7 @@ namespace MeesGame
         /// <param name="hoverBackgroundName">The texture that overlays the background when the mouse is hovering over the button</param>
         /// <param name="selectedBackgroundName">The texture that overlays the background when the button is selected</param>
         /// <param name="textFont">The name of the text font used for the text as in the contenmanager</param>
-        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, string text, ClickEventHandler onClick, bool autoDimensions = true, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont") : base(location, dimensions, parent)
+        public Button(Vector2? location, Vector2? dimensions, string text, ClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont") : base(location, dimensions)
         {
             spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(textFont);
             background = new SpriteSheet(backgroundName);
@@ -55,11 +46,15 @@ namespace MeesGame
             selectedBackground = new SpriteSheet(selectedBackgroundName);
 
             this.text = text;
-            if (autoDimensions)
-                this.Dimensions = spriteFont.MeasureString(text);
-            else
-                this.Dimensions = dimensions;
-            OnClick += onClick;
+            Vector2 measuredDimensions = spriteFont.MeasureString(text);
+            this.Dimensions = dimensions ?? measuredDimensions;
+
+            //we test if the dimensions vector contains a value < 0, if it contains one it replaces the value
+            //with the value the text specifies
+            this.Dimensions = new Vector2((Dimensions.X > 0) ? Dimensions.X : measuredDimensions.X,
+                (Dimensions.Y > 0) ? Dimensions.Y : measuredDimensions.Y);
+            if(onClick != null)
+                OnClick += onClick;
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
@@ -79,17 +74,26 @@ namespace MeesGame
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Invalidate = true;
         }
 
-        public override void HandleInput(InputHelper inputHelper)
+        public bool Selected
         {
-            base.HandleInput(inputHelper);
-            if (Clicked)
+            get { return selected; }
+            set { selected = value; }
+        }
+
+
+        public override bool Invalidate
+        {
+            get
             {
-                OnClick?.Invoke(this);
+                return base.Invalidate;
             }
 
+            set
+            {
+                base.Invalidate = true;
+            }
         }
     }
 }

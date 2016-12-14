@@ -30,11 +30,11 @@ namespace MeesGame
             screen = new Point(1440, 825);
             windowSize = new Point(1024, 586);
             FullScreen = false;
-            gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState(Content));
+            gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState());
             //uncomment to add gamestates
-            gameStateManager.AddGameState("TitleMenuState", new TitleMenuState(this));
+            gameStateManager.AddGameState("TitleMenuState", new TitleMenuState());
             gameStateManager.AddGameState("EditorState", new LevelEditorState());
-            gameStateManager.AddGameState("LoadMenuState", new LoadMenuState(Content));
+            gameStateManager.AddGameState("LoadMenuState", new LoadMenuState());
             //gameStateManager.AddGameState("helpState", new HelpState());
             //gameStateManager.AddGameState("playingState", new PlayingState(Content));
             //gameStateManager.AddGameState("levelMenu", new LevelMenuState());

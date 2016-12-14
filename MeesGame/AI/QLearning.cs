@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AI
 {
-    // Tijdelijk type om errors te voorkomen, moet uiteindelijk ergens in de MeesGame namespace worden gedefiniëerd.
+    // Tijdelijk type om errors te voorkomen, moet GUIteindelijk ergens in de MeesGame namespace worden gedefiniëerd.
     class ILevelState
     {
 
