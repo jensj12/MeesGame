@@ -123,6 +123,16 @@ namespace MeesGame
             }
         }
 
+        public bool IsNextToSpecialTile()
+        {
+            foreach (Tile tile in Neighbours)
+            {
+                if (tile.TileType == TileType.Door)
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField
         /// </summary>
@@ -142,6 +152,10 @@ namespace MeesGame
                     return new FloorTile();
                 case TileType.Wall:
                     return new WallTile();
+                case TileType.Door:
+                    return new DoorTile();
+                case TileType.Key:
+                    return new KeyTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
@@ -163,6 +177,11 @@ namespace MeesGame
             }
             //If no Tile can be made of the specified tiletype, return an empty string
             return "";
+        }
+
+        public virtual InventoryItem GetItem()
+        {
+            return null;
         }
     }
 
@@ -201,12 +220,6 @@ namespace MeesGame
 
         public override void UpdateGraphicsToMatchSurroundings()
         {
-        }
-
-        //TODO
-        public bool IsNextToSpecialTile()
-        {
-            return false;
         }
     }
 

@@ -93,6 +93,9 @@ namespace MeesGame
             LastAction = action;
 
             CurrentTile.PerformAction(this, state, action);
+            InventoryItem item = CurrentTile.GetItem();
+            if (item != null)
+                state.Inventory.Items.Add(item);
         }
 
         /// <summary>
@@ -123,7 +126,9 @@ namespace MeesGame
 
         public bool HasKey()
         {
-            // TODO
+            foreach (InventoryItem item in (state.Inventory.Items))
+                if (item.type == InventoryItemType.Key)
+                    return true;
             return false;
         }
 
