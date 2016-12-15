@@ -63,7 +63,7 @@ namespace MeesGame
     {
         public const string defaultAssetName = "keyOverlay";
 
-        public KeyTile(int layer = 0, string id = "") : base("keyTile", TileType.Key, layer, id)
+        public KeyTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Key, layer, id)
         {
 
         }
