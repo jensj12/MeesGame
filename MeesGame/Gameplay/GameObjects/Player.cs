@@ -3,24 +3,16 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using static MeesGame.PlayerAction;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class Player : GameObjectList
+    class Player : SmoothlyMovingGameObject
     {
-        /// <summary>
-        /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
-        /// </summary>
-        private PlayerState state;
-
-        public Player(Level level, Point location, int score = 0)
+        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "player")
         {
-            state = new PlayerState(new SmoothlyMovingGameObject(level.Tiles, level.TimeBetweenActions, "player", 100));
             Score = score;
             Level = level;
-            state.Character.Teleport(location);
-            Add(Character);
+            Teleport(location);
         }
 
         /// <summary>
@@ -28,15 +20,7 @@ namespace MeesGame
         /// </summary>
         public int Score
         {
-            get
-            {
-                return state.Score;
-            }
-
-            private set
-            {
-                state.Score = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -94,7 +78,12 @@ namespace MeesGame
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
             LastAction = action;
 
-            CurrentTile.PerformAction(this, state, action);
+            CurrentTile.PerformAction(this, action);
+        }
+
+        public Inventory Inventory
+        {
+            get;
         }
 
         /// <summary>
@@ -108,29 +97,10 @@ namespace MeesGame
             }
         }
 
-        /// <summary>
-        /// The location of the player on the TileField
-        /// </summary>
-        public Point Location
-        {
-            get
-            {
-                return state.Character.Location;
-            }
-        }
-
         public bool HasKey()
         {
             // TODO
             return false;
-        }
-
-        protected SmoothlyMovingGameObject Character
-        {
-            get
-            {
-                return state.Character;
-            }
         }
 
         /// <summary>
@@ -154,7 +124,7 @@ namespace MeesGame
         /// </summary>
         protected TimeSpan lastActionTime;
 
-        public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, score)
+        public TimedPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
@@ -162,10 +132,10 @@ namespace MeesGame
         {
             base.Update(gameTime);
 
-            if (!Character.IsMoving)
+            if (!IsMoving)
             {
                 if (CanPerformAction(NextAction) && NextAction != NONE)
-                { 
+                {
                     PerformAction(NextAction);
                     lastActionTime = gameTime.TotalGameTime;
                     NextAction = NONE;
@@ -179,20 +149,12 @@ namespace MeesGame
         public PlayerAction NextAction
         {
             get; set;
-        }
-
-        public override Rectangle BoundingBox
-        {
-            get
-            {
-                return Character.BoundingBox;
-            }
-        }
+        } = NONE;
     }
 
     class HumanPlayer : TimedPlayer
     {
-        public HumanPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public HumanPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 

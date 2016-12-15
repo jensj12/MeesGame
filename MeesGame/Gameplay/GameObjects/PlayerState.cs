@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -27,30 +26,6 @@ namespace MeesGame
         public Inventory()
         {
             Items = new List<InventoryItem>();
-        }
-    }
-
-    class PlayerState
-    {
-        public Inventory Inventory
-        {
-            get;
-        }
-
-        public int Score
-        {
-            get; set;
-        }
-
-        public SmoothlyMovingGameObject Character
-        {
-            get;
-        }
-
-        public PlayerState(SmoothlyMovingGameObject character)
-        {
-            Character = character;
-            Inventory = new Inventory();
         }
     }
 }

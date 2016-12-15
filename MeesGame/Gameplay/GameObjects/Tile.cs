@@ -81,15 +81,14 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the PlayerState appropriately
+        /// Perform an action for the player. Modifies the Player appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
-        /// <param name="state">The state of the player to be modified by this function</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
+        public virtual void PerformAction(Player player, PlayerAction action)
         {
             if (action.IsDirection())
-                state.Character.MoveSmoothly(action.ToDirection());
+                player.MoveSmoothly(action.ToDirection());
         }
 
         /// <summary>
