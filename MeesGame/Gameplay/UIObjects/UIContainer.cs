@@ -4,25 +4,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    public class GUIContainer : GUIObject
+    public class UIContainer : UIObject
     {
-        protected GUIObjectList<GUIObject> children;
+        protected UIObjectList<UIObject> children;
 
         //Object that is using the input. This object will be asked every time HandleInput if it wants to keep eating the input
-        private GUIObject inputEater = null;
+        private UIObject inputEater = null;
 
         /// <summary>
-        /// Contains GUI elements
+        /// Contains UI elements
         /// </summary>
         /// <param name="location"></param>
         /// <param name="dimensions"></param>
         /// <param name="parent"></param>
-        public GUIContainer(Vector2? location, Vector2? dimensions, Color? backgroundColor = null) : base(location, dimensions, backgroundColor)
+        public UIContainer(Vector2? location, Vector2? dimensions, Color? backgroundColor = null) : base(location, dimensions, backgroundColor)
         {
-            children = new GUIObjectList<GUIObject>();
+            children = new UIObjectList<UIObject>();
         }
 
-        public virtual void AddChild(GUIObject child)
+        public virtual void AddChild(UIObject child)
         {
             child.Parent = this;
             children.Add(child);
@@ -60,9 +60,9 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Because in each GUI hierarchy we only want one object to use the input, we call the parent.
+        /// Because in each UI hierarchy we only want one object to use the input, we call the parent.
         /// </summary>
-        public GUIObject InputEater
+        public UIObject InputEater
         {
             get
             {
@@ -78,12 +78,12 @@ namespace MeesGame
         }
 
         //This method is for the children. Every child might have a different anchor point in a sorted list.
-        public virtual Vector2 GetChildAnchorPoint(GUIObject GUIObject)
+        public virtual Vector2 GetChildAnchorPoint(UIObject UIObject)
         {
             return Vector2.Zero;
         }
 
-        public GUIObjectList<GUIObject> Children
+        public UIObjectList<UIObject> Children
         {
             get { return children; }
         }

@@ -3,9 +3,9 @@ using MeesGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GUIObjects
+namespace UIObjects
 {
-    class ImageView : GUIObject
+    class ImageView : UIObject
     {
         int imageOffset;
 

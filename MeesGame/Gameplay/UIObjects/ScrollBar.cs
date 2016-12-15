@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    public class ScrollBar : GUIObject
+    public class ScrollBar : UIObject
     {
         //Variables defining the colors of the scrollbar
         private readonly Color scrollbarColor = Color.Aqua;
@@ -20,7 +20,7 @@ namespace MeesGame
         //whether the scrollbar is being dragged
         private bool beingDragged = false;
 
-        public ScrollBar(GUIList parent, int width = 20, Color? backgroundColor = null, Color? scrollbarColor = null) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), backgroundColor ?? Color.Beige)
+        public ScrollBar(UIList parent, int width = 20, Color? backgroundColor = null, Color? scrollbarColor = null) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), backgroundColor ?? Color.Beige)
         {
             this.Parent = parent;
             this.scrollbarColor = scrollbarColor ?? Color.Aqua;
@@ -122,7 +122,7 @@ namespace MeesGame
                     ///A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height 
                     ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
                     ///offset distance
-                    return ((GUIList)Parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);
+                    return ((UIList)Parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);
                 return 0;
             }
             set
@@ -131,9 +131,9 @@ namespace MeesGame
                     ///The ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
                     ///and the maximum distance the scrollbar can travel
                     ///
-                    ((GUIList)Parent).ElementsOffset = (int)(value * (parentHeightWhenShowingAllChildren - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
+                    ((UIList)Parent).ElementsOffset = (int)(value * (parentHeightWhenShowingAllChildren - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
                 else
-                    ((GUIList)Parent).ElementsOffset = 0;
+                    ((UIList)Parent).ElementsOffset = 0;
             }
         }
 

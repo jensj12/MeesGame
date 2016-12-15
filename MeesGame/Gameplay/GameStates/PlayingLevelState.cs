@@ -10,10 +10,10 @@ namespace MeesGame
         private const int inventoryWidth = 125;
         private const int inventoryHeightOffset = 75;
 
-        GUIContainer overlay;
+        UIContainer overlay;
         List<PlayingLevel> level;
         int currentLevelIndex;
-        GUIList inventoryUI;
+        UIList inventoryUI;
 
         public PlayingLevelState()
         {
@@ -27,9 +27,9 @@ namespace MeesGame
 
         private void initOverlay()
         {
-            overlay = new GUIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
 
-            inventoryUI = new GUIList(new Vector2(0, inventoryHeightOffset), new Vector2(inventoryWidth, (int) GameEnvironment.Screen.Y - 2 * inventoryHeightOffset), backgroundColor: new Color(122, 122, 122, 122));
+            inventoryUI = new UIList(new Vector2(0, inventoryHeightOffset), new Vector2(inventoryWidth, (int) GameEnvironment.Screen.Y - 2 * inventoryHeightOffset), backgroundColor: new Color(122, 122, 122, 122));
 
             overlay.AddChild(inventoryUI);
         }

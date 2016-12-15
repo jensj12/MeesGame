@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    public class Button : GUIObject
+    public class Button : UIObject
     {
         /// <summary>
         /// Text = the text the button displays

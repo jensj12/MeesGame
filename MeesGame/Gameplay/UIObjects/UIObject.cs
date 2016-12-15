@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    public abstract class GUIObject : IGameLoopObject
+    public abstract class UIObject : IGameLoopObject
     {
-        public delegate void ClickEventHandler(GUIObject GUIObject);
+        public delegate void ClickEventHandler(UIObject UIObject);
         public event ClickEventHandler OnClick;
 
         /// <summary>
@@ -17,12 +17,12 @@ namespace MeesGame
         /// location = relative location to the parent of the object
         /// dimensions = size of the element, used for input and for rendering when overflow is hidden
         /// parent = the parent of the object
-        /// renderTarget = the texture of the GUI element, so that we can render it when it is updated and disposed when not needed anymore
+        /// renderTarget = the texture of the UI element, so that we can render it when it is updated and disposed when not needed anymore
         /// invalidated = determines if the rendertarget needs updating
         /// </summary>
         private Vector2 relativeLocation;
         private Vector2 dimensions;
-        private GUIContainer parent;
+        private UIContainer parent;
         private bool visible = true;
         protected Color? BackgroundColor;
         protected RenderTarget2D renderTarget;
@@ -41,7 +41,7 @@ namespace MeesGame
         /// <param name="location">location relative to the parent</param>
         /// <param name="dimensions">size of the object</param>
         /// <param name="parent">parent of the object</param>
-        public GUIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
+        public UIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
         {
             this.relativeLocation = location ?? Vector2.Zero;
             //dimensions is set to 1,1 because our graphics device can't compute a size of 0,0 
@@ -63,7 +63,7 @@ namespace MeesGame
             return solidWhiteTexture;
         }
 
-        ///allows a component to use the input in the GUI until it doesn't need the input anymore. If we wouldn't use this method, dragging any element
+        ///allows a component to use the input in the UI until it doesn't need the input anymore. If we wouldn't use this method, dragging any element
         ///would result in the input being registered for every element. Multiple buttons hovering at the same time for example
         public virtual bool WantsToEatInput
         {
@@ -71,7 +71,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// We read the input to determine if the GUI element is being pointed at
+        /// We read the input to determine if the UI element is being pointed at
         /// </summary>
         /// <param name="inputHelper"></param>
         public virtual void HandleInput(InputHelper inputHelper)
@@ -106,7 +106,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// GUI elements are able to override this at will, for example if the GUI changes over time
+        /// UI elements are able to override this at will, for example if the UI changes over time
         /// </summary>
         /// <param name="gameTime">current time</param>
         public virtual void Update(GameTime gameTime)
@@ -114,7 +114,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// draws the GUIel
+        /// draws the UIel
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>
@@ -226,7 +226,7 @@ namespace MeesGame
             get { return new Rectangle(0, 0, (int)dimensions.X, (int)dimensions.Y); }
         }
 
-        public GUIContainer Parent
+        public UIContainer Parent
         {
             get { return parent; }
             set { parent = value; }

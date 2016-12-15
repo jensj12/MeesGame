@@ -19,9 +19,9 @@ namespace MeesGame
         List<TileType> tileTypes;
         int currentLevelIndex;
 
-        private GUIContainer overlay;
-        private GUIList tilesList;
-        private GUIList tilesPropertiesList;
+        private UIContainer overlay;
+        private UIList tilesList;
+        private UIList tilesPropertiesList;
 
         int selectedTileIndex;
 
@@ -46,9 +46,9 @@ namespace MeesGame
         /// </summary>
         private void InitUI()
         {
-            overlay = new GUIContainer(null, GameEnvironment.Screen.ToVector2());
-            tilesList = new GUIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
-            tilesPropertiesList = new GUIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            overlay = new UIContainer(null, GameEnvironment.Screen.ToVector2());
+            tilesList = new UIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            tilesPropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
 
             overlay.AddChild(tilesList);
             overlay.AddChild(tilesPropertiesList);
@@ -88,7 +88,7 @@ namespace MeesGame
         /// Method called when an object in the tilesList is selected. For now, only buttons can be clicked.
         /// </summary>
         /// <param name="o">The button that was clicked</param>
-        public void OnItemSelect(GUIObject o)
+        public void OnItemSelect(UIObject o)
         {
             ((Button)tilesList.Children[selectedTileIndex]).Selected = false;
             selectedTileIndex = tilesList.Children.IndexOf(o);

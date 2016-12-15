@@ -58,10 +58,10 @@
     <Compile Include="Gameplay\GameStates\LoadMenuState.cs" />
     <Compile Include="Gameplay\UIObjects\Objects\FileExplorer.cs" />
     <Compile Include="Gameplay\Level\PlayerAction.cs" />
-    <Compile Include="Gameplay\UIObjects\GUIContainer.cs" />
-    <Compile Include="Gameplay\UIObjects\GUIList.cs" />
-    <Compile Include="Gameplay\UIObjects\GUIObject.cs" />
-    <Compile Include="Gameplay\UIObjects\GUIObjectList.cs" />
+    <Compile Include="Gameplay\UIObjects\UIContainer.cs" />
+    <Compile Include="Gameplay\UIObjects\UIList.cs" />
+    <Compile Include="Gameplay\UIObjects\UIObject.cs" />
+    <Compile Include="Gameplay\UIObjects\UIObjectList.cs" />
     <Compile Include="MeesGame.cs" />
     <Compile Include="Gameplay\GameManagement\AnimatedGameObject.cs" />
     <Compile Include="Gameplay\GameManagement\Animation.cs" />

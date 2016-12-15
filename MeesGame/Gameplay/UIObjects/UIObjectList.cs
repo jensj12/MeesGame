@@ -5,11 +5,11 @@ using System.Collections;
 
 namespace MeesGame
 {
-    public class GUIObjectList<Type> : GameObject, IList<Type> where Type : GUIObject
+    public class UIObjectList<Type> : GameObject, IList<Type> where Type : UIObject
     {
         protected List<Type> children = new List<Type>();
 
-        public GUIObjectList()
+        public UIObjectList()
         {
         }
 

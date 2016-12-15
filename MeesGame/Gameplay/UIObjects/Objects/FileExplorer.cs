@@ -4,7 +4,7 @@ using System.IO;
 
 namespace MeesGame
 {
-    public class FileExplorer : GUIList
+    public class FileExplorer : UIList
     {
         private readonly Color DefaultBackgroundColor = Color.Wheat;
         /// <summary>
@@ -72,7 +72,7 @@ namespace MeesGame
         /// updates the selected variable
         /// </summary>
         /// <param name="button">Button that was just pressed</param>
-        public void OnItemClicked(GUIObject button)
+        public void OnItemClicked(UIObject button)
         {
             ((Button)children[selected]).Selected = false;
             ((Button)button).Selected = true;
