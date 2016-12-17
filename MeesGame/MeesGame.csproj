@@ -38,9 +38,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\IAI.cs" />
     <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
+    <Compile Include="Gameplay\GameObjects\IPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />
     <Compile Include="Gameplay\GameObjects\PlayerState.cs" />

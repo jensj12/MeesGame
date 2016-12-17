@@ -146,7 +146,7 @@ namespace MeesGame
 
     }
 
-    class TimedPlayer : Player
+    class TimedPlayer : Player, IPlayer
     {
         /// <summary>
         /// The time that the last action was performed
@@ -232,6 +232,14 @@ namespace MeesGame
         public PlayerAction NextAction
         {
             get; set;
+        }
+
+        public ITileField TileField
+        {
+            get
+            {
+                return Level.Tiles;
+            }
         }
     }
 

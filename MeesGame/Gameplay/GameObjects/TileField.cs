@@ -2,7 +2,7 @@
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid
+    class TileField : GameObjectGrid, ITileField
     {
         public TileField(int rows, int columns, int layer = 0, string id = "") : base(rows, columns, layer, id)
         {
