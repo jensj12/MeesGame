@@ -19,6 +19,7 @@ namespace MeesGame
             Level = level;
             Location = location;
             position = Level.Tiles.GetAnchorPosition(location);
+            this.Level.Tiles.revealArea(location);
         }
 
         /// <summary>
@@ -96,6 +97,8 @@ namespace MeesGame
             InventoryItem item = CurrentTile.GetItem();
             if (item != null)
                 state.Inventory.Items.Add(item);
+
+            this.Level.Tiles.revealArea(Location);
         }
 
         /// <summary>

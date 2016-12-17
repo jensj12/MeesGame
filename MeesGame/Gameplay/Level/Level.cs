@@ -20,7 +20,7 @@ namespace MeesGame
 
         public Level()
         {
-            tiles = new TileField(numRows, numColumns, 0, "tiles");
+            tiles = new TileField(numRows, numColumns, true, 0, "tiles");
             tiles.CellHeight = CELL_HEIGHT;
             tiles.CellWidth = CELL_WIDTH;
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
@@ -16,10 +17,23 @@ namespace MeesGame
     {
         protected TileType tileType;
         protected Point location = Point.Zero;
+        protected bool revealed = false;
 
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
             this.tileType = tileType;
+        }
+
+        public bool Revealed
+        {
+            get
+            {
+                return revealed;
+            }
+            set
+            {
+                revealed = value;
+            }
         }
 
         /// <summary>
@@ -39,6 +53,14 @@ namespace MeesGame
             set { location = value; }
         }
 
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!(Parent as TileField).FogOfWar || Revealed)
+            {
+                base.Draw(gameTime, spriteBatch);
+            }
+        }
+        
         /// <summary>
         /// Checks if this tile prevents a player who is currently at this Tile from performing the specified action
         /// </summary>
