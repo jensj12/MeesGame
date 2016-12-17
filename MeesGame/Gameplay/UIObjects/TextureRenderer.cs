@@ -7,18 +7,18 @@ namespace MeesGame
     {
         public delegate void RenderTask(GameTime gameTime, SpriteBatch spriteBatch);
 
-        //spritebatch used for rendering our texture. Needs to be instantiate for each seperate texture,
+        //Spritebatch used for rendering our texture. Needs to be instantiate for each separate texture,
         //otherwise we would have to end the previous draw
         public SpriteBatch mSpriteBatch;
 
         /// <summary>
-        /// render the task to a texture
+        /// Render the task to a texture
         /// </summary>
-        /// <param name="gameTime">time used for the rendertask</param>
-        /// <param name="graphicsDevice">graphicsdevice the spritebatch should use</param>
-        /// <param name="task">what we want to render to the texture</param>
-        /// <param name="dimensions">size of the texture</param>
-        /// <param name="renderTarget">the target we want to render to</param>
+        /// <param name="gameTime">Time used for the rendertask</param>
+        /// <param name="graphicsDevice">Graphicsdevice the spritebatch should use</param>
+        /// <param name="task">What we want to render to the texture</param>
+        /// <param name="dimensions">Size of the texture</param>
+        /// <param name="renderTarget">The target we want to render to</param>
         public void Render(GameTime gameTime, GraphicsDevice graphicsDevice, RenderTask task, Vector2 dimensions, out RenderTarget2D renderTarget)
         {
             if (mSpriteBatch == null)

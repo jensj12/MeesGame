@@ -6,17 +6,17 @@ namespace MeesGame
     public class ScrollBar : UIObject
     {
         /// <summary>
-        /// the word Bar in this class is the inner part of the scrollbar which moves when being dragged.
+        /// The word Bar in this class is the inner part of the scrollbar which moves when being dragged.
         /// </summary>
 
-        //variables defining the colors of the scrollbar
+        //Variables defining the colors of the scrollbar
         private readonly Color barColor = Color.Aqua;
         private readonly Color backColor = Color.Beige;
 
-        //stores the total length of elements in the container.
+        //Stores the total length of elements in the container.
         private int totalElementsSize;
-        //the scroll distance before we began draggin. This variable is needed because otherwise we'd have
-        //to use the less acurate change of coordinates and apply that to the current scrollbarlocation
+        //The scroll distance before we began dragging. This variable is needed because otherwise we'd have
+        //To use the less accurate change of coordinates and apply that to the current scrollbar location
         private int scolldistanceStartDrag;
 
         //a solid color is inserted into this texture for painting a solid color
@@ -29,7 +29,7 @@ namespace MeesGame
         private bool beingDragged = false;
 
         /// <summary>
-        /// we need to override our relative location because we are not part of the list, so we don't need the
+        /// We need to override our relative location because we are not part of the list, so we don't need the
         /// anchor point, only to the position of its parent
         /// </summary>
         public override Vector2 RelativeLocation
@@ -40,13 +40,13 @@ namespace MeesGame
             }
         }
 
-        ///how big the offset it from the scrollbar to the top of the parent element is. gets and set it in the parent.
+        ///How big the offset it from the scrollbar to the top of the parent element is. gets and set it in the parent.
         private int ScrollDistance
         {
             get
             {
                 if (totalElementsSize != AbsoluteRectangle.Height)
-                    ///a simple way to picture this calculation is to think that the maximum distance of the elementsoffset is equal to totalElementsSize - Rectangle.Height 
+                    ///A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height 
                     ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
                     ///offset distance
                     return ((UIList)parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (totalElementsSize - AbsoluteRectangle.Height);
@@ -55,7 +55,7 @@ namespace MeesGame
             set
             {
                 if (totalElementsSize - Dimensions.Y != 0)
-                    ///the ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
+                    ///The ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
                     ///and the maximum distance the scrollbar can travel
                     ///
                     ((UIList)parent).ElementsOffset = (int)(value * (totalElementsSize - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
@@ -65,7 +65,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives the absolute location of the bar
+        /// Gives the absolute location of the bar
         /// </summary>
         public Rectangle AbsoluteBarRectangle
         {
@@ -81,7 +81,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives the location relative to the parent of the barr
+        /// Gives the location relative to the parent of the bar
         /// </summary>
         public Rectangle RelativeBarRectangle
         {
@@ -89,7 +89,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// gives a rectangle when drawing, is located at the origin of the screen to render the texture
+        /// Gives a rectangle when drawing, is located at the origin of the screen to render the texture
         /// </summary>
         public Rectangle OriginLocationBarRectangle
         {
@@ -97,15 +97,17 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// calculates the height of the bar
+        /// Calculates the height of the bar
         /// </summary>
         private int Barheight
         {
-            //basically it takes the ratio between the height of the scrollbar and the total size, and
+            //Basically it takes the ratio between the height of the scrollbar and the total size, and
             //multiplies this ratio by the total height of the scrollbar. This results in the bar
             //always being smaller than the scrollbar. totalelementssize is always at least as big as
             //the parent container
-            get { return (int)(Dimensions.Y / (double)totalElementsSize * Dimensions.Y); }
+            get { if (totalElementsSize == 0)
+                    return (int)Dimensions.Y;
+                return (int)(Dimensions.Y / (double)totalElementsSize * Dimensions.Y); }
         }
 
         public bool BeingDragged
@@ -118,7 +120,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// updates the size the parent would be if it were fully expanded. Always smaller than
+        /// Updates the size the parent would be if it were fully expanded. Always smaller than
         /// its size as defined in its width and height
         /// </summary>
         public void ChangeTotalElementsSize()
@@ -136,7 +138,7 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //fills the solidcolortexture with a single white color
+            //Fills the solidcolortexture with a single white color
             if (solidColorTexture == null)
             {
                 Color[] colordata = new Color[1];
@@ -151,11 +153,11 @@ namespace MeesGame
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            //use the input if it isn't used already and is hovering over the scrollbar
+            //Use the input if it isn't used already and is hovering over the scrollbar
             if (!parent.InputEaten && AbsoluteRectangle.Contains(inputHelper.MousePosition))
             {
                 parent.InputEater = this;
-                //if we press the mouse button on the bar we start draggin
+                //If we press the mouse button on the bar we start dragging
                 if (inputHelper.MouseLeftButtonDown() && AbsoluteBarRectangle.Contains(inputHelper.MousePosition))
                 {
                    mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
@@ -167,7 +169,7 @@ namespace MeesGame
             {
                 if (inputHelper.MouseLeftButtonDown())
                 {
-                    //the scrolldistance is the scroll distance we started with plus the distance the mouse has
+                    //The scroll distance is the scroll distance we started with plus the distance the mouse has
                     //moved since we started dragging
                     ScrollDistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
                     if (AbsoluteBarRectangle.Bottom > AbsoluteRectangle.Bottom)
@@ -189,7 +191,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// if we are dragging we want to keep using the input
+        /// If we are dragging we want to keep using the input
         /// </summary>
         public override bool WantsToEatInput
         {

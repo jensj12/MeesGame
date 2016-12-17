@@ -8,14 +8,14 @@ namespace MeesGame
     class PlayingLevelState : IGameLoopObject
     {
         ContentManager content;
-        List<Level> level;
+        List<PlayingLevel> level;
         int currentLevelIndex;
 
         public PlayingLevelState(ContentManager content)
         {
             this.content = content;
-            level = new List<Level>();
-            level.Add(new Level());
+            level = new List<PlayingLevel>();
+            level.Add(new PlayingLevel());
             currentLevelIndex = 0;
         }
 

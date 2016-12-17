@@ -60,7 +60,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="action">The action to check</param>
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
-        public bool CanPerformAction(PlayerAction action)
+        public virtual bool CanPerformAction(PlayerAction action)
         {
 
             if (CurrentTile.IsActionForbiddenFromHere(this, action)) return false;
@@ -79,6 +79,9 @@ namespace MeesGame
             LastAction = action;
 
             CurrentTile.PerformAction(this, action);
+            InventoryItem item = CurrentTile.GetItem();
+            if (item != null)
+                state.Inventory.Items.Add(item)
         }
 
         public Inventory Inventory
@@ -99,7 +102,9 @@ namespace MeesGame
 
         public bool HasKey()
         {
-            // TODO
+            foreach (InventoryItem item in (state.Inventory.Items))
+                if (item.type == InventoryItemType.Key)
+                    return true;
             return false;
         }
 
@@ -182,4 +187,32 @@ namespace MeesGame
             }
         }
     }
+
+    /// <summary>
+    /// A player that can move over obstacles
+    /// </summary>
+    class EditorPlayer : HumanPlayer
+    {
+        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        {
+        }
+
+
+        /// <summary>
+        /// An editorplayer can move everywhere on the map. He only cannot move out of the maps bounds
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public override bool CanPerformAction(PlayerAction action)
+        {
+            //An editorplayer can not do special moves
+            if (action == PlayerAction.SPECIAL) return false;
+
+            Point newLocation = CurrentTile.GetLocationAfterAction(action);
+            //If the editorplayer may only not move out of the tilefield
+            return !Level.Tiles.OutOfTileField(newLocation.X, newLocation.Y);
+        }
+
+    }
+
 }
