@@ -22,7 +22,7 @@ namespace MeesGame
 
             /*/Temporary initialisation of empty tiles
             for (int x = 0; x < numColumns; x++)
-            {
+            {C:\Users\Thijs\Documents\GitHub\MeesGame\MeesGame\Gameplay\GameManagement\GameObjects\
                 for (int y = 0; y < numRows; y++)
                 {
                     tiles.Add(new FloorTile(), x, y);
@@ -61,6 +61,11 @@ namespace MeesGame
             camera.UpdateCamera();
             base.Draw(gameTime, spriteBatch);
             camera.ResetCamera();
+        }
+
+        public Point Start
+        {
+            get { return start; }
         }
     }
 }

@@ -30,6 +30,7 @@ namespace MeesGame
             aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), uiContainer, content, "ai", directory);
             startButton = new Button(new Vector2(700, 700), Vector2.Zero, uiContainer, content, Strings.ok, (Button o) =>
             {
+                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
 

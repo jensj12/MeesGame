@@ -41,10 +41,14 @@
     <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
+    <Compile Include="Gameplay\GameObjects\EndTile.cs" />
+    <Compile Include="Gameplay\GameObjects\HoleTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />
+    <Compile Include="Gameplay\GameObjects\StartTile.cs" />
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
+    <Compile Include="Gameplay\GameStates\GameOverState.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="Gameplay\UIObjects\ScrollBar.cs" />
     <Compile Include="Gameplay\UIObjects\TextureGenerator.cs" />
