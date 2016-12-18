@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MeesGame.Gameplay.GameObjects
+﻿namespace MeesGame
 {
     class EndTile : FloorTile
     {
-        GameStateManager gameStates;
-
-        public EndTile(int layer = 0, string id = "") : base("end_door", TileType.Floor, layer, id)
+        public EndTile(int layer = 0, string id = "") : base("end_door", TileType.End, layer, id)
         {
 
         }
@@ -19,9 +11,7 @@ namespace MeesGame.Gameplay.GameObjects
         public void Finished(Player player)
         {
             if (player.Position == this.position)
-                gameStates.SwitchTo("GameOverState");
-            else
-                return;
+                GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
     }
 }

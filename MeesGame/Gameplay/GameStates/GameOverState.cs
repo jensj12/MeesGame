@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,9 +15,7 @@ namespace MeesGame.Gameplay.GameStates
         //TODO: Make the user go back to the editor if he came from there
         public void HandleInput(InputHelper inputHelper)
         {
-            if (!inputHelper.KeyPressed(Keys.Space))
-                return;
-            else
+            if (inputHelper.KeyPressed(Keys.Space))
                 GameEnvironment.GameStateManager.SwitchTo(GameEnvironment.GameStateManager.PreviousGameState);
         }
 

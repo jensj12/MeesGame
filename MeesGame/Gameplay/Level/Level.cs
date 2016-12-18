@@ -14,6 +14,7 @@ namespace MeesGame
         protected Point start;
         protected Player player;
         protected TileField tiles;
+        protected StartTile startTile;
         public Level(int levelindex = 0)
         {
             tiles = new TileField(numRows, numColumns, 0, "tiles");
@@ -29,7 +30,7 @@ namespace MeesGame
                 }
             }//*/
 
-            start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
+            start = new Point((int)startTile.Position.X, (int)startTile.Position.Y);
             tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
 
             this.player = new HumanPlayer(this, tiles, start);

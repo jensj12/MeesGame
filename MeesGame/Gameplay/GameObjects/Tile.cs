@@ -9,6 +9,9 @@ namespace MeesGame
         Wall,
         Door,
         Key,
+        Start,
+        End,
+        Hole,
         Unknown
     }
 

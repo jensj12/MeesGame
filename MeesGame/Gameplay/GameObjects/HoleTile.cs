@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MeesGame.Gameplay.GameObjects
+﻿namespace MeesGame
 {
     class HoleTile : FloorTile
     {
-        public HoleTile(int layer = 0, string id = "") : base("hole", TileType.Floor, layer, id)    //Change the name of the sprite once there is one
+        public HoleTile(int layer = 0, string id = "") : base("hole", TileType.Hole, layer, id)    //Change the name of the sprite once there is one
         {
 
         }
