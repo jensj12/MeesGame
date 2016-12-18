@@ -55,6 +55,12 @@ namespace MeesGame
             }
         }
 
+        protected override void OnLocationChanged()
+        {
+            base.OnLocationChanged();
+            CurrentTile.EnterTile(this);
+        }
+
         /// <summary>
         /// Checks if a player can perform the specified action
         /// </summary>
@@ -81,7 +87,7 @@ namespace MeesGame
             CurrentTile.PerformAction(this, action);
             InventoryItem item = CurrentTile.GetItem();
             if (item != null)
-                state.Inventory.Items.Add(item)
+                Inventory.Items.Add(item);
         }
 
         public Inventory Inventory
@@ -102,7 +108,7 @@ namespace MeesGame
 
         public bool HasKey()
         {
-            foreach (InventoryItem item in (state.Inventory.Items))
+            foreach (InventoryItem item in (Inventory.Items))
                 if (item.type == InventoryItemType.Key)
                     return true;
             return false;
@@ -193,7 +199,7 @@ namespace MeesGame
     /// </summary>
     class EditorPlayer : HumanPlayer
     {
-        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, score)
         {
         }
 

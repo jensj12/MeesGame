@@ -161,6 +161,8 @@ namespace MeesGame
             return new FloorTile();
         }
 
+        public virtual void EnterTile(Player player) { }
+
         /// <summary>
         /// Returns the default asset name of the specified tileType. If the specified tileType doesn't have a default assetName, returns ""
         /// </summary>

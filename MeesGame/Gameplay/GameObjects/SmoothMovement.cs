@@ -117,12 +117,27 @@ namespace MeesGame
             get;
         }
 
+        private Point location;
         /// <summary>
         /// The location on the field
         /// </summary>
         public Point Location
         {
-            get; private set;
+            get
+            {
+                return location;
+            }
+
+            private set
+            {
+                location = value;
+                OnLocationChanged();
+            }
+        }
+
+        protected virtual void OnLocationChanged()
+        {
+
         }
 
         /// <summary>
