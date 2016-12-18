@@ -13,7 +13,7 @@ namespace MeesGame
         /// </summary>
         private PlayerState state = new PlayerState();
 
-        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base("player", layer, id)
+        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base("playerdown@4", layer, id)
         {
             Score = score;
             Level = level;
@@ -77,7 +77,6 @@ namespace MeesGame
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
         public virtual bool CanPerformAction(PlayerAction action)
         {
-
             if (CurrentTile.IsActionForbiddenFromHere(this, action)) return false;
 
             Point newLocation = CurrentTile.GetLocationAfterAction(action);
@@ -155,6 +154,7 @@ namespace MeesGame
         /// The time that the last action was performed
         /// </summary>
         protected TimeSpan lastActionTime;
+        protected TimeSpan lastAnimationTime;
 
         public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
         {
@@ -162,6 +162,7 @@ namespace MeesGame
 
         public override void Update(GameTime gameTime)
         {
+            animate(gameTime);
             //if enough time has elapsed since the previous action, perform the selected action
             if (gameTime.TotalGameTime - lastActionTime >= Level.TimeBetweenActions)
             {
@@ -170,6 +171,24 @@ namespace MeesGame
                     //important for smooth movement
                     velocity = CalculateVelocityVector(NextAction);
                     PerformAction(NextAction);
+
+                    if (NextAction == PlayerAction.NORTH)
+                    {
+                        this.sprite = new SpriteSheet("playerup@4");
+                    }
+                    else if (NextAction == PlayerAction.SOUTH)
+                    {
+                        this.sprite = new SpriteSheet("playerdown@4");
+                    }
+                    else if (NextAction == PlayerAction.EAST)
+                    {
+                        this.sprite = new SpriteSheet("playerright@4");
+                    }
+                    else if (NextAction == PlayerAction.WEST)
+                    {
+                        this.sprite = new SpriteSheet("playerleft@4");
+                    }
+
                     lastActionTime = gameTime.TotalGameTime;
                     NextAction = NONE;
                 }
@@ -177,12 +196,22 @@ namespace MeesGame
                 {
                     //stop moving
                     velocity = Vector2.Zero;
+                    this.Sprite.SheetIndex = 0;
 
                     //put the player exactly at the middle of the square
                     position = Level.Tiles.GetAnchorPosition(Location);
                 }
             }
             base.Update(gameTime);
+        }
+
+        public void animate(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds - lastAnimationTime.TotalMilliseconds >= this.Level.TimeBetweenActions.TotalMilliseconds / 4)
+            {
+                this.Sprite.SheetIndex = (this.Sprite.SheetIndex + 1) % 4;
+                lastAnimationTime = gameTime.TotalGameTime;
+            }
         }
 
         /// <summary>
