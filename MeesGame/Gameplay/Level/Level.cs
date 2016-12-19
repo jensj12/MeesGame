@@ -20,12 +20,9 @@ namespace MeesGame
 
         public Level(bool fogOfWar = true)
         {
-<<<<<<< HEAD
             tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
             tiles.CellHeight = CELL_HEIGHT;
             tiles.CellWidth = CELL_WIDTH;
-=======
->>>>>>> refs/remotes/origin/master
         }
 
         public Player Player

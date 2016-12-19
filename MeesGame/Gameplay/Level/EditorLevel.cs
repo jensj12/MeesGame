@@ -8,10 +8,6 @@ namespace MeesGame
 
         public EditorLevel(int levelindex = 0, int screenWidth = -1, int screenHeight = -1) : base(false)
         {
-            tiles = new TileField(numRows, numColumns, false, 0, "tiles");
-            tiles.CellHeight = CELL_HEIGHT;
-            tiles.CellWidth = CELL_WIDTH;
-
             start = Point.Zero;
             FillLevelWithEmptyTiles();
             tiles.UpdateGraphicsToMatchSurroundings();
