@@ -89,6 +89,7 @@ namespace MeesGame
             {
                 obj.Reset();
             }
+            children = new List<Type>();
         }
 
         public void Clear()

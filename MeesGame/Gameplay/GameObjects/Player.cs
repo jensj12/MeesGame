@@ -25,6 +25,11 @@ namespace MeesGame
             this.Level.Tiles.revealArea(location);
         }
 
+        public PlayerState State
+        {
+            get { return state; }
+        }
+
         /// <summary>
         /// Current score of the player
         /// </summary>
@@ -101,6 +106,8 @@ namespace MeesGame
                 state.Inventory.Items.Add(item);
 
             this.Level.Tiles.revealArea(Location);
+
+            PlayerActionEvent(action);
         }
 
         /// <summary>

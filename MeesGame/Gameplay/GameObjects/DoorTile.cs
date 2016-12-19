@@ -6,7 +6,7 @@ namespace MeesGame
 {
     class DoorTile : WallTile
     {
-        new const string defaultAssetName = "horizontalDoorOverlay";
+        new public const string defaultAssetName = "horizontalDoorOverlay";
 
         protected bool doorIsOpen = false;
 

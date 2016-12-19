@@ -92,7 +92,7 @@ namespace MeesGen
                     }
 
                     nodesToDo.Add(next);
-                    tiles.Add(new MeesGame.FloorTile(), next.X, next.Y);
+                    tiles.Add(new MeesGame.KeyTile(), next.X, next.Y);
                     tiles.Add(new MeesGame.FloorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                     randomNext = false;
                     break;

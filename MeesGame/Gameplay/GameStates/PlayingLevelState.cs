@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using UIObjects;
 
 namespace MeesGame
 {
@@ -23,6 +24,8 @@ namespace MeesGame
             initOverlay();
 
             currentLevelIndex = 0;
+
+            level[currentLevelIndex].Player.OnPlayerAction += UpdateInventoryUI;
         }
 
         private void initOverlay()
@@ -34,11 +37,14 @@ namespace MeesGame
             overlay.AddChild(inventoryUI);
         }
 
-        private void UpdateInventoryUI()
+        private void UpdateInventoryUI(PlayerAction action)
         {
             inventoryUI.Reset();
 
-//          for (level[currentLevelIndex].Player.Inventory)
+            foreach (InventoryItem item in level[currentLevelIndex].Player.State.Inventory.Items)
+            {
+                inventoryUI.AddChild(new ImageView(Vector2.Zero, new Vector2(inventoryWidth), InventoryItem.inventoryItemAsset(item.type)));
+            }
         }
 
         public void HandleInput(InputHelper inputHelper)

@@ -51,6 +51,13 @@ namespace MeesGame
             scrollBar.Update(gameTime);
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            children.Reset();
+            scrollBar.UpdateParentHeightWhenShowingAllChildren();
+        }
+
         //distance each of the following elements has
         private int elementsDistance;
         public int ElementsDistance

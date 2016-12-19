@@ -15,6 +15,15 @@ namespace MeesGame
             get; set;
         }
 
+        public static string inventoryItemAsset(InventoryItemType ii)
+        {
+            switch (ii)
+            {
+                case InventoryItemType.Key:
+                    return KeyTile.GetDefaultAssetNames()[1];
+            }
+            return null;
+        }
     }
 
     class InventoryKey : InventoryItem
@@ -28,9 +37,6 @@ namespace MeesGame
 
     class Inventory
     {
-        public delegate void InventoryChangedEventHandler();
-        public event InventoryChangedEventHandler OnInventoryChanged;
-
         public List<InventoryItem> Items
         {
             get;
@@ -39,11 +45,6 @@ namespace MeesGame
         public Inventory()
         {
             Items = new List<InventoryItem>();
-        }
-
-        private void InventoryChanged()
-        {
-            OnInventoryChanged?.Invoke();
         }
     }
 

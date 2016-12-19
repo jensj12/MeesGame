@@ -41,6 +41,8 @@ namespace MeesGame
                 //automatically remove scrollbar when it is not necessary
                 Visible = false;
             }
+            else
+                Visible = true;
 
         }
 
