@@ -113,7 +113,7 @@ namespace MeesGame
                 level[0].Tiles.UpdateGraphicsToMatchSurroundings();
             }
 
-            if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+            if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Back))
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState");
         }
 
