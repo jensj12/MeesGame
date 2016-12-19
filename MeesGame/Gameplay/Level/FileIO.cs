@@ -13,7 +13,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="level"> The level being saved. </param>
         /// <param name="filename"> The name of the file the level is being saved to. </param>
-        public static void Save(Level level)
+        public static void Save(TileField tilefield)
         {
             string fileName = null;
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -22,23 +22,30 @@ namespace MeesGame
             {
                 fileName = saveFileDialog.FileName;
                 Stream stream = new FileStream(fileName, FileMode.Create);
+                LevelData data = new LevelData();
+                data.SetData(tilefield);
                 XmlWriter writer = XmlWriter.Create(stream);
-                new XmlSerializer(typeof(TileField)).Serialize(writer, level.Tiles);
+                new XmlSerializer(typeof(LevelData)).Serialize(writer, data);
                 writer.Close();
             }
         }
 
         /// <summary>
         /// Loads a level from a file with the specified name.
+        /// <param name = "filename"> The name of the file the level is being loaded from. </param>
         /// </summary>
-        public static void Load(string filename)
+        public static LevelData Load(string filename)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "txt Files|*.txt ";
-            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                //Lees het bestand uit en construeer een TileField hieruit.
+                LevelData data = new LevelData();
+                Stream stream = new FileStream(filename, FileMode.Open);
+                XmlReader reader = XmlReader.Create(stream);
+                return data = (LevelData)new XmlSerializer(typeof(LevelData)).Deserialize(reader);
             }
+            return null;
         }
     }
 }

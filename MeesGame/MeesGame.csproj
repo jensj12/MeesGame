@@ -53,6 +53,7 @@
     <Compile Include="Gameplay\Level\EditorLevel.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />
     <Compile Include="Gameplay\Level\Level.cs" />
+    <Compile Include="Gameplay\Level\LevelData.cs" />
     <Compile Include="Gameplay\UIObjects\ScrollBar.cs" />
     <Compile Include="Gameplay\UIObjects\TextureRenderer.cs" />
     <Compile Include="Gameplay\UIObjects\Button.cs" />

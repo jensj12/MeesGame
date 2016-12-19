@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Xml.Schema;
 
 namespace MeesGame
 {
-    public class TileField : GameObjectGrid, ITileField, IXmlSerializable
+    public class TileField : GameObjectGrid, ITileField
     {
         protected bool fogOfWar;
 
@@ -29,6 +25,15 @@ namespace MeesGame
             {
                 fogOfWar = value;
             }
+        }
+
+        public int NumRows
+        {
+            get { return NumRows; }
+        }
+        public int NumColumns
+        {
+            get { return NumColumns; }
         }
 
         public TileType GetType(int x, int y)
@@ -100,34 +105,11 @@ namespace MeesGame
 
         public void revealArea(Point a)
         {
-            for(int i = a.X-1; i <= a.X+1; i++)
+            for (int i = a.X - 1; i <= a.X + 1; i++)
             {
-                for(int j = a.Y - 1; j <= a.Y + 1; j++)
+                for (int j = a.Y - 1; j <= a.Y + 1; j++)
                 {
-                    if(i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
-                }
-            }
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            new XmlSerializer(typeof(int)).Serialize(writer, Columns);
-            new XmlSerializer(typeof(int)).Serialize(writer, Rows);
-            for(int x = 0; x<=Columns; x++)
-            {
-                for (int y = 0; y<=Rows; y++)
-                {
-                    new XmlSerializer(typeof(Tile)).Serialize(writer, GetTile(new Point(x, y)));
+                    if (i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
                 }
             }
         }

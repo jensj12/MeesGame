@@ -26,7 +26,7 @@ namespace MeesGame
     }
 
 
-    class Inventory
+    public class Inventory
     {
         public List<InventoryItem> Items
         {
