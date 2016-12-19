@@ -18,6 +18,8 @@ namespace MeesGame
         protected TileType tileType;
         protected Point location = Point.Zero;
         protected bool revealed = false;
+        protected SpriteSheet secondarySprite;
+        protected Color secondarySpriteColor = Color.White;
 
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
@@ -58,9 +60,13 @@ namespace MeesGame
             if (!(Parent as TileField).FogOfWar || Revealed)
             {
                 base.Draw(gameTime, spriteBatch);
+                if (secondarySprite != null && visible)
+                {
+                    secondarySprite.Draw(spriteBatch, this.GlobalPosition, origin, drawColor: secondarySpriteColor);
+                }
             }
         }
-        
+
         /// <summary>
         /// Checks if this tile prevents a player who is currently at this Tile from performing the specified action
         /// </summary>

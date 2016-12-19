@@ -1,4 +1,5 @@
-﻿using static MeesGame.PlayerAction;
+﻿using Microsoft.Xna.Framework;
+using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
@@ -7,9 +8,10 @@ namespace MeesGame
         protected bool doorIsOpen = false;
 
         //TODO: Pair a door with a specific key.
-        public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)
+        public DoorTile(int layer = 0, string id = "") : base("horizontalDoor", TileType.Door, layer, id)
         {
-
+            secondarySprite = new SpriteSheet("horizontalDoorOverlay");
+            secondarySpriteColor = Color.Blue;
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -63,15 +65,16 @@ namespace MeesGame
     class KeyTile : FloorTile
     {
 
-        public KeyTile(int layer = 0, string id = "") : base("keyOverlay", TileType.Key, layer, id)
+        public KeyTile(int layer = 0, string id = "") : base("floorTile", TileType.Key, layer, id)
         {
-
+            secondarySprite = new SpriteSheet("keyOverlay");
+            secondarySpriteColor = Color.Aqua;
         }
 
         public override InventoryItem GetItem()
         {
-                InventoryItem key = new InventoryKey();
-                return key;
+            InventoryItem key = new InventoryKey();
+            return key;
         }
 
         //TODO: if key has been picked up, keytile changes into floortile.
