@@ -17,6 +17,15 @@ namespace MeesGame
 
     }
 
+    class InventoryKey : InventoryItem
+    {
+        public InventoryKey(InventoryItemType iit = InventoryItemType.Key)
+        {
+
+        }
+    }
+
+
     class Inventory
     {
         public delegate void InventoryChangedEventHandler();

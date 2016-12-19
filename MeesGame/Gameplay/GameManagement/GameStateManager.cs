@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 public class GameStateManager : IGameLoopObject
 {
@@ -45,6 +46,7 @@ public class GameStateManager : IGameLoopObject
 
     public void HandleInput(InputHelper inputHelper)
     {
+        if (inputHelper.KeyPressed(Keys.Back)) SwitchTo("TitleMenuState");
         if (currentGameState != null)
         {
             currentGameState.HandleInput(inputHelper);

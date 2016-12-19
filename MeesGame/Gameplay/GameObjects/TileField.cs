@@ -2,11 +2,25 @@
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid
+    class TileField : GameObjectGrid, ITileField
     {
-        public TileField(int rows, int columns, int layer = 0, string id = "") : base(rows, columns, layer, id)
-        {
+        protected bool fogOfWar;
 
+        public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "") : base(rows, columns, layer, id)
+        {
+            this.fogOfWar = fogOfWar;
+        }
+
+        public bool FogOfWar
+        {
+            get
+            {
+                return fogOfWar;
+            }
+            set
+            {
+                fogOfWar = value;
+            }
         }
 
         public TileType GetType(int x, int y)
@@ -73,6 +87,17 @@ namespace MeesGame
             foreach (Tile tile in Objects)
             {
                 tile.UpdateGraphicsToMatchSurroundings();
+            }
+        }
+
+        public void revealArea(Point a)
+        {
+            for(int i = a.X-1; i <= a.X+1; i++)
+            {
+                for(int j = a.Y - 1; j <= a.Y + 1; j++)
+                {
+                    if(i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
+                }
             }
         }
     }

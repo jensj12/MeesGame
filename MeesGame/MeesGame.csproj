@@ -38,9 +38,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\IAI.cs" />
     <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
+    <Compile Include="Gameplay\GameObjects\IPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />
     <Compile Include="Gameplay\GameObjects\PlayerState.cs" />
@@ -107,10 +110,11 @@
     <Content Include="Gameplay\Content\ice.png" />
     <Content Include="Gameplay\Content\keyOverlay.png" />
     <Content Include="Gameplay\Content\ladder.png" />
-    <Content Include="Gameplay\Content\leftplayer.png" />
     <Content Include="Gameplay\Content\money.png" />
-    <Content Include="Gameplay\Content\player.png" />
-    <Content Include="Gameplay\Content\rightplayer.png" />
+    <Content Include="Gameplay\Content\playerdown%404.png" />
+    <Content Include="Gameplay\Content\playerleft%404.png" />
+    <Content Include="Gameplay\Content\playerright%404.png" />
+    <Content Include="Gameplay\Content\playerup%404.png" />
     <Content Include="Gameplay\Content\verticalDoor.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
