@@ -6,6 +6,7 @@ namespace MeesGame
     public abstract class UIObject : IGameLoopObject
     {
         public delegate void ClickEventHandler(UIObject uiObject);
+
         public event ClickEventHandler OnClick;
 
         /// <summary>
@@ -21,6 +22,7 @@ namespace MeesGame
         /// invalidated = determines if the rendertarget needs updating
         /// </summary>
         private Vector2 relativeLocation;
+
         private Vector2 dimensions;
         private UIContainer parent;
         private bool visible = true;
@@ -28,15 +30,16 @@ namespace MeesGame
         protected RenderTarget2D renderTarget;
         protected bool needsToBeInvalidated = true;
         protected TextureRenderer textureRenderer;
-        
+
         ///because the input is eaten after an element uses it we keep track of whether the elements
         ///have received an input and allow them to act accordingly in the update method
         private bool hovering;
+
         private bool mouseDown;
         private bool clicked;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="location">location relative to the parent</param>
         /// <param name="dimensions">size of the object</param>
@@ -44,7 +47,7 @@ namespace MeesGame
         public UIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
         {
             this.relativeLocation = location ?? Vector2.Zero;
-            //dimensions is set to 1,1 because our graphics device can't compute a size of 0,0 
+            //dimensions is set to 1,1 because our graphics device can't compute a size of 0,0
             this.dimensions = dimensions ?? new Vector2(1);
             this.BackgroundColor = backgroundColor;
             this.textureRenderer = new TextureRenderer();
@@ -58,7 +61,6 @@ namespace MeesGame
                 colordata[0] = Color.White;
                 solidWhiteTexture = new Texture2D(device, 1, 1);
                 solidWhiteTexture.SetData(colordata);
-
             }
             return solidWhiteTexture;
         }
@@ -123,7 +125,7 @@ namespace MeesGame
             if (!visible) return;
 
             if (BackgroundColor != null)
-                spriteBatch.Draw(SolidWhiteTexture(spriteBatch.GraphicsDevice), RelativeRectangle, (Color) BackgroundColor);
+                spriteBatch.Draw(SolidWhiteTexture(spriteBatch.GraphicsDevice), RelativeRectangle, (Color)BackgroundColor);
             if (Invalidate == true)
             {
                 renderTarget?.Dispose();
@@ -140,8 +142,9 @@ namespace MeesGame
         /// <param name="spriteBatch">a spritebatch to draw in</param>
         public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
 
-        public virtual void Reset() { }
-
+        public virtual void Reset()
+        {
+        }
 
         public bool Hovering
         {
@@ -182,7 +185,7 @@ namespace MeesGame
             }
         }
 
-        ///location relative to the location of its parent 
+        ///location relative to the location of its parent
         public virtual Vector2 RelativeLocation
         {
             get
@@ -235,7 +238,9 @@ namespace MeesGame
         public bool Visible
         {
             get { return visible; }
-            set { visible = value;
+            set
+            {
+                visible = value;
                 Invalidate = true;
             }
         }

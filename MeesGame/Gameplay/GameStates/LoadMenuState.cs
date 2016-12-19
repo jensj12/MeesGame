@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System.IO;
 
 namespace MeesGame
@@ -34,7 +33,6 @@ namespace MeesGame
             uiContainer.AddChild(levelExplorer);
             uiContainer.AddChild(aiExplorer);
             uiContainer.AddChild(startButton);
-
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

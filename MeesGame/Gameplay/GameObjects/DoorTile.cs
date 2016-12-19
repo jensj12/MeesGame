@@ -1,5 +1,4 @@
-﻿using MeesGame;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using static MeesGame.PlayerAction;
 
 namespace MeesGame
@@ -16,7 +15,6 @@ namespace MeesGame
         //TODO: Pair a door with a specific key.
         public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)
         {
-
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -75,14 +73,12 @@ namespace MeesGame
         }
     }
 
-
     class KeyTile : FloorTile
     {
         new const string defaultAssetName = "keyOverlay";
 
         public KeyTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Key, layer, id)
         {
-
         }
 
         public override InventoryItem GetItem()

@@ -38,4 +38,3 @@ public class Collision
         return new Rectangle(xmin, ymin, xmax - xmin, ymax - ymin);
     }
 }
-

@@ -19,7 +19,7 @@ namespace MeesGame
         {
             int objectIndex = children.IndexOf(uiObject);
 
-            if(objectIndex > 0)
+            if (objectIndex > 0)
                 return new Vector2(0, elementsDistance + children[objectIndex - 1].RelativeRectangle.Bottom);
 
             //if we only scale the first element, the rest will follow.
@@ -60,13 +60,15 @@ namespace MeesGame
 
         //distance each of the following elements has
         private int elementsDistance;
+
         public int ElementsDistance
         {
             get { return elementsDistance; }
         }
 
-        //in retrospect, this is only usefull for the scrollbar
+        //in retrospect, this is only useful for the scrollbar
         protected int elementsOffset;
+
         public int ElementsOffset
         {
             get { return elementsOffset; }

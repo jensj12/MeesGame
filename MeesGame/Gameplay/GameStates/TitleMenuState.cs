@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MeesGame;
 
 namespace MeesGame
 {
@@ -24,7 +22,6 @@ namespace MeesGame
             {
                 GameEnvironment.GetGameEnvironment.Exit();
             }));
-
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

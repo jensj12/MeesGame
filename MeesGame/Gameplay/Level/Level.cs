@@ -76,7 +76,6 @@ namespace MeesGame
             if (screenWidth == -1) screenWidth = GameEnvironment.Screen.X;
             if (screenHeight == -1) screenHeight = GameEnvironment.Screen.Y;
 
-
             Camera camera = new Camera(new Point(screenWidth, screenHeight), player);
             Add(camera);
             camera.Add(this.tiles);

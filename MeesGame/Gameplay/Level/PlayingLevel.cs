@@ -4,7 +4,6 @@ namespace MeesGame
 {
     class PlayingLevel : Level
     {
-
         public PlayingLevel(int levelindex = 0, bool human = true)
         {
             start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);

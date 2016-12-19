@@ -30,10 +30,8 @@ namespace MeesGame
     {
         public InventoryKey(InventoryItemType iit = InventoryItemType.Key)
         {
-
         }
     }
-
 
     class Inventory
     {

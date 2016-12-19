@@ -7,6 +7,7 @@ namespace MeesGame
     public class FileExplorer : UIList
     {
         private readonly Color DefaultBackgroundColor = Color.Wheat;
+
         /// <summary>
         /// distance between each of the buttons in the file explorer
         /// </summary>
@@ -23,7 +24,7 @@ namespace MeesGame
         private String currentDirectory;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="location"></param>
         /// <param name="dimensions"></param>

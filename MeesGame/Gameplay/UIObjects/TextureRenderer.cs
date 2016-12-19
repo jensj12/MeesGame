@@ -34,7 +34,6 @@ namespace MeesGame
             mSpriteBatch.GraphicsDevice.Clear(Color.Transparent);
             mSpriteBatch.End();
             mSpriteBatch.GraphicsDevice.SetRenderTargets(oldTargets);
-            }
         }
     }
-
+}

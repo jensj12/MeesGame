@@ -92,11 +92,11 @@ namespace MeesGame
 
         public void revealArea(Point a)
         {
-            for(int i = a.X-1; i <= a.X+1; i++)
+            for (int i = a.X - 1; i <= a.X + 1; i++)
             {
-                for(int j = a.Y - 1; j <= a.Y + 1; j++)
+                for (int j = a.Y - 1; j <= a.Y + 1; j++)
                 {
-                    if(i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
+                    if (i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
                 }
             }
         }

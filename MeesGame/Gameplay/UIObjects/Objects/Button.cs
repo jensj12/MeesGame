@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace MeesGame
@@ -15,6 +15,7 @@ namespace MeesGame
         /// SelectedBackground = the background the button takes when it is in selected state
         /// </summary>
         protected String text;
+
         protected SpriteFont spriteFont;
         protected List<SpriteSheet> backgrounds;
         protected SpriteSheet hoverBackground;
@@ -44,11 +45,11 @@ namespace MeesGame
             backgrounds = new List<SpriteSheet>();
 
             spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(textFont);
-            if(backgroundName != null)
+            if (backgroundName != null)
                 backgrounds.Add(new SpriteSheet(backgroundName));
             hoverBackground = new SpriteSheet(hoverBackgroundName);
             selectedBackground = new SpriteSheet(selectedBackgroundName);
-            if(overlayNames != null)
+            if (overlayNames != null)
                 for (int i = 0; i < overlayNames.Length; i++)
                     backgrounds.Add(new SpriteSheet(overlayNames[i]));
 
@@ -60,13 +61,13 @@ namespace MeesGame
             //with the value the text specifies
             this.Dimensions = new Vector2((Dimensions.X > 0) ? Dimensions.X : measuredDimensions.X,
                 (Dimensions.Y > 0) ? Dimensions.Y : measuredDimensions.Y);
-            if(onClick != null)
+            if (onClick != null)
                 OnClick += onClick;
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            for(int i = 0; i < backgrounds.Count; i++)
+            for (int i = 0; i < backgrounds.Count; i++)
                 backgrounds[i].Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
 
             if (selected)
@@ -90,7 +91,6 @@ namespace MeesGame
             get { return selected; }
             set { selected = value; }
         }
-
 
         public override bool Invalidate
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 public class SpriteSheet
@@ -15,7 +14,7 @@ public class SpriteSheet
     {
         // retrieve the sprite
         sprite = GameEnvironment.AssetManager.GetSprite(assetname);
-        
+
         // construct the collision mask
         Color[] colorData = new Color[sprite.Width * sprite.Height];
         collisionMask = new bool[sprite.Width * sprite.Height];
@@ -64,16 +63,14 @@ public class SpriteSheet
             spriteEffects = SpriteEffects.FlipHorizontally;
         }
         //checking using -1 to verify that we haven't inserted a size for the sprite
-        if(width == -1 || height == -1)
+        if (width == -1 || height == -1)
             spriteBatch.Draw(sprite, position, spritePart, Color.White,
                 0.0f, origin, 1.0f, spriteEffects, 0.0f);
         else
         {
             Rectangle destinationRectangle = new Rectangle((int)position.X, (int)position.Y, width, height);
             spriteBatch.Draw(sprite, destinationRectangle, spritePart, Color.White);
-
         }
-
     }
 
     public bool IsTranslucent(int x, int y)

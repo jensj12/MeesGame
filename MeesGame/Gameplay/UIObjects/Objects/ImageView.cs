@@ -1,5 +1,4 @@
-﻿using System;
-using MeesGame;
+﻿using MeesGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

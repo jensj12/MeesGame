@@ -10,6 +10,7 @@ namespace MeesGame
 
         //Stores the total length of elements in the container.
         private int parentHeightWhenShowingAllChildren;
+
         //The scroll distance before we began dragging. This variable is needed because otherwise we'd have
         //To use the less accurate change of coordinates and apply that to the current scrollbar location
         private int scolldistanceStartDrag;
@@ -43,7 +44,6 @@ namespace MeesGame
             }
             else
                 Visible = true;
-
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
@@ -62,9 +62,9 @@ namespace MeesGame
                 //If we press the mouse button on the bar we start dragging
                 if (inputHelper.MouseLeftButtonDown() && AbsoluteBarRectangle.Contains(inputHelper.MousePosition))
                 {
-                   mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
-                   scolldistanceStartDrag = ScrollDistance;
-                   beingDragged = true;
+                    mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
+                    scolldistanceStartDrag = ScrollDistance;
+                    beingDragged = true;
                 }
             }
             else if (beingDragged)
@@ -121,7 +121,7 @@ namespace MeesGame
             get
             {
                 if (parentHeightWhenShowingAllChildren != AbsoluteRectangle.Height)
-                    ///A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height 
+                    ///A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height
                     ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
                     ///offset distance
                     return ((UIList)Parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);

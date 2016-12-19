@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace MeesGame
@@ -9,6 +9,7 @@ namespace MeesGame
     {
         //The width of the bars with buttons the editor can click to place certain tiles
         const int leftBarWidth = 150;
+
         const int rightBarWidth = 200;
         const int buttonDistanceFromRightWall = 20;
         readonly Color listsBackgroundColor = new Color(122, 122, 122, 255);
@@ -17,6 +18,7 @@ namespace MeesGame
 
         //We need an ordered list of tiletypes to match the buttons with
         List<TileType> tileTypes;
+
         int currentLevelIndex;
 
         private UIContainer overlay;
@@ -107,7 +109,7 @@ namespace MeesGame
             {
                 Point playerLocation = level[currentLevelIndex].Player.Location;
                 level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypes[selectedTileIndex]), playerLocation.X, playerLocation.Y);
-                //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles) 
+                //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
                 level[0].Tiles.UpdateGraphicsToMatchSurroundings();
             }
 

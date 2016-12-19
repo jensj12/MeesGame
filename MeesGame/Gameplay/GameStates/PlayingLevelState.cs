@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using UIObjects;
@@ -32,7 +31,7 @@ namespace MeesGame
         {
             overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
 
-            inventoryUI = new UIList(new Vector2(0, inventoryHeightOffset), new Vector2(inventoryWidth, (int) GameEnvironment.Screen.Y - 2 * inventoryHeightOffset), backgroundColor: new Color(122, 122, 122, 122));
+            inventoryUI = new UIList(new Vector2(0, inventoryHeightOffset), new Vector2(inventoryWidth, (int)GameEnvironment.Screen.Y - 2 * inventoryHeightOffset), backgroundColor: new Color(122, 122, 122, 122));
 
             overlay.AddChild(inventoryUI);
         }
