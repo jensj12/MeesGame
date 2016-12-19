@@ -5,7 +5,7 @@ namespace MeesGame
 {
     class DoorTile : WallTile
     {
-        new public const string defaultAssetName = "horizontalDoorOverlay";
+        new public const string defaultAssetName = "horizontalDoor";
 
         protected bool doorIsOpen = false;
 
@@ -13,8 +13,10 @@ namespace MeesGame
         public Color Background { get; set; }
 
         //TODO: Pair a door with a specific key.
-        public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)
+        public DoorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Door, layer, id)
         {
+            secondarySprite = new SpriteSheet("horizontalDoorOverlay");
+            secondarySpriteColor = Color.Blue;
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -77,8 +79,10 @@ namespace MeesGame
     {
         new const string defaultAssetName = "keyOverlay";
 
-        public KeyTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Key, layer, id)
+        public KeyTile(int layer = 0, string id = "") : base(FloorTile.defaultAssetName, TileType.Key, layer, id)
         {
+            secondarySprite = new SpriteSheet("keyOverlay");
+            secondarySpriteColor = Color.Aqua;
         }
 
         public override InventoryItem GetItem()
