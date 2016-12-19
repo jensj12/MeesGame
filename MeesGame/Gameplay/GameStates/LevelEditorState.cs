@@ -57,7 +57,7 @@ namespace MeesGame
             overlay.AddChild(tilesList);
             overlay.AddChild(tilesPropertiesList);
 
-            tilesList.onItemClick += OnItemSelect;
+            tilesList.OnClick += OnItemSelect;
 
             FillTilesList();
         }

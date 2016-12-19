@@ -5,8 +5,6 @@ namespace MeesGame
 {
     public class UIList : UIContainer
     {
-        public event ClickEventHandler onItemClick;
-
         protected ScrollBar scrollBar;
 
         public UIList(Vector2? location = null, Vector2? dimensions = null, int elementsDistance = 10, Color? backgroundColor = null) : base(location, dimensions, backgroundColor)

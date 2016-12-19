@@ -123,6 +123,9 @@
   <data name="exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="generate_random_maze" xml:space="preserve">
+    <value>Generate random maze</value>
+  </data>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
   </data>

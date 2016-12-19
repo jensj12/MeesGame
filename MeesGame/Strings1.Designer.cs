@@ -47,7 +47,7 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Overrides the current thread's CurrentCulture property for all
+        ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -75,6 +75,15 @@ namespace MeesGame {
         internal static string exit {
             get {
                 return ResourceManager.GetString("exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate random maze.
+        /// </summary>
+        internal static string generate_random_maze {
+            get {
+                return ResourceManager.GetString("generate_random_maze", resourceCulture);
             }
         }
         

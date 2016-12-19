@@ -65,6 +65,12 @@ namespace MeesGame
                 OnClick += onClick;
         }
 
+        internal void UpdateText(string text, bool v)
+        {
+            this.text = text;
+            this.Dimensions = spriteFont.MeasureString(text);
+        }
+
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < backgrounds.Count; i++)

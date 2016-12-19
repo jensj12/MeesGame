@@ -25,14 +25,36 @@ namespace MeesGame
             uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
             levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), "lvl", directory);
             aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
-            startButton = new Button(new Vector2(700, 700), null, Strings.ok, (UIObject o) =>
+            startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
-
+            centerStartButton();
             uiContainer.AddChild(levelExplorer);
             uiContainer.AddChild(aiExplorer);
             uiContainer.AddChild(startButton);
+
+            levelExplorer.OnClick += OnLevelSelect;
+        }
+
+        private void centerStartButton()
+        {
+            startButton.RelativeLocation = new Vector2(GameEnvironment.Screen.X / 2 - startButton.Dimensions.X / 2, 700);
+        }
+
+        public void OnLevelSelect(UIObject o)
+        {
+            if (o == levelExplorer)
+            {
+                foreach(Button button in levelExplorer.Children)
+                {
+                    if (button.Selected)
+                    {
+                        startButton.UpdateText(Strings.ok, true);
+                        centerStartButton();
+                    }
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

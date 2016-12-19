@@ -102,9 +102,15 @@ namespace MeesGame
 
                 if (Clicked)
                 {
-                    OnClick?.Invoke(this);
+                    InvokeClickEvent();
                 }
             }
+        }
+
+        public void InvokeClickEvent()
+        {
+            OnClick?.Invoke(this);
+            parent?.InvokeClickEvent();
         }
 
         /// <summary>
@@ -193,6 +199,10 @@ namespace MeesGame
                 if (parent != null)
                     return relativeLocation + parent.GetChildAnchorPoint(this);
                 return relativeLocation;
+            }
+            set
+            {
+                relativeLocation = value;
             }
         }
 
