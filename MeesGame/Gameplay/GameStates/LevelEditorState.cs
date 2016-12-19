@@ -38,6 +38,8 @@ namespace MeesGame
             level.Add(newLevel);
             currentLevelIndex = 0;
 
+            level[currentLevelIndex].Player.OnPlayerAction += PlayerMoved;
+
             InitUI();
         }
 
@@ -124,5 +126,16 @@ namespace MeesGame
             level[currentLevelIndex].Update(gameTime);
             overlay.Update(gameTime);
         }
+
+        public void PlayerMoved(PlayerAction action)
+        {
+            Tile currentTile = level[currentLevelIndex].Player.Location
+            foreach
+        }
+    }
+
+    public class EditableAttribute : Attribute
+    {
+        public bool isEditable;
     }
 }

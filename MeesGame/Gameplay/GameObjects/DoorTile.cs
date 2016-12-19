@@ -1,4 +1,6 @@
-﻿using static MeesGame.PlayerAction;
+﻿using MeesGame;
+using Microsoft.Xna.Framework;
+using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
@@ -7,6 +9,9 @@ namespace MeesGame
         new const string defaultAssetName = "horizontalDoorOverlay";
 
         protected bool doorIsOpen = false;
+
+        [EditableAttribute]
+        public Color Background { get; set; }
 
         //TODO: Pair a door with a specific key.
         public DoorTile(int layer = 0, string id = "") : base("horizontalDoorOverlay", TileType.Door, layer, id)

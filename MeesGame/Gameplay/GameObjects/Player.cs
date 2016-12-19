@@ -8,6 +8,9 @@ namespace MeesGame
 {
     class Player : SpriteGameObject
     {
+        public delegate void PlayerActionHandler(PlayerAction action);
+        public event PlayerActionHandler OnPlayerAction;
+
         /// <summary>
         /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
         /// </summary>
@@ -138,6 +141,11 @@ namespace MeesGame
         /// List of actions that can be used to move players
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
+
+        public void PlayerActionEvent(PlayerAction action)
+        {
+            OnPlayerAction?.Invoke(action);
+        }
     }
 
     /// <summary>
