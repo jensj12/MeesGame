@@ -18,9 +18,9 @@ namespace MeesGame
         protected Player player;
         protected TileField tiles;
 
-        public Level()
+        public Level(bool fogOfWar = true)
         {
-            tiles = new TileField(numRows, numColumns, true, 0, "tiles");
+            tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
             tiles.CellHeight = CELL_HEIGHT;
             tiles.CellWidth = CELL_WIDTH;
         }

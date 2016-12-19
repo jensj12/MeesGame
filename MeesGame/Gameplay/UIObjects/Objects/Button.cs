@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -15,7 +16,7 @@ namespace MeesGame
         /// </summary>
         protected String text;
         protected SpriteFont spriteFont;
-        protected SpriteSheet background;
+        protected List<SpriteSheet> backgrounds;
         protected SpriteSheet hoverBackground;
         private SpriteSheet selectedBackground;
 
@@ -38,12 +39,18 @@ namespace MeesGame
         /// <param name="hoverBackgroundName">The texture that overlays the background when the mouse is hovering over the button</param>
         /// <param name="selectedBackgroundName">The texture that overlays the background when the button is selected</param>
         /// <param name="textFont">The name of the text font used for the text as in the contenmanager</param>
-        public Button(Vector2? location, Vector2? dimensions, string text, ClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont") : base(location, dimensions)
+        public Button(Vector2? location, Vector2? dimensions, string text, ClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont", string[] overlayNames = null) : base(location, dimensions)
         {
+            backgrounds = new List<SpriteSheet>();
+
             spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(textFont);
-            background = new SpriteSheet(backgroundName);
+            if(backgroundName != null)
+                backgrounds.Add(new SpriteSheet(backgroundName));
             hoverBackground = new SpriteSheet(hoverBackgroundName);
             selectedBackground = new SpriteSheet(selectedBackgroundName);
+            if(overlayNames != null)
+                for (int i = 0; i < overlayNames.Length; i++)
+                    backgrounds.Add(new SpriteSheet(overlayNames[i]));
 
             this.text = text;
             Vector2 measuredDimensions = spriteFont.MeasureString(text);
@@ -59,7 +66,9 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            background.Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
+            for(int i = 0; i < backgrounds.Count; i++)
+                backgrounds[i].Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
+
             if (selected)
                 selectedBackground.Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
             else if (Hovering)

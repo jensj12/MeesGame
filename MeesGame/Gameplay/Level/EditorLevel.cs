@@ -6,7 +6,7 @@ namespace MeesGame
     {
         private const string tileFieldName = "editorTiles";
 
-        public EditorLevel(int levelindex = 0, int screenWidth = -1, int screenHeight = -1)
+        public EditorLevel(int levelindex = 0, int screenWidth = -1, int screenHeight = -1) : base(false)
         {
             start = Point.Zero;
             FillLevelWithEmptyTiles();

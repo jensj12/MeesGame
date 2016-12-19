@@ -68,10 +68,10 @@ namespace MeesGame
             foreach (TileType tt in Enum.GetValues(typeof(TileType)))
             {
                 tileTypes.Add(tt);
-                string assetName = Tile.GetAssetNameFromTileType(tt);
-                if (assetName != "")
+                string[] tileBackgroundAndOverlays = Tile.GetAssetNamesFromTileType(tt);
+                if (tileBackgroundAndOverlays != null)
                 {
-                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(leftBarWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, assetName);
+                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(leftBarWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, null, overlayNames: tileBackgroundAndOverlays);
                     tilesList.AddChild(newButton);
                 }
             }

@@ -188,21 +188,21 @@ namespace MeesGame
         /// </summary>
         /// <param name="tt"></param>
         /// <returns></returns>
-        public static string GetAssetNameFromTileType(TileType tt)
+        public static string[] GetAssetNamesFromTileType(TileType tt)
         {
             switch (tt)
             {
                 case TileType.Floor:
-                    return FloorTile.defaultAssetName;
+                    return FloorTile.GetDefaultAssetNames();
                 case TileType.Wall:
-                    return WallTile.defaultAssetName;
+                    return WallTile.GetDefaultAssetNames();
                 case TileType.Door:
-                    return DoorTile.defaultAssetName;
+                    return DoorTile.GetDefaultAssetNames();
                 case TileType.Key:
-                    return KeyTile.defaultAssetName;
+                    return KeyTile.GetDefaultAssetNames();
             }
-            //If no Tile can be made of the specified tiletype, return an empty string
-            return "";
+            //If no Tile can be made of the specified tiletype, return null
+            return null;
         }
 
         public virtual InventoryItem GetItem()
@@ -247,6 +247,11 @@ namespace MeesGame
         public override void UpdateGraphicsToMatchSurroundings()
         {
         }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
+        }
     }
 
     class WallTile : Tile
@@ -287,6 +292,11 @@ namespace MeesGame
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+        }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
         }
     }
 }
