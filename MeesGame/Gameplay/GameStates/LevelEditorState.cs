@@ -129,8 +129,8 @@ namespace MeesGame
 
         public void PlayerMoved(PlayerAction action)
         {
-            Tile currentTile = level[currentLevelIndex].Player.Location
-            foreach
+            /* Tile currentTile = level[currentLevelIndex].Player.Location
+            foreach */
         }
     }
 

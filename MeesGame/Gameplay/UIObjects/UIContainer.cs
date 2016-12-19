@@ -78,7 +78,7 @@ namespace MeesGame
         }
 
         //This method is for the children. Every child might have a different anchor point in a sorted list.
-        public virtual Vector2 GetChildAnchorPoint(UIObject UIObject)
+        public virtual Vector2 GetChildAnchorPoint(UIObject uiObject)
         {
             return Vector2.Zero;
         }

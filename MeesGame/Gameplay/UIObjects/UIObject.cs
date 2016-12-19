@@ -5,7 +5,7 @@ namespace MeesGame
 {
     public abstract class UIObject : IGameLoopObject
     {
-        public delegate void ClickEventHandler(UIObject UIObject);
+        public delegate void ClickEventHandler(UIObject uiObject);
         public event ClickEventHandler OnClick;
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// draws the UIel
+        /// draws the UI
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>

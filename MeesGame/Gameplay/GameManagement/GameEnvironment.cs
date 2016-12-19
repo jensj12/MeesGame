@@ -16,7 +16,7 @@ public class GameEnvironment : Game
     protected static Random random;
     protected static AssetManager assetManager;
     protected static GameSettingsManager gameSettingsManager;
-    protected static GameEnvironment gameEnvirontment;
+    protected static GameEnvironment gameEnvironment;
 
     public GameEnvironment()
     {
@@ -28,7 +28,7 @@ public class GameEnvironment : Game
         random = new Random();
         assetManager = new AssetManager(Content);
         gameSettingsManager = new GameSettingsManager();
-        gameEnvirontment = this;
+        gameEnvironment = this;
     }
 
     public static Point Screen
@@ -59,7 +59,7 @@ public class GameEnvironment : Game
 
     public static GameEnvironment GetGameEnvironment
     {
-        get { return gameEnvirontment; }
+        get { return gameEnvironment; }
     }
 
     public bool FullScreen

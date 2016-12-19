@@ -15,9 +15,9 @@ namespace MeesGame
             scrollBar = new ScrollBar(this);
         }
 
-        public override Vector2 GetChildAnchorPoint(UIObject UIObject)
+        public override Vector2 GetChildAnchorPoint(UIObject uiObject)
         {
-            int objectIndex = children.IndexOf(UIObject);
+            int objectIndex = children.IndexOf(uiObject);
 
             if(objectIndex > 0)
                 return new Vector2(0, elementsDistance + children[objectIndex - 1].RelativeRectangle.Bottom);

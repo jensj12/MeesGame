@@ -8,7 +8,7 @@ namespace MeesGame
     internal class LoadMenuState : IGameLoopObject
     {
         //we need to use a container, because only elements in a container can eat the input of the other elements
-        private UIContainer UIContainer;
+        private UIContainer uiContainer;
 
         private FileExplorer levelExplorer;
         private FileExplorer aiExplorer;
@@ -23,7 +23,7 @@ namespace MeesGame
             DirectoryInfo info = Directory.CreateDirectory(directory);
 
             //we don't need to insert a valid size because we don't hide the overflow. I can't give a valid one yet because I can't get the correct dimensions of the window
-            UIContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
             levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), "lvl", directory);
             aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
             startButton = new Button(new Vector2(700, 700), null, Strings.ok, (UIObject o) =>
@@ -31,20 +31,20 @@ namespace MeesGame
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
 
-            UIContainer.AddChild(levelExplorer);
-            UIContainer.AddChild(aiExplorer);
-            UIContainer.AddChild(startButton);
+            uiContainer.AddChild(levelExplorer);
+            uiContainer.AddChild(aiExplorer);
+            uiContainer.AddChild(startButton);
 
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            UIContainer.Draw(gameTime, spriteBatch);
+            uiContainer.Draw(gameTime, spriteBatch);
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
-            UIContainer.HandleInput(inputHelper);
+            uiContainer.HandleInput(inputHelper);
         }
 
         public void Reset()
@@ -53,7 +53,7 @@ namespace MeesGame
 
         public void Update(GameTime gameTime)
         {
-            UIContainer.Update(gameTime);
+            uiContainer.Update(gameTime);
         }
     }
 }
