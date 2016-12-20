@@ -52,8 +52,9 @@ public class SpriteSheet
     /// <param name="origin">locaiton the sprite should consider its reference point for drawing and rotating</param>
     /// <param name="width">width of the image</param>
     /// <param name="height">height of the sprite</param>
-    public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, int width = -1, int height = -1)
+    public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, int width = -1, int height = -1, Color? drawColor = null)
     {
+        Color color = drawColor ?? Color.White;
         int columnIndex = sheetIndex % sheetColumns;
         int rowIndex = sheetIndex / sheetColumns % sheetRows;
         Rectangle spritePart = new Rectangle(columnIndex * Width, rowIndex * Height, Width, Height);
@@ -64,12 +65,13 @@ public class SpriteSheet
         }
         //checking using -1 to verify that we haven't inserted a size for the sprite
         if (width == -1 || height == -1)
-            spriteBatch.Draw(sprite, position, spritePart, Color.White,
+            spriteBatch.Draw(sprite, position, spritePart, color,
                 0.0f, origin, 1.0f, spriteEffects, 0.0f);
         else
         {
             Rectangle destinationRectangle = new Rectangle((int)position.X, (int)position.Y, width, height);
-            spriteBatch.Draw(sprite, destinationRectangle, spritePart, Color.White);
+            spriteBatch.Draw(sprite, destinationRectangle, spritePart, color);
+
         }
     }
 
