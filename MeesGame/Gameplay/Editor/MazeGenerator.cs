@@ -36,7 +36,7 @@ namespace MeesGen
                 start = new Point(random.Next(tiles.Columns / 2) * 2, random.Next(tiles.Rows / 2) * 2);
             }
             nodesToDo.Add(start);
-            tiles.Add(new MeesGame.FloorTile(0, "playerstart"), start.X, start.Y);
+            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
             bool randomNext = false;
             while (nodesToDo.Count != 0)

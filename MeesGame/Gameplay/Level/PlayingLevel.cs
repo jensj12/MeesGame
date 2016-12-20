@@ -6,7 +6,7 @@ namespace MeesGame
     {
         public PlayingLevel(TileField tileField, int levelindex = 0, bool human = true)
         {
-            start = new Point(2, 2);
+            start = tileField.Start;
             numRows = tileField.Rows;
             numColumns = tileField.Columns;
             Tiles = tileField;

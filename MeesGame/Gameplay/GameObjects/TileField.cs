@@ -7,6 +7,19 @@ namespace MeesGame
     {
         protected bool fogOfWar;
 
+        private static readonly Point NO_POINT = new Point(-1, -1);
+        private static readonly Point DEFAULT_START = Point.Zero;
+        private Point start = NO_POINT;
+        public Point Start
+        {
+            get
+            {
+                if (start == NO_POINT)
+                    UpdateStart();
+                return start;
+            }
+        }
+
         public TileField() : base(0, 0, 0, "")
         {
         }
@@ -102,6 +115,22 @@ namespace MeesGame
                 for (int j = a.Y - 1; j <= a.Y + 1; j++)
                 {
                     if (i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
+                }
+            }
+        }
+        
+        private void UpdateStart()
+        {
+            start = DEFAULT_START;
+            for (int x = 0; x < Columns; x++)
+            {
+                for (int y = 0; y < Rows; y++)
+                {
+                    if (GetTile(x, y).TileType == TileType.Start)
+                    {
+                        start = new Point(x, y);
+                        break;
+                    }
                 }
             }
         }

@@ -44,11 +44,15 @@
     <Compile Include="Gameplay\GameObjects\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\IPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\ITileField.cs" />
+    <Compile Include="Gameplay\GameObjects\EndTile.cs" />
+    <Compile Include="Gameplay\GameObjects\HoleTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player.cs" />
     <Compile Include="AI\QLearning.cs" />
     <Compile Include="Gameplay\GameObjects\PlayerState.cs" />
+    <Compile Include="Gameplay\GameObjects\StartTile.cs" />
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
+    <Compile Include="Gameplay\GameStates\GameOverState.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="Gameplay\Level\EditorLevel.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />

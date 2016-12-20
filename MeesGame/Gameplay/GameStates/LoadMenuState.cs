@@ -27,6 +27,7 @@ namespace MeesGame
             aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
             startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
             {
+                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
                 PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
                 TileField tileField;
                 if (levelExplorer.SelectedFile != null)
