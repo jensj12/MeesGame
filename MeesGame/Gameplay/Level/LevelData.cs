@@ -1,10 +1,10 @@
 ﻿namespace MeesGame
 {
-    class LevelData
+    public class LevelData
     {
         public int numRows;
         public int numColumns;
-        public Tile[,] tilefield;
+        public TileData[][] tilefield;
 
         public TileField GetData(string filename)
         {
@@ -15,7 +15,7 @@
             {
                 for (int y = 0; y <= numRows; y++)
                 {
-                    tilefield.Add(this.tilefield[x, y], x, y);
+                    tilefield.Add(Tile.CreateTileFromTileData(this.tilefield[x][y]), x, y);
                 }
             }
             return tilefield;
@@ -23,14 +23,15 @@
 
         public void SetData(TileField tilefield)
         {
-            int rows = tilefield.NumRows;
-            int columns = tilefield.NumColumns;
-            this.tilefield = new Tile[rows, columns];
-            for (int y = 0; y < rows; y++)
+            numRows = tilefield.Rows;
+            numColumns = tilefield.Columns;
+            this.tilefield = new TileData[numColumns][];
+            for (int x = 0; x < numColumns; x++)
             {
-                for (int x = 0; x < columns; x++)
+                this.tilefield[x] = new TileData[numRows];
+                for (int y = 0; y < numRows; y++)
                 {
-                    this.tilefield[x, y] = tilefield.GetTile(x, y);
+                    this.tilefield[x][y] = tilefield.GetTile(x, y).Data;
                 }
             }
         }

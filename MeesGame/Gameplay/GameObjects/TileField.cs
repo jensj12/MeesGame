@@ -27,18 +27,9 @@ namespace MeesGame
             }
         }
 
-        public int NumRows
-        {
-            get { return NumRows; }
-        }
-        public int NumColumns
-        {
-            get { return NumColumns; }
-        }
-
         public TileType GetType(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return TileType.Wall;
             }
@@ -83,7 +74,7 @@ namespace MeesGame
         ///this bool returns if the x and y are outside the bounds of the tilefield
         public bool OutOfTileField(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return true;
             }

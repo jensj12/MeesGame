@@ -118,9 +118,5 @@ namespace MeesGame
             tilesList.Update(gameTime);
             tilesPropertiesList.Update(gameTime);
         }
-        public TileField Tiles
-        {
-            get { return tileField; }
-        }
     }
 }

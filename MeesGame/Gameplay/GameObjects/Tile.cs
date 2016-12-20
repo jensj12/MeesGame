@@ -13,9 +13,21 @@ namespace MeesGame
         Unknown
     }
 
+    public struct TileData
+    {
+        public TileType TileType;
+        public TileData(TileType tileType)
+        {
+            TileType = tileType;
+        }
+    }
+
     public abstract class Tile : SpriteGameObject
     {
-        public TileType tileType;
+        public TileData Data
+        {
+            get; private set;
+        }
         public Point location = Point.Zero;
         protected bool revealed = false;
 
@@ -25,7 +37,7 @@ namespace MeesGame
 
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            this.tileType = tileType;
+            Data = new TileData(tileType);
         }
 
         public bool Revealed
@@ -45,7 +57,7 @@ namespace MeesGame
         /// </summary>
         public TileType TileType
         {
-            get { return tileType; }
+            get { return Data.TileType; }
         }
 
         /// <summary>
@@ -185,6 +197,11 @@ namespace MeesGame
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
+        }
+
+        public static Tile CreateTileFromTileData(TileData data)
+        {
+            return CreateTileFromTileType(data.TileType);
         }
 
         /// <summary>
