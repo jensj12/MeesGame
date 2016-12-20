@@ -199,7 +199,7 @@ namespace MeesGame
         /// <summary>
         /// returns false if the object doesn't contain a texture
         /// </summary>
-        public virtual bool Invalid
+        protected virtual bool Invalid
         {
             get
             {
