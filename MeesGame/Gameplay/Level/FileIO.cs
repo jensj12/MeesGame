@@ -17,7 +17,10 @@ namespace MeesGame
         {
             string fileName = null;
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "txt Files (*.txt) | *.txt ";
+            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
+            DirectoryInfo info = Directory.CreateDirectory(directory);
+            saveFileDialog.InitialDirectory = info.FullName;
+            saveFileDialog.Filter = "lvl Files| *.lvl";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 fileName = saveFileDialog.FileName;

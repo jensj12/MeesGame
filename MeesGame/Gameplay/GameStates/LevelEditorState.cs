@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MeesGame
 {
@@ -22,7 +24,7 @@ namespace MeesGame
         /// </summary>
         int selectedTileIndex;
 
-        List<Level> level;
+        List<EditorLevel> level;
 
         int currentLevelIndex;
 
@@ -42,10 +44,10 @@ namespace MeesGame
         /// </summary>
         public LevelEditorState()
         {
-            level = new List<Level>();
+            level = new List<EditorLevel>();
 
             //Resize and reposition the level to prevent it from overlapping with the controls
-            Level newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (tilesListWidth + tilePropertiesListWidth), GameEnvironment.Screen.Y);
+            EditorLevel newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (tilesListWidth + tilePropertiesListWidth), GameEnvironment.Screen.Y);
             newLevel.Position += new Vector2(tilesListWidth, 0);
             level.Add(newLevel);
             currentLevelIndex = 0;
@@ -78,12 +80,24 @@ namespace MeesGame
         
         private void SaveLevel(UIObject o)
         {
-            //TODO implement save level code!!!!
+            FileIO.Save(level[currentLevelIndex].Tiles);
         }
 
         private void LoadLevel(UIObject o)
         {
-            //TODO implement LoadLevel code!!!!
+            string fileName = null;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
+            DirectoryInfo info = Directory.CreateDirectory(directory);
+            openFileDialog.InitialDirectory = info.FullName;
+            openFileDialog.Filter = "lvl Files| *.lvl";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                fileName = openFileDialog.FileName;
+                level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(fileName));
+                level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
+            }
+
         }
 
         /// <summary>
