@@ -9,6 +9,7 @@ namespace MeesGame
             start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
             tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
             tiles.UpdateGraphicsToMatchSurroundings();
+            tiles.UpdateGraphics();
             if (human)
             {
                 UseHumanPlayer();

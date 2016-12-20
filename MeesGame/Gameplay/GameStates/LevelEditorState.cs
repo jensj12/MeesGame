@@ -119,7 +119,6 @@ namespace MeesGame
                 level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]), playerLocation.X, playerLocation.Y);
                 //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
                 level[0].Tiles.UpdateGraphicsToMatchSurroundings();
-                level[0].Tiles.UpdateGraphics();
             }
 
             //When backspace is presset, we return to the TitleMenu
