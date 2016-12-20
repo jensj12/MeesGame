@@ -74,6 +74,20 @@ namespace MeesGame
         {
             //Because the scrollbar is drawn first it needs to be the first object to have its input checked
             scrollBar.HandleInput(inputHelper);
+
+            //Only the scrollbar has more influence than a mouseScroll
+            int newObjectsOffset = ObjectsOffset - inputHelper.ScrollDelta;
+            if (newObjectsOffset != ObjectsOffset && AbsoluteRectangle.Contains(inputHelper.MousePosition))
+            {
+                InputEater = this;
+                if (newObjectsOffset < 0)
+                    ObjectsOffset = 0;
+                else if (newObjectsOffset > MaximumScrollDistance)
+                    ObjectsOffset = MaximumScrollDistance;
+                else ObjectsOffset = newObjectsOffset;
+                scrollBar.Invalidate();
+            }
+
             base.HandleInput(inputHelper);
         }
 
@@ -91,12 +105,17 @@ namespace MeesGame
             scrollBar.UpdateParentHeightWhenShowingAllChildren();
         }
 
-        public int ElementsDistance
+        private int MaximumScrollDistance
+        {
+            get { return (int)(Children[Children.Count - 1].AbsoluteRectangle.Bottom - Children[0].AbsoluteRectangle.Top - Dimensions.Y); }
+        }
+
+        public int ObjectsDistance
         {
             get { return objectsDistance; }
         }
 
-        public int ElementsOffset
+        public int ObjectsOffset
         {
             get { return objectsOffset; }
             set { objectsOffset = value; }

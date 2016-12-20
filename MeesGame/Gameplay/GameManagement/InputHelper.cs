@@ -6,11 +6,13 @@ public class InputHelper
     protected MouseState currentMouseState, previousMouseState;
     protected KeyboardState currentKeyboardState, previousKeyboardState;
     protected Vector2 scale, offset;
+    protected int scrollOld, scrollNew;
 
     public InputHelper()
     {
         scale = Vector2.One;
         offset = Vector2.Zero;
+        scrollOld = currentMouseState.ScrollWheelValue;
     }
 
     public void Update()
@@ -19,6 +21,9 @@ public class InputHelper
         previousKeyboardState = currentKeyboardState;
         currentMouseState = Mouse.GetState();
         currentKeyboardState = Keyboard.GetState();
+
+        scrollOld = scrollNew;
+        scrollNew = currentMouseState.ScrollWheelValue;
     }
 
     public Vector2 Scale
@@ -36,6 +41,11 @@ public class InputHelper
     public Vector2 MousePosition
     {
         get { return (new Vector2(currentMouseState.X, currentMouseState.Y) - offset) / scale; }
+    }
+
+    public int ScrollDelta
+    {
+        get { return (int)(scrollNew - scrollOld) / 2; }
     }
 
     public bool MouseLeftButtonPressed()

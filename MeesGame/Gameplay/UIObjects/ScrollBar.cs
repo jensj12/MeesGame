@@ -120,7 +120,7 @@ namespace MeesGame
                     //A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height
                     //and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
                     //offset distance
-                    return ((UIList)Parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);
+                    return ((UIList)Parent).ObjectsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);
                 return 0;
             }
             set
@@ -128,9 +128,9 @@ namespace MeesGame
                 if (parentHeightWhenShowingAllChildren - Dimensions.Y != 0)
                     //The ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
                     //and the maximum distance the scrollbar can travel
-                    ((UIList)Parent).ElementsOffset = (int)(value * (parentHeightWhenShowingAllChildren - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
+                    ((UIList)Parent).ObjectsOffset = (int)(value * (parentHeightWhenShowingAllChildren - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
                 else
-                    ((UIList)Parent).ElementsOffset = 0;
+                    ((UIList)Parent).ObjectsOffset = 0;
             }
         }
 
