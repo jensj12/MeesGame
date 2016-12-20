@@ -105,22 +105,12 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// The button changes when it's input changed. So we invalidate every time it became the InputEater
-        /// </summary>
-        public override bool WantsToEatInput
-        {
-            get
-            {
-                Invalidate();
-                return base.WantsToEatInput;
-            }
-        }
-        /// <summary>
         /// Invalidates the button every frame because we need to test if the mouse is hovering
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
+            Invalidate();
             base.Update(gameTime);
         }
 
