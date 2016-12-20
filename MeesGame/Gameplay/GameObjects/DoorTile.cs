@@ -5,10 +5,15 @@ namespace MeesGame
 {
     class DoorTile : WallTile
     {
+        new public const string defaultAssetName = "horizontalDoor";
+
         protected bool doorIsOpen = false;
 
+        [EditableAttribute]
+        public Color Background { get; set; }
+
         //TODO: Pair a door with a specific key.
-        public DoorTile(int layer = 0, string id = "") : base("horizontalDoor", TileType.Door, layer, id)
+        public DoorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Door, layer, id)
         {
             secondarySprite = new SpriteSheet("horizontalDoorOverlay");
             secondarySpriteColor = Color.Blue;
@@ -54,31 +59,31 @@ namespace MeesGame
                 doorIsOpen = true;
             }
         }
-        /*/ TODO 
+
         public override void UpdateGraphicsToMatchSurroundings()
         {
-            int sheetIndex = 0;
-            int x = Location.X;
-            int y = Location.Y;
-            TileField tileField = Parent as TileField;
-            if (tileField.GetTile(x, y - 1) is WallTile) sheetIndex += 1;
-            if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
-            if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
-            if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
-            sprite = new SpriteSheet(defaultAssetName, sheetIndex);
-        }
-       /* public override void UpdateGraphicsToMatchSurroundings()
-        {
             //TODO: choose hor/ver wall
-        }*/
+        }
+
+
+        new public static string[] GetDefaultAssetNames()
+        {
+            string[] parentDefaultAssetNames = WallTile.GetDefaultAssetNames();
+            string[] defaultAssetNames = new string[parentDefaultAssetNames.Length + 1];
+            parentDefaultAssetNames.CopyTo(defaultAssetNames, 0);
+            defaultAssetNames[parentDefaultAssetNames.Length] = defaultAssetName;
+            return defaultAssetNames;
+        }
     }
 
 
     class KeyTile : FloorTile
     {
-        public KeyTile(int layer = 0, string id = "") : base("floorTile", TileType.Key, layer, id)
+        new const string defaultAssetName = "keyOverlay";
+
+        public KeyTile(int layer = 0, string id = "") : base(FloorTile.defaultAssetName, TileType.Key, layer, id)
         {
-            secondarySprite = new SpriteSheet("keyOverlay");
+            secondarySprite = new SpriteSheet(defaultAssetName);
             secondarySpriteColor = Color.Aqua;
         }
 
@@ -92,6 +97,15 @@ namespace MeesGame
         {
             if (isVisited)
                 sprite = new SpriteSheet("FloorTile");
+        }
+
+        new public static string[] GetDefaultAssetNames()
+        {
+            string[] parentDefaultAssetNames = FloorTile.GetDefaultAssetNames();
+            string[] defaultAssetNames = new string[parentDefaultAssetNames.Length + 1];
+            parentDefaultAssetNames.CopyTo(defaultAssetNames, 0);
+            defaultAssetNames[parentDefaultAssetNames.Length] = defaultAssetName;
+            return defaultAssetNames;
         }
 
         //TODO: if key has been picked up, keytile changes into floortile.

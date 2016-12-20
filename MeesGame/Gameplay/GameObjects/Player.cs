@@ -8,6 +8,10 @@ namespace MeesGame
 {
     class Player : SpriteGameObject
     {
+        public delegate void PlayerActionHandler(PlayerAction action);
+
+        public event PlayerActionHandler OnPlayerAction;
+
         /// <summary>
         /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
         /// </summary>
@@ -20,6 +24,11 @@ namespace MeesGame
             Location = location;
             position = Level.Tiles.GetAnchorPosition(location);
             this.Level.Tiles.revealArea(location);
+        }
+
+        public PlayerState State
+        {
+            get { return state; }
         }
 
         /// <summary>
@@ -99,6 +108,8 @@ namespace MeesGame
 
             this.Level.Tiles.revealArea(Location);
             CurrentTile.IsVisited = true;
+
+            PlayerActionEvent(action);
         }
 
         /// <summary>
@@ -139,6 +150,11 @@ namespace MeesGame
         /// List of actions that can be used to move players
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
+
+        public void PlayerActionEvent(PlayerAction action)
+        {
+            OnPlayerAction?.Invoke(action);
+        }
     }
 
     /// <summary>
@@ -146,7 +162,6 @@ namespace MeesGame
     /// </summary>
     class PlayerActionNotAllowedException : Exception
     {
-
     }
 
     class TimedPlayer : Player, IPlayer
@@ -155,6 +170,7 @@ namespace MeesGame
         /// The time that the last action was performed
         /// </summary>
         protected TimeSpan lastActionTime;
+
         protected TimeSpan lastAnimationTime;
 
         public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
@@ -238,10 +254,13 @@ namespace MeesGame
             {
                 case NORTH:
                     return new Vector2(0, -1);
+
                 case EAST:
                     return new Vector2(1, 0);
+
                 case SOUTH:
                     return new Vector2(0, 1);
+
                 case WEST:
                     return new Vector2(-1, 0);
             }
@@ -316,7 +335,6 @@ namespace MeesGame
         {
         }
 
-
         /// <summary>
         /// An editorplayer can move everywhere on the map. He only cannot move out of the maps bounds
         /// </summary>
@@ -331,7 +349,5 @@ namespace MeesGame
             //If the editorplayer may only not move out of the tilefield
             return !Level.Tiles.OutOfTileField(newLocation.X, newLocation.Y);
         }
-
     }
-
 }

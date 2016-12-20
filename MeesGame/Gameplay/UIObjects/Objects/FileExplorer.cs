@@ -6,6 +6,8 @@ namespace MeesGame
 {
     public class FileExplorer : UIList
     {
+        private readonly Color DefaultBackgroundColor = Color.Wheat;
+
         /// <summary>
         /// distance between each of the buttons in the file explorer
         /// </summary>
@@ -22,7 +24,7 @@ namespace MeesGame
         private String currentDirectory;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="location"></param>
         /// <param name="dimensions"></param>
@@ -30,13 +32,15 @@ namespace MeesGame
         /// <param name="content"></param>
         /// <param name="fileExtension">extensions the file explorer looks for, for example .lvl</param>
         /// <param name="path">path of the folder the files are located in</param>
-        public FileExplorer(Vector2 location, Vector2 dimensions, UIContainer parent, String fileExtension, string path) : base(location, dimensions, parent)
+        public FileExplorer(Vector2? location = null, Vector2? dimensions = null, String fileExtension = "", string path = "", Color? defaultBackgroundColor = null) : base(location, dimensions, backgroundColor: defaultBackgroundColor)
         {
+            backgroundColor = backgroundColor ?? DefaultBackgroundColor;
+
             currentDirectory = path;
             this.fileExtension = fileExtension;
 
             generateFileList();
-            scrollBar.ChangeTotalElementsSize();
+            scrollBar.UpdateParentHeightWhenShowingAllChildren();
         }
 
         /// <summary>
@@ -53,11 +57,11 @@ namespace MeesGame
                 {
                     if (index == 0)
                     {
-                        children.Add(new Button(new Vector2(0, 0), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        AddChild(new Button(new Vector2(0, 0), null, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
                     }
                     else
                     {
-                        children.Add(new Button(new Vector2(0, buttonDistance), Dimensions, this, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), ItemSelect));
+                        AddChild(new Button(new Vector2(0, buttonDistance), null, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
                     }
                     index++;
                 }
@@ -69,10 +73,10 @@ namespace MeesGame
         /// updates the selected variable
         /// </summary>
         /// <param name="button">Button that was just pressed</param>
-        public void ItemSelect(Button button)
+        public void OnItemClicked(UIObject button)
         {
             ((Button)children[selected]).Selected = false;
-            button.Selected = true;
+            ((Button)button).Selected = true;
             selected = children.IndexOf(button);
         }
     }

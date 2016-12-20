@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -11,6 +11,7 @@ namespace MeesGame
         ITileField TileField { get; }
         Point Location { get; }
         int Score { get; }
+
         bool HasKey();
     }
 }

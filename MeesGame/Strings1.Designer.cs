@@ -79,6 +79,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate random maze.
+        /// </summary>
+        internal static string generate_random_maze {
+            get {
+                return ResourceManager.GetString("generate_random_maze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create level.
         /// </summary>
         internal static string map_editor {

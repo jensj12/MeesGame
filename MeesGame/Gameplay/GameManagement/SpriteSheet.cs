@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 public class SpriteSheet
@@ -46,7 +45,7 @@ public class SpriteSheet
     }
 
     /// <summary>
-    /// method used to draw spritesheets
+    /// Creates customizable button
     /// </summary>
     /// <param name="spriteBatch">spritebatch on which to draw</param>
     /// <param name="position">the position the sprite should be drawn at</param>
@@ -72,9 +71,7 @@ public class SpriteSheet
         {
             Rectangle destinationRectangle = new Rectangle((int)position.X, (int)position.Y, width, height);
             spriteBatch.Draw(sprite, destinationRectangle, spritePart, color);
-
         }
-
     }
 
     public bool IsTranslucent(int x, int y)

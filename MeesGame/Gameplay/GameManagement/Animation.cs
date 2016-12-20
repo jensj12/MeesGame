@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 public class Animation : SpriteSheet
 {
@@ -56,4 +56,3 @@ public class Animation : SpriteSheet
         get { return !isLooping && sheetIndex >= NumberSheetElements - 1; }
     }
 }
-
