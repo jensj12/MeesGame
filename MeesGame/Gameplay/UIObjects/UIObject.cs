@@ -5,9 +5,12 @@ namespace MeesGame
 {
     public abstract class UIObject : IGameLoopObject
     {
-        public delegate void ClickEventHandler(UIObject uiObject);
+        public delegate void OnClickEventHandler(UIObject uiObject);
 
-        public event ClickEventHandler OnClick;
+        /// <summary>
+        /// When the UIObject is clicked this event is called
+        /// </summary>
+        public event OnClickEventHandler Click;
 
         /// <summary>
         /// Texture that holds a solid white color. It can be used to draw solid backgrounds
@@ -15,24 +18,25 @@ namespace MeesGame
         private static Texture2D solidWhiteTexture;
 
         /// <summary>
-        /// location = relative location to the parent of the object
-        /// dimensions = size of the element, used for input and for rendering when overflow is hidden
-        /// parent = the parent of the object
-        /// renderTarget = the texture of the UI element, so that we can render it when it is updated and disposed when not needed anymore
-        /// invalidated = determines if the rendertarget needs updating
+        /// relativeLocation = relative location to the parent of the object
+        /// dimensions = size of the element, used for input and for rendering
+        /// objectTexture = the texture of the UI element, so that we can render it when it is updated and disposed when not needed anymore
+        /// needsToBeInvalidated = determines if the rendertarget needs updating
+        /// textureRenderer = used to render the texture for the UI
         /// </summary>
         private Vector2 relativeLocation;
 
         private Vector2 dimensions;
         private UIContainer parent;
         private bool visible = true;
-        protected Color? BackgroundColor;
-        protected RenderTarget2D renderTarget;
-        protected bool needsToBeInvalidated = true;
-        protected TextureRenderer textureRenderer;
+        protected Color? backgroundColor;
+        protected RenderTarget2D objectTexture;
 
-        ///because the input is eaten after an element uses it we keep track of whether the elements
-        ///have received an input and allow them to act accordingly in the update method
+        /// <summary>
+        /// hovering = specifies if the mouse is hovering over the UIObject
+        /// mouseDown = specified if the left mouseButton is pressed (while also hovering over this object)
+        /// clicked = specifies if the mouse just clicked on this object
+        /// </summary>
         private bool hovering;
 
         private bool mouseDown;
@@ -41,32 +45,40 @@ namespace MeesGame
         /// <summary>
         ///
         /// </summary>
-        /// <param name="location">location relative to the parent</param>
+        /// <param name="location">location relative to the parent, equals Vector2.Zero if left empty</param>
         /// <param name="dimensions">size of the object</param>
-        /// <param name="parent">parent of the object</param>
         public UIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
         {
             this.relativeLocation = location ?? Vector2.Zero;
-            //dimensions is set to 1,1 because our graphics device can't compute a size of 0,0
-            this.dimensions = dimensions ?? new Vector2(1);
-            this.BackgroundColor = backgroundColor;
-            this.textureRenderer = new TextureRenderer();
+            this.dimensions = dimensions ?? Vector2.Zero;
+            this.backgroundColor = backgroundColor;
         }
 
-        public static Texture2D SolidWhiteTexture(GraphicsDevice device)
+        /// <summary>
+        /// The SolidWhiteTexture is a white 1x1 texture. It can be used to color a surface using only a Color property
+        /// in the spritebatch.draw(texture, rectangle, color) method.
+        /// </summary>
+        protected static Texture2D SolidWhiteTexture
         {
-            if (solidWhiteTexture == null)
+            get
             {
-                Color[] colordata = new Color[1];
-                colordata[0] = Color.White;
-                solidWhiteTexture = new Texture2D(device, 1, 1);
-                solidWhiteTexture.SetData(colordata);
+                if (solidWhiteTexture == null)
+                {
+                    Color[] colordata = new Color[1];
+                    colordata[0] = Color.White;
+                    solidWhiteTexture = new Texture2D(GameEnvironment.Instance.GraphicsDevice, 1, 1);
+                    solidWhiteTexture.SetData(colordata);
+                }
+                return solidWhiteTexture;
             }
-            return solidWhiteTexture;
+            set
+            {
+                solidWhiteTexture = value;
+            }
         }
 
         ///allows a component to use the input in the UI until it doesn't need the input anymore. If we wouldn't use this method, dragging any element
-        ///would result in the input being registered for every element. Multiple buttons hovering at the same time for example
+        ///would result in the input being registered for every element the mouse hovers over in the meantime.
         public virtual bool WantsToEatInput
         {
             get { return false; }
@@ -88,7 +100,7 @@ namespace MeesGame
                 if (AbsoluteRectangle.Contains(inputHelper.MousePosition))
                 {
                     hovering = true;
-                    if (parent != null)
+                    if (parent != null && Visible)
                         parent.InputEater = this;
                     if (inputHelper.MouseLeftButtonDown())
                     {
@@ -102,19 +114,21 @@ namespace MeesGame
 
                 if (Clicked)
                 {
-                    InvokeClickEvent();
+                    InvokeOnClickEvent();
                 }
             }
         }
 
-        public void InvokeClickEvent()
+        /// <summary>
+        /// invokes the OnClickEvent
+        /// </summary>
+        public void InvokeOnClickEvent()
         {
-            OnClick?.Invoke(this);
-            parent?.InvokeClickEvent();
+            Click?.Invoke(this);
         }
 
         /// <summary>
-        /// UI elements are able to override this at will, for example if the UI changes over time
+        /// Updates the UIElement
         /// </summary>
         /// <param name="gameTime">current time</param>
         public virtual void Update(GameTime gameTime)
@@ -122,34 +136,49 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// draws the UI
+        /// Draws the UIElement to the SpriteBatch. Until ScissorRectangles works it always uses a texture (objectTexture)
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!visible) return;
+            if (!Visible) return;
 
-            if (BackgroundColor != null)
-                spriteBatch.Draw(SolidWhiteTexture(spriteBatch.GraphicsDevice), RelativeRectangle, (Color)BackgroundColor);
-            if (Invalidate == true)
-            {
-                renderTarget?.Dispose();
-                textureRenderer.Render(gameTime, spriteBatch.GraphicsDevice, DrawTask, dimensions, out renderTarget);
-                Invalidate = false;
-            }
-            spriteBatch.Draw(renderTarget, RelativeRectangle, Color.White);
+            spriteBatch.Draw(objectTexture, RelativeRectangle, Color.White);
         }
 
         /// <summary>
-        /// the draw task is basically the draw call, but with the added bonus of allowing the class to makeup the spritebatch using a scissor rectange for example
+        /// renders the UIObject's texture
         /// </summary>
-        /// <param name="gameTime">the current gametime</param>
-        /// <param name="spriteBatch">a spritebatch to draw in</param>
-        public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
+        public virtual void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!Visible) return;
 
+            if (Invalid)
+            {
+                objectTexture?.Dispose();
+                TextureRenderer.Render(gameTime, DrawTask, dimensions, out objectTexture);
+            }
+        }
+
+        /// <summary>
+        /// In the DrawTask method we draw the individual parts of the UIObject to the SpriteBatch, which is then
+        /// put into a texture we can use to draw this UIObject until it is invalidated.
+        /// </summary>
+        public virtual void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (backgroundColor != null)
+                spriteBatch.Draw(SolidWhiteTexture, OriginLocationRectangle, (Color)backgroundColor);
+        }
+
+        /// <summary>
+        /// cleanly disposes unnecessary textures
+        /// </summary>
         public virtual void Reset()
         {
+            objectTexture?.Dispose();
         }
 
         public bool Hovering
@@ -167,17 +196,33 @@ namespace MeesGame
             get { return clicked; }
         }
 
-        public virtual bool Invalidate
+        /// <summary>
+        /// returns false if the object doesn't contain a texture
+        /// </summary>
+        public virtual bool Invalid
         {
-            get { return needsToBeInvalidated; }
-            set
+            get
             {
-                needsToBeInvalidated = value;
-                if (parent != null)
-                    parent.Invalidate = value;
+                return objectTexture == null;
             }
         }
 
+        /// <summary>
+        /// Forces the object to redraw itself
+        /// </summary>
+        public void Invalidate()
+        {
+            {
+                objectTexture?.Dispose();
+                objectTexture = null;
+                if (Parent != null)
+                    Parent.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Specifies the location of the object relative to the base of the UIObject structure (the only object in the structure without a parent)
+        /// </summary>
         public virtual Vector2 AbsoluteLocation
         {
             get
@@ -191,7 +236,11 @@ namespace MeesGame
             }
         }
 
-        ///location relative to the location of its parent
+        /// <summary>
+        /// Location relative to the location of its parent
+        /// get : returns the location relative to the distance from the parent's anchor point
+        /// set : sets the location relative to the parents location EXCLUDING the anchor point
+        /// </summary>
         public virtual Vector2 RelativeLocation
         {
             get
@@ -213,8 +262,8 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Gives the absolute location of the rectangle compared to the origin of the screen, 0,0
-        /// useful for input checking
+        /// Gives the absolute location of the rectangle compared to the origin of the screen (0,0)
+        /// Useful for input checking
         /// </summary>
         public Rectangle AbsoluteRectangle
         {
@@ -245,13 +294,17 @@ namespace MeesGame
             set { parent = value; }
         }
 
+        /// <summary>
+        /// get : Returns true if the parent is visible, the objects internal boolean visible is true and the dimensions are not the 0 vector
+        /// set : Sets the internal boolean visible
+        /// </summary>
         public bool Visible
         {
-            get { return visible; }
+            get { return visible && Parent?.Visible != false && Dimensions != Vector2.Zero; }
             set
             {
                 visible = value;
-                Invalidate = true;
+                Invalidate();
             }
         }
     }

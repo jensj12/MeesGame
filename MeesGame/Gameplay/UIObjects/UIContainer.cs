@@ -6,9 +6,14 @@ namespace MeesGame
 {
     public class UIContainer : UIObject
     {
+        public event OnClickEventHandler ChildClick;
+
         protected UIObjectList<UIObject> children;
 
-        //Object that is using the input. This object will be asked every time HandleInput if it wants to keep eating the input
+        /// <summary>
+        /// Only used in the parent of the UI structure. Specifies which object is using the input
+        /// Required to prevent multiple objects inside the UI from using the input when it is already being used.
+        /// </summary>
         private UIObject inputEater = null;
 
         /// <summary>
@@ -26,18 +31,22 @@ namespace MeesGame
         {
             child.Parent = this;
             children.Add(child);
+            child.Click += OnChildClick;
+        }
+
+        protected virtual void OnChildClick(UIObject o)
+        {
+            ChildClick?.Invoke(o);
         }
 
         public override void HandleInput(InputHelper inputHelper)
         {
             //we check if the inputEater wants to keep eating our input
             //we can safely ask if the inputeater wants to use the input.
-            if (InputEaten && !InputEater.WantsToEatInput)
+            if (InputEater?.WantsToEatInput == false)
             {
                 InputEater = null;
             }
-
-            if (!Visible) return;
 
             children.HandleInput(inputHelper);
 
@@ -49,8 +58,34 @@ namespace MeesGame
             children.Update(gameTime);
         }
 
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!Visible) return;
+
+            //If the container doesn't have a parent it is the base of the UI structure, and therefore
+            //its RenderTexture method is never called. Once we finish rendering all textures we reset the rendertarget.
+            if (Parent == null)
+            {
+                RenderTargetBinding[] renderTargets = spriteBatch.GraphicsDevice.GetRenderTargets();
+                RenderTexture(gameTime, spriteBatch);
+                spriteBatch.GraphicsDevice.SetRenderTargets(renderTargets);
+            }
+
+            spriteBatch.Draw(objectTexture, RelativeRectangle, Color.White);
+        }
+
+        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (Invalid)
+            {
+                children.RenderTexture(gameTime, spriteBatch);
+                base.RenderTexture(gameTime, spriteBatch);
+            }
+        }
+
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            base.DrawTask(gameTime, spriteBatch);
             children.Draw(gameTime, spriteBatch);
         }
 

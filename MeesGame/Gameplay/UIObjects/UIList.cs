@@ -7,28 +7,61 @@ namespace MeesGame
     {
         protected ScrollBar scrollBar;
 
-        public UIList(Vector2? location = null, Vector2? dimensions = null, int elementsDistance = 10, Color? backgroundColor = null) : base(location, dimensions, backgroundColor)
+        /// <summary>
+        /// Distance from the parent at which the children should be drawn.
+        /// </summary>
+        protected int objectsOffset;
+
+        /// <summary>
+        /// Distance between the child objects
+        /// </summary>
+        private int objectsDistance;
+
+        /// <summary>
+        /// A sorted list in which children are drawn underneath each other.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="dimensions"></param>
+        /// <param name="objectDistance">Distance between the objects in the list</param>
+        /// <param name="backgroundColor"></param>
+        public UIList(Vector2? location = null, Vector2? dimensions = null, int objectDistance = 10, Color? backgroundColor = null) : base(location, dimensions, backgroundColor)
         {
-            this.elementsDistance = elementsDistance;
+            this.objectsDistance = objectDistance;
             scrollBar = new ScrollBar(this);
         }
 
+        /// <summary>
+        /// Returns an offset from the location of this object where the child should be drawn
+        /// For example, when scrolling down we want every object in the list to be drawn at a greater Y value
+        /// </summary>
+        /// <param name="uiObject"></param>
+        /// <returns></returns>
         public override Vector2 GetChildAnchorPoint(UIObject uiObject)
         {
             int objectIndex = children.IndexOf(uiObject);
 
             if (objectIndex > 0)
-                return new Vector2(0, elementsDistance + children[objectIndex - 1].RelativeRectangle.Bottom);
+                return new Vector2(0, objectsDistance + children[objectIndex - 1].RelativeRectangle.Bottom);
 
             //if we only scale the first element, the rest will follow.
-            return new Vector2(0, -elementsOffset);
+            return new Vector2(0, -objectsOffset);
         }
 
+        /// <summary>
+        /// Adds a child to the sorted list
+        /// </summary>
+        /// <param name="child"></param>
         public override void AddChild(UIObject child)
         {
             base.AddChild(child);
 
             scrollBar.UpdateParentHeightWhenShowingAllChildren();
+        }
+
+        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            scrollBar.RenderTexture(gameTime, spriteBatch);
+            base.RenderTexture(gameTime, spriteBatch);
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
@@ -39,14 +72,16 @@ namespace MeesGame
 
         public override void HandleInput(InputHelper inputHelper)
         {
+            //Because the scrollbar is drawn first it needs to be the first object to have its input checked
             scrollBar.HandleInput(inputHelper);
             base.HandleInput(inputHelper);
         }
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //when scrolling down the scrollbar should be updated first
             scrollBar.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public override void Reset()
@@ -56,21 +91,15 @@ namespace MeesGame
             scrollBar.UpdateParentHeightWhenShowingAllChildren();
         }
 
-        //distance each of the following elements has
-        private int elementsDistance;
-
         public int ElementsDistance
         {
-            get { return elementsDistance; }
+            get { return objectsDistance; }
         }
-
-        //in retrospect, this is only useful for the scrollbar
-        protected int elementsOffset;
 
         public int ElementsOffset
         {
-            get { return elementsOffset; }
-            set { elementsOffset = value; }
+            get { return objectsOffset; }
+            set { objectsOffset = value; }
         }
     }
 }

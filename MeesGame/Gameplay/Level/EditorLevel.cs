@@ -10,7 +10,6 @@ namespace MeesGame
         {
             start = Point.Zero;
             FillLevelWithEmptyTiles();
-            tiles.UpdateGraphicsToMatchSurroundings();
             usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
         }
 

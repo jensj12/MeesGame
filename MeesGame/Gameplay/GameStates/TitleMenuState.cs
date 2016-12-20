@@ -5,42 +5,43 @@ namespace MeesGame
 {
     internal class TitleMenuState : IGameLoopObject
     {
-        private UIObjectList<UIObject> gameObjectList;
+        private UIContainer UIContainer;
 
         public TitleMenuState()
         {
-            gameObjectList = new UIObjectList<UIObject>();
-            gameObjectList.Add(new Button(new Vector2(10, 10), null, Strings.begin, (UIObject o) =>
+            UIContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            UIContainer.AddChild(new Button(new Vector2(10, 10), null, Strings.begin, (UIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 120), null, Strings.map_editor, (UIObject o) =>
+            UIContainer.AddChild(new Button(new Vector2(10, 120), null, Strings.map_editor, (UIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 230), null, Strings.exit, (UIObject o) =>
+            UIContainer.AddChild(new Button(new Vector2(10, 230), null, Strings.exit, (UIObject o) =>
             {
-                GameEnvironment.GetGameEnvironment.Exit();
+                GameEnvironment.Instance.Exit();
             }));
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            gameObjectList.Draw(gameTime, spriteBatch);
+            UIContainer.Draw(gameTime, spriteBatch);
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
-            gameObjectList.HandleInput(inputHelper);
+            UIContainer.HandleInput(inputHelper);
         }
 
         public void Reset()
         {
+            UIContainer.Reset();
         }
 
         public void Update(GameTime gameTime)
         {
-            gameObjectList.Update(gameTime);
+            UIContainer.Update(gameTime);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace MeesGame
             uiContainer.AddChild(aiExplorer);
             uiContainer.AddChild(startButton);
 
-            levelExplorer.OnClick += OnLevelSelect;
+            levelExplorer.Click += OnLevelSelect;
         }
 
         private void centerStartButton()
@@ -49,6 +49,7 @@ namespace MeesGame
                 if (button.Selected)
                 {
                     startButton.UpdateText(Strings.ok, true);
+                    startButton.Dimensions = Vector2.Zero;
                     centerStartButton();
                 }
             }
