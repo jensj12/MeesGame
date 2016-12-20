@@ -231,6 +231,12 @@ namespace MeesGame
 
                 case TileType.Start:
                     return new StartTile();
+
+                case TileType.End:
+                    return new EndTile();
+
+                case TileType.Hole:
+                    return new HoleTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
@@ -258,6 +264,16 @@ namespace MeesGame
 
                 case TileType.Key:
                     return KeyTile.GetDefaultAssetNames();
+
+                case TileType.Hole:
+                    return HoleTile.GetDefaultAssetNames();
+
+                case TileType.End:
+                    return EndTile.GetDefaultAssetNames();
+
+                case TileType.Start:
+                    return StartTile.GetDefaultAssetNames();
+
             }
             //If no Tile can be made of the specified tiletype, return null
             return null;
