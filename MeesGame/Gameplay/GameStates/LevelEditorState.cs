@@ -34,6 +34,8 @@ namespace MeesGame
         private UIContainer overlay;
         private UIList tilesList;
         private UIList tilePropertiesList;
+        private Button saveLevel;
+        private Button loadLevel;
 
         /// <summary>
         /// State for editing levels
@@ -61,13 +63,27 @@ namespace MeesGame
             overlay = new UIContainer(null, GameEnvironment.Screen.ToVector2());
             tilesList = new UIList(new Vector2(0, 0), new Vector2(tilesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
             tilePropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth, 0), new Vector2(tilePropertiesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            saveLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 720), null, "save", SaveLevel);
+            loadLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 600), null, "Load", LoadLevel);
 
             overlay.AddChild(tilesList);
             overlay.AddChild(tilePropertiesList);
+            overlay.AddChild(saveLevel);
+            overlay.AddChild(loadLevel);
 
             tilesList.ChildClick += OnItemSelect;
 
             FillTilesList();
+        }
+        
+        private void SaveLevel(UIObject o)
+        {
+            //TODO implement save level code!!!!
+        }
+
+        private void LoadLevel(UIObject o)
+        {
+            //TODO implement LoadLevel code!!!!
         }
 
         /// <summary>
