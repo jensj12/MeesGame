@@ -46,7 +46,7 @@ namespace MeesGame
         {
             if (o == levelExplorer)
             {
-                foreach(Button button in levelExplorer.Children)
+                foreach (Button button in levelExplorer.Children)
                 {
                     if (button.Selected)
                     {

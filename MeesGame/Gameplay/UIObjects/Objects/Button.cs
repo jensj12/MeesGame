@@ -11,11 +11,12 @@ namespace MeesGame
         /// Text = the text the button displays
         /// Spritefont = the font used for the image
         /// backgroundAndOverlays = the background of the button can consist of multiple spritesheets
-        /// because it needs to be rendered like tiles. The multiple textures are rendered in the order they are stored in the list 
+        /// because it needs to be rendered like tiles. The multiple textures are rendered in the order they are stored in the list
         /// HoverBackground = the background used when the mouse hovers over it
         /// SelectedBackground = the background the button takes when it is in selected state
         /// </summary>
         protected String text;
+
         protected SpriteFont spriteFont;
         protected List<SpriteSheet> background;
         protected SpriteSheet hoverBackground;
@@ -115,6 +116,7 @@ namespace MeesGame
                 return base.WantsToEatInput;
             }
         }
+
         /// <summary>
         /// Invalidates the button every frame because we need to test if the mouse is hovering
         /// </summary>
