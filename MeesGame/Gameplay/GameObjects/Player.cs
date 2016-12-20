@@ -287,7 +287,7 @@ namespace MeesGame
     /// </summary>
     class EditorPlayer : HumanPlayer
     {
-        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, score)
+        public EditorPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
