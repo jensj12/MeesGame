@@ -150,14 +150,14 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the PlayerState appropriately
+        /// Perform an action for the player. Modifies the Player appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
-        /// <param name="state">The state of the player to be modified by this function</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
+        public virtual void PerformAction(Player player, PlayerAction action)
         {
-            state.Location = GetLocationAfterAction(action);
+            if (action.IsDirection())
+                player.MoveSmoothly(action.ToDirection());
         }
 
         /// <summary>
@@ -227,10 +227,15 @@ namespace MeesGame
 
                 case TileType.Key:
                     return new KeyTile();
+
+                case TileType.Start:
+                    return new StartTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
         }
+
+        public virtual void EnterTile(Player player) { }
 
         /// <summary>
         /// Returns the default asset name of the specified tileType. If the specified tileType doesn't have a default assetName, returns ""

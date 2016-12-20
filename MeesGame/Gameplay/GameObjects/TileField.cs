@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
-    public class TileField : GameObjectGrid, ITileField
+    public class TileField : GameObjectGrid, IDiscreteField, ITileField
     {
         protected bool fogOfWar;
 
@@ -118,7 +118,7 @@ namespace MeesGame
                 }
             }
         }
-        
+
         private void UpdateStart()
         {
             start = DEFAULT_START;
@@ -134,5 +134,14 @@ namespace MeesGame
                 }
             }
         }
+
+        public Vector2 CellDimensions
+        {
+            get
+            {
+                return new Vector2(CellWidth, CellHeight);
+            }
+        }
+        
     }
 }

@@ -38,7 +38,7 @@ namespace MeesGame
         {
             inventoryUI.Reset();
 
-            foreach (InventoryItem item in level.Player.State.Inventory.Items)
+            foreach (InventoryItem item in level.Player.Inventory.Items)
             {
                 inventoryUI.AddChild(new ImageView(Vector2.Zero, new Vector2(inventoryWidth), InventoryItem.inventoryItemAsset(item.type)));
             }
