@@ -127,7 +127,7 @@ namespace MeesGame
             }
         }
 
-        private void UpdateStart()
+        public bool UpdateStart()
         {
             start = DEFAULT_START;
             for (int x = 0; x < Columns; x++)
@@ -137,10 +137,11 @@ namespace MeesGame
                     if (GetTile(x, y).TileType == TileType.Start)
                     {
                         start = new Point(x, y);
-                        break;
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
         public Vector2 CellDimensions

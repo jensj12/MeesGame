@@ -4,7 +4,7 @@ namespace MeesGame
 {
     class StartTile : FloorTile
     {
-        new public const string defaultAssetName = "floorTile";
+        new public const string defaultAssetName = "ladder";
         
         public StartTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Start, layer, id)  //Change the name of the sprite once there is one
         {

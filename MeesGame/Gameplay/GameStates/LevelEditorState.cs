@@ -131,6 +131,13 @@ namespace MeesGame
             //When space is pressed, we set a tile
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
             {
+                if (tileTypeList[selectedTileIndex] == TileType.Start)
+                {
+                    if (level[0].Tiles.UpdateStart())
+                    {
+                        return;
+                    }
+                }
                 Point playerLocation = level[currentLevelIndex].Player.Location;
                 level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]), playerLocation.X, playerLocation.Y);
                 //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
