@@ -36,6 +36,7 @@ namespace MeesGame
 
         public void Reset()
         {
+            UIContainer.Reset();
         }
 
         public void Update(GameTime gameTime)

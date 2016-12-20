@@ -21,6 +21,9 @@ namespace MeesGame
         /// <param name="renderTarget">The target we want to render to</param>
         public static void Render(GameTime gameTime, RenderTask task, Vector2 dimensions, out RenderTarget2D renderTarget)
         {
+            if (mSpriteBatch == null)
+                mSpriteBatch = new SpriteBatch(GameEnvironment.Instance.GraphicsDevice);
+
             renderTarget = new RenderTarget2D(mSpriteBatch.GraphicsDevice, (int)dimensions.X, (int)dimensions.Y, false,
                 mSpriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
@@ -30,13 +33,5 @@ namespace MeesGame
             mSpriteBatch.GraphicsDevice.Clear(Color.Transparent);
             mSpriteBatch.End();
         }
-
-        public static void CreateMSpriteBatch(GraphicsDevice device)
-        { 
-            if(mSpriteBatch == null)
-                mSpriteBatch = new SpriteBatch(device);
-        
-        }
-
     }
 }

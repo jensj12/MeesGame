@@ -5,20 +5,20 @@ namespace MeesGame
 {
     public class ScrollBar : UIObject
     {
-        //Variables defining the colors of the scrollbar
+        ///Variables defining the colors of the scrollbar
         private readonly Color scrollbarColor = Color.Aqua;
 
-        //Stores the total length of elements in the container.
+        ///Stores the total length of elements in the container.
         private int parentHeightWhenShowingAllChildren;
 
-        //The scroll distance before we began dragging. This variable is needed because otherwise we'd have
-        //To use the less accurate change of coordinates and apply that to the current scrollbar location
+        ///The scroll distance before we began dragging. This variable is needed because otherwise we'd have
+        ///To use the less accurate change of coordinates and apply that to the current scrollbar location
         private int scolldistanceStartDrag;
 
-        //the mouse position when we start dragging the scrollbar
+        ///Rhe mouse position when we start dragging the scrollbar
         private Point mouseStartDragLocation = new Point();
 
-        //whether the scrollbar is being dragged
+        ///whether the scrollbar is being dragged
         private bool beingDragged = false;
 
         public ScrollBar(UIList parent, int width = 20, Color? backgroundColor = null, Color? scrollbarColor = null) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), backgroundColor ?? Color.Beige)
@@ -46,11 +46,6 @@ namespace MeesGame
                 Visible = true;
         }
 
-        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.RenderTexture(gameTime, spriteBatch);
-        }
-
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.DrawTask(gameTime, spriteBatch);
@@ -75,6 +70,7 @@ namespace MeesGame
             }
             else if (beingDragged)
             {
+                Invalidate();
                 if (inputHelper.MouseLeftButtonDown())
                 {
                     //The scroll distance is the scroll distance we started with plus the distance the mouse has
@@ -92,12 +88,6 @@ namespace MeesGame
             }
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            this.Invalidate = true;
-        }
-
         /// <summary>
         /// If we are dragging we want to keep using the input
         /// </summary>
@@ -110,7 +100,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// We need to override our relative location because we are not part of the list, so we don't need the
+        /// We need to override our relative location because we are not part of the list, so we never need the
         /// anchor point, only to the position of its parent
         /// </summary>
         public override Vector2 RelativeLocation
@@ -127,18 +117,17 @@ namespace MeesGame
             get
             {
                 if (parentHeightWhenShowingAllChildren != AbsoluteRectangle.Height)
-                    ///A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height
-                    ///and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
-                    ///offset distance
+                    //A simple way to picture this calculation is to think that the maximum distance of the elements offset is equal to totalElementsSize - Rectangle.Height
+                    //and the maximum distance the scrollbar can travel is Rectangle.Height - Barheight, so it will always remain between those bounds and linearly scale
+                    //offset distance
                     return ((UIList)Parent).ElementsOffset * (AbsoluteRectangle.Height - Barheight) / (parentHeightWhenShowingAllChildren - AbsoluteRectangle.Height);
                 return 0;
             }
             set
             {
                 if (parentHeightWhenShowingAllChildren - Dimensions.Y != 0)
-                    ///The ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
-                    ///and the maximum distance the scrollbar can travel
-                    ///
+                    //The ratio between the maximum distance of the elementsoffset * the maximum distance the scrollbar can travel, and multiply this by a number between zero
+                    //and the maximum distance the scrollbar can travel
                     ((UIList)Parent).ElementsOffset = (int)(value * (parentHeightWhenShowingAllChildren - Dimensions.Y) / (double)(Dimensions.Y - Barheight));
                 else
                     ((UIList)Parent).ElementsOffset = 0;
@@ -162,7 +151,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Gives the location relative to the parent of the bar
+        /// Gives the location of the bar relative to the scrollbar's parent
         /// </summary>
         public Rectangle RelativeBarRectangle
         {
@@ -182,10 +171,6 @@ namespace MeesGame
         /// </summary>
         private int Barheight
         {
-            //Basically it takes the ratio between the height of the scrollbar and the total size, and
-            //multiplies this ratio by the total height of the scrollbar. This results in the bar
-            //always being smaller than the scrollbar. totalelementssize is always at least as big as
-            //the parent container
             get
             {
                 if (parentHeightWhenShowingAllChildren == 0)

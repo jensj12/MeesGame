@@ -58,7 +58,7 @@ namespace MeesGame
             Dimensions = dimensions ?? Vector2.Zero;
 
             if (onClick != null)
-                OnClick += onClick;
+                Click += onClick;
         }
 
         /// <summary>
@@ -104,12 +104,17 @@ namespace MeesGame
             spriteBatch.DrawString(spriteFont, text, Vector2.Zero, Color.White);
         }
 
-        public override void HandleInput(InputHelper inputHelper)
+        /// <summary>
+        /// The button changes when it's input changed. So we invalidate every time it became the InputEater
+        /// </summary>
+        public override bool WantsToEatInput
         {
-            base.HandleInput(inputHelper);
-            this.Invalidate = true;
+            get
+            {
+                Invalidate();
+                return base.WantsToEatInput;
+            }
         }
-
         /// <summary>
         /// Invalidates the button every frame because we need to test if the mouse is hovering
         /// </summary>
