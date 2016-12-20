@@ -40,7 +40,7 @@ namespace MeesGame
         /// <param name="selectedBackgroundName">The texture that overlays the background when the button is selected</param>
         /// <param name="textFont">The name of the text font used for the text as in the contenmanager</param>
         /// <param name="overlays">The overlays that should be rendered over the background</param>
-        public Button(Vector2? location, Vector2? dimensions, string text, ClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont", string[] overlayNames = null) : base(location, dimensions)
+        public Button(Vector2? location, Vector2? dimensions, string text, OnClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont", string[] overlayNames = null) : base(location, dimensions)
         {
             background = new List<SpriteSheet>();
 

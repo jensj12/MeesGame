@@ -6,7 +6,7 @@ namespace MeesGame
 {
     public class UIContainer : UIObject
     {
-        public event ClickEventHandler ChildClick;
+        public event OnClickEventHandler ChildClick;
 
         protected UIObjectList<UIObject> children;
 

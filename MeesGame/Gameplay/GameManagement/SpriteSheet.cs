@@ -45,7 +45,7 @@ public class SpriteSheet
     }
 
     /// <summary>
-    /// method used to draw spritesheets
+    /// Creates customizable button
     /// </summary>
     /// <param name="spriteBatch">spritebatch on which to draw</param>
     /// <param name="position">the position the sprite should be drawn at</param>

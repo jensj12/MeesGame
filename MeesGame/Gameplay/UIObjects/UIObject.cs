@@ -5,12 +5,12 @@ namespace MeesGame
 {
     public abstract class UIObject : IGameLoopObject
     {
-        public delegate void ClickEventHandler(UIObject uiObject);
+        public delegate void OnClickEventHandler(UIObject uiObject);
 
         /// <summary>
         /// When the UIObject is clicked this event is called
         /// </summary>
-        public event ClickEventHandler Click;
+        public event OnClickEventHandler Click;
 
         /// <summary>
         /// Texture that holds a solid white color. It can be used to draw solid backgrounds
