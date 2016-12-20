@@ -1,12 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid, ITileField
+    public class TileField : GameObjectGrid, ITileField
     {
         protected bool fogOfWar;
 
-        public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "") : base(rows, columns, layer, id)
+        public TileField() : base(0, 0, 0, "")
+        {
+        }
+
+        public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "tiles") : base(rows, columns, layer, id)
         {
             this.fogOfWar = fogOfWar;
         }
@@ -25,7 +30,7 @@ namespace MeesGame
 
         public TileType GetType(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return TileType.Wall;
             }
@@ -70,7 +75,7 @@ namespace MeesGame
         ///this bool returns if the x and y are outside the bounds of the tilefield
         public bool OutOfTileField(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return true;
             }
@@ -90,7 +95,7 @@ namespace MeesGame
             }
         }
 
-        public void revealArea(Point a)
+        public void RevealArea(Point a)
         {
             for (int i = a.X - 1; i <= a.X + 1; i++)
             {

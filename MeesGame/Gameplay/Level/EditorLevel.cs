@@ -10,7 +10,7 @@ namespace MeesGame
         {
             start = Point.Zero;
             FillLevelWithEmptyTiles();
-            tiles.UpdateGraphicsToMatchSurroundings();
+            Tiles.UpdateGraphicsToMatchSurroundings();
             usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
         }
 
@@ -18,7 +18,7 @@ namespace MeesGame
         {
             for (int x = 0; x < numRows; x++)
                 for (int y = 0; y < numColumns; y++)
-                    tiles.Add(new FloorTile(), x, y);
+                    Tiles.Add(new FloorTile(), x, y);
         }
     }
 }

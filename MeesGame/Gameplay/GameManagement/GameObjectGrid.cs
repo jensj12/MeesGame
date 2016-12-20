@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class GameObjectGrid : GameObject
 {
-    protected GameObject[,] grid;
-    protected int cellWidth, cellHeight;
+    public GameObject[,] grid;
+    public int cellWidth, cellHeight;
 
     public GameObjectGrid(int rows, int columns, int layer = 0, string id = "")
         : base(layer, id)

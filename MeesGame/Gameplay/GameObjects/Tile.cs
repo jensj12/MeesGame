@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    enum TileType
+    public enum TileType
     {
         Floor,
         Wall,
@@ -13,17 +13,44 @@ namespace MeesGame
         Unknown
     }
 
-    abstract class Tile : SpriteGameObject
+    public struct TileData
     {
-        protected TileType tileType;
-        protected Point location = Point.Zero;
+        public TileType TileType { get; set; }
+        public TileData(TileType tileType)
+        {
+            TileType = tileType;
+        }
+
+        public Tile ToTile()
+        {
+            return Tile.CreateTileFromTileType(TileType);
+        }
+
+        public static implicit operator Tile (TileData data)
+        {
+            return data.ToTile();
+        }
+
+        public static implicit operator TileData(Tile tile)
+        {
+            return tile.Data;
+        }
+    }
+
+    public abstract class Tile : SpriteGameObject
+    {
+        public TileData Data
+        {
+            get; private set;
+        }
+        public Point location = Point.Zero;
         protected bool revealed = false;
         protected SpriteSheet secondarySprite;
         protected Color secondarySpriteColor = Color.White;
 
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            this.tileType = tileType;
+            Data = new TileData(tileType);
         }
 
         public bool Revealed
@@ -43,7 +70,7 @@ namespace MeesGame
         /// </summary>
         public TileType TileType
         {
-            get { return tileType; }
+            get { return Data.TileType; }
         }
 
         /// <summary>
@@ -53,6 +80,14 @@ namespace MeesGame
         {
             get { return location; }
             set { location = value; }
+        }
+
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(Location.X * TileField.CellWidth, Location.Y * TileField.CellHeight);
+            }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
