@@ -15,21 +15,19 @@ namespace MeesGame
         private static Texture2D solidWhiteTexture;
 
         /// <summary>
-        /// location = relative location to the parent of the object
-        /// dimensions = size of the element, used for input and for rendering when overflow is hidden
-        /// parent = the parent of the object
+        /// relativeLocation = relative location to the parent of the object
+        /// dimensions = size of the element, used for input and for rendering
         /// renderTarget = the texture of the UI element, so that we can render it when it is updated and disposed when not needed anymore
-        /// invalidated = determines if the rendertarget needs updating
+        /// needsToBeInvalidated = determines if the rendertarget needs updating
+        /// textureRenderer = used to render the texture for the UI
         /// </summary>
         private Vector2 relativeLocation;
-
         private Vector2 dimensions;
         private UIContainer parent;
         private bool visible = true;
-        protected Color? BackgroundColor;
+        protected Color? backgroundColor;
         protected RenderTarget2D renderTarget;
         protected bool needsToBeInvalidated = true;
-        protected TextureRenderer textureRenderer;
 
         ///because the input is eaten after an element uses it we keep track of whether the elements
         ///have received an input and allow them to act accordingly in the update method
@@ -41,28 +39,32 @@ namespace MeesGame
         /// <summary>
         ///
         /// </summary>
-        /// <param name="location">location relative to the parent</param>
+        /// <param name="location">location relative to the parent, equals Vector2.Zero if left empty</param>
         /// <param name="dimensions">size of the object</param>
-        /// <param name="parent">parent of the object</param>
         public UIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
         {
             this.relativeLocation = location ?? Vector2.Zero;
-            //dimensions is set to 1,1 because our graphics device can't compute a size of 0,0
-            this.dimensions = dimensions ?? new Vector2(1);
-            this.BackgroundColor = backgroundColor;
-            this.textureRenderer = new TextureRenderer();
+            this.dimensions = dimensions ?? Vector2.Zero;
+            this.backgroundColor = backgroundColor;
         }
 
-        public static Texture2D SolidWhiteTexture(GraphicsDevice device)
+        protected static Texture2D SolidWhiteTexture
         {
-            if (solidWhiteTexture == null)
+            get
             {
-                Color[] colordata = new Color[1];
-                colordata[0] = Color.White;
-                solidWhiteTexture = new Texture2D(device, 1, 1);
-                solidWhiteTexture.SetData(colordata);
+                if (solidWhiteTexture == null)
+                {
+                    Color[] colordata = new Color[1];
+                    colordata[0] = Color.White;
+                    solidWhiteTexture = new Texture2D(GameEnvironment.Instance.GraphicsDevice, 1, 1);
+                    solidWhiteTexture.SetData(colordata);
+                }
+                return solidWhiteTexture;
             }
-            return solidWhiteTexture;
+            set
+            {
+                solidWhiteTexture = value;
+            }
         }
 
         ///allows a component to use the input in the UI until it doesn't need the input anymore. If we wouldn't use this method, dragging any element
@@ -122,31 +124,44 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// draws the UI
+        /// Draws to the spritebatch
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!visible) return;
+            if (!Visible) return;
 
-            if (BackgroundColor != null)
-                spriteBatch.Draw(SolidWhiteTexture(spriteBatch.GraphicsDevice), RelativeRectangle, (Color)BackgroundColor);
-            if (Invalidate == true)
-            {
-                renderTarget?.Dispose();
-                textureRenderer.Render(gameTime, spriteBatch.GraphicsDevice, DrawTask, dimensions, out renderTarget);
-                Invalidate = false;
-            }
             spriteBatch.Draw(renderTarget, RelativeRectangle, Color.White);
         }
 
         /// <summary>
-        /// the draw task is basically the draw call, but with the added bonus of allowing the class to makeup the spritebatch using a scissor rectange for example
+        /// Draws to the UIObject's texture
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
+        public virtual void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!Visible) return;
+
+            if (Invalidate)
+            {
+                renderTarget?.Dispose();
+                TextureRenderer.Render(gameTime, DrawTask, dimensions, out renderTarget);
+                Invalidate = false;
+            }
+        }
+
+        /// <summary>
+        /// Draws to the renderTarget
         /// </summary>
         /// <param name="gameTime">the current gametime</param>
         /// <param name="spriteBatch">a spritebatch to draw in</param>
-        public abstract void DrawTask(GameTime gameTime, SpriteBatch spriteBatch);
+        public virtual void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (backgroundColor != null)
+                spriteBatch.Draw(SolidWhiteTexture, OriginLocationRectangle, (Color)backgroundColor);
+        }
 
         public virtual void Reset()
         {
@@ -173,7 +188,7 @@ namespace MeesGame
             set
             {
                 needsToBeInvalidated = value;
-                if (parent != null)
+                if (parent != null && value == true)
                     parent.Invalidate = value;
             }
         }
@@ -247,7 +262,7 @@ namespace MeesGame
 
         public bool Visible
         {
-            get { return visible; }
+            get { return visible && Dimensions != Vector2.Zero; }
             set
             {
                 visible = value;

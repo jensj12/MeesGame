@@ -49,8 +49,32 @@ namespace MeesGame
             children.Update(gameTime);
         }
 
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!Visible) return;
+
+            if (Parent == null)
+            {
+                TextureRenderer.CreateMSpriteBatch(spriteBatch.GraphicsDevice);
+                RenderTexture(gameTime, spriteBatch);
+                spriteBatch.GraphicsDevice.SetRenderTarget(null);
+            }
+
+            spriteBatch.Draw(renderTarget, RelativeRectangle, Color.White);
+        }
+
+        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (Invalidate)
+            {
+                children.RenderTexture(gameTime, spriteBatch);
+                base.RenderTexture(gameTime, spriteBatch);
+            }
+        }
+
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            base.DrawTask(gameTime, spriteBatch);
             children.Draw(gameTime, spriteBatch);
         }
 

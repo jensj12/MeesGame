@@ -51,6 +51,8 @@ namespace MeesGame
                     if (button.Selected)
                     {
                         startButton.UpdateText(Strings.ok, true);
+                        startButton.Dimensions = Vector2.Zero;
+
                         centerStartButton();
                     }
                 }

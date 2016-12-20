@@ -31,6 +31,12 @@ namespace MeesGame
             scrollBar.UpdateParentHeightWhenShowingAllChildren();
         }
 
+        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            scrollBar.RenderTexture(gameTime, spriteBatch);
+            base.RenderTexture(gameTime, spriteBatch);
+        }
+
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.DrawTask(gameTime, spriteBatch);

@@ -46,10 +46,16 @@ namespace MeesGame
                 Visible = true;
         }
 
+        public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            base.RenderTexture(gameTime, spriteBatch);
+        }
+
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            base.DrawTask(gameTime, spriteBatch);
             //draws the scrollbar and the bar in their respective colors with the bar on top
-            spriteBatch.Draw(SolidWhiteTexture(spriteBatch.GraphicsDevice), OriginLocationBarRectangle, scrollbarColor);
+            spriteBatch.Draw(SolidWhiteTexture, OriginLocationBarRectangle, scrollbarColor);
         }
 
         public override void HandleInput(InputHelper inputHelper)

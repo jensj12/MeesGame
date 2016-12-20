@@ -18,6 +18,7 @@ namespace UIObjects
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            base.DrawTask(gameTime, spriteBatch);
             image.Draw(spriteBatch, new Vector2((int)imageOffset, (int)imageOffset), Vector2.Zero, (int)Dimensions.X - imageOffset * 2, (int)Dimensions.Y - imageOffset * 2);
         }
     }
