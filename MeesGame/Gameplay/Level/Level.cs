@@ -18,8 +18,11 @@ namespace MeesGame
         protected Player player;
         protected TileField tiles;
 
-        public Level()
+        public Level(bool fogOfWar = true)
         {
+            tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
+            tiles.CellHeight = CELL_HEIGHT;
+            tiles.CellWidth = CELL_WIDTH;
         }
 
         public Player Player
@@ -72,7 +75,6 @@ namespace MeesGame
 
             if (screenWidth == -1) screenWidth = GameEnvironment.Screen.X;
             if (screenHeight == -1) screenHeight = GameEnvironment.Screen.Y;
-
 
             Camera camera = new Camera(new Point(screenWidth, screenHeight), player);
             Add(camera);

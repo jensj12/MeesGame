@@ -6,7 +6,6 @@ namespace AI
     // Tijdelijk type om errors te voorkomen, moet uiteindelijk ergens in de MeesGame namespace worden gedefiniëerd.
     class ILevelState
     {
-
     }
 
     class QLearning
@@ -17,7 +16,7 @@ namespace AI
         private ILevelState beginState;
 
         /// <summary>
-        /// discountFactor is a number that determines how much more important earlier rewards are. 
+        /// discountFactor is a number that determines how much more important earlier rewards are.
         /// The lower discountFactor is, the more important it is to the Q function to get rewards as soon as possible.
         /// </summary>
         private double learningRate, discountFactor;
@@ -36,7 +35,7 @@ namespace AI
         }
 
         /// <summary>
-        /// This function starts the training mode. 
+        /// This function starts the training mode.
         /// </summary>
         public void AIStartTrainingMode()
         {
@@ -44,15 +43,14 @@ namespace AI
         }
 
         /// <summary>
-        /// This function picks an action to perform during the trainins phase. 
+        /// This function picks an action to perform during the trainins phase.
         /// It receives an ILevelState s and semi-randomly (depending on the learningRate) chooses an PlayerAction a to perform.
-        /// It performs the action and calls the Q function to update the qValues entry for (s, a). 
+        /// It performs the action and calls the Q function to update the qValues entry for (s, a).
         /// </summary>
         /// <param name="s"></param>
         /// <param name="learningRate"></param>
         public void AITrainingModeDoMove(ILevelState s)
         {
-
         }
 
         /// <summary>
@@ -60,7 +58,6 @@ namespace AI
         /// </summary>
         public void AIPlayGame()
         {
-
         }
 
         /// <summary>
@@ -74,7 +71,7 @@ namespace AI
         }
 
         /// <summary>
-        /// This function estimates the best qValue that can be obtained by performing an action in the new ILevelState s' that is reached by performing PlayerAction a in ILevelState s. 
+        /// This function estimates the best qValue that can be obtained by performing an action in the new ILevelState s' that is reached by performing PlayerAction a in ILevelState s.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
@@ -85,7 +82,7 @@ namespace AI
         }
 
         /// <summary>
-        /// The Q function receives a ILevelState s and a to be performed PlayerAction a. 
+        /// The Q function receives a ILevelState s and a to be performed PlayerAction a.
         /// It determines what the result is of this action and then updates the entry for (s, a) in the qValues library.
         /// </summary>
         /// <param name="s"></param>

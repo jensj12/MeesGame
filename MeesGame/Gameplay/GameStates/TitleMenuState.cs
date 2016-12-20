@@ -1,51 +1,47 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MeesGame;
 
 namespace MeesGame
 {
     internal class TitleMenuState : IGameLoopObject
     {
-        private UIObjectList<UIObject> gameObjectList;
-        private GameEnvironment game;
+        private UIContainer UIContainer;
 
-        public TitleMenuState(GameEnvironment game)
+        public TitleMenuState()
         {
-            this.game = game;
-            gameObjectList = new UIObjectList<UIObject>();
-            gameObjectList.Add(new Button(new Vector2(10, 10), new Vector2(100, 100), null, Strings.begin, (Button o) =>
+            UIContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            UIContainer.AddChild(new Button(new Vector2(10, 10), null, Strings.begin, (UIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 120), Vector2.Zero, null, Strings.map_editor, (Button o) =>
+            UIContainer.AddChild(new Button(new Vector2(10, 120), null, Strings.map_editor, (UIObject o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
-            gameObjectList.Add(new Button(new Vector2(10, 230), Vector2.Zero, null, Strings.exit, (Button o) =>
+            UIContainer.AddChild(new Button(new Vector2(10, 230), null, Strings.exit, (UIObject o) =>
             {
-                game.Exit();
+                GameEnvironment.Instance.Exit();
             }));
-
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            gameObjectList.Draw(gameTime, spriteBatch);
+            UIContainer.Draw(gameTime, spriteBatch);
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
-            gameObjectList.HandleInput(inputHelper);
+            UIContainer.HandleInput(inputHelper);
         }
 
         public void Reset()
         {
+            UIContainer.Reset();
         }
 
         public void Update(GameTime gameTime)
         {
-            gameObjectList.Update(gameTime);
+            UIContainer.Update(gameTime);
         }
     }
 }

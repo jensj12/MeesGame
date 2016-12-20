@@ -15,16 +15,23 @@ namespace MeesGame
             get; set;
         }
 
+        public static string inventoryItemAsset(InventoryItemType ii)
+        {
+            switch (ii)
+            {
+                case InventoryItemType.Key:
+                    return KeyTile.GetDefaultAssetNames()[1];
+            }
+            return null;
+        }
     }
 
     class InventoryKey : InventoryItem
     {
         public InventoryKey(InventoryItemType iit = InventoryItemType.Key)
         {
-
         }
     }
-
 
     class Inventory
     {

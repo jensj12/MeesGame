@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -95,12 +95,15 @@ namespace MeesGame
                 case PlayerAction.NORTH:
                     newLocation.Y--;
                     break;
+
                 case PlayerAction.EAST:
                     newLocation.X++;
                     break;
+
                 case PlayerAction.SOUTH:
                     newLocation.Y++;
                     break;
+
                 case PlayerAction.WEST:
                     newLocation.X--;
                     break;
@@ -166,7 +169,6 @@ namespace MeesGame
         /// </summary>
         public abstract void UpdateGraphicsToMatchSurroundings();
 
-
         /// <summary>
         /// Used to create Tiles solemnly on a tileType
         /// </summary>
@@ -178,10 +180,13 @@ namespace MeesGame
             {
                 case TileType.Floor:
                     return new FloorTile();
+
                 case TileType.Wall:
                     return new WallTile();
+
                 case TileType.Door:
                     return new DoorTile();
+
                 case TileType.Key:
                     return new KeyTile();
             }
@@ -194,17 +199,24 @@ namespace MeesGame
         /// </summary>
         /// <param name="tt"></param>
         /// <returns></returns>
-        public static string GetAssetNameFromTileType(TileType tt)
+        public static string[] GetAssetNamesFromTileType(TileType tt)
         {
             switch (tt)
             {
                 case TileType.Floor:
-                    return FloorTile.defaultAssetName;
+                    return FloorTile.GetDefaultAssetNames();
+
                 case TileType.Wall:
-                    return WallTile.defaultAssetName;
+                    return WallTile.GetDefaultAssetNames();
+
+                case TileType.Door:
+                    return DoorTile.GetDefaultAssetNames();
+
+                case TileType.Key:
+                    return KeyTile.GetDefaultAssetNames();
             }
-            //If no Tile can be made of the specified tiletype, return an empty string
-            return "";
+            //If no Tile can be made of the specified tiletype, return null
+            return null;
         }
 
         public virtual InventoryItem GetItem()
@@ -219,12 +231,10 @@ namespace MeesGame
 
         protected FloorTile(string assetName = defaultAssetName, TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
-
         }
 
         public FloorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Floor, layer, id)
         {
-
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -241,7 +251,7 @@ namespace MeesGame
             {
                 return false;
             }
-            //Special actions are not allowed on a floor tile, if it is surrounded by tiles that don't allow special actions. 
+            //Special actions are not allowed on a floor tile, if it is surrounded by tiles that don't allow special actions.
             else
                 return action == PlayerAction.SPECIAL;
         }
@@ -249,21 +259,23 @@ namespace MeesGame
         public override void UpdateGraphicsToMatchSurroundings()
         {
         }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
+        }
     }
 
     class WallTile : Tile
     {
         public const string defaultAssetName = "walls@16";
 
-
         protected WallTile(string assetName = defaultAssetName, TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
-
         }
 
         public WallTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Wall, layer, id)
         {
-
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -289,6 +301,11 @@ namespace MeesGame
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+        }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
         }
     }
 }

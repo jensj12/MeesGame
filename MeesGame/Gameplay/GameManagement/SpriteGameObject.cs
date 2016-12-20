@@ -105,4 +105,3 @@ public class SpriteGameObject : GameObject
         return false;
     }
 }
-

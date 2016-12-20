@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -82,6 +82,19 @@ namespace MeesGame
             }
         }
 
+        public void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (!visible)
+            {
+                return;
+            }
+            List<Type>.Enumerator e = children.GetEnumerator();
+            while (e.MoveNext())
+            {
+                e.Current.RenderTexture(gameTime, spriteBatch);
+            }
+        }
+
         public override void Reset()
         {
             base.Reset();
@@ -89,6 +102,7 @@ namespace MeesGame
             {
                 obj.Reset();
             }
+            children = new List<Type>();
         }
 
         public void Clear()
