@@ -57,7 +57,17 @@ namespace MeesGame
         public void OnLevelSelect(FileExplorer fileExplorer)
         {
             startButton.UpdateText(Strings.ok, true);
+            startButton.Dimensions = Vector2.Zero;
             centerStartButton();
+            foreach(Button button in levelExplorer.Children)
+            {
+                if (button.Selected)
+                {
+                    startButton.UpdateText(Strings.ok, true);
+                    startButton.Dimensions = Vector2.Zero;
+                    centerStartButton();
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

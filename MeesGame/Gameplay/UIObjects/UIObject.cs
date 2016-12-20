@@ -25,6 +25,7 @@ namespace MeesGame
         /// textureRenderer = used to render the texture for the UI
         /// </summary>
         private Vector2 relativeLocation;
+
         private Vector2 dimensions;
         private UIContainer parent;
         private bool visible = true;
@@ -37,6 +38,7 @@ namespace MeesGame
         /// clicked = specifies if the mouse just clicked on this object
         /// </summary>
         private bool hovering;
+
         private bool mouseDown;
         private bool clicked;
 
@@ -197,11 +199,12 @@ namespace MeesGame
         /// <summary>
         /// returns false if the object doesn't contain a texture
         /// </summary>
-        public virtual bool Invalid
+        protected virtual bool Invalid
         {
-            get {
-                    return objectTexture == null;
-                }
+            get
+            {
+                return objectTexture == null;
+            }
         }
 
         /// <summary>

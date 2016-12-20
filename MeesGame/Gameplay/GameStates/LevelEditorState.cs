@@ -7,25 +7,33 @@ namespace MeesGame
 {
     internal class LevelEditorState : IGameLoopObject
     {
-        //The width of the bars with buttons the editor can click to place certain tiles
-        const int leftBarWidth = 150;
-
-        const int rightBarWidth = 200;
+        const int tilesListWidth = 150;
+        const int tilePropertiesListWidth = 200;
         const int buttonDistanceFromRightWall = 20;
         readonly Color listsBackgroundColor = new Color(122, 122, 122, 255);
 
-        List<Level> level;
+        /// <summary>
+        ///Ordered list of tiletypes to match the buttons with.
+        /// </summary>
+        List<TileType> tileTypeList;
 
-        //We need an ordered list of tiletypes to match the buttons with
-        List<TileType> tileTypes;
+        /// <summary>
+        /// Index of the currently selected tileType as in the tileTypeList
+        /// </summary>
+        int selectedTileIndex;
+
+        List<Level> level;
 
         int currentLevelIndex;
 
+        /// <summary>
+        /// The overlay contains all of the UI, including the tilesList and tilePropertiesList
+        /// The tilesList contains all different types of tyles
+        /// The tilePropertiesList contains the editable properties of the Tile on which the Editorplayer is standing
+        /// </summary>
         private UIContainer overlay;
         private UIList tilesList;
-        private UIList tilesPropertiesList;
-
-        int selectedTileIndex;
+        private UIList tilePropertiesList;
 
         /// <summary>
         /// State for editing levels
@@ -35,8 +43,8 @@ namespace MeesGame
             level = new List<Level>();
 
             //Resize and reposition the level to prevent it from overlapping with the controls
-            Level newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (leftBarWidth + rightBarWidth), GameEnvironment.Screen.Y);
-            newLevel.Position += new Vector2(leftBarWidth, 0);
+            Level newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (tilesListWidth + tilePropertiesListWidth), GameEnvironment.Screen.Y);
+            newLevel.Position += new Vector2(tilesListWidth, 0);
             level.Add(newLevel);
             currentLevelIndex = 0;
 
@@ -51,11 +59,11 @@ namespace MeesGame
         private void InitUI()
         {
             overlay = new UIContainer(null, GameEnvironment.Screen.ToVector2());
-            tilesList = new UIList(new Vector2(0, 0), new Vector2(leftBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
-            tilesPropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - rightBarWidth, 0), new Vector2(rightBarWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            tilesList = new UIList(new Vector2(0, 0), new Vector2(tilesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            tilePropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth, 0), new Vector2(tilePropertiesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
 
             overlay.AddChild(tilesList);
-            overlay.AddChild(tilesPropertiesList);
+            overlay.AddChild(tilePropertiesList);
 
             tilesList.ChildClick += OnItemSelect;
 
@@ -68,14 +76,14 @@ namespace MeesGame
         private void FillTilesList()
         {
             //When we fill the list we want tiletypes to be empty
-            tileTypes = new List<TileType>();
+            tileTypeList = new List<TileType>();
             foreach (TileType tt in Enum.GetValues(typeof(TileType)))
             {
-                tileTypes.Add(tt);
+                tileTypeList.Add(tt);
                 string[] tileBackgroundAndOverlays = Tile.GetAssetNamesFromTileType(tt);
                 if (tileBackgroundAndOverlays != null)
                 {
-                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(leftBarWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, null, overlayNames: tileBackgroundAndOverlays);
+                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(tilesListWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, null, overlayNames: tileBackgroundAndOverlays);
                     tilesList.AddChild(newButton);
                 }
             }
@@ -108,11 +116,12 @@ namespace MeesGame
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
             {
                 Point playerLocation = level[currentLevelIndex].Player.Location;
-                level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypes[selectedTileIndex]), playerLocation.X, playerLocation.Y);
+                level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]), playerLocation.X, playerLocation.Y);
                 //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
                 level[0].Tiles.UpdateGraphicsToMatchSurroundings();
             }
 
+            //When backspace is presset, we return to the TitleMenu
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Back))
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState");
         }
@@ -131,8 +140,7 @@ namespace MeesGame
 
         public void PlayerMoved(PlayerAction action)
         {
-            /* Tile currentTile = level[currentLevelIndex].Player.Location
-            foreach */
+            tilePropertiesList.Invalidate();
         }
     }
 
