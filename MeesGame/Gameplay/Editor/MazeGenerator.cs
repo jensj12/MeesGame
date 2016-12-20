@@ -88,7 +88,10 @@ namespace MeesGen
                     {
                         if (random.Next(BIGINT) < loopChance * BIGINT)
                             if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is MeesGame.WallTile)
+                            {
                                 tiles.Add(new MeesGame.DoorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                                tiles.Add(new MeesGame.KeyTile(), next.X, next.Y);
+                            }
                         continue;
                     }
 

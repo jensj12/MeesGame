@@ -94,7 +94,8 @@ namespace MeesGame
             if (item != null)
                 Inventory.Items.Add(item);
 
-            Level.Tiles.RevealArea(Location);
+            this.Level.Tiles.RevealArea(Location);
+            CurrentTile.IsVisited = true;
 
             PlayerActionEvent(action);
         }
