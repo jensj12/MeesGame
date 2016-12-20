@@ -44,15 +44,12 @@ namespace MeesGame
 
         public void OnLevelSelect(UIObject o)
         {
-            if (o == levelExplorer)
+            foreach(Button button in levelExplorer.Children)
             {
-                foreach(Button button in levelExplorer.Children)
+                if (button.Selected)
                 {
-                    if (button.Selected)
-                    {
-                        startButton.UpdateText(Strings.ok, true);
-                        centerStartButton();
-                    }
+                    startButton.UpdateText(Strings.ok, true);
+                    centerStartButton();
                 }
             }
         }
