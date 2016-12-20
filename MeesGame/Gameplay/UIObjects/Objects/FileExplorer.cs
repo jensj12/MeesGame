@@ -44,7 +44,7 @@ namespace MeesGame
         /// <param name="path">path of the folder the files are located in</param>
         public FileExplorer(Vector2? location = null, Vector2? dimensions = null, string fileExtension = "", string path = "", Color? defaultBackgroundColor = null) : base(location, dimensions, backgroundColor: defaultBackgroundColor)
         {
-            BackgroundColor = BackgroundColor ?? DefaultBackgroundColor;
+            backgroundColor = backgroundColor ?? DefaultBackgroundColor;
 
             currentDirectory = path;
             this.fileExtension = fileExtension;

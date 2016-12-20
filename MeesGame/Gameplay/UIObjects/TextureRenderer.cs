@@ -1,15 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
-    public class TextureRenderer
+    public static class TextureRenderer
     {
         public delegate void RenderTask(GameTime gameTime, SpriteBatch spriteBatch);
 
-        //Spritebatch used for rendering our texture. Needs to be instantiate for each separate texture,
-        //otherwise we would have to end the previous draw
-        public SpriteBatch mSpriteBatch;
+        //SpriteBatche used for rendering our texture.
+        private static SpriteBatch mSpriteBatch;
 
         /// <summary>
         /// Render the task to a texture
@@ -19,12 +19,11 @@ namespace MeesGame
         /// <param name="task">What we want to render to the texture</param>
         /// <param name="dimensions">Size of the texture</param>
         /// <param name="renderTarget">The target we want to render to</param>
-        public void Render(GameTime gameTime, GraphicsDevice graphicsDevice, RenderTask task, Vector2 dimensions, out RenderTarget2D renderTarget)
+        public static void Render(GameTime gameTime, RenderTask task, Vector2 dimensions, out RenderTarget2D renderTarget)
         {
             if (mSpriteBatch == null)
-                mSpriteBatch = new SpriteBatch(graphicsDevice);
+                mSpriteBatch = new SpriteBatch(GameEnvironment.Instance.GraphicsDevice);
 
-            RenderTargetBinding[] oldTargets = graphicsDevice.GetRenderTargets();
             renderTarget = new RenderTarget2D(mSpriteBatch.GraphicsDevice, (int)dimensions.X, (int)dimensions.Y, false,
                 mSpriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
@@ -33,7 +32,6 @@ namespace MeesGame
             task(gameTime, mSpriteBatch);
             mSpriteBatch.GraphicsDevice.Clear(Color.Transparent);
             mSpriteBatch.End();
-            mSpriteBatch.GraphicsDevice.SetRenderTargets(oldTargets);
         }
     }
 }

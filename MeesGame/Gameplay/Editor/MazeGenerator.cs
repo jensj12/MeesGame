@@ -69,19 +69,15 @@ namespace MeesGen
                         case 1:
                             next = new Point(current.X - 2, current.Y);
                             break;
-
                         case 2:
                             next = new Point(current.X + 2, current.Y);
                             break;
-
                         case 3:
                             next = new Point(current.X, current.Y - 2);
                             break;
-
                         case 4:
                             next = new Point(current.X, current.Y + 2);
                             break;
-
                         default:
                             throw new ArgumentOutOfRangeException();
                             //break;
@@ -97,7 +93,7 @@ namespace MeesGen
                     }
 
                     nodesToDo.Add(next);
-                    tiles.Add(new MeesGame.KeyTile(), next.X, next.Y);
+                    tiles.Add(new MeesGame.FloorTile(), next.X, next.Y);
                     tiles.Add(new MeesGame.FloorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                     randomNext = false;
                     break;
