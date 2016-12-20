@@ -101,14 +101,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gameplay\Content\backplayer.png" />
+    <Content Include="Gameplay\Content\doorOverlaySpritesheet.png" />
     <Content Include="Gameplay\Content\floorTile.png" />
     <Content Include="Gameplay\Content\guard.png" />
     <Content Include="Gameplay\Content\hole.png" />
     <Content Include="Gameplay\Content\horizontalDoor.png" />
-    <Content Include="Gameplay\Content\horizontalDoorOverlay.png" />
     <Content Include="Gameplay\Content\horizontalEnd.png" />
     <Content Include="Gameplay\Content\ice.png" />
-    <Content Include="Gameplay\Content\keyOverlay.png" />
     <Content Include="Gameplay\Content\ladder.png" />
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\playerdown%404.png" />
@@ -116,7 +115,6 @@
     <Content Include="Gameplay\Content\playerright%404.png" />
     <Content Include="Gameplay\Content\playerup%404.png" />
     <Content Include="Gameplay\Content\verticalDoor.png" />
-    <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Gameplay\Content\walls%4016.png" />
     <Content Include="Icon.ico" />
