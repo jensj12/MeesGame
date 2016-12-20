@@ -90,6 +90,14 @@ namespace MeesGame
             }
         }
 
+        public void UpdateGraphics()
+        {
+            foreach (Tile tile in Objects)
+            {
+                tile.UpdateGraphics(); 
+            }
+        }
+
         public void revealArea(Point a)
         {
             for(int i = a.X-1; i <= a.X+1; i++)

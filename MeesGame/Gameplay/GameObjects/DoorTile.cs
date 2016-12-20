@@ -54,17 +54,28 @@ namespace MeesGame
                 doorIsOpen = true;
             }
         }
-
+        /*/ TODO 
         public override void UpdateGraphicsToMatchSurroundings()
         {
-            //TODO: choose hor/ver wall
+            int sheetIndex = 0;
+            int x = Location.X;
+            int y = Location.Y;
+            TileField tileField = Parent as TileField;
+            if (tileField.GetTile(x, y - 1) is WallTile) sheetIndex += 1;
+            if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
+            if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
+            if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
+            sprite = new SpriteSheet(defaultAssetName, sheetIndex);
         }
+       /* public override void UpdateGraphicsToMatchSurroundings()
+        {
+            //TODO: choose hor/ver wall
+        }*/
     }
 
 
     class KeyTile : FloorTile
     {
-
         public KeyTile(int layer = 0, string id = "") : base("floorTile", TileType.Key, layer, id)
         {
             secondarySprite = new SpriteSheet("keyOverlay");
@@ -75,6 +86,12 @@ namespace MeesGame
         {
             InventoryItem key = new InventoryKey();
             return key;
+        }
+
+        public override void UpdateGraphics()
+        {
+            if (isVisited)
+                sprite = new SpriteSheet("FloorTile");
         }
 
         //TODO: if key has been picked up, keytile changes into floortile.

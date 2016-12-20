@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MeesGame
 {
@@ -18,6 +19,7 @@ namespace MeesGame
         protected TileType tileType;
         protected Point location = Point.Zero;
         protected bool revealed = false;
+        protected bool isVisited = false;
         protected SpriteSheet secondarySprite;
         protected Color secondarySpriteColor = Color.White;
 
@@ -211,6 +213,20 @@ namespace MeesGame
         {
             return null;
         }
+
+        public abstract void UpdateGraphics();
+
+        public bool IsVisited
+        {
+            get
+            {
+                return isVisited;
+            }
+            set
+            {
+                isVisited = value;
+            }
+        }
     }
 
     class FloorTile : Tile
@@ -247,6 +263,10 @@ namespace MeesGame
         }
 
         public override void UpdateGraphicsToMatchSurroundings()
+        {
+        }
+
+        public override void UpdateGraphics()
         {
         }
     }
@@ -289,6 +309,10 @@ namespace MeesGame
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+        }
+
+        public override void UpdateGraphics()
+        {
         }
     }
 }

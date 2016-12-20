@@ -98,6 +98,7 @@ namespace MeesGame
                 state.Inventory.Items.Add(item);
 
             this.Level.Tiles.revealArea(Location);
+            CurrentTile.IsVisited = true;
         }
 
         /// <summary>
