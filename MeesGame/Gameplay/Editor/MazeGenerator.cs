@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using MeesGame;
 
 namespace MeesGen
 {
@@ -108,6 +109,12 @@ namespace MeesGen
             }
 
             return tiles;
+        }
+
+        public static TileField GenerateMazeWithRandomStart()
+        {
+            Point start = new Point(GameEnvironment.Random.Next(Level.DEFAULT_NUM_COLS / 2) * 2, GameEnvironment.Random.Next(Level.DEFAULT_NUM_ROWS / 2) * 2);
+            return GenerateMaze(new TileField(Level.DEFAULT_NUM_ROWS,Level.DEFAULT_NUM_COLS), start.X, start.Y);
         }
 
         private static void swap(IList<Point> list, int pos1, int pos2)

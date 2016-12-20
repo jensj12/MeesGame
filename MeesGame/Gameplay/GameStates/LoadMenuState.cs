@@ -28,10 +28,17 @@ namespace MeesGame
             startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
             {
                 PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
-                TileField tileField = FileIO.Load(levelExplorer.SelectedFile);
+                TileField tileField;
+                if (levelExplorer.SelectedFile != null)
+                {
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);
+                    
+                }else
+                {
+                    tileField = MeesGen.MazeGenerator.GenerateMazeWithRandomStart();
+                }
                 state.StartLevel(new PlayingLevel(tileField));
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
-                
             });
             centerStartButton();
             uiContainer.AddChild(levelExplorer);

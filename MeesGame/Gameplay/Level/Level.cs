@@ -6,8 +6,10 @@ namespace MeesGame
 {
     public class Level : GameObjectList
     {
-        protected int numRows = 31;
-        protected int numColumns = 31;
+        public const int DEFAULT_NUM_ROWS = 31;
+        public const int DEFAULT_NUM_COLS = 31;
+        protected int numRows = DEFAULT_NUM_ROWS;
+        protected int numColumns = DEFAULT_NUM_COLS;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(300);
