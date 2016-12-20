@@ -96,7 +96,7 @@ namespace MeesGame
         public KeyTile(int layer = 0, string id = "") : base(FloorTile.defaultAssetName, TileType.Key, layer, id)
         {
             secondarySprite = new SpriteSheet(defaultAssetName);
-            secondarySpriteColor = Color.Aqua;
+            secondarySpriteColor = Color.Blue;
         }
 
         public override InventoryItem GetItem()
