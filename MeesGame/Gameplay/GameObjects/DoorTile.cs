@@ -62,7 +62,19 @@ namespace MeesGame
 
         public override void UpdateGraphicsToMatchSurroundings()
         {
-            //TODO: choose hor/ver wall
+            int x = Location.X;
+            int y = Location.Y;
+            TileField tileField = Parent as TileField;
+            if (tileField.GetTile(x, y - 1) is WallTile)
+            {
+                sprite = new SpriteSheet("verticalDoor");
+                secondarySprite = new SpriteSheet("verticalDoorOverlay");
+            }
+            if (tileField.GetTile(x - 1, y) is WallTile)
+            {
+                sprite = new SpriteSheet("horizontalDoor");
+                secondarySprite = new SpriteSheet("horizontalDoorOverlay");
+            }
         }
 
 
