@@ -106,7 +106,7 @@ namespace MeesGen
                     nodesToDo.RemoveAt(position);
                 }
             }
-
+            tiles.Add(new MeesGame.EndTile(), 0, 0);
             return tiles;
         }
 
