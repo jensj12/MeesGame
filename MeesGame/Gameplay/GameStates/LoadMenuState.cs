@@ -49,6 +49,12 @@ namespace MeesGame
             levelExplorer.OnFileSelected += OnLevelSelect;
         }
 
+        public void UpdateFileExplorers()
+        {
+            levelExplorer.generateFileList();
+            aiExplorer.generateFileList();
+        }
+
         private void centerStartButton()
         {
             startButton.RelativeLocation = new Vector2(GameEnvironment.Screen.X / 2 - startButton.Dimensions.X / 2, 700);

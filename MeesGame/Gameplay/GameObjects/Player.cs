@@ -10,7 +10,7 @@ namespace MeesGame
     {
         public delegate void PlayerActionHandler(PlayerAction action);
 
-        public event PlayerActionHandler OnPlayerAction;
+        public event PlayerActionHandler PlayerAction;
 
         public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level.Tiles,level.TimeBetweenActions,"playerdown@4", layer, id)
         {
@@ -127,7 +127,7 @@ namespace MeesGame
 
         public void PlayerActionEvent(PlayerAction action)
         {
-            OnPlayerAction?.Invoke(action);
+            PlayerAction?.Invoke(action);
         }
 
         public Inventory Inventory
@@ -167,19 +167,19 @@ namespace MeesGame
                 {
                     PerformAction(NextAction);
 
-                    if (NextAction == PlayerAction.NORTH)
+                    if (NextAction == MeesGame.PlayerAction.NORTH)
                     {
                         this.sprite = new SpriteSheet("playerup@4");
                     }
-                    else if (NextAction == PlayerAction.SOUTH)
+                    else if (NextAction == MeesGame.PlayerAction.SOUTH)
                     {
                         this.sprite = new SpriteSheet("playerdown@4");
                     }
-                    else if (NextAction == PlayerAction.EAST)
+                    else if (NextAction == MeesGame.PlayerAction.EAST)
                     {
                         this.sprite = new SpriteSheet("playerright@4");
                     }
-                    else if (NextAction == PlayerAction.WEST)
+                    else if (NextAction == MeesGame.PlayerAction.WEST)
                     {
                         this.sprite = new SpriteSheet("playerleft@4");
                     }
@@ -315,7 +315,7 @@ namespace MeesGame
         public override bool CanPerformAction(PlayerAction action)
         {
             //An editorplayer can not do special moves
-            if (action == PlayerAction.SPECIAL) return false;
+            if (action == MeesGame.PlayerAction.SPECIAL) return false;
 
             Point newLocation = CurrentTile.GetLocationAfterAction(action);
             //If the editorplayer may only not move out of the tilefield

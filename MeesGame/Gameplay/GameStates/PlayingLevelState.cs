@@ -22,7 +22,7 @@ namespace MeesGame
         public void StartLevel(PlayingLevel lvl)
         {
             level = lvl;
-            level.Player.OnPlayerAction += UpdateInventoryUI;
+            level.Player.PlayerAction += OnPlayerAction;
         }
 
         private void initOverlay()
@@ -34,13 +34,32 @@ namespace MeesGame
             overlay.AddChild(inventoryUI);
         }
 
-        private void UpdateInventoryUI(PlayerAction action)
+        private void OnPlayerAction(PlayerAction action)
+        {
+            UpdateInventoryUI();
+            CheckIfVictory();
+        }
+
+        private void UpdateInventoryUI()
         {
             inventoryUI.Reset();
 
             foreach (InventoryItem item in level.Player.Inventory.Items)
             {
                 inventoryUI.AddChild(new ImageView(Vector2.Zero, new Vector2(inventoryWidth), InventoryItem.inventoryItemAsset(item.type)));
+            }
+        }
+
+        public void CheckIfVictory()
+        {
+            if (level.Player.CurrentTile.GetType() == typeof(EndTile))
+            {
+                overlay.Reset();
+
+                overlay.AddChild(new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2(), Color.Black));
+
+                overlay.AddChild(new Button(new Vector2(600, 400), null, Strings.victory, (UIObject o) =>
+                    GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             }
         }
 

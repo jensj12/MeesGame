@@ -104,5 +104,14 @@ namespace MeesGame {
                 return ResourceManager.GetString("ok", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Victory!!!.
+        /// </summary>
+        internal static string victory {
+            get {
+                return ResourceManager.GetString("victory", resourceCulture);
+            }
+        }
     }
 }

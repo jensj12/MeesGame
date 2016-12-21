@@ -130,6 +130,9 @@
     <value>Create level</value>
   </data>
   <data name="ok" xml:space="preserve">
-    <value>ok</value>
+    <value>Load Level</value>
+  </data>
+  <data name="victory" xml:space="preserve">
+    <value>Victory!!!</value>
   </data>
 </root>

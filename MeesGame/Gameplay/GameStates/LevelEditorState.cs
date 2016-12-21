@@ -52,7 +52,7 @@ namespace MeesGame
             level.Add(newLevel);
             currentLevelIndex = 0;
 
-            level[currentLevelIndex].Player.OnPlayerAction += PlayerMoved;
+            level[currentLevelIndex].Player.PlayerAction += PlayerMoved;
 
             InitUI();
         }
