@@ -60,6 +60,7 @@ namespace MeesGame
         {
             level.HandleInput(inputHelper);
             overlay.HandleInput(inputHelper);
+            level.Tiles.UpdateGraphics();
         }
 
         public void Update(GameTime gameTime)

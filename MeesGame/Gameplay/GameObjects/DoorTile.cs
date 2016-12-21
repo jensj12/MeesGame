@@ -108,7 +108,7 @@ namespace MeesGame
         public override void UpdateGraphics()
         {
             if (isVisited)
-                sprite = new SpriteSheet("FloorTile");
+                secondarySprite = null;
         }
 
         new public static string[] GetDefaultAssetNames()
