@@ -16,7 +16,7 @@ namespace MeesGame
 
         public PlayingLevelState()
         {
-            initOverlay();
+            InitOverlay();
         }
 
         public void StartLevel(PlayingLevel lvl)
@@ -25,7 +25,7 @@ namespace MeesGame
             level.Player.PlayerAction += OnPlayerAction;
         }
 
-        private void initOverlay()
+        private void InitOverlay()
         {
             overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
 
@@ -83,8 +83,8 @@ namespace MeesGame
 
         public void Reset()
         {
-            level.Reset();
             overlay.Reset();
+            InitOverlay();
         }
     }
 }

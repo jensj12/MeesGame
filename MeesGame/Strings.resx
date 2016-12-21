@@ -126,11 +126,11 @@
   <data name="generate_random_maze" xml:space="preserve">
     <value>Generate random maze</value>
   </data>
+  <data name="loadLevel" xml:space="preserve">
+    <value>Load Level</value>
+  </data>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
-  </data>
-  <data name="ok" xml:space="preserve">
-    <value>Load Level</value>
   </data>
   <data name="victory" xml:space="preserve">
     <value>Victory!!!</value>

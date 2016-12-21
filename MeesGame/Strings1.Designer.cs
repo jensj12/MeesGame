@@ -88,20 +88,20 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Level.
+        /// </summary>
+        internal static string loadLevel {
+            get {
+                return ResourceManager.GetString("loadLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create level.
         /// </summary>
         internal static string map_editor {
             get {
                 return ResourceManager.GetString("map_editor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ok.
-        /// </summary>
-        internal static string ok {
-            get {
-                return ResourceManager.GetString("ok", resourceCulture);
             }
         }
         

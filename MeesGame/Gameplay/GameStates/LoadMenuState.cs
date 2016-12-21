@@ -32,13 +32,13 @@ namespace MeesGame
                 TileField tileField;
                 if (levelExplorer.SelectedFile != null)
                 {
-                    tileField = FileIO.Load(levelExplorer.SelectedFile);
-                    
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);                    
                 }else
                 {
                     tileField = MeesGen.MazeGenerator.GenerateMazeWithRandomStart();
                 }
                 state.StartLevel(new PlayingLevel(tileField));
+                GameEnvironment.GameStateManager.GetGameState("PlayingLevelState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
             centerStartButton();
@@ -62,14 +62,14 @@ namespace MeesGame
 
         public void OnLevelSelect(FileExplorer fileExplorer)
         {
-            startButton.UpdateText(Strings.ok, true);
+            startButton.UpdateText(Strings.loadLevel, true);
             startButton.Dimensions = Vector2.Zero;
             centerStartButton();
             foreach(Button button in levelExplorer.Children)
             {
                 if (button.Selected)
                 {
-                    startButton.UpdateText(Strings.ok, true);
+                    startButton.UpdateText(Strings.loadLevel, true);
                     startButton.Dimensions = Vector2.Zero;
                     centerStartButton();
                 }
