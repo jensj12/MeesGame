@@ -14,7 +14,7 @@ namespace MeesGame
             usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
         }
 
-        private void FillLevelWithEmptyTiles()
+        public void FillLevelWithEmptyTiles()
         {
             for (int x = 0; x < numRows; x++)
                 for (int y = 0; y < numColumns; y++)

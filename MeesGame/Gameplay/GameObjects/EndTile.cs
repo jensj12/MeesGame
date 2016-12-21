@@ -2,7 +2,7 @@
 {
     class EndTile : FloorTile
     {
-        new const string defaultAssetName = "end_door";
+        new const string defaultAssetName = "money";
 
         public EndTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.End, layer, id)
         {

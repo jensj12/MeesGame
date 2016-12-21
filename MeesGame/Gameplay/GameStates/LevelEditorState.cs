@@ -166,8 +166,7 @@ namespace MeesGame
 
         public void Reset()
         {
-            level[currentLevelIndex].Reset();
-            overlay.Reset();
+            level[currentLevelIndex].FillLevelWithEmptyTiles();
         }
 
         public void Update(GameTime gameTime)

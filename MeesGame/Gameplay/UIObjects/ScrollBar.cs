@@ -35,7 +35,7 @@ namespace MeesGame
         public void UpdateParentHeightWhenShowingAllChildren()
         {
             if (Parent.Children.Count > 0)
-                parentHeightWhenShowingAllChildren = Parent.Children[Parent.Children.Count - 1].AbsoluteRectangle.Bottom - Parent.Children[0].AbsoluteRectangle.Top;
+                parentHeightWhenShowingAllChildren = (int) (Parent.Children[Parent.Children.Count - 1].AbsoluteRectangle.Bottom - Parent.Children[0].AbsoluteRectangle.Top + Parent.Children[0].RelativeRectangle.Y);
             if (parentHeightWhenShowingAllChildren <= AbsoluteRectangle.Height)
             {
                 parentHeightWhenShowingAllChildren = Parent.AbsoluteRectangle.Height;

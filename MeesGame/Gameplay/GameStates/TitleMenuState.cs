@@ -16,6 +16,8 @@ namespace MeesGame
             }));
             UIContainer.AddChild(new Button(new Vector2(10, 120), null, Strings.map_editor, (UIObject o) =>
             {
+                //reset the gamestate to open blank;
+                GameEnvironment.GameStateManager.GetGameState("EditorState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
             UIContainer.AddChild(new Button(new Vector2(10, 230), null, Strings.exit, (UIObject o) =>
