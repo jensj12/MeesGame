@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -10,15 +10,33 @@ namespace MeesGame
         Wall,
         Door,
         Key,
+        Start,
+        End,
+        Hole,
         Unknown
     }
 
     public struct TileData
     {
-        public TileType TileType;
+        public TileType TileType { get; set; }
         public TileData(TileType tileType)
         {
             TileType = tileType;
+        }
+
+        public Tile ToTile()
+        {
+            return Tile.CreateTileFromTileType(TileType);
+        }
+
+        public static implicit operator Tile (TileData data)
+        {
+            return data.ToTile();
+        }
+
+        public static implicit operator TileData(Tile tile)
+        {
+            return tile.Data;
         }
     }
 
@@ -30,6 +48,9 @@ namespace MeesGame
         }
         public Point location = Point.Zero;
         protected bool revealed = false;
+        protected bool isVisited = false;
+        protected SpriteSheet secondarySprite;
+        protected Color secondarySpriteColor = Color.White;
 
         public Tile() : base("")
         {
@@ -69,11 +90,23 @@ namespace MeesGame
             set { location = value; }
         }
 
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(Location.X * TileField.CellWidth, Location.Y * TileField.CellHeight);
+            }
+        }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!(Parent as TileField).FogOfWar || Revealed)
             {
                 base.Draw(gameTime, spriteBatch);
+                if (secondarySprite != null && visible)
+                {
+                    secondarySprite.Draw(spriteBatch, this.GlobalPosition, origin, drawColor: secondarySpriteColor);
+                }
             }
         }
 
@@ -105,12 +138,15 @@ namespace MeesGame
                 case PlayerAction.NORTH:
                     newLocation.Y--;
                     break;
+
                 case PlayerAction.EAST:
                     newLocation.X++;
                     break;
+
                 case PlayerAction.SOUTH:
                     newLocation.Y++;
                     break;
+
                 case PlayerAction.WEST:
                     newLocation.X--;
                     break;
@@ -119,14 +155,14 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the PlayerState appropriately
+        /// Perform an action for the player. Modifies the Player appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
-        /// <param name="state">The state of the player to be modified by this function</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
+        public virtual void PerformAction(Player player, PlayerAction action)
         {
-            state.Location = GetLocationAfterAction(action);
+            if (action.IsDirection())
+                player.MoveSmoothly(action.ToDirection());
         }
 
         /// <summary>
@@ -176,7 +212,6 @@ namespace MeesGame
         /// </summary>
         public abstract void UpdateGraphicsToMatchSurroundings();
 
-
         /// <summary>
         /// Used to create Tiles solemnly on a tileType
         /// </summary>
@@ -188,16 +223,24 @@ namespace MeesGame
             {
                 case TileType.Floor:
                     return new FloorTile();
+
                 case TileType.Wall:
                     return new WallTile();
+
                 case TileType.Door:
                     return new DoorTile();
+
                 case TileType.Key:
                     return new KeyTile();
+
+                case TileType.Start:
+                    return new StartTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
         }
+
+        public virtual void EnterTile(Player player) { }
 
         public static Tile CreateTileFromTileData(TileData data)
         {
@@ -209,22 +252,43 @@ namespace MeesGame
         /// </summary>
         /// <param name="tt"></param>
         /// <returns></returns>
-        public static string GetAssetNameFromTileType(TileType tt)
+        public static string[] GetAssetNamesFromTileType(TileType tt)
         {
             switch (tt)
             {
                 case TileType.Floor:
-                    return FloorTile.defaultAssetName;
+                    return FloorTile.GetDefaultAssetNames();
+
                 case TileType.Wall:
-                    return WallTile.defaultAssetName;
+                    return WallTile.GetDefaultAssetNames();
+
+                case TileType.Door:
+                    return DoorTile.GetDefaultAssetNames();
+
+                case TileType.Key:
+                    return KeyTile.GetDefaultAssetNames();
             }
-            //If no Tile can be made of the specified tiletype, return an empty string
-            return "";
+            //If no Tile can be made of the specified tiletype, return null
+            return null;
         }
 
         public virtual InventoryItem GetItem()
         {
             return null;
+        }
+
+        public abstract void UpdateGraphics();
+
+        public bool IsVisited
+        {
+            get
+            {
+                return isVisited;
+            }
+            set
+            {
+                isVisited = value;
+            }
         }
     }
 
@@ -234,12 +298,10 @@ namespace MeesGame
 
         protected FloorTile(string assetName = defaultAssetName, TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
-
         }
 
         public FloorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Floor, layer, id)
         {
-
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -256,7 +318,7 @@ namespace MeesGame
             {
                 return false;
             }
-            //Special actions are not allowed on a floor tile, if it is surrounded by tiles that don't allow special actions. 
+            //Special actions are not allowed on a floor tile, if it is surrounded by tiles that don't allow special actions.
             else
                 return action == PlayerAction.SPECIAL;
         }
@@ -264,21 +326,29 @@ namespace MeesGame
         public override void UpdateGraphicsToMatchSurroundings()
         {
         }
+
+
+        public override void UpdateGraphics()
+        {
+        }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
+
+        }
     }
 
     class WallTile : Tile
     {
         public const string defaultAssetName = "walls@16";
 
-
         protected WallTile(string assetName = defaultAssetName, TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
         {
-
         }
 
         public WallTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Wall, layer, id)
         {
-
         }
 
         public override bool CanPlayerMoveHere(Player player)
@@ -304,6 +374,15 @@ namespace MeesGame
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+        }
+
+        public override void UpdateGraphics()
+        {
+        }
+
+        public static string[] GetDefaultAssetNames()
+        {
+            return new string[] { defaultAssetName };
         }
     }
 }

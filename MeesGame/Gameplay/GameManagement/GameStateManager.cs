@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 public class GameStateManager : IGameLoopObject
 {
     Dictionary<string, IGameLoopObject> gameStates;
     IGameLoopObject currentGameState;
+    string previousGameState;
 
     public GameStateManager()
     {
@@ -42,6 +43,12 @@ public class GameStateManager : IGameLoopObject
         {
             return currentGameState;
         }
+    }
+
+    public string PreviousGameState
+    {
+        get { return previousGameState; }
+        set { previousGameState = value; }
     }
 
     public void HandleInput(InputHelper inputHelper)

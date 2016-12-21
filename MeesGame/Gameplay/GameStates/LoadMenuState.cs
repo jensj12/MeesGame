@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System.IO;
 
 namespace MeesGame
@@ -14,27 +13,61 @@ namespace MeesGame
         private FileExplorer aiExplorer;
         private Button startButton;
 
-        public LoadMenuState(ContentManager content)
+        public LoadMenuState()
         {
             //check if the directory for levels exists and if not create it
             //for now it reads  (and creates) \MeesGame\bin\Windows\x86\Debug\Content\levels
             //the reading does work, you can check by adding a .lvl (left column) or a .ai (right column) to the \levels directory. Just make sure it isn't a txt file
-            string directory = content.RootDirectory + "/levels";
+            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
             DirectoryInfo info = Directory.CreateDirectory(directory);
 
             //we don't need to insert a valid size because we don't hide the overflow. I can't give a valid one yet because I can't get the correct dimensions of the window
-            uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2(), null);
-            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), uiContainer, "lvl", directory);
-            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), uiContainer, "ai", directory);
-            startButton = new Button(new Vector2(700, 700), Vector2.Zero, uiContainer, Strings.ok, (Button o) =>
+            uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), "lvl", directory);
+            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
+            startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
             {
+                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
+                PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
+                TileField tileField;
+                if (levelExplorer.SelectedFile != null)
+                {
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);
+                    
+                }else
+                {
+                    tileField = MeesGen.MazeGenerator.GenerateMazeWithRandomStart();
+                }
+                state.StartLevel(new PlayingLevel(tileField));
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
-
+            centerStartButton();
             uiContainer.AddChild(levelExplorer);
             uiContainer.AddChild(aiExplorer);
             uiContainer.AddChild(startButton);
 
+            levelExplorer.OnFileSelected += OnLevelSelect;
+        }
+
+        private void centerStartButton()
+        {
+            startButton.RelativeLocation = new Vector2(GameEnvironment.Screen.X / 2 - startButton.Dimensions.X / 2, 700);
+        }
+
+        public void OnLevelSelect(FileExplorer fileExplorer)
+        {
+            startButton.UpdateText(Strings.ok, true);
+            startButton.Dimensions = Vector2.Zero;
+            centerStartButton();
+            foreach(Button button in levelExplorer.Children)
+            {
+                if (button.Selected)
+                {
+                    startButton.UpdateText(Strings.ok, true);
+                    startButton.Dimensions = Vector2.Zero;
+                    centerStartButton();
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

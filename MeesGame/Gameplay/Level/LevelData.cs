@@ -6,34 +6,47 @@
         public int numColumns;
         public TileData[][] tilefield;
 
-        public TileField GetData(string filename)
+        public LevelData()
         {
-            LevelData data = FileIO.Load(filename);
-            TileField tilefield = new TileField(numRows, numColumns);
-            this.tilefield = data.tilefield;
-            for (int x = 0; x <= numColumns; x++)
-            {
-                for (int y = 0; y <= numRows; y++)
-                {
-                    tilefield.Add(Tile.CreateTileFromTileData(this.tilefield[x][y]), x, y);
-                }
-            }
-            return tilefield;
+
         }
 
-        public void SetData(TileField tilefield)
+        public LevelData(TileField tileField)
         {
-            numRows = tilefield.Rows;
-            numColumns = tilefield.Columns;
+            numRows = tileField.Rows;
+            numColumns = tileField.Columns;
             this.tilefield = new TileData[numColumns][];
             for (int x = 0; x < numColumns; x++)
             {
                 this.tilefield[x] = new TileData[numRows];
                 for (int y = 0; y < numRows; y++)
                 {
-                    this.tilefield[x][y] = tilefield.GetTile(x, y).Data;
+                    this.tilefield[x][y] = tileField.GetTile(x, y).Data;
                 }
             }
+        }
+
+        public TileField ToTileField()
+        {
+            TileField tilefield = new TileField(numRows, numColumns);
+            for (int x = 0; x < numColumns; x++)
+            {
+                for (int y = 0; y < numRows; y++)
+                {
+                    tilefield.Add(this.tilefield[x][y], x, y);
+                }
+            }
+            return tilefield;
+        }
+
+        public static implicit operator TileField(LevelData data)
+        {
+            return data.ToTileField();
+        }
+
+        public static implicit operator LevelData(TileField tileField)
+        {
+            return new LevelData(tileField);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -22,8 +22,7 @@ namespace MeesGame
             {
                 fileName = saveFileDialog.FileName;
                 Stream stream = new FileStream(fileName, FileMode.Create);
-                LevelData data = new LevelData();
-                data.SetData(tilefield);
+                LevelData data = new LevelData(tilefield);
                 XmlWriter writer = XmlWriter.Create(stream);
                 new XmlSerializer(typeof(LevelData)).Serialize(writer, data);
                 writer.Close();
@@ -36,16 +35,10 @@ namespace MeesGame
         /// </summary>
         public static LevelData Load(string filename)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "txt Files|*.txt ";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                LevelData data = new LevelData();
-                Stream stream = new FileStream(filename, FileMode.Open);
-                XmlReader reader = XmlReader.Create(stream);
-                return data = (LevelData)new XmlSerializer(typeof(LevelData)).Deserialize(reader);
-            }
-            return null;
+            LevelData data = new LevelData();
+            Stream stream = new FileStream(filename, FileMode.Open);
+            XmlReader reader = XmlReader.Create(stream);
+            return data = (LevelData)new XmlSerializer(typeof(LevelData)).Deserialize(reader);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using MeesGame;
 
 namespace MeesGen
 {
@@ -35,7 +36,7 @@ namespace MeesGen
                 start = new Point(random.Next(tiles.Columns / 2) * 2, random.Next(tiles.Rows / 2) * 2);
             }
             nodesToDo.Add(start);
-            tiles.Add(new MeesGame.FloorTile(0, "playerstart"), start.X, start.Y);
+            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
             bool randomNext = false;
             while (nodesToDo.Count != 0)
@@ -87,7 +88,10 @@ namespace MeesGen
                     {
                         if (random.Next(BIGINT) < loopChance * BIGINT)
                             if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is MeesGame.WallTile)
+                            {
                                 tiles.Add(new MeesGame.DoorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                                tiles.Add(new MeesGame.KeyTile(), next.X, next.Y);
+                            }
                         continue;
                     }
 
@@ -104,6 +108,12 @@ namespace MeesGen
             }
 
             return tiles;
+        }
+
+        public static TileField GenerateMazeWithRandomStart()
+        {
+            Point start = new Point(GameEnvironment.Random.Next(Level.DEFAULT_NUM_COLS / 2) * 2, GameEnvironment.Random.Next(Level.DEFAULT_NUM_ROWS / 2) * 2);
+            return GenerateMaze(new TileField(Level.DEFAULT_NUM_ROWS,Level.DEFAULT_NUM_COLS), start.X, start.Y);
         }
 
         private static void swap(IList<Point> list, int pos1, int pos2)

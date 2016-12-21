@@ -1,24 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
     public class Button : UIObject
     {
-        public delegate void ClickEventHandler(Button button);
-        public event ClickEventHandler OnClick;
-
         /// <summary>
         /// Text = the text the button displays
         /// Spritefont = the font used for the image
-        /// Background = the background of the button
+        /// backgroundAndOverlays = the background of the button can consist of multiple spritesheets
+        /// because it needs to be rendered like tiles. The multiple textures are rendered in the order they are stored in the list
         /// HoverBackground = the background used when the mouse hovers over it
         /// SelectedBackground = the background the button takes when it is in selected state
         /// </summary>
         protected String text;
+
         protected SpriteFont spriteFont;
-        protected SpriteSheet background;
+        protected List<SpriteSheet> background;
         protected SpriteSheet hoverBackground;
         private SpriteSheet selectedBackground;
 
@@ -27,18 +27,11 @@ namespace MeesGame
         /// </summary>
         protected bool selected = false;
 
-        public bool Selected
-        {
-            get { return selected; }
-            set { selected = value; }
-        }
-
         /// <summary>
         /// Method used to create a customizable button
         /// </summary>
         /// <param name="location"></param>
         /// <param name="dimensions"></param>
-        /// <param name="parent"></param>
         /// <param name="text">Text the button displays</param>
         /// <param name="onClick">Action when the button is pressed</param>
         /// <param name="autoDimensions">Scale the button automatically to the size of the text</param>
@@ -47,24 +40,64 @@ namespace MeesGame
         /// <param name="hoverBackgroundName">The texture that overlays the background when the mouse is hovering over the button</param>
         /// <param name="selectedBackgroundName">The texture that overlays the background when the button is selected</param>
         /// <param name="textFont">The name of the text font used for the text as in the contenmanager</param>
-        public Button(Vector2 location, Vector2 dimensions, UIContainer parent, string text, ClickEventHandler onClick, bool autoDimensions = true, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont") : base(location, dimensions, parent)
+        /// <param name="overlays">The overlays that should be rendered over the background</param>
+        public Button(Vector2? location, Vector2? dimensions, string text, OnClickEventHandler onClick = null, string backgroundName = "floorTile", string hoverBackgroundName = "keyOverlay", string selectedBackgroundName = "horizontalEnd", string textFont = "menufont", string[] overlayNames = null) : base(location, dimensions)
         {
+            background = new List<SpriteSheet>();
+
             spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(textFont);
-            background = new SpriteSheet(backgroundName);
+            if (backgroundName != null)
+                background.Add(new SpriteSheet(backgroundName));
             hoverBackground = new SpriteSheet(hoverBackgroundName);
             selectedBackground = new SpriteSheet(selectedBackgroundName);
+            if (overlayNames != null)
+                for (int i = 0; i < overlayNames.Length; i++)
+                    background.Add(new SpriteSheet(overlayNames[i]));
 
             this.text = text;
-            if (autoDimensions)
-                this.Dimensions = spriteFont.MeasureString(text);
-            else
-                this.Dimensions = dimensions;
-            OnClick += onClick;
+
+            Dimensions = dimensions ?? Vector2.Zero;
+
+            if (onClick != null)
+                Click += onClick;
+        }
+
+        /// <summary>
+        /// changes the text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="v"></param>
+        public void UpdateText(string text, bool v)
+        {
+            this.text = text;
+        }
+
+        /// <summary>
+        /// changes the dimensions of the button. if set to Vector2.Zero it measures the string
+        /// </summary>
+        public override Vector2 Dimensions
+        {
+            get
+            {
+                return base.Dimensions;
+            }
+
+            set
+            {
+                Vector2 measuredDimensions = spriteFont.MeasureString(text);
+                if (value == Vector2.Zero)
+                    base.Dimensions = measuredDimensions;
+                else
+                    base.Dimensions = value;
+            }
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            background.Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
+            base.DrawTask(gameTime, spriteBatch);
+            for (int i = 0; i < background.Count; i++)
+                background[i].Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
+
             if (selected)
                 selectedBackground.Draw(spriteBatch, OriginLocationRectangle.Location.ToVector2(), Vector2.Zero, (int)Dimensions.X, (int)Dimensions.Y);
             else if (Hovering)
@@ -78,18 +111,14 @@ namespace MeesGame
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
+            Invalidate();
             base.Update(gameTime);
-            Invalidate = true;
         }
 
-        public override void HandleInput(InputHelper inputHelper)
+        public bool Selected
         {
-            base.HandleInput(inputHelper);
-            if (Clicked)
-            {
-                OnClick?.Invoke(this);
-            }
-
+            get { return selected; }
+            set { selected = value; }
         }
     }
 }

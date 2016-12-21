@@ -6,20 +6,19 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
-    public class Player : SpriteGameObject
+    public class Player : SmoothlyMovingGameObject
     {
-        /// <summary>
-        /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
-        /// </summary>
-        private PlayerState state = new PlayerState();
+        public delegate void PlayerActionHandler(PlayerAction action);
 
-        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base("playerdown@4", layer, id)
+        public event PlayerActionHandler OnPlayerAction;
+
+        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level.Tiles,level.TimeBetweenActions,"playerdown@4", layer, id)
         {
             Score = score;
             Level = level;
-            Location = location;
-            position = Level.Tiles.GetAnchorPosition(location);
-            this.Level.Tiles.revealArea(location);
+            Teleport(location);
+            Inventory = new Inventory();
+            Level.Tiles.RevealArea(location);
         }
 
         /// <summary>
@@ -27,15 +26,7 @@ namespace MeesGame
         /// </summary>
         public int Score
         {
-            get
-            {
-                return state.Score;
-            }
-
-            private set
-            {
-                state.Score = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -70,6 +61,12 @@ namespace MeesGame
             }
         }
 
+        protected override void OnLocationChanged()
+        {
+            base.OnLocationChanged();
+            CurrentTile.EnterTile(this);
+        }
+
         /// <summary>
         /// Checks if a player can perform the specified action
         /// </summary>
@@ -92,13 +89,17 @@ namespace MeesGame
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
             LastAction = action;
 
-            CurrentTile.PerformAction(this, state, action);
+            CurrentTile.PerformAction(this, action);
             InventoryItem item = CurrentTile.GetItem();
             if (item != null)
-                state.Inventory.Items.Add(item);
+                Inventory.Items.Add(item);
 
-            this.Level.Tiles.revealArea(Location);
+            this.Level.Tiles.RevealArea(Location);
+            CurrentTile.IsVisited = true;
+
+            PlayerActionEvent(action);
         }
+        
 
         /// <summary>
         /// The Tile the player is currently on
@@ -111,24 +112,9 @@ namespace MeesGame
             }
         }
 
-        /// <summary>
-        /// The location of the player on the TileField
-        /// </summary>
-        public Point Location
-        {
-            get
-            {
-                return state.Location;
-            }
-            private set
-            {
-                state.Location = value;
-            }
-        }
-
         public bool HasKey()
         {
-            foreach (InventoryItem item in (state.Inventory.Items))
+            foreach (InventoryItem item in (Inventory.Items))
                 if (item.type == InventoryItemType.Key)
                     return true;
             return false;
@@ -138,6 +124,16 @@ namespace MeesGame
         /// List of actions that can be used to move players
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
+
+        public void PlayerActionEvent(PlayerAction action)
+        {
+            OnPlayerAction?.Invoke(action);
+        }
+
+        public Inventory Inventory
+        {
+            get;
+        }
     }
 
     /// <summary>
@@ -145,7 +141,6 @@ namespace MeesGame
     /// </summary>
     class PlayerActionNotAllowedException : Exception
     {
-
     }
 
     class TimedPlayer : Player, IPlayer
@@ -154,22 +149,22 @@ namespace MeesGame
         /// The time that the last action was performed
         /// </summary>
         protected TimeSpan lastActionTime;
+
         protected TimeSpan lastAnimationTime;
 
-        public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public TimedPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             animate(gameTime);
-            //if enough time has elapsed since the previous action, perform the selected action
-            if (gameTime.TotalGameTime - lastActionTime >= Level.TimeBetweenActions)
+            if (!IsMoving)
             {
                 if (CanPerformAction(NextAction) && NextAction != NONE)
                 {
-                    //important for smooth movement
-                    velocity = CalculateVelocityVector(NextAction);
                     PerformAction(NextAction);
 
                     if (NextAction == PlayerAction.NORTH)
@@ -194,23 +189,8 @@ namespace MeesGame
                 }
                 else
                 {
-                    //stop moving
-                    velocity = Vector2.Zero;
                     this.Sprite.SheetIndex = 0;
-
-                    //put the player exactly at the middle of the square
-                    position = Level.Tiles.GetAnchorPosition(Location);
                 }
-            }
-            base.Update(gameTime);
-        }
-
-        public void animate(GameTime gameTime)
-        {
-            if (gameTime.TotalGameTime.TotalMilliseconds - lastAnimationTime.TotalMilliseconds >= this.Level.TimeBetweenActions.TotalMilliseconds / 4)
-            {
-                this.Sprite.SheetIndex = (this.Sprite.SheetIndex + 1) % 4;
-                lastAnimationTime = gameTime.TotalGameTime;
             }
         }
 
@@ -237,14 +217,26 @@ namespace MeesGame
             {
                 case NORTH:
                     return new Vector2(0, -1);
+
                 case EAST:
                     return new Vector2(1, 0);
+
                 case SOUTH:
                     return new Vector2(0, 1);
+
                 case WEST:
                     return new Vector2(-1, 0);
             }
             return new Vector2(0, 0);
+        }
+
+        public void animate(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds - lastAnimationTime.TotalMilliseconds >= this.Level.TimeBetweenActions.TotalMilliseconds / 4)
+            {
+                this.Sprite.SheetIndex = (this.Sprite.SheetIndex + 1) % 4;
+                lastAnimationTime = gameTime.TotalGameTime;
+            }
         }
 
         /// <summary>
@@ -264,7 +256,7 @@ namespace MeesGame
         public PlayerAction NextAction
         {
             get; set;
-        }
+        } = NONE;
 
         public ITileField TileField
         {
@@ -277,7 +269,7 @@ namespace MeesGame
 
     class HumanPlayer : TimedPlayer
     {
-        public HumanPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public HumanPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
@@ -311,10 +303,9 @@ namespace MeesGame
     /// </summary>
     class EditorPlayer : HumanPlayer
     {
-        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public EditorPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
-
 
         /// <summary>
         /// An editorplayer can move everywhere on the map. He only cannot move out of the maps bounds
@@ -330,7 +321,5 @@ namespace MeesGame
             //If the editorplayer may only not move out of the tilefield
             return !Level.Tiles.OutOfTileField(newLocation.X, newLocation.Y);
         }
-
     }
-
 }
