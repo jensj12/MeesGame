@@ -111,7 +111,7 @@ namespace MeesGame
             {
                 if (children.Count > 0)
                 {
-                    int childrenHeight = (int)(Children[Children.Count - 1].AbsoluteRectangle.Bottom - Children[0].AbsoluteRectangle.Top + Children[0].RelativeLocation.Y);
+                    int childrenHeight = (int)(Children[Children.Count - 1].RelativeRectangle.Bottom - GetChildAnchorPoint(children[0]).Y);
                     if (childrenHeight > Dimensions.Y)
                         return childrenHeight;
                 }
