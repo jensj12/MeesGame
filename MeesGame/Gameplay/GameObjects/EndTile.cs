@@ -18,11 +18,9 @@
             return defaultAssetNames;
         }
 
-        //Check if the player finished the level
-        public void Finished(Player player)
+        public override void EnterCenterOfTile(Player player)
         {
-            if (player.Position == this.position)
-                GameEnvironment.GameStateManager.SwitchTo("GameOverState");
+            player.Win();
         }
     }
 }

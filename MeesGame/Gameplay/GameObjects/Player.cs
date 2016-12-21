@@ -9,7 +9,8 @@ namespace MeesGame
     public class Player : SmoothlyMovingGameObject
     {
         public delegate void PlayerActionHandler(PlayerAction action);
-
+        public delegate void PlayerWinHandler(Player player);
+        public event PlayerWinHandler PlayerWin;
         public event PlayerActionHandler PlayerAction;
 
         public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level.Tiles,level.TimeBetweenActions,"playerdown@4", layer, id)
@@ -67,6 +68,12 @@ namespace MeesGame
             CurrentTile.EnterTile(this);
         }
 
+        protected override void StopMoving()
+        {
+            base.StopMoving();
+            CurrentTile.EnterCenterOfTile(this);
+        }
+
         /// <summary>
         /// Checks if a player can perform the specified action
         /// </summary>
@@ -118,6 +125,11 @@ namespace MeesGame
                 if (item.type == InventoryItemType.Key)
                     return true;
             return false;
+        }
+
+        public void Win()
+        {
+            PlayerWin?.Invoke(this);
         }
 
         /// <summary>

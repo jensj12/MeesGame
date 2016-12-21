@@ -126,6 +126,9 @@
   <data name="generate_random_maze" xml:space="preserve">
     <value>Generate random maze</value>
   </data>
+  <data name="level_complete" xml:space="preserve">
+    <value>Level complete</value>
+  </data>
   <data name="loadLevel" xml:space="preserve">
     <value>Load Level</value>
   </data>
@@ -133,6 +136,6 @@
     <value>Create level</value>
   </data>
   <data name="victory" xml:space="preserve">
-    <value>Victory!!!</value>
+    <value>Victory!</value>
   </data>
 </root>

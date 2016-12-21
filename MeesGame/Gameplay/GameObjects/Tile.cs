@@ -94,6 +94,8 @@ namespace MeesGame
             }
         }
 
+        public virtual void EnterCenterOfTile(Player player) { }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!(Parent as TileField).FogOfWar || Revealed)

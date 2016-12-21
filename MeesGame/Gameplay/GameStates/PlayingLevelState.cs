@@ -23,6 +23,7 @@ namespace MeesGame
         {
             level = lvl;
             level.Player.PlayerAction += OnPlayerAction;
+            level.Player.PlayerWin += ShowVictoryScreen;
         }
 
         private void InitOverlay()
@@ -37,7 +38,6 @@ namespace MeesGame
         private void OnPlayerAction(PlayerAction action)
         {
             UpdateInventoryUI();
-            CheckIfVictory();
         }
 
         private void UpdateInventoryUI()
@@ -50,17 +50,10 @@ namespace MeesGame
             }
         }
 
-        public void CheckIfVictory()
+        public void ShowVictoryScreen(Player player)
         {
-            if (level.Player.CurrentTile.GetType() == typeof(EndTile))
-            {
-                overlay.Reset();
-
-                overlay.AddChild(new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2(), Color.Black));
-
-                overlay.AddChild(new Button(new Vector2(600, 400), null, Strings.victory, (UIObject o) =>
-                    GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
-            }
+            GameEnvironment.GameStateManager.SwitchTo("GameOverState");
+            
         }
 
         public void HandleInput(InputHelper inputHelper)

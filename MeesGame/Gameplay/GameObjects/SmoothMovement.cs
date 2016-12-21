@@ -184,7 +184,7 @@ namespace MeesGame
         /// <summary>
         /// Stop the object from moving
         /// </summary>
-        protected void StopMoving()
+        protected virtual void StopMoving()
         {
             velocity = Vector2.Zero;
             IsMoving = false;
