@@ -2,91 +2,14 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
-    public enum Direction
-    {
-        NORTH, EAST, SOUTH, WEST
-    }
-
-    static class DirectionExtensions
-    {
-        /// <summary>
-        /// Converts the direction into a point with absolute value 1
-        /// </summary>
-        /// <param name="direction"></param>
-        /// <returns>A point with absolute value 1 in the direction relative to the origin</returns>
-        public static Point ToPoint(this Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.NORTH:
-                    return new Point(0, -1);
-                case Direction.EAST:
-                    return new Point(1, 0);
-                case Direction.SOUTH:
-                    return new Point(0, 1);
-                case Direction.WEST:
-                    return new Point(-1, 0);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Converts the direction into a vector with absolute value 1
-        /// </summary>
-        /// <param name="direction"></param>
-        /// <returns>A vector with absolute value 1 in the direction relative to the origin</returns>
-        public static Vector2 ToVector2(this Direction direction)
-        {
-            Point p = direction.ToPoint();
-            return new Vector2(p.X, p.Y);
-        }
-
-        public static bool IsDirection(this PlayerAction action)
-        {
-            switch (action)
-            {
-                case PlayerAction.NORTH:
-                case PlayerAction.EAST:
-                case PlayerAction.SOUTH:
-                case PlayerAction.WEST:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public static Direction ToDirection(this PlayerAction action)
-        {
-            switch (action)
-            {
-                case PlayerAction.NORTH:
-                    return Direction.NORTH;
-                case PlayerAction.EAST:
-                    return Direction.EAST;
-                case PlayerAction.SOUTH:
-                    return Direction.SOUTH;
-                case PlayerAction.WEST:
-                    return Direction.WEST;
-                default:
-                    throw new PlayerActionNotAllowedException();
-            }
-        }
-    }
-
-    public interface IDiscreteField
-    {
-        Vector2 GetAnchorPosition(Point location);
-        Vector2 CellDimensions { get; }
-    }
-
     /// <summary>
     /// Game object that exists at discrete positions but animates smoothly to its new position when moving
     /// </summary>
-    public class SmoothlyMovingGameObject : SpriteGameObject
+    public class SmoothlyMovingGameObject : RotatableGameObject
     {
         /// <summary>
         /// When the current movement started
@@ -103,7 +26,7 @@ namespace MeesGame
         /// </summary>
         private IDiscreteField field;
 
-        public SmoothlyMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(assetName, layer, id, sheetIndex)
+        public SmoothlyMovingGameObject(Dictionary<Direction,SpriteSheet> sprites, IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(sprites, assetName, layer, id, sheetIndex)
         {
             this.field = field;
             TravelTime = travelTime;
@@ -161,6 +84,7 @@ namespace MeesGame
             Vector2 translation = Vector2.Multiply(field.CellDimensions, direction.ToVector2());
             velocity = Vector2.Divide(translation, (float)TravelTime.TotalSeconds);
             justStartedMoving = true;
+            FacingDirection = direction;
         }
 
         /// <summary>

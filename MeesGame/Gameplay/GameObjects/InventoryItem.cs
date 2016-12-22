@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MeesGame
+﻿namespace MeesGame
 {
     public enum InventoryItemType
     {
@@ -32,27 +30,6 @@ namespace MeesGame
         public override bool Equals(object obj)
         {
             return type.Equals((obj as InventoryItem).type);
-        }
-    }
-
-    class InventoryKey : InventoryItem
-    {
-        public InventoryKey()
-        {
-            type = InventoryItemType.Key;
-        }
-    }
-
-    public class Inventory
-    {
-        public ISet<InventoryItem> Items
-        {
-            get;
-        }
-
-        public Inventory()
-        {
-            Items = new HashSet<InventoryItem>();
         }
     }
 }
