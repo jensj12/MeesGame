@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI\IAI.cs" />
-    <Compile Include="Gameplay\Editor\MazeGenerator.cs" />
+    <Compile Include="Gameplay\MazeGenerator\MazeGenerator.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\Direction.cs" />
     <Compile Include="Gameplay\GameObjects\Players\EditorPlayer.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="Gameplay\GameStates\LevelEditorState.cs" />
     <Compile Include="Gameplay\GameStates\LoadMenuState.cs" />
     <Compile Include="Gameplay\UIObjects\Objects\FileExplorer.cs" />
-    <Compile Include="Gameplay\Level\PlayerAction.cs" />
+    <Compile Include="Gameplay\GameObjects\Players\PlayerAction.cs" />
     <Compile Include="Gameplay\UIObjects\UIContainer.cs" />
     <Compile Include="Gameplay\UIObjects\UIList.cs" />
     <Compile Include="Gameplay\UIObjects\UIObject.cs" />
