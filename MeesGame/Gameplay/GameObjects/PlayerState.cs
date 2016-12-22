@@ -23,25 +23,36 @@ namespace MeesGame
             }
             return null;
         }
+
+        public override int GetHashCode()
+        {
+            return type.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return type.Equals((obj as InventoryItem).type);
+        }
     }
 
     class InventoryKey : InventoryItem
     {
-        public InventoryKey(InventoryItemType iit = InventoryItemType.Key)
+        public InventoryKey()
         {
+            type = InventoryItemType.Key;
         }
     }
 
     public class Inventory
     {
-        public List<InventoryItem> Items
+        public ISet<InventoryItem> Items
         {
             get;
         }
 
         public Inventory()
         {
-            Items = new List<InventoryItem>();
+            Items = new HashSet<InventoryItem>();
         }
     }
 }
