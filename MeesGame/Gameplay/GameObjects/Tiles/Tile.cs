@@ -52,6 +52,10 @@ namespace MeesGame
         protected SpriteSheet secondarySprite;
         protected Color secondarySpriteColor = Color.White;
 
+        public Tile() : base("")
+        {
+        }
+
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
             Data = new TileData(tileType);
@@ -245,6 +249,11 @@ namespace MeesGame
         }
 
         public virtual void EnterTile(Player player) { }
+
+        public static Tile CreateTileFromTileData(TileData data)
+        {
+            return CreateTileFromTileType(data.TileType);
+        }
 
         /// <summary>
         /// Returns the default asset name of the specified tileType. If the specified tileType doesn't have a default assetName, returns ""
