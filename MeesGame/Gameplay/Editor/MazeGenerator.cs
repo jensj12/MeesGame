@@ -18,7 +18,7 @@ namespace MeesGen
         /// <param name="loopChance">Chance that existing routes will not block new routes, thus creating a loop</param>
         /// <param name="splitChance">Chance that the algorithm will randomly continue at another point, low values generate longer paths, but with less junctions</param>
         /// <returns>The populated TileField</returns>
-        public static MeesGame.TileField GenerateMaze(MeesGame.TileField tiles, int startX, int startY, double loopChance = 0.01, double splitChance = 0.03)
+        public static MeesGame.TileField GenerateMaze(MeesGame.TileField tiles, int startX, int startY, double loopChance = 0.05, double splitChance = 0.03)
         {
             for (int y = 0; y < tiles.Columns; y++)
             {
@@ -106,7 +106,7 @@ namespace MeesGen
                     nodesToDo.RemoveAt(position);
                 }
             }
-
+            tiles.Add(new MeesGame.EndTile(), 0, 0);
             return tiles;
         }
 
