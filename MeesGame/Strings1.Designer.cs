@@ -97,7 +97,7 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load Level.
+        ///   Looks up a localized string similar to Load level.
         /// </summary>
         internal static string loadLevel {
             get {

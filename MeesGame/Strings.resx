@@ -130,7 +130,7 @@
     <value>Level complete</value>
   </data>
   <data name="loadLevel" xml:space="preserve">
-    <value>Load Level</value>
+    <value>Load level</value>
   </data>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
