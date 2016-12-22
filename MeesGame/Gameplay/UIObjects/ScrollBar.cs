@@ -110,8 +110,10 @@ namespace MeesGame
                 return new Vector2(Parent.Dimensions.X - Dimensions.X, 0);
             }
         }
-
-        ///How big the offset it from the scrollbar to the top of the parent element is. gets and set it in the parent.
+        
+        /// <summary>
+        /// How big the offset is from the scrollbar to the top of the parent element. gets and sets it in the parent.
+        /// </summary>
         private int ScrollDistance
         {
             get
