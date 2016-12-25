@@ -1,28 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 
 namespace MeesGame
 {
-    class Level : GameObjectList, IXmlSerializable
+    public class Level : GameObjectList
     {
-        protected int numRows = 31;
-        protected int numColumns = 31;
+        public const int DEFAULT_NUM_ROWS = 31;
+        public const int DEFAULT_NUM_COLS = 31;
+        protected int numRows = DEFAULT_NUM_ROWS;
+        protected int numColumns = DEFAULT_NUM_COLS;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(300);
         protected Point start;
         protected Player player;
-        protected TileField tiles;
+        private TileField tiles;
 
         public Level(bool fogOfWar = true)
         {
-            tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
-            tiles.CellHeight = CELL_HEIGHT;
-            tiles.CellWidth = CELL_WIDTH;
+            Tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
+            
         }
 
         public Player Player
@@ -36,6 +34,12 @@ namespace MeesGame
             {
                 return tiles;
             }
+            protected set
+            {
+                tiles = value;
+                tiles.CellHeight = CELL_HEIGHT;
+                tiles.CellWidth = CELL_WIDTH;
+            }
         }
 
         public TimeSpan TimeBetweenActions
@@ -44,21 +48,6 @@ namespace MeesGame
             {
                 return timeBetweenActions;
             }
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            throw new NotImplementedException();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -77,9 +66,9 @@ namespace MeesGame
             if (screenHeight == -1) screenHeight = GameEnvironment.Screen.Y;
 
             Camera camera = new Camera(new Point(screenWidth, screenHeight), player);
-            Add(camera);
-            camera.Add(this.tiles);
+            camera.Add(this.Tiles);
             camera.Add(this.player);
+            Add(camera);
         }
     }
 }

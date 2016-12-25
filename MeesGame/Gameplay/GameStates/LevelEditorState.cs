@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MeesGame
 {
@@ -22,7 +24,7 @@ namespace MeesGame
         /// </summary>
         int selectedTileIndex;
 
-        List<Level> level;
+        List<EditorLevel> level;
 
         int currentLevelIndex;
 
@@ -34,21 +36,23 @@ namespace MeesGame
         private UIContainer overlay;
         private UIList tilesList;
         private UIList tilePropertiesList;
+        private Button saveLevel;
+        private Button loadLevel;
 
         /// <summary>
         /// State for editing levels
         /// </summary>
         public LevelEditorState()
         {
-            level = new List<Level>();
+            level = new List<EditorLevel>();
 
             //Resize and reposition the level to prevent it from overlapping with the controls
-            Level newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (tilesListWidth + tilePropertiesListWidth), GameEnvironment.Screen.Y);
+            EditorLevel newLevel = new EditorLevel(0, GameEnvironment.Screen.X - (tilesListWidth + tilePropertiesListWidth), GameEnvironment.Screen.Y);
             newLevel.Position += new Vector2(tilesListWidth, 0);
             level.Add(newLevel);
             currentLevelIndex = 0;
 
-            level[currentLevelIndex].Player.OnPlayerAction += PlayerMoved;
+            level[currentLevelIndex].Player.PlayerAction += PlayerMoved;
 
             InitUI();
         }
@@ -61,13 +65,39 @@ namespace MeesGame
             overlay = new UIContainer(null, GameEnvironment.Screen.ToVector2());
             tilesList = new UIList(new Vector2(0, 0), new Vector2(tilesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
             tilePropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth, 0), new Vector2(tilePropertiesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
+            saveLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 720), null, "save", SaveLevel);
+            loadLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 600), null, "Load", LoadLevel);
 
             overlay.AddChild(tilesList);
             overlay.AddChild(tilePropertiesList);
+            overlay.AddChild(saveLevel);
+            overlay.AddChild(loadLevel);
 
             tilesList.ChildClick += OnItemSelect;
 
             FillTilesList();
+        }
+        
+        private void SaveLevel(UIObject o)
+        {
+            FileIO.Save(level[currentLevelIndex].Tiles);
+        }
+
+        private void LoadLevel(UIObject o)
+        {
+            string fileName = null;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
+            DirectoryInfo info = Directory.CreateDirectory(directory);
+            openFileDialog.InitialDirectory = info.FullName;
+            openFileDialog.Filter = "lvl Files| *.lvl";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                fileName = openFileDialog.FileName;
+                level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(fileName));
+                level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
+            }
+
         }
 
         /// <summary>
@@ -115,6 +145,13 @@ namespace MeesGame
             //When space is pressed, we set a tile
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
             {
+                if (tileTypeList[selectedTileIndex] == TileType.Start)
+                {
+                    if (level[0].Tiles.UpdateStart())
+                    {
+                        return;
+                    }
+                }
                 Point playerLocation = level[currentLevelIndex].Player.Location;
                 level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]), playerLocation.X, playerLocation.Y);
                 //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
@@ -128,8 +165,7 @@ namespace MeesGame
 
         public void Reset()
         {
-            level[currentLevelIndex].Reset();
-            overlay.Reset();
+            level[currentLevelIndex].FillLevelWithEmptyTiles();
         }
 
         public void Update(GameTime gameTime)

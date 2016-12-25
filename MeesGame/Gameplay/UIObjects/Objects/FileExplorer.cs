@@ -6,6 +6,9 @@ namespace MeesGame
 {
     public class FileExplorer : UIList
     {
+        public delegate void FileSelectedEventHandler(FileExplorer explorer);
+        public event FileSelectedEventHandler OnFileSelected;
+
         private readonly Color DefaultBackgroundColor = Color.Wheat;
 
         /// <summary>
@@ -13,15 +16,22 @@ namespace MeesGame
         /// </summary>
         private int buttonDistance = 10;
 
-        private String fileExtension;
+        private string fileExtension;
+
+        private const int NOTHING_SELECTED = -1;
 
         ///returns the index of the selected button
-        private int selected = 0;
+        private int selected = NOTHING_SELECTED;
 
         /// <summary>
         /// directory the file explorer is displaying
         /// </summary>
-        private String currentDirectory;
+        private string currentDirectory;
+
+        /// <summary>
+        /// The files that are currently shown
+        /// </summary>
+        private string[] fileList;
 
         /// <summary>
         ///
@@ -32,7 +42,7 @@ namespace MeesGame
         /// <param name="content"></param>
         /// <param name="fileExtension">extensions the file explorer looks for, for example .lvl</param>
         /// <param name="path">path of the folder the files are located in</param>
-        public FileExplorer(Vector2? location = null, Vector2? dimensions = null, String fileExtension = "", string path = "", Color? defaultBackgroundColor = null) : base(location, dimensions, backgroundColor: defaultBackgroundColor)
+        public FileExplorer(Vector2? location = null, Vector2? dimensions = null, string fileExtension = "", string path = "", Color? defaultBackgroundColor = null) : base(location, dimensions, backgroundColor: defaultBackgroundColor)
         {
             backgroundColor = backgroundColor ?? DefaultBackgroundColor;
 
@@ -49,21 +59,14 @@ namespace MeesGame
         public void generateFileList()
         {
             children.Reset();
-            String[] tmpFileList = Directory.GetFiles(currentDirectory);
-            int index = 0;
-            for (int i = 0; i < tmpFileList.Length; i++)
+            fileList = Directory.GetFiles(currentDirectory);
+            Vector2 nextButtonLocation = Vector2.Zero;
+            for (int i = 0; i < fileList.Length; i++)
             {
-                if (tmpFileList[i].EndsWith("." + fileExtension))
+                if (fileList[i].EndsWith("." + fileExtension))
                 {
-                    if (index == 0)
-                    {
-                        AddChild(new Button(new Vector2(0, 0), null, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
-                    }
-                    else
-                    {
-                        AddChild(new Button(new Vector2(0, buttonDistance), null, tmpFileList[i].Substring(currentDirectory.Length + 1, tmpFileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
-                    }
-                    index++;
+                    AddChild(new Button(nextButtonLocation, null, fileList[i].Substring(currentDirectory.Length + 1, fileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
+                    nextButtonLocation = new Vector2(0, buttonDistance);
                 }
             }
         }
@@ -75,9 +78,21 @@ namespace MeesGame
         /// <param name="button">Button that was just pressed</param>
         public void OnItemClicked(UIObject button)
         {
-            ((Button)children[selected]).Selected = false;
-            ((Button)button).Selected = true;
-            selected = children.IndexOf(button);
+            Button btn = (Button)button;
+            if(selected != NOTHING_SELECTED)
+                ((Button)children[selected]).Selected = false;
+            btn.Selected = true;
+            selected = children.IndexOf(btn);
+            OnFileSelected?.Invoke(this);
+        }
+
+        public string SelectedFile
+        {
+            get
+            {
+                if (selected == NOTHING_SELECTED) return null;
+                return fileList[selected];
+            }
         }
     }
 }

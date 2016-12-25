@@ -4,26 +4,61 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    enum TileType
+    public enum TileType
     {
         Floor,
         Wall,
         Door,
         Key,
+        Start,
+        End,
+        Hole,
         Unknown
     }
 
-    abstract class Tile : SpriteGameObject
+    public struct TileData
     {
-        protected TileType tileType;
-        protected Point location = Point.Zero;
+        public TileType TileType { get; set; }
+        public TileData(TileType tileType)
+        {
+            TileType = tileType;
+        }
+
+        public Tile ToTile()
+        {
+            return Tile.CreateTileFromTileType(TileType);
+        }
+
+        public static implicit operator Tile (TileData data)
+        {
+            return data.ToTile();
+        }
+
+        public static implicit operator TileData(Tile tile)
+        {
+            return tile.Data;
+        }
+    }
+
+    public abstract class Tile : SpriteGameObject
+    {
+        public TileData Data
+        {
+            get; private set;
+        }
+        public Point location = Point.Zero;
         protected bool revealed = false;
+        protected bool isVisited = false;
         protected SpriteSheet secondarySprite;
         protected Color secondarySpriteColor = Color.White;
 
+        public Tile() : base("")
+        {
+        }
+
         protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
         {
-            this.tileType = tileType;
+            Data = new TileData(tileType);
         }
 
         public bool Revealed
@@ -43,7 +78,7 @@ namespace MeesGame
         /// </summary>
         public TileType TileType
         {
-            get { return tileType; }
+            get { return Data.TileType; }
         }
 
         /// <summary>
@@ -54,6 +89,16 @@ namespace MeesGame
             get { return location; }
             set { location = value; }
         }
+
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(Location.X * TileField.CellWidth, Location.Y * TileField.CellHeight);
+            }
+        }
+
+        public virtual void EnterCenterOfTile(Player player) { }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -112,14 +157,14 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the PlayerState appropriately
+        /// Perform an action for the player. Modifies the Player appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
-        /// <param name="state">The state of the player to be modified by this function</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerState state, PlayerAction action)
+        public virtual void PerformAction(Player player, PlayerAction action)
         {
-            state.Location = GetLocationAfterAction(action);
+            if (action.IsDirection())
+                player.MoveSmoothly(action.ToDirection());
         }
 
         /// <summary>
@@ -165,7 +210,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField
+        /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField.
         /// </summary>
         public abstract void UpdateGraphicsToMatchSurroundings();
 
@@ -189,9 +234,25 @@ namespace MeesGame
 
                 case TileType.Key:
                     return new KeyTile();
+
+                case TileType.Start:
+                    return new StartTile();
+
+                case TileType.End:
+                    return new EndTile();
+
+                case TileType.Hole:
+                    return new HoleTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
+        }
+
+        public virtual void EnterTile(Player player) { }
+
+        public static Tile CreateTileFromTileData(TileData data)
+        {
+            return CreateTileFromTileType(data.TileType);
         }
 
         /// <summary>
@@ -214,6 +275,16 @@ namespace MeesGame
 
                 case TileType.Key:
                     return KeyTile.GetDefaultAssetNames();
+
+                case TileType.Hole:
+                    return HoleTile.GetDefaultAssetNames();
+
+                case TileType.End:
+                    return EndTile.GetDefaultAssetNames();
+
+                case TileType.Start:
+                    return StartTile.GetDefaultAssetNames();
+
             }
             //If no Tile can be made of the specified tiletype, return null
             return null;
@@ -222,6 +293,23 @@ namespace MeesGame
         public virtual InventoryItem GetItem()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Updates the graphics of the tile according to things happining while playing.
+        /// </summary>
+        public abstract void UpdateGraphics();
+
+        public bool IsVisited
+        {
+            get
+            {
+                return isVisited;
+            }
+            set
+            {
+                isVisited = value;
+            }
         }
     }
 
@@ -260,9 +348,15 @@ namespace MeesGame
         {
         }
 
+
+        public override void UpdateGraphics()
+        {
+        }
+
         public static string[] GetDefaultAssetNames()
         {
             return new string[] { defaultAssetName };
+
         }
     }
 
@@ -301,6 +395,10 @@ namespace MeesGame
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+        }
+
+        public override void UpdateGraphics()
+        {
         }
 
         public static string[] GetDefaultAssetNames()

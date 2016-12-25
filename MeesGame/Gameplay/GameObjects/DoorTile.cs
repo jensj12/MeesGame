@@ -62,8 +62,21 @@ namespace MeesGame
 
         public override void UpdateGraphicsToMatchSurroundings()
         {
-            //TODO: choose hor/ver wall
+            int x = Location.X;
+            int y = Location.Y;
+            TileField tileField = Parent as TileField;
+            if (tileField.GetTile(x, y - 1) is WallTile)
+            {
+                sprite = new SpriteSheet("verticalDoor");
+                secondarySprite = new SpriteSheet("verticalDoorOverlay");
+            }
+            if (tileField.GetTile(x - 1, y) is WallTile)
+            {
+                sprite = new SpriteSheet("horizontalDoor");
+                secondarySprite = new SpriteSheet("horizontalDoorOverlay");
+            }
         }
+
 
         new public static string[] GetDefaultAssetNames()
         {
@@ -75,6 +88,7 @@ namespace MeesGame
         }
     }
 
+
     class KeyTile : FloorTile
     {
         new const string defaultAssetName = "keyOverlay";
@@ -82,13 +96,19 @@ namespace MeesGame
         public KeyTile(int layer = 0, string id = "") : base(FloorTile.defaultAssetName, TileType.Key, layer, id)
         {
             secondarySprite = new SpriteSheet(defaultAssetName);
-            secondarySpriteColor = Color.Aqua;
+            secondarySpriteColor = Color.Blue;
         }
 
         public override InventoryItem GetItem()
         {
             InventoryItem key = new InventoryKey();
             return key;
+        }
+
+        public override void UpdateGraphics()
+        {
+            if (isVisited)
+                secondarySprite = null;
         }
 
         new public static string[] GetDefaultAssetNames()

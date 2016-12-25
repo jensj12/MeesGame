@@ -38,6 +38,11 @@ public class InputHelper
         get { return (new Vector2(currentMouseState.X, currentMouseState.Y) - offset) / scale; }
     }
 
+    public int ScrollDelta
+    {
+        get { return (int)(currentMouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue) / 2; }
+    }
+
     public bool MouseLeftButtonPressed()
     {
         return currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;

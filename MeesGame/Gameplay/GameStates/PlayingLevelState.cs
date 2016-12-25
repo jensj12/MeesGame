@@ -11,23 +11,22 @@ namespace MeesGame
         private const int inventoryHeightOffset = 75;
 
         UIContainer overlay;
-        List<PlayingLevel> level;
-        int currentLevelIndex;
+        PlayingLevel level;
         UIList inventoryUI;
 
         public PlayingLevelState()
         {
-            level = new List<PlayingLevel>();
-            level.Add(new PlayingLevel());
-
-            initOverlay();
-
-            currentLevelIndex = 0;
-
-            level[currentLevelIndex].Player.OnPlayerAction += UpdateInventoryUI;
+            InitOverlay();
         }
 
-        private void initOverlay()
+        public void StartLevel(PlayingLevel lvl)
+        {
+            level = lvl;
+            level.Player.PlayerAction += OnPlayerAction;
+            level.Player.PlayerWin += ShowVictoryScreen;
+        }
+
+        private void InitOverlay()
         {
             overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
 
@@ -36,38 +35,50 @@ namespace MeesGame
             overlay.AddChild(inventoryUI);
         }
 
-        private void UpdateInventoryUI(PlayerAction action)
+        private void OnPlayerAction(PlayerAction action)
+        {
+            UpdateInventoryUI();
+        }
+
+        private void UpdateInventoryUI()
         {
             inventoryUI.Reset();
 
-            foreach (InventoryItem item in level[currentLevelIndex].Player.State.Inventory.Items)
+            foreach (InventoryItem item in level.Player.Inventory.Items)
             {
                 inventoryUI.AddChild(new ImageView(Vector2.Zero, new Vector2(inventoryWidth), InventoryItem.inventoryItemAsset(item.type)));
             }
         }
 
+        public void ShowVictoryScreen(Player player)
+        {
+            GameEnvironment.GameStateManager.SwitchTo("GameOverState");
+            
+        }
+
         public void HandleInput(InputHelper inputHelper)
         {
-            level[currentLevelIndex].HandleInput(inputHelper);
+            level.HandleInput(inputHelper);
             overlay.HandleInput(inputHelper);
+            level.Tiles.UpdateGraphics();
         }
 
         public void Update(GameTime gameTime)
         {
-            level[currentLevelIndex].Update(gameTime);
+            level.Update(gameTime);
             overlay.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            level[currentLevelIndex].Draw(gameTime, spriteBatch);
+            level.Draw(gameTime, spriteBatch);
             overlay.Draw(gameTime, spriteBatch);
         }
 
         public void Reset()
         {
-            level[currentLevelIndex].Reset();
             overlay.Reset();
+            InitOverlay();
         }
     }
 }

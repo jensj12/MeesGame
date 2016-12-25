@@ -4,11 +4,13 @@ namespace MeesGame
 {
     class PlayingLevel : Level
     {
-        public PlayingLevel(int levelindex = 0, bool human = true)
+        public PlayingLevel(TileField tileField, int levelindex = 0, bool human = true)
         {
-            start = new Point(GameEnvironment.Random.Next(tiles.Columns / 2) * 2, GameEnvironment.Random.Next(tiles.Rows / 2) * 2);
-            tiles = MeesGen.MazeGenerator.GenerateMaze(tiles, start.X, start.Y);
-            tiles.UpdateGraphicsToMatchSurroundings();
+            start = tileField.Start;
+            numRows = tileField.Rows;
+            numColumns = tileField.Columns;
+            Tiles = tileField;
+            Tiles.UpdateGraphicsToMatchSurroundings();
             if (human)
             {
                 UseHumanPlayer();

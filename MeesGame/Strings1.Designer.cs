@@ -88,6 +88,24 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level complete.
+        /// </summary>
+        internal static string level_complete {
+            get {
+                return ResourceManager.GetString("level_complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Level.
+        /// </summary>
+        internal static string loadLevel {
+            get {
+                return ResourceManager.GetString("loadLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create level.
         /// </summary>
         internal static string map_editor {
@@ -97,11 +115,11 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ok.
+        ///   Looks up a localized string similar to Victory!.
         /// </summary>
-        internal static string ok {
+        internal static string victory {
             get {
-                return ResourceManager.GetString("ok", resourceCulture);
+                return ResourceManager.GetString("victory", resourceCulture);
             }
         }
     }

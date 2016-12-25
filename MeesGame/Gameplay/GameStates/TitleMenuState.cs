@@ -12,10 +12,13 @@ namespace MeesGame
             UIContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
             UIContainer.AddChild(new Button(new Vector2(10, 10), null, Strings.begin, (UIObject o) =>
             {
+                ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateFileExplorers();
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
             UIContainer.AddChild(new Button(new Vector2(10, 120), null, Strings.map_editor, (UIObject o) =>
             {
+                //reset the gamestate to open blank;
+                GameEnvironment.GameStateManager.GetGameState("EditorState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("EditorState");
             }));
             UIContainer.AddChild(new Button(new Vector2(10, 230), null, Strings.exit, (UIObject o) =>

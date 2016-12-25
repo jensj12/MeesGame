@@ -1,14 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MeesGame
 {
-    enum InventoryItemType
+    public enum InventoryItemType
     {
         Key
     }
 
-    abstract class InventoryItem
+    public abstract class InventoryItem
     {
         public InventoryItemType type
         {
@@ -24,48 +23,36 @@ namespace MeesGame
             }
             return null;
         }
+
+        public override int GetHashCode()
+        {
+            return type.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return type.Equals((obj as InventoryItem).type);
+        }
     }
 
     class InventoryKey : InventoryItem
     {
-        public InventoryKey(InventoryItemType iit = InventoryItemType.Key)
+        public InventoryKey()
         {
+            type = InventoryItemType.Key;
         }
     }
 
-    class Inventory
+    public class Inventory
     {
-        public List<InventoryItem> Items
+        public ISet<InventoryItem> Items
         {
             get;
         }
 
         public Inventory()
         {
-            Items = new List<InventoryItem>();
-        }
-    }
-
-    class PlayerState
-    {
-        public Inventory Inventory
-        {
-            get;
-        }
-
-        public int Score
-        {
-            get; set;
-        }
-
-        public Point Location
-        {
-            get; set;
-        }
-
-        public PlayerState()
-        {
-            Inventory = new Inventory();
+            Items = new HashSet<InventoryItem>();
         }
     }
 }

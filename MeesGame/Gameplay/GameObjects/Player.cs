@@ -6,29 +6,20 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
-    class Player : SpriteGameObject
+    public class Player : SmoothlyMovingGameObject
     {
         public delegate void PlayerActionHandler(PlayerAction action);
+        public delegate void PlayerWinHandler(Player player);
+        public event PlayerWinHandler PlayerWin;
+        public event PlayerActionHandler PlayerAction;
 
-        public event PlayerActionHandler OnPlayerAction;
-
-        /// <summary>
-        /// Contains all information about the player that may change during the game. Given to Tiles to edit when performing actions.
-        /// </summary>
-        private PlayerState state = new PlayerState();
-
-        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base("playerdown@4", layer, id)
+        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level.Tiles,level.TimeBetweenActions,"playerdown@4", layer, id)
         {
             Score = score;
             Level = level;
-            Location = location;
-            position = Level.Tiles.GetAnchorPosition(location);
-            this.Level.Tiles.revealArea(location);
-        }
-
-        public PlayerState State
-        {
-            get { return state; }
+            Teleport(location);
+            Inventory = new Inventory();
+            Level.Tiles.RevealArea(location);
         }
 
         /// <summary>
@@ -36,15 +27,7 @@ namespace MeesGame
         /// </summary>
         public int Score
         {
-            get
-            {
-                return state.Score;
-            }
-
-            private set
-            {
-                state.Score = value;
-            }
+            get; set;
         }
 
         /// <summary>
@@ -79,6 +62,18 @@ namespace MeesGame
             }
         }
 
+        protected override void OnLocationChanged()
+        {
+            base.OnLocationChanged();
+            CurrentTile.EnterTile(this);
+        }
+
+        protected override void StopMoving()
+        {
+            base.StopMoving();
+            CurrentTile.EnterCenterOfTile(this);
+        }
+
         /// <summary>
         /// Checks if a player can perform the specified action
         /// </summary>
@@ -101,15 +96,17 @@ namespace MeesGame
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
             LastAction = action;
 
-            CurrentTile.PerformAction(this, state, action);
+            CurrentTile.PerformAction(this, action);
             InventoryItem item = CurrentTile.GetItem();
             if (item != null)
-                state.Inventory.Items.Add(item);
+                Inventory.Items.Add(item);
 
-            this.Level.Tiles.revealArea(Location);
+            this.Level.Tiles.RevealArea(Location);
+            CurrentTile.IsVisited = true;
 
             PlayerActionEvent(action);
         }
+        
 
         /// <summary>
         /// The Tile the player is currently on
@@ -122,27 +119,23 @@ namespace MeesGame
             }
         }
 
-        /// <summary>
-        /// The location of the player on the TileField
-        /// </summary>
-        public Point Location
-        {
-            get
-            {
-                return state.Location;
-            }
-            private set
-            {
-                state.Location = value;
-            }
-        }
-
         public bool HasKey()
         {
-            foreach (InventoryItem item in (state.Inventory.Items))
+            foreach (InventoryItem item in (Inventory.Items))
                 if (item.type == InventoryItemType.Key)
                     return true;
             return false;
+        }
+
+        public void Win()
+        {
+            PlayerWin?.Invoke(this);
+        }
+
+        // TODO: make the player lose instead of win
+        public void Lose()
+        {
+            PlayerWin?.Invoke(this);
         }
 
         /// <summary>
@@ -152,7 +145,12 @@ namespace MeesGame
 
         public void PlayerActionEvent(PlayerAction action)
         {
-            OnPlayerAction?.Invoke(action);
+            PlayerAction?.Invoke(action);
+        }
+
+        public Inventory Inventory
+        {
+            get;
         }
     }
 
@@ -172,35 +170,34 @@ namespace MeesGame
 
         protected TimeSpan lastAnimationTime;
 
-        public TimedPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public TimedPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             animate(gameTime);
-            //if enough time has elapsed since the previous action, perform the selected action
-            if (gameTime.TotalGameTime - lastActionTime >= Level.TimeBetweenActions)
+            if (!IsMoving)
             {
                 if (CanPerformAction(NextAction) && NextAction != NONE)
                 {
-                    //important for smooth movement
-                    velocity = CalculateVelocityVector(NextAction);
                     PerformAction(NextAction);
 
-                    if (NextAction == PlayerAction.NORTH)
+                    if (NextAction == MeesGame.PlayerAction.NORTH)
                     {
                         this.sprite = new SpriteSheet("playerup@4");
                     }
-                    else if (NextAction == PlayerAction.SOUTH)
+                    else if (NextAction == MeesGame.PlayerAction.SOUTH)
                     {
                         this.sprite = new SpriteSheet("playerdown@4");
                     }
-                    else if (NextAction == PlayerAction.EAST)
+                    else if (NextAction == MeesGame.PlayerAction.EAST)
                     {
                         this.sprite = new SpriteSheet("playerright@4");
                     }
-                    else if (NextAction == PlayerAction.WEST)
+                    else if (NextAction == MeesGame.PlayerAction.WEST)
                     {
                         this.sprite = new SpriteSheet("playerleft@4");
                     }
@@ -210,23 +207,8 @@ namespace MeesGame
                 }
                 else
                 {
-                    //stop moving
-                    velocity = Vector2.Zero;
                     this.Sprite.SheetIndex = 0;
-
-                    //put the player exactly at the middle of the square
-                    position = Level.Tiles.GetAnchorPosition(Location);
                 }
-            }
-            base.Update(gameTime);
-        }
-
-        public void animate(GameTime gameTime)
-        {
-            if (gameTime.TotalGameTime.TotalMilliseconds - lastAnimationTime.TotalMilliseconds >= this.Level.TimeBetweenActions.TotalMilliseconds / 4)
-            {
-                this.Sprite.SheetIndex = (this.Sprite.SheetIndex + 1) % 4;
-                lastAnimationTime = gameTime.TotalGameTime;
             }
         }
 
@@ -266,6 +248,15 @@ namespace MeesGame
             return new Vector2(0, 0);
         }
 
+        public void animate(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds - lastAnimationTime.TotalMilliseconds >= this.Level.TimeBetweenActions.TotalMilliseconds / 4)
+            {
+                this.Sprite.SheetIndex = (this.Sprite.SheetIndex + 1) % 4;
+                lastAnimationTime = gameTime.TotalGameTime;
+            }
+        }
+
         /// <summary>
         /// The speed of the player for animation in px per seconds
         /// </summary>
@@ -283,7 +274,7 @@ namespace MeesGame
         public PlayerAction NextAction
         {
             get; set;
-        }
+        } = NONE;
 
         public ITileField TileField
         {
@@ -296,7 +287,7 @@ namespace MeesGame
 
     class HumanPlayer : TimedPlayer
     {
-        public HumanPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public HumanPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
@@ -330,7 +321,7 @@ namespace MeesGame
     /// </summary>
     class EditorPlayer : HumanPlayer
     {
-        public EditorPlayer(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level, location, layer, id, score)
+        public EditorPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
 
@@ -342,7 +333,7 @@ namespace MeesGame
         public override bool CanPerformAction(PlayerAction action)
         {
             //An editorplayer can not do special moves
-            if (action == PlayerAction.SPECIAL) return false;
+            if (action == MeesGame.PlayerAction.SPECIAL) return false;
 
             Point newLocation = CurrentTile.GetLocationAfterAction(action);
             //If the editorplayer may only not move out of the tilefield

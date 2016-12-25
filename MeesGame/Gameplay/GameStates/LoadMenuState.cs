@@ -27,6 +27,18 @@ namespace MeesGame
             aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
             startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
             {
+                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
+                PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
+                TileField tileField;
+                if (levelExplorer.SelectedFile != null)
+                {
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);                    
+                }else
+                {
+                    tileField = MeesGen.MazeGenerator.GenerateMaze();
+                }
+                state.StartLevel(new PlayingLevel(tileField));
+                GameEnvironment.GameStateManager.GetGameState("PlayingLevelState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
             centerStartButton();
@@ -34,7 +46,13 @@ namespace MeesGame
             uiContainer.AddChild(aiExplorer);
             uiContainer.AddChild(startButton);
 
-            levelExplorer.Click += OnLevelSelect;
+            levelExplorer.OnFileSelected += OnLevelSelect;
+        }
+
+        public void UpdateFileExplorers()
+        {
+            levelExplorer.generateFileList();
+            aiExplorer.generateFileList();
         }
 
         private void centerStartButton()
@@ -42,13 +60,16 @@ namespace MeesGame
             startButton.RelativeLocation = new Vector2(GameEnvironment.Screen.X / 2 - startButton.Dimensions.X / 2, 700);
         }
 
-        public void OnLevelSelect(UIObject o)
+        public void OnLevelSelect(FileExplorer fileExplorer)
         {
+            startButton.UpdateText(Strings.loadLevel, true);
+            startButton.Dimensions = Vector2.Zero;
+            centerStartButton();
             foreach(Button button in levelExplorer.Children)
             {
                 if (button.Selected)
                 {
-                    startButton.UpdateText(Strings.ok, true);
+                    startButton.UpdateText(Strings.loadLevel, true);
                     startButton.Dimensions = Vector2.Zero;
                     centerStartButton();
                 }

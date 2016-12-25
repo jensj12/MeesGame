@@ -1,6 +1,6 @@
 ﻿namespace MeesGame
 {
-    enum PlayerAction
+    public enum PlayerAction
     {
         NORTH, EAST, SOUTH, WEST, SPECIAL, NONE
     }

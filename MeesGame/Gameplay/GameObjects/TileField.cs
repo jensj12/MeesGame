@@ -1,12 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
-    class TileField : GameObjectGrid, ITileField
+    public class TileField : GameObjectGrid, IDiscreteField, ITileField
     {
         protected bool fogOfWar;
 
-        public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "") : base(rows, columns, layer, id)
+        private static readonly Point NO_POINT = new Point(-1, -1);
+        private static readonly Point DEFAULT_START = Point.Zero;
+        private Point start = NO_POINT;
+        public Point Start
+        {
+            get
+            {
+                if (start == NO_POINT)
+                    UpdateStart();
+                return start;
+            }
+        }
+
+        public TileField() : base(0, 0, 0, "")
+        {
+        }
+
+        public TileField(int rows, int columns, bool fogOfWar = true, int layer = 0, string id = "tiles") : base(rows, columns, layer, id)
         {
             this.fogOfWar = fogOfWar;
         }
@@ -25,7 +43,7 @@ namespace MeesGame
 
         public TileType GetType(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return TileType.Wall;
             }
@@ -70,7 +88,7 @@ namespace MeesGame
         ///this bool returns if the x and y are outside the bounds of the tilefield
         public bool OutOfTileField(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= Columns || y >= Rows)
+            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
             {
                 return true;
             }
@@ -90,7 +108,15 @@ namespace MeesGame
             }
         }
 
-        public void revealArea(Point a)
+        public void UpdateGraphics()
+        {
+            foreach (Tile tile in Objects)
+            {
+                tile.UpdateGraphics(); 
+            }
+        }
+
+        public void RevealArea(Point a)
         {
             for (int i = a.X - 1; i <= a.X + 1; i++)
             {
@@ -100,5 +126,31 @@ namespace MeesGame
                 }
             }
         }
+
+        public bool UpdateStart()
+        {
+            start = DEFAULT_START;
+            for (int x = 0; x < Columns; x++)
+            {
+                for (int y = 0; y < Rows; y++)
+                {
+                    if (GetTile(x, y).TileType == TileType.Start)
+                    {
+                        start = new Point(x, y);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public Vector2 CellDimensions
+        {
+            get
+            {
+                return new Vector2(CellWidth, CellHeight);
+            }
+        }
+        
     }
 }

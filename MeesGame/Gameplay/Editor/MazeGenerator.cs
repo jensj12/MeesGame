@@ -1,41 +1,41 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using MeesGame;
 
 namespace MeesGen
 {
     class MazeGenerator
     {
         private const int BIGINT = 100000;
+        private const int DEFAULT_NUM_ROWS = Level.DEFAULT_NUM_ROWS;
+        private const int DEFAULT_NUM_COLS = Level.DEFAULT_NUM_COLS;
 
         /// <summary>
         /// Generates a random maze using backtracking. Use odd dimensions for best effect.
         /// </summary>
-        /// <param name="tiles">TileField to be populated</param>
-        /// <param name="startX">Starting position of the algorithm</param>
-        /// <param name="startY">Starting position of the algorithm</param>
+        /// <param name="numRows">The number of rows the generated maze should have</param>
+        /// <param name="numCols">The number of columns the generated maze should have</param>
         /// <param name="loopChance">Chance that existing routes will not block new routes, thus creating a loop</param>
         /// <param name="splitChance">Chance that the algorithm will randomly continue at another point, low values generate longer paths, but with less junctions</param>
         /// <returns>The populated TileField</returns>
-        public static MeesGame.TileField GenerateMaze(MeesGame.TileField tiles, int startX, int startY, double loopChance = 0.01, double splitChance = 0.03)
+        public static TileField GenerateMaze(int numRows = DEFAULT_NUM_ROWS, int numCols = DEFAULT_NUM_COLS, double loopChance = 0.05, double splitChance = 0.03)
         {
+            TileField tiles = new TileField(Level.DEFAULT_NUM_ROWS, Level.DEFAULT_NUM_COLS);
+
             for (int y = 0; y < tiles.Columns; y++)
             {
                 for (int x = 0; x < tiles.Rows; x++)
                 {
-                    tiles.Add(new MeesGame.WallTile(), x, y);
+                    tiles.Add(new WallTile(), x, y);
                 }
             }
 
             Random random = GameEnvironment.Random;
             IList<Point> nodesToDo = new List<Point>();
-            Point start = new Point(startX, startY);
-            if (startX < 0 || startY < 0 || startX >= tiles.Columns || startY >= tiles.Rows)
-            {
-                start = new Point(random.Next(tiles.Columns / 2) * 2, random.Next(tiles.Rows / 2) * 2);
-            }
+            Point start = new Point(random.Next(tiles.Columns / 2) * 2, random.Next(tiles.Rows / 2) * 2);
             nodesToDo.Add(start);
-            tiles.Add(new MeesGame.FloorTile(0, "playerstart"), start.X, start.Y);
+            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
             bool randomNext = false;
             while (nodesToDo.Count != 0)
@@ -83,17 +83,20 @@ namespace MeesGen
                     }
 
                     if (next.X < 0 || next.Y < 0 || next.X >= tiles.Columns || next.Y >= tiles.Rows) continue;
-                    if (!(tiles.GetTile(next) is MeesGame.WallTile))
+                    if (!(tiles.GetTile(next) is WallTile))
                     {
                         if (random.Next(BIGINT) < loopChance * BIGINT)
-                            if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is MeesGame.WallTile)
-                                tiles.Add(new MeesGame.DoorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                            if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is WallTile)
+                            {
+                                tiles.Add(new DoorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                                tiles.Add(new KeyTile(), next.X, next.Y);
+                            }
                         continue;
                     }
 
                     nodesToDo.Add(next);
-                    tiles.Add(new MeesGame.FloorTile(), next.X, next.Y);
-                    tiles.Add(new MeesGame.FloorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                    tiles.Add(new FloorTile(), next.X, next.Y);
+                    tiles.Add(new FloorTile(), (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                     randomNext = false;
                     break;
                 }
@@ -102,7 +105,7 @@ namespace MeesGen
                     nodesToDo.RemoveAt(position);
                 }
             }
-
+            tiles.Add(new EndTile(), 0, 0);
             return tiles;
         }
 
