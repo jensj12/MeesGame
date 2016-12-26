@@ -35,7 +35,7 @@ namespace MeesGame
             overlay.AddChild(inventoryUI);
         }
 
-        private void OnPlayerAction(PlayerAction action)
+        private void OnPlayerAction(Player player)
         {
             UpdateInventoryUI();
         }

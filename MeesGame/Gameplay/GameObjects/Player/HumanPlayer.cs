@@ -4,6 +4,9 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
+    /// <summary>
+    /// A timed player that performs actions based on input from the user.
+    /// </summary>
     class HumanPlayer : TimedPlayer
     {
         public HumanPlayer(Level level, Point location, int score = 0) : base(level, location, score)

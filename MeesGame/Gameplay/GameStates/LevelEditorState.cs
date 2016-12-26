@@ -174,7 +174,7 @@ namespace MeesGame
             overlay.Update(gameTime);
         }
 
-        public void PlayerMoved(PlayerAction action)
+        public void PlayerMoved(Player player)
         {
             tilePropertiesList.Invalidate();
         }

@@ -5,20 +5,41 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
+    /// <summary>
+    /// Smoothly moving, animated game object that is affected by the tiles on the tilefield.
+    /// Can perform PlayerActions on the TileField affecting himself. After a while he might either
+    /// win or lose.
+    /// Has a score and an inventory.
+    /// </summary>
     public class Player : AnimatedMovingGameObject
     {
-        public delegate void PlayerActionHandler(PlayerAction action);
-        public delegate void PlayerWinHandler(Player player);
-        public event PlayerWinHandler PlayerWin;
-        public event PlayerActionHandler PlayerAction;
+        public delegate void PlayerEventHandler(Player player);
 
-        public Player(Level level, Point location, int layer = 0, string id = "", int score = 0) : base(level.Tiles,level.TimeBetweenActions,"playerdown@4", layer, id)
+        /// <summary>
+        /// Event called when the player has won the game
+        /// </summary>
+        public event PlayerEventHandler PlayerWin;
+
+        /// <summary>
+        /// Event called when a player performs an action
+        /// </summary>
+        public event PlayerEventHandler PlayerAction;
+
+        /// <summary>
+        /// Creates a new player for a specific level
+        /// </summary>
+        /// <param name="level">The Level that the player should play in</param>
+        /// <param name="location">The starting location of the player</param>
+        /// <param name="score">The initial score of the player. Default is 0.</param>
+        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "playerdown@4", 0, "")
         {
             Score = score;
             Level = level;
             Teleport(location);
             Inventory = new Inventory();
             Level.Tiles.RevealArea(location);
+            LocationChanged += delegate (GameObject obj) { CurrentTile.EnterTile(this); };
+            StoppedMoving += delegate (GameObject obj) { CurrentTile.EnterCenterOfTile(this); };
         }
 
         /// <summary>
@@ -46,9 +67,9 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// A list of all possible actions the player can take at the current stage of the game
+        /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
-        public ICollection<PlayerAction> Actions
+        public ICollection<PlayerAction> PossibleActions
         {
             get
             {
@@ -59,18 +80,6 @@ namespace MeesGame
                 }
                 return actions;
             }
-        }
-
-        protected override void OnLocationChanged()
-        {
-            base.OnLocationChanged();
-            CurrentTile.EnterTile(this);
-        }
-
-        protected override void StopMoving()
-        {
-            base.StopMoving();
-            CurrentTile.EnterCenterOfTile(this);
         }
 
         /// <summary>
@@ -95,6 +104,11 @@ namespace MeesGame
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
             LastAction = action;
 
+            if (action.IsDirection())
+            {
+                sprite = new SpriteSheet(getAssetNameFromDirection(action.ToDirection()));
+            }
+
             CurrentTile.PerformAction(this, action);
             InventoryItem item = CurrentTile.GetItem();
             if (item != null)
@@ -103,9 +117,9 @@ namespace MeesGame
             this.Level.Tiles.RevealArea(Location);
             CurrentTile.IsVisited = true;
 
-            PlayerAction?.Invoke(action);
+            PlayerAction?.Invoke(this);
         }
-        
+
 
         /// <summary>
         /// The Tile the player is currently on
@@ -118,6 +132,10 @@ namespace MeesGame
             }
         }
 
+        /// <summary>
+        /// Checks if the player has a key
+        /// </summary>
+        /// <returns></returns>
         public bool HasKey()
         {
             foreach (InventoryItem item in (Inventory.Items))
@@ -126,6 +144,9 @@ namespace MeesGame
             return false;
         }
 
+        /// <summary>
+        /// Makes the player win the game
+        /// </summary>
         public void Win()
         {
             PlayerWin?.Invoke(this);
@@ -142,9 +163,28 @@ namespace MeesGame
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
 
+        /// <summary>
+        /// The inventory of the player
+        /// </summary>
         public Inventory Inventory
         {
             get;
+        }
+
+        private string getAssetNameFromDirection(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.NORTH:
+                    return "playerup@4";
+                case Direction.EAST:
+                    return "playerright@4";
+                case Direction.SOUTH:
+                    return "playerdown@4";
+                case Direction.WEST:
+                    return "playerleft@4";
+            }
+            throw new IndexOutOfRangeException();
         }
     }
 

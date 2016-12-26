@@ -4,6 +4,9 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
+    /// <summary>
+    /// A player that needs to wait for his actions to complete before he can perform the next action.
+    /// </summary>
     class TimedPlayer : Player, IPlayer
     {
         /// <summary>
@@ -25,23 +28,6 @@ namespace MeesGame
                 {
                     PerformAction(NextAction);
 
-                    if (NextAction == NORTH)
-                    {
-                        this.sprite = new SpriteSheet("playerup@4");
-                    }
-                    else if (NextAction == SOUTH)
-                    {
-                        this.sprite = new SpriteSheet("playerdown@4");
-                    }
-                    else if (NextAction == EAST)
-                    {
-                        this.sprite = new SpriteSheet("playerright@4");
-                    }
-                    else if (NextAction == WEST)
-                    {
-                        this.sprite = new SpriteSheet("playerleft@4");
-                    }
-
                     lastActionTime = gameTime.TotalGameTime;
                     NextAction = NONE;
                 }
@@ -56,6 +42,9 @@ namespace MeesGame
             get; set;
         } = NONE;
 
+        /// <summary>
+        /// The TileField that the player is on
+        /// </summary>
         public ITileField TileField
         {
             get

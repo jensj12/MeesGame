@@ -15,6 +15,16 @@ namespace MeesGame
     public class SmoothlyMovingGameObject : SpriteGameObject
     {
         /// <summary>
+        /// Event called when the location of the object changes
+        /// </summary>
+        public event GameObjectEventHandler LocationChanged;
+
+        /// <summary>
+        /// Event called when the object stops moving
+        /// </summary>
+        public event GameObjectEventHandler StoppedMoving;
+
+        /// <summary>
         /// When the current movement started
         /// </summary>
         private TimeSpan startOfCurrentMovement;
@@ -57,13 +67,8 @@ namespace MeesGame
             private set
             {
                 location = value;
-                OnLocationChanged();
+                LocationChanged?.Invoke(this);
             }
-        }
-
-        protected virtual void OnLocationChanged()
-        {
-
         }
 
         /// <summary>
@@ -110,10 +115,11 @@ namespace MeesGame
         /// <summary>
         /// Stop the object from moving
         /// </summary>
-        protected virtual void StopMoving()
+        protected void StopMoving()
         {
             velocity = Vector2.Zero;
             IsMoving = false;
+            StoppedMoving?.Invoke(this);
         }
 
         public override void Update(GameTime gameTime)

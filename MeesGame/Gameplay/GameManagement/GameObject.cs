@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class GameObject : IGameLoopObject
 {
+    public delegate void GameObjectEventHandler(GameObject obj);
     protected GameObject parent;
     protected Vector2 position, velocity;
     protected int layer;
