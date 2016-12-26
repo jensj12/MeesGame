@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI\IAI.cs" />
+    <Compile Include="Gameplay\GameObjects\AnimatedMovingGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Direction.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />

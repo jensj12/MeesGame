@@ -5,7 +5,7 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
-    public class Player : SmoothlyMovingGameObject
+    public class Player : AnimatedMovingGameObject
     {
         public delegate void PlayerActionHandler(PlayerAction action);
         public delegate void PlayerWinHandler(Player player);
@@ -103,7 +103,7 @@ namespace MeesGame
             this.Level.Tiles.RevealArea(Location);
             CurrentTile.IsVisited = true;
 
-            PlayerActionEvent(action);
+            PlayerAction?.Invoke(action);
         }
         
 
@@ -141,11 +141,6 @@ namespace MeesGame
         /// List of actions that can be used to move players
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
-
-        public void PlayerActionEvent(PlayerAction action)
-        {
-            PlayerAction?.Invoke(action);
-        }
 
         public Inventory Inventory
         {
