@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
@@ -112,7 +111,7 @@ namespace MeesGame
         {
             foreach (Tile tile in Objects)
             {
-                tile.UpdateGraphics(); 
+                tile.UpdateGraphics();
             }
         }
 
@@ -151,6 +150,5 @@ namespace MeesGame
                 return new Vector2(CellWidth, CellHeight);
             }
         }
-        
     }
 }

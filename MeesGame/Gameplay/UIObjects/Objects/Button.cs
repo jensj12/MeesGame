@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 
 namespace MeesGame
@@ -8,18 +7,29 @@ namespace MeesGame
     public class Button : UIObject
     {
         /// <summary>
-        /// Text = the text the button displays
-        /// Spritefont = the font used for the image
-        /// backgroundAndOverlays = the background of the button can consist of multiple spritesheets
-        /// because it needs to be rendered like tiles. The multiple textures are rendered in the order they are stored in the list
-        /// HoverBackground = the background used when the mouse hovers over it
-        /// SelectedBackground = the background the button takes when it is in selected state
+        /// The text the button displays
         /// </summary>
-        protected String text;
+        protected string text;
 
+        /// <summary>
+        /// The font used for the image
+        /// </summary>
         protected SpriteFont spriteFont;
+
+        /// <summary>
+        /// The background of the button can consist of multiple spritesheets because it needs to be rendered like tiles.
+        /// Multiple textures are rendered in the order they are stored in the list.
+        /// </summary>
         protected List<SpriteSheet> background;
+
+        /// <summary>
+        /// The background used when the mouse hovers over it
+        /// </summary>
         protected SpriteSheet hoverBackground;
+
+        /// <summary>
+        /// The background the button takes when it is in selected state
+        /// </summary>
         private SpriteSheet selectedBackground;
 
         /// <summary>

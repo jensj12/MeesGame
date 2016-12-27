@@ -4,7 +4,7 @@
     {
         public int numRows;
         public int numColumns;
-        public TileData[][] tilefield;
+        public TileData[][] tileData;
 
         public LevelData()
         {
@@ -15,13 +15,13 @@
         {
             numRows = tileField.Rows;
             numColumns = tileField.Columns;
-            this.tilefield = new TileData[numColumns][];
+            tileData = new TileData[numColumns][];
             for (int x = 0; x < numColumns; x++)
             {
-                this.tilefield[x] = new TileData[numRows];
+                tileData[x] = new TileData[numRows];
                 for (int y = 0; y < numRows; y++)
                 {
-                    this.tilefield[x][y] = tileField.GetTile(x, y).Data;
+                    tileData[x][y] = tileField.GetTile(x, y).Data;
                 }
             }
         }
@@ -33,7 +33,7 @@
             {
                 for (int y = 0; y < numRows; y++)
                 {
-                    tilefield.Add(this.tilefield[x][y], x, y);
+                    tilefield.Add(tileData[x][y], x, y);
                 }
             }
             return tilefield;

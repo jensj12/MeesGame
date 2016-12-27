@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace MeesGame
+﻿namespace MeesGame
 {
     class PlayingLevel : Level
     {

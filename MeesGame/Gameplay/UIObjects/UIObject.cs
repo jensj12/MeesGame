@@ -19,32 +19,23 @@ namespace MeesGame
 
         /// <summary>
         /// relativeLocation = relative location to the parent of the object
-        /// dimensions = size of the element, used for input and for rendering
-        /// objectTexture = the texture of the UI element, so that we can render it when it is updated and disposed when not needed anymore
-        /// needsToBeInvalidated = determines if the rendertarget needs updating
-        /// textureRenderer = used to render the texture for the UI
         /// </summary>
         private Vector2 relativeLocation;
 
+        /// <summary>
+        /// Size of the element, used for input and for rendering
+        /// </summary>
         private Vector2 dimensions;
+
         private UIContainer parent;
         private bool visible = true;
         protected Color? backgroundColor;
         protected RenderTarget2D objectTexture;
-
-        /// <summary>
-        /// hovering = specifies if the mouse is hovering over the UIObject
-        /// mouseDown = specified if the left mouseButton is pressed (while also hovering over this object)
-        /// clicked = specifies if the mouse just clicked on this object
-        /// </summary>
-        private bool hovering;
-
+        
+        private bool mouseHovering;
         private bool mouseDown;
-        private bool clicked;
-
-        /// <summary>
-        ///
-        /// </summary>
+        private bool mouseClicked;
+        
         /// <param name="location">location relative to the parent, equals Vector2.Zero if left empty</param>
         /// <param name="dimensions">size of the object</param>
         public UIObject(Vector2? location = null, Vector2? dimensions = null, Color? backgroundColor = null)
@@ -91,15 +82,15 @@ namespace MeesGame
         public virtual void HandleInput(InputHelper inputHelper)
         {
             if (!visible) return;
-            hovering = false;
+            mouseHovering = false;
             mouseDown = false;
-            clicked = false;
+            mouseClicked = false;
 
             if (parent == null || !parent.InputEaten)
             {
                 if (AbsoluteRectangle.Contains(inputHelper.MousePosition))
                 {
-                    hovering = true;
+                    mouseHovering = true;
                     if (parent != null && Visible)
                         parent.InputEater = this;
                     if (inputHelper.MouseLeftButtonDown())
@@ -108,7 +99,7 @@ namespace MeesGame
                     }
                     if (inputHelper.MouseLeftButtonPressed())
                     {
-                        clicked = true;
+                        mouseClicked = true;
                     }
                 }
 
@@ -183,7 +174,7 @@ namespace MeesGame
 
         public bool Hovering
         {
-            get { return hovering; }
+            get { return mouseHovering; }
         }
 
         public bool MouseDown
@@ -193,7 +184,7 @@ namespace MeesGame
 
         public bool Clicked
         {
-            get { return clicked; }
+            get { return mouseClicked; }
         }
 
         /// <summary>
@@ -295,8 +286,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// get : Returns true if the parent is visible, the objects internal boolean visible is true and the dimensions are not the 0 vector
-        /// set : Sets the internal boolean visible
+        /// When reading, it also checks if the dimensions aren't zero.
         /// </summary>
         public bool Visible
         {

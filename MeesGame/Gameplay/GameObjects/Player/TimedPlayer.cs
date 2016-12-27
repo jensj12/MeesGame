@@ -21,7 +21,7 @@ namespace MeesGame
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
+
             if (!IsMoving)
             {
                 if (CanPerformAction(NextAction) && NextAction != NONE)
@@ -33,7 +33,7 @@ namespace MeesGame
                 }
             }
         }
-        
+
         /// <summary>
         /// The action that will be performed as soon as another action can be performed
         /// </summary>

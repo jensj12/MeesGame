@@ -20,7 +20,6 @@ namespace MeesGame
         public Level(bool fogOfWar = true)
         {
             Tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
-            
         }
 
         public Player Player

@@ -19,7 +19,7 @@ namespace MeesGame
 
         protected override void Initialize()
         {
-            this.IsMouseVisible = true;
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -30,16 +30,10 @@ namespace MeesGame
             windowSize = new Point(1024, 586);
             FullScreen = false;
             gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState());
-            //uncomment to add gamestates
             gameStateManager.AddGameState("TitleMenuState", new TitleMenuState());
             gameStateManager.AddGameState("EditorState", new LevelEditorState());
             gameStateManager.AddGameState("LoadMenuState", new LoadMenuState());
             gameStateManager.AddGameState("GameOverState", new GameOverState());
-            //gameStateManager.AddGameState("helpState", new HelpState());
-            //gameStateManager.AddGameState("playingState", new PlayingState(Content));
-            //gameStateManager.AddGameState("levelMenu", new LevelMenuState());
-            //gameStateManager.AddGameState("gameOverState", new GameOverState());
-            //gameStateManager.AddGameState("levelFinishedState", new LevelFinishedState());//*/
             gameStateManager.SwitchTo("TitleMenuState");
         }
     }

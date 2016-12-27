@@ -32,8 +32,9 @@ namespace MeesGame
                 TileField tileField;
                 if (levelExplorer.SelectedFile != null)
                 {
-                    tileField = FileIO.Load(levelExplorer.SelectedFile);                    
-                }else
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);
+                }
+                else
                 {
                     tileField = MeesGen.MazeGenerator.GenerateMaze();
                 }
@@ -65,7 +66,7 @@ namespace MeesGame
             startButton.UpdateText(Strings.loadLevel, true);
             startButton.Dimensions = Vector2.Zero;
             centerStartButton();
-            foreach(Button button in levelExplorer.Children)
+            foreach (Button button in levelExplorer.Children)
             {
                 if (button.Selected)
                 {

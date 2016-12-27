@@ -25,7 +25,7 @@ namespace MeesGame
         {
             for (int x = 0; x < numRows; x++)
                 for (int y = 0; y < numColumns; y++)
-                    this.Tiles.Add(tiles.Objects[x,y], x, y);
+                    Tiles.Add(tiles.Objects[x, y], x, y);
         }
     }
 }

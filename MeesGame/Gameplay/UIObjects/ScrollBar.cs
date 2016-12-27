@@ -5,20 +5,15 @@ namespace MeesGame
 {
     public class ScrollBar : UIObject
     {
-        ///Variables defining the colors of the scrollbar
         private readonly Color scrollbarColor = Color.Aqua;
 
-        ///Stores the total length of elements in the container.
+        /// <summary>
+        /// Stores the total length of elements in the container.
+        /// </summary>
         private int parentHeightWhenShowingAllChildren;
-
-        ///The scroll distance before we began dragging. This variable is needed because otherwise we'd have
-        ///To use the less accurate change of coordinates and apply that to the current scrollbar location
-        private int scolldistanceStartDrag;
-
-        ///Rhe mouse position when we start dragging the scrollbar
+        
+        private int scollDistanceBeforeDrag;
         private Point mouseStartDragLocation = new Point();
-
-        ///whether the scrollbar is being dragged
         private bool beingDragged = false;
 
         public ScrollBar(UIList parent, int width = 20, Color? backgroundColor = null, Color? scrollbarColor = null) : base(new Vector2(parent.Dimensions.X - width, 0), new Vector2(width, parent.Dimensions.Y), backgroundColor ?? Color.Beige)
@@ -64,7 +59,7 @@ namespace MeesGame
                 if (inputHelper.MouseLeftButtonDown() && AbsoluteBarRectangle.Contains(inputHelper.MousePosition))
                 {
                     mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
-                    scolldistanceStartDrag = ScrollDistance;
+                    scollDistanceBeforeDrag = ScrollDistance;
                     beingDragged = true;
                 }
             }
@@ -75,7 +70,7 @@ namespace MeesGame
                 {
                     //The scroll distance is the scroll distance we started with plus the distance the mouse has
                     //moved since we started dragging
-                    ScrollDistance = scolldistanceStartDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
+                    ScrollDistance = scollDistanceBeforeDrag + (int)(inputHelper.MousePosition.Y - mouseStartDragLocation.Y);
                     if (AbsoluteBarRectangle.Bottom > AbsoluteRectangle.Bottom)
                         ScrollDistance = AbsoluteRectangle.Height - AbsoluteBarRectangle.Height;
                     if (ScrollDistance < 0)

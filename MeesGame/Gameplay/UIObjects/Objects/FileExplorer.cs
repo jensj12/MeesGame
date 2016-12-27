@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.IO;
 
 namespace MeesGame
@@ -79,7 +78,7 @@ namespace MeesGame
         public void OnItemClicked(UIObject button)
         {
             Button btn = (Button)button;
-            if(selected != NOTHING_SELECTED)
+            if (selected != NOTHING_SELECTED)
                 ((Button)children[selected]).Selected = false;
             btn.Selected = true;
             selected = children.IndexOf(btn);

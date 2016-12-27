@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using UIObjects;
 
 namespace MeesGame
@@ -53,7 +52,6 @@ namespace MeesGame
         public void ShowVictoryScreen(Player player)
         {
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
-            
         }
 
         public void HandleInput(InputHelper inputHelper)
