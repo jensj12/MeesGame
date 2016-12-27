@@ -21,14 +21,14 @@ namespace MeesGame
         PlayerAction LastAction { get; }
 
         /// <summary>
-        /// The TileField that is being played on
-        /// </summary>
-        ITileField TileField { get; }
-
-        /// <summary>
         /// The player's location on the TileField
         /// </summary>
         Point Location { get; }
+
+        /// <summary>
+        /// The items of the player
+        /// </summary>
+        Inventory Inventory { get; }
 
         /// <summary>
         /// The player's score
@@ -40,5 +40,11 @@ namespace MeesGame
         /// </summary>
         /// <returns></returns>
         bool HasKey();
+
+        /// <summary>
+        /// Creates of copy of the player at its current position
+        /// </summary>
+        /// <returns></returns>
+        IPlayer Clone();
     }
 }

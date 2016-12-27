@@ -11,7 +11,7 @@ namespace MeesGame
     /// win or lose.
     /// Has a score and an inventory.
     /// </summary>
-    public class Player : AnimatedMovingGameObject
+    public class Player : AnimatedMovingGameObject, IPlayer
     {
         public delegate void PlayerEventHandler(Player player);
 
@@ -185,6 +185,20 @@ namespace MeesGame
                     return "playerleft@4";
             }
             throw new IndexOutOfRangeException();
+        }
+
+        /// <summary>
+        /// Creates of copy of the player at its current position
+        /// </summary>
+        /// <returns></returns>
+        IPlayer IPlayer.Clone()
+        {
+            IPlayer newPlayer = new Player(Level, Location, Score);
+            foreach (InventoryItem item in Inventory.Items)
+            {
+                newPlayer.Inventory.Items.Add(item);
+            }
+            return newPlayer;
         }
     }
 
