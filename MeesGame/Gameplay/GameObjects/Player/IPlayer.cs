@@ -6,9 +6,9 @@ namespace MeesGame
     interface IPlayer
     {
         /// <summary>
-        /// All the PlayerActions the player can take at the currrent state of the game
+        /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
-        ICollection<PlayerAction> PossibleActions { get; }
+        IList<PlayerAction> PossibleActions { get; }
 
         /// <summary>
         /// The Tile the player is currently on

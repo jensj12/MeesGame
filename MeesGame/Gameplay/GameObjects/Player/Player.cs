@@ -69,7 +69,7 @@ namespace MeesGame
         /// <summary>
         /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
-        public ICollection<PlayerAction> PossibleActions
+        public IList<PlayerAction> PossibleActions
         {
             get
             {
