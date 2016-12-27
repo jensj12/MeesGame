@@ -12,7 +12,10 @@ namespace MeesGame
         }
         public Point location = Point.Zero;
         protected bool revealed = false;
-        protected bool isVisited = false;
+        public bool IsVisited
+        {
+            get; private set;
+        }
         protected SpriteSheet secondarySprite;
         protected Color secondarySpriteColor = Color.White;
 
@@ -212,7 +215,10 @@ namespace MeesGame
             return new FloorTile();
         }
 
-        public virtual void EnterTile(Player player) { }
+        public virtual void EnterTile(Player player)
+        {
+            IsVisited = true;
+        }
 
         public static Tile CreateTileFromTileData(TileData data)
         {
@@ -254,26 +260,9 @@ namespace MeesGame
             return null;
         }
 
-        public virtual InventoryItem GetItem()
-        {
-            return null;
-        }
-
         /// <summary>
         /// Updates the graphics of the tile according to things happining while playing.
         /// </summary>
         public abstract void UpdateGraphics();
-
-        public bool IsVisited
-        {
-            get
-            {
-                return isVisited;
-            }
-            set
-            {
-                isVisited = value;
-            }
-        }
     }
 }

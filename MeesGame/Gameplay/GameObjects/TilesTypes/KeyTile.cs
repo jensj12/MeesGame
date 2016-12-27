@@ -12,15 +12,9 @@ namespace MeesGame
             secondarySpriteColor = Color.Blue;
         }
 
-        public override InventoryItem GetItem()
-        {
-            InventoryItem key = new InventoryKey();
-            return key;
-        }
-
         public override void UpdateGraphics()
         {
-            if (isVisited)
+            if (IsVisited)
                 secondarySprite = null;
         }
 
@@ -33,6 +27,10 @@ namespace MeesGame
             return defaultAssetNames;
         }
 
-        //TODO: if key has been picked up, keytile changes into floortile.
+        public override void EnterTile(Player player)
+        {
+            player.Inventory.Items.Add(new InventoryKey());
+            base.EnterTile(player);
+        }
     }
 }

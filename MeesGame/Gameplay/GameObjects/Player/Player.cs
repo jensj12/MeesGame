@@ -110,12 +110,8 @@ namespace MeesGame
             }
 
             CurrentTile.PerformAction(this, action);
-            InventoryItem item = CurrentTile.GetItem();
-            if (item != null)
-                Inventory.Items.Add(item);
 
-            this.Level.Tiles.RevealArea(Location);
-            CurrentTile.IsVisited = true;
+            Level.Tiles.RevealArea(Location);
 
             PlayerAction?.Invoke(this);
         }
@@ -171,7 +167,7 @@ namespace MeesGame
             get;
         }
 
-        private string getAssetNameFromDirection(Direction direction)
+        private static string getAssetNameFromDirection(Direction direction)
         {
             switch (direction)
             {
