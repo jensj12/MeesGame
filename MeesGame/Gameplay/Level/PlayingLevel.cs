@@ -13,6 +13,10 @@
             {
                 UseHumanPlayer();
             }
+            else
+            {
+                UseRandomWalkingAIPlayer();
+            }
         }
 
         public void UseHumanPlayer()
@@ -28,6 +32,11 @@
         public void UseUntimedPlayer()
         {
             usePlayer(new Player(this, start));
+        }
+
+        public void UseRandomWalkingAIPlayer()
+        {
+            usePlayer(new AIPlayer(new AI.RandomWalker() ,this, start));
         }
     }
 }
