@@ -2,13 +2,11 @@
 {
     class FloorTile : Tile
     {
-        public const string defaultAssetName = "floorTile";
-
-        protected FloorTile(string assetName = defaultAssetName, TileType tt = TileType.Floor, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        protected FloorTile(TileType tt = TileType.Floor, int layer = 0, string id = "") : base(tt, layer, id)
         {
         }
 
-        public FloorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Floor, layer, id)
+        public FloorTile(int layer = 0, string id = "") : base(TileType.Floor, layer, id)
         {
         }
 
@@ -34,16 +32,9 @@
         public override void UpdateGraphicsToMatchSurroundings()
         {
         }
-
-
+        
         public override void UpdateGraphics()
         {
-        }
-
-        public static string[] GetDefaultAssetNames()
-        {
-            return new string[] { defaultAssetName };
-
         }
     }
 }

@@ -5,17 +5,14 @@ namespace MeesGame
 {
     class DoorTile : WallTile
     {
-        new public const string defaultAssetName = "horizontalDoor";
-
         protected bool doorIsOpen = false;
 
         [EditableAttribute]
         public Color Background { get; set; }
 
         //TODO: Pair a door with a specific key.
-        public DoorTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Door, layer, id)
+        public DoorTile(int layer = 0, string id = "") : base(TileType.Door, layer, id)
         {
-            secondarySprite = new SpriteSheet("horizontalDoorOverlay");
             secondarySpriteColor = Color.Blue;
         }
 
@@ -75,16 +72,6 @@ namespace MeesGame
                 sprite = new SpriteSheet("horizontalDoor");
                 secondarySprite = new SpriteSheet("horizontalDoorOverlay");
             }
-        }
-
-
-        new public static string[] GetDefaultAssetNames()
-        {
-            string[] parentDefaultAssetNames = WallTile.GetDefaultAssetNames();
-            string[] defaultAssetNames = new string[parentDefaultAssetNames.Length + 1];
-            parentDefaultAssetNames.CopyTo(defaultAssetNames, 0);
-            defaultAssetNames[parentDefaultAssetNames.Length] = defaultAssetName;
-            return defaultAssetNames;
         }
     }
 }

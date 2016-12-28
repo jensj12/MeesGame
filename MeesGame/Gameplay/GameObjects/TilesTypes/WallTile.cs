@@ -2,13 +2,11 @@
 {
     class WallTile : Tile
     {
-        public const string defaultAssetName = "walls@16";
-
-        protected WallTile(string assetName = defaultAssetName, TileType tt = TileType.Wall, int layer = 0, string id = "") : base(assetName, tt, layer, id)
+        protected WallTile(TileType tt = TileType.Wall, int layer = 0, string id = "") : base(tt, layer, id)
         {
         }
 
-        public WallTile(int layer = 0, string id = "") : base(defaultAssetName, TileType.Wall, layer, id)
+        public WallTile(int layer = 0, string id = "") : base(TileType.Wall, layer, id)
         {
         }
 
@@ -34,16 +32,11 @@
             if (tileField.GetTile(x + 1, y) is WallTile) sheetIndex += 2;
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
-            sprite = new SpriteSheet(defaultAssetName, sheetIndex);
+            sprite = new SpriteSheet(GetAssetNamesFromTileType(TileType.Wall)[0], sheetIndex);
         }
 
         public override void UpdateGraphics()
         {
-        }
-
-        public static string[] GetDefaultAssetNames()
-        {
-            return new string[] { defaultAssetName };
         }
     }
 }

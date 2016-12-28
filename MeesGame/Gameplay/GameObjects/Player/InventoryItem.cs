@@ -17,7 +17,7 @@
             switch (ii)
             {
                 case InventoryItemType.Key:
-                    return KeyTile.GetDefaultAssetNames()[1];
+                    return Tile.GetAssetNamesFromTileType(TileType.Key)[1];
             }
             return null;
         }

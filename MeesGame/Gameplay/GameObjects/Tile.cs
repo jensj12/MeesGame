@@ -23,9 +23,11 @@ namespace MeesGame
         {
         }
 
-        protected Tile(string assetName = "", TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(assetName, layer, id)
+        protected Tile(TileType tileType = TileType.Floor, int layer = 0, string id = "") : base(GetAssetNamesFromTileType(tileType)[0], layer, id)
         {
             Data = new TileData(tileType);
+            if (GetAssetNamesFromTileType(tileType).Length >= 2)
+                secondarySprite = new SpriteSheet(GetAssetNamesFromTileType(tileType)[1]);
         }
 
         public bool Revealed
@@ -235,25 +237,25 @@ namespace MeesGame
             switch (tt)
             {
                 case TileType.Floor:
-                    return FloorTile.GetDefaultAssetNames();
+                    return new string[] { "floorTile" };
 
                 case TileType.Wall:
-                    return WallTile.GetDefaultAssetNames();
+                    return new string[] { "walls@16" };
 
                 case TileType.Door:
-                    return DoorTile.GetDefaultAssetNames();
+                    return new string[] { "horizontalDoor", "horizontalDoorOverlay" };
 
                 case TileType.Key:
-                    return KeyTile.GetDefaultAssetNames();
+                    return new string[] { "floorTile", "keyOverlay" };
 
                 case TileType.Hole:
-                    return HoleTile.GetDefaultAssetNames();
+                    return new string[] { "hole" };
 
                 case TileType.End:
-                    return EndTile.GetDefaultAssetNames();
+                    return new string[] { "floorTile", "money" };
 
                 case TileType.Start:
-                    return StartTile.GetDefaultAssetNames();
+                    return new string[] { "ladder" };
 
             }
             //If no Tile can be made of the specified tiletype, return null
