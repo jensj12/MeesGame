@@ -99,11 +99,29 @@ namespace MeesGame
             return GetTile(location.X, location.Y);
         }
 
+        /// <summary>
+        /// Update the graphics of all tiles to match the surroundings.
+        /// </summary>
         public void UpdateGraphicsToMatchSurroundings()
         {
             foreach (Tile tile in Objects)
             {
                 tile.UpdateGraphicsToMatchSurroundings();
+            }
+        }
+
+        /// <summary>
+        /// Update the graphics of the tiles around the given location to match the surroundings.
+        /// </summary>
+        public void UpdateGraphicsToMatchSurroundings(Point location)
+        {
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    if (OutOfTileField(location.X + x, location.Y + y)) continue;
+                    (Objects[location.X + x, location.Y + y] as Tile).UpdateGraphicsToMatchSurroundings();
+                }
             }
         }
 
