@@ -21,7 +21,7 @@ namespace MeesGen
         /// <returns>The populated TileField</returns>
         public static TileField GenerateMaze(int numRows = DEFAULT_NUM_ROWS, int numCols = DEFAULT_NUM_COLS, double loopChance = 0.05, double splitChance = 0.03)
         {
-            TileField tiles = new TileField(Level.DEFAULT_NUM_ROWS, Level.DEFAULT_NUM_COLS);
+            TileField tiles = new TileField(numRows, numCols);
 
             for (int y = 0; y < tiles.Columns; y++)
             {
@@ -33,7 +33,7 @@ namespace MeesGen
 
             Random random = GameEnvironment.Random;
             IList<Point> nodesToDo = new List<Point>();
-            Point start = new Point(random.Next(tiles.Columns / 2) * 2, random.Next(tiles.Rows / 2) * 2);
+            Point start = new Point(random.Next(tiles.Columns / 2 - 1) * 2 + 1, random.Next(tiles.Rows / 2 - 1) * 2 + 1);
             nodesToDo.Add(start);
             tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
@@ -105,7 +105,14 @@ namespace MeesGen
                     nodesToDo.RemoveAt(position);
                 }
             }
-            tiles.Add(new EndTile(), 0, 0);
+            if(start.X + start.Y > (numRows + numCols) / 2)
+            {
+                tiles.Add(new EndTile(), 1, 1);
+            }
+            else
+            {
+                tiles.Add(new EndTile(), numRows - 2, numCols - 2);
+            }
             return tiles;
         }
 
