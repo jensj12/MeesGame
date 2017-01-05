@@ -13,7 +13,7 @@ namespace MeesGame
 
         public AnimatedMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(field, travelTime, assetName, layer, id, sheetIndex)
         {
-            timeBetweenAnimations = TimeSpan.FromSeconds(travelTime.TotalSeconds / Sprite.NumberSheetElements);
+            timeBetweenAnimations = TimeSpan.FromSeconds(travelTime.TotalSeconds / Sprite.NumberColumns);
         }
 
         public override void Update(GameTime gameTime)
@@ -23,13 +23,13 @@ namespace MeesGame
             {
                 if (gameTime.TotalGameTime - lastAnimationTime >= timeBetweenAnimations)
                 {
-                    Sprite.SheetIndex = (Sprite.SheetIndex + 1) % Sprite.NumberSheetElements;
+                    Sprite.SheetIndex = Sprite.SpriteRowIndex * Sprite.NumberColumns + ((Sprite.SheetIndex + 1) % Sprite.NumberColumns);
                     lastAnimationTime = gameTime.TotalGameTime;
                 }
             }
             else
             {
-                Sprite.SheetIndex = 0;
+                Sprite.SheetIndex = Sprite.SpriteRowIndex;
             }
         }
     }

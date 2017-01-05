@@ -31,7 +31,7 @@ namespace MeesGame
         /// <param name="level">The Level that the player should play in</param>
         /// <param name="location">The starting location of the player</param>
         /// <param name="score">The initial score of the player. Default is 0.</param>
-        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "playerdown@4", 0, "")
+        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "player@4x4", 0, "")
         {
             Score = score;
             Level = level;
@@ -106,7 +106,21 @@ namespace MeesGame
 
             if (action.IsDirection())
             {
-                sprite = new SpriteSheet(getAssetNameFromDirection(action.ToDirection()));
+                switch (action)
+                {
+                    case NORTH:
+                        Sprite.SpriteRowIndex = 0;
+                        break;
+                    case EAST:
+                        Sprite.SpriteRowIndex = 1;
+                        break;
+                    case SOUTH:
+                        Sprite.SpriteRowIndex = 2;
+                        break;
+                    case WEST:
+                        Sprite.SpriteRowIndex = 3;
+                        break;
+                }
             }
 
             CurrentTile.PerformAction(this, action);
@@ -165,22 +179,6 @@ namespace MeesGame
         public Inventory Inventory
         {
             get;
-        }
-
-        private static string getAssetNameFromDirection(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.NORTH:
-                    return "playerup@4";
-                case Direction.EAST:
-                    return "playerright@4";
-                case Direction.SOUTH:
-                    return "playerdown@4";
-                case Direction.WEST:
-                    return "playerleft@4";
-            }
-            throw new IndexOutOfRangeException();
         }
 
         /// <summary>
