@@ -199,3 +199,33 @@
 /processorParam:TextureFormat=Color
 /build:player@4x4.png
 
+#begin button_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:button_click.wav
+
+#begin footsteps.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:footsteps.wav
+
+#begin key_pickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:key_pickup.wav
+
+#begin open_door.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:open_door.wav
+
+#begin theme_song.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:theme_song.wav
+

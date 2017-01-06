@@ -119,7 +119,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Gameplay\Content\button_click.wav" />
     <Content Include="Gameplay\Content\floorTile.png" />
+    <Content Include="Gameplay\Content\footsteps.wav" />
     <Content Include="Gameplay\Content\guard.png" />
     <Content Include="Gameplay\Content\hole.png" />
     <Content Include="Gameplay\Content\horizontalDoor.png" />
@@ -127,9 +129,12 @@
     <Content Include="Gameplay\Content\horizontalEnd.png" />
     <Content Include="Gameplay\Content\ice.png" />
     <Content Include="Gameplay\Content\keyOverlay.png" />
+    <Content Include="Gameplay\Content\key_pickup.wav" />
     <Content Include="Gameplay\Content\ladder.png" />
     <Content Include="Gameplay\Content\money.png" />
+    <Content Include="Gameplay\Content\open_door.wav" />
     <Content Include="Gameplay\Content\player%404x4.png" />
+    <Content Include="Gameplay\Content\theme_song.wav" />
     <Content Include="Gameplay\Content\verticalDoor.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
