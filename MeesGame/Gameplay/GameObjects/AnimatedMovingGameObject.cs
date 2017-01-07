@@ -29,7 +29,7 @@ namespace MeesGame
             }
             else
             {
-                Sprite.SheetIndex = Sprite.SpriteRowIndex;
+                Sprite.SheetIndex = Sprite.SpriteRowIndex * Sprite.NumberColumns;
             }
         }
     }
