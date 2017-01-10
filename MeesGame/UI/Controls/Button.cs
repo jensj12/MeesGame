@@ -1,4 +1,5 @@
 ﻿using MeesGame.UI;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MeesGame
 {
@@ -24,6 +25,8 @@ namespace MeesGame
         /// </summary>
         private Textbox textBox;
 
+        private SoundEffect buttonClickSound;
+        
         /// <summary>
         /// Creates a button.
         /// </summary>
@@ -46,6 +49,11 @@ namespace MeesGame
             if (dimensions == null)
                 Dimensions = new MeasuredDimensions(textBox);
             AddComponent(textBox);
+
+            Click += (UIComponent component) =>
+            {
+                GameEnvironment.AssetManager.PlaySound(DefaultUIValues.Default.ButtonSound);
+            };
 
             if (onClick != null)
                 Click += onClick;
