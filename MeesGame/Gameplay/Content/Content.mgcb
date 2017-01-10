@@ -199,6 +199,12 @@
 /processorParam:TextureFormat=Color
 /build:player@4x4.png
 
+#begin smallfont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:smallfont.spritefont
+
 #begin button_click.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -10,7 +10,7 @@ namespace MeesGame
         Point screenSize;
 
         /// <summary>
-        /// Creates a camara object which tracks the specified object
+        /// Creates a camera object which tracks the specified object
         /// </summary>
         /// <param name="screenSize">Visible space, corners of the map should end here</param>
         /// <param name="objectToFollow">object, usually the player, the camera should track</param>

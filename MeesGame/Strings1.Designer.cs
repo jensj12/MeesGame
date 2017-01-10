@@ -70,6 +70,16 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick your
+        ///color..
+        /// </summary>
+        internal static string color_picker_text {
+            get {
+                return ResourceManager.GetString("color_picker_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string exit {

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    public class UIObjectList<Type> : GameObject, IList<Type> where Type : UIObject
+    public class ComponentList<Type> : IList<Type> where Type : UIComponent
     {
         protected List<Type> children = new List<Type>();
 
-        public UIObjectList()
+        public ComponentList()
         {
         }
 
@@ -50,10 +50,10 @@ namespace MeesGame
         public void Remove(Type obj)
         {
             children.Remove(obj);
-            obj.Parent = null;
+            obj.Dispose();
         }
 
-        public override void HandleInput(InputHelper inputHelper)
+        public void HandleInput(InputHelper inputHelper)
         {
             for (int i = children.Count - 1; i >= 0; i--)
             {
@@ -61,7 +61,7 @@ namespace MeesGame
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             foreach (Type obj in children)
             {
@@ -69,25 +69,17 @@ namespace MeesGame
             }
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)
         {
-            if (!visible)
-            {
-                return;
-            }
             List<Type>.Enumerator e = children.GetEnumerator();
             while (e.MoveNext())
             {
-                e.Current.Draw(gameTime, spriteBatch);
+                e.Current.Draw(gameTime, spriteBatch, anchorPoint);
             }
         }
 
         public void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!visible)
-            {
-                return;
-            }
             List<Type>.Enumerator e = children.GetEnumerator();
             while (e.MoveNext())
             {
@@ -95,23 +87,35 @@ namespace MeesGame
             }
         }
 
-        public override void Reset()
+        public void Reset()
         {
-            base.Reset();
             foreach (Type obj in children)
             {
                 obj.Reset();
             }
-            children = new List<Type>();
+        }
+
+        public void Dispose()
+        {
+            foreach (Type obj in children)
+            {
+                obj.Dispose();
+            }
         }
 
         public void Clear()
         {
+            Dispose();
             ((ICollection<Type>)children).Clear();
         }
 
         public bool Contains(Type item)
         {
+            foreach (Type child in children)
+            {
+                if (child.ContainsComponent(item))
+                    return true;
+            }
             return ((ICollection<Type>)children).Contains(item);
         }
 
@@ -147,6 +151,7 @@ namespace MeesGame
 
         public void RemoveAt(int index)
         {
+            children[index].Dispose();
             ((IList<Type>)children).RemoveAt(index);
         }
     }

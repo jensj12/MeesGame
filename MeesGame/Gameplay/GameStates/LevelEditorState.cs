@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Windows.Forms;
+using System.Reflection;
 
 namespace MeesGame
 {
@@ -11,7 +12,7 @@ namespace MeesGame
     {
         const int tilesListWidth = 150;
         const int tilePropertiesListWidth = 200;
-        const int buttonDistanceFromRightWall = 20;
+        const int buttonDistanceFromTop = 20;
         readonly Color listsBackgroundColor = new Color(122, 122, 122, 255);
 
         /// <summary>
@@ -30,12 +31,12 @@ namespace MeesGame
 
         /// <summary>
         /// The overlay contains all of the UI, including the tilesList and tilePropertiesList
-        /// The tilesList contains all different types of tyles
+        /// The tilesList contains all different types of tiles
         /// The tilePropertiesList contains the editable properties of the Tile on which the Editorplayer is standing
         /// </summary>
-        private UIContainer overlay;
-        private UIList tilesList;
-        private UIList tilePropertiesList;
+        private UIComponent overlay;
+        private SortedList tilesList;
+        private SortedList tilePropertiesList;
         private Button saveLevel;
         private Button loadLevel;
 
@@ -62,11 +63,11 @@ namespace MeesGame
         /// </summary>
         private void InitUI()
         {
-            overlay = new UIContainer(null, GameEnvironment.Screen.ToVector2());
-            tilesList = new UIList(new Vector2(0, 0), new Vector2(tilesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
-            tilePropertiesList = new UIList(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth, 0), new Vector2(tilePropertiesListWidth, GameEnvironment.Screen.Y), backgroundColor: listsBackgroundColor);
-            saveLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 720), null, "save", SaveLevel);
-            loadLevel = new Button(new Vector2(GameEnvironment.Screen.X - tilePropertiesListWidth + 20, 600), null, "Load", LoadLevel);
+            overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
+            tilesList = new SortedList(SimpleLocation.Zero, new SimpleDimensions(tilesListWidth, GameEnvironment.Screen.Y));
+            tilePropertiesList = new SortedList(new DirectionLocation(leftToRight: false), new InheritDimensions(false, true, tilePropertiesListWidth));
+            saveLevel = new SpriteSheetButton(new DirectionLocation(20, 720, false), null, "save", SaveLevel);
+            loadLevel = new SpriteSheetButton(new DirectionLocation(20, 600, false), null, "Load", LoadLevel);
 
             overlay.AddChild(tilesList);
             overlay.AddChild(tilePropertiesList);
@@ -78,24 +79,25 @@ namespace MeesGame
             FillTilesList();
         }
 
-        private void SaveLevel(UIObject o)
+        private void SaveLevel(UIComponent o)
         {
             FileIO.Save(level[currentLevelIndex].Tiles);
         }
 
-        private void LoadLevel(UIObject o)
+        private void LoadLevel(UIComponent o)
         {
             string fileName = null;
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
             DirectoryInfo info = Directory.CreateDirectory(directory);
             openFileDialog.InitialDirectory = info.FullName;
             openFileDialog.Filter = "lvl Files| *.lvl";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 fileName = openFileDialog.FileName;
                 level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(fileName));
                 level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
+                PlayerMoved(level[currentLevelIndex].Player);
             }
 
         }
@@ -113,11 +115,12 @@ namespace MeesGame
                 string[] tileBackgroundAndOverlays = Tile.GetAssetNamesFromTileType(tt);
                 if (tileBackgroundAndOverlays != null)
                 {
-                    Button newButton = new Button(new Vector2(buttonDistanceFromRightWall), new Vector2(tilesListWidth - buttonDistanceFromRightWall * 2 - 10), "", OnItemSelect, null, overlayNames: tileBackgroundAndOverlays);
+                    Button newButton = new SpriteSheetButton(new CenteredLocation(yOffset: buttonDistanceFromTop, horizontalCenter: true), new SimpleDimensions(tilesListWidth - buttonDistanceFromTop * 2 - 10, tilesListWidth - buttonDistanceFromTop * 2 - 10), "", OnItemSelect, tileBackgroundAndOverlays);
                     tilesList.AddChild(newButton);
                 }
             }
             ((Button)tilesList.Children[0]).Selected = true;
+            PlayerMoved(level[currentLevelIndex].Player);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -130,7 +133,7 @@ namespace MeesGame
         /// Method called when an object in the tilesList is selected. For now, only buttons can be clicked.
         /// </summary>
         /// <param name="o">The button that was clicked</param>
-        public void OnItemSelect(UIObject o)
+        public void OnItemSelect(UIComponent o)
         {
             ((Button)tilesList.Children[selectedTileIndex]).Selected = false;
             selectedTileIndex = tilesList.Children.IndexOf(o);
@@ -147,18 +150,20 @@ namespace MeesGame
             {
                 if (tileTypeList[selectedTileIndex] == TileType.Start)
                 {
-                    if (level[0].Tiles.UpdateStart())
+                    if (level[currentLevelIndex].Tiles.UpdateStart())
                     {
                         return;
                     }
                 }
                 Point playerLocation = level[currentLevelIndex].Player.Location;
-                level[0].Tiles.Add(Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]), playerLocation.X, playerLocation.Y);
+                Tile CurrentTile = Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]);
+                level[0].Tiles.Add(CurrentTile, playerLocation.X, playerLocation.Y);
                 //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
                 level[0].Tiles.UpdateGraphicsToMatchSurroundings(playerLocation);
+                CurrentTileChanged(CurrentTile);
             }
 
-            //When backspace is presset, we return to the TitleMenu
+            //When backspace is pressed, we return to the TitleMenu
             if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Back))
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState");
         }
@@ -174,14 +179,48 @@ namespace MeesGame
             overlay.Update(gameTime);
         }
 
+        /// <summary>
+        /// Called every time the players moves to update the UI accordingly.
+        /// </summary>
+        /// <param name="player">The player that moved.</param>
         public void PlayerMoved(Player player)
         {
-            tilePropertiesList.Invalidate();
+            Tile playerTile = (Tile)level[currentLevelIndex].Tiles.Objects[player.Location.X, player.Location.Y];
+            CurrentTileChanged(playerTile);
         }
-    }
 
-    public class EditableAttribute : Attribute
-    {
-        public bool isEditable;
+        /// <summary>
+        /// Called when the Tile that the editor uses should change
+        /// </summary>
+        /// <param name="playerTile">Tile the player is standing on.</param>
+        public void CurrentTileChanged(Tile playerTile)
+        {
+            tilePropertiesList.Reset();
+            PropertyInfo[] properties = playerTile.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                foreach (EditorAttribute editorAttribute in property.GetCustomAttributes(true))
+                {
+                    UIComponent editorComponent = GetEditorControl(playerTile, property);
+                    if(editorComponent != null)
+                        tilePropertiesList.AddChild(editorComponent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the UI component that can edit the property
+        /// </summary>
+        /// <param name="tile">The tile containing the property.</param>
+        /// <param name="property">The property to be changed.</param>
+        /// <returns></returns>
+        private UIComponent GetEditorControl(Tile tile, PropertyInfo property)
+        {
+            if(property.GetMethod.ReturnType == typeof(Color))
+            {
+                return new ColorPicker(SimpleLocation.Zero, property, tile);
+            }
+            return null;
+        }
     }
 }

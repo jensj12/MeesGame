@@ -6,11 +6,11 @@ namespace MeesGame
 {
     class GameOverState : IGameLoopObject
     {
-        public UIContainer overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+        public UIComponent overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
         public GameOverState()
         {
-            overlay.AddChild(new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2(), Color.Black));
-            overlay.AddChild(new Button(new Vector2(600, 400), null, Strings.victory, (UIObject o) =>
+            overlay.AddChild(new UIComponent(SimpleLocation.Zero, InheritDimensions.All));
+            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, Strings.victory, (UIComponent o) =>
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
         }
 

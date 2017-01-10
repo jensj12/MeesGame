@@ -7,9 +7,6 @@ namespace MeesGame
     {
         protected bool doorIsOpen = false;
 
-        [EditableAttribute]
-        public Color Background { get; set; }
-
         //TODO: Pair a door with a specific key.
         public DoorTile(int layer = 0, string id = "") : base(TileType.Door, layer, id)
         {

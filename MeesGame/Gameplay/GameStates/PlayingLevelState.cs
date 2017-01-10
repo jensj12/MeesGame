@@ -1,17 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using UIObjects;
 
 namespace MeesGame
 {
     class PlayingLevelState : IGameLoopObject
     {
         private const int inventoryWidth = 125;
-        private const int inventoryHeightOffset = 75;
+        private const int inventoryHeight = 600;
 
-        UIContainer overlay;
+        UIComponent overlay;
         PlayingLevel level;
-        UIList inventoryUI;
+        SortedList inventoryUI;
 
         public PlayingLevelState()
         {
@@ -27,9 +26,9 @@ namespace MeesGame
 
         private void InitOverlay()
         {
-            overlay = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
+            overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
 
-            inventoryUI = new UIList(new Vector2(0, inventoryHeightOffset), new Vector2(inventoryWidth, (int)GameEnvironment.Screen.Y - 2 * inventoryHeightOffset), backgroundColor: new Color(122, 122, 122, 122));
+            inventoryUI = new SortedList(new CenteredLocation(0, verticalCenter: true), new SimpleDimensions(inventoryWidth, inventoryHeight), backgroundColor: new Color(122, 122, 122, 122));
 
             overlay.AddChild(inventoryUI);
         }
@@ -45,7 +44,7 @@ namespace MeesGame
 
             foreach (InventoryItem item in level.Player.Inventory.Items)
             {
-                inventoryUI.AddChild(new ImageView(Vector2.Zero, new Vector2(inventoryWidth), InventoryItem.inventoryItemAsset(item.type)));
+                inventoryUI.AddChild(new UISpriteSheet(new CenteredLocation(horizontalCenter: true), new SimpleDimensions(80, 80), new string[] { "KeyOverlay" }));
             }
         }
 

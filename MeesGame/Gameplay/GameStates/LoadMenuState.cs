@@ -7,7 +7,7 @@ namespace MeesGame
     internal class LoadMenuState : IGameLoopObject
     {
         //we need to use a container, because only elements in a container can eat the input of the other elements
-        private UIContainer uiContainer;
+        private UIComponent menuContainer;
 
         private FileExplorer levelExplorer;
         private FileExplorer aiExplorer;
@@ -22,10 +22,10 @@ namespace MeesGame
             DirectoryInfo info = Directory.CreateDirectory(directory);
 
             //we don't need to insert a valid size because we don't hide the overflow. I can't give a valid one yet because I can't get the correct dimensions of the window
-            uiContainer = new UIContainer(Vector2.Zero, GameEnvironment.Screen.ToVector2());
-            levelExplorer = new FileExplorer(new Vector2(100, 100), new Vector2(500, 500), "lvl", directory);
-            aiExplorer = new FileExplorer(new Vector2(700, 100), new Vector2(500, 500), "ai", directory);
-            startButton = new Button(Vector2.Zero, null, Strings.generate_random_maze, (UIObject o) =>
+            menuContainer = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
+            levelExplorer = new FileExplorer(new SimpleLocation(100, 100), new SimpleDimensions(500, 500), "lvl", directory);
+            aiExplorer = new FileExplorer(new SimpleLocation(700, 100), new SimpleDimensions(500, 500), "ai", directory);
+            startButton = new SpriteSheetButton(new CenteredLocation(0, 700, true, false), null, Strings.generate_random_maze, (UIComponent o) =>
             {
                 GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
                 PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
@@ -42,12 +42,11 @@ namespace MeesGame
                 GameEnvironment.GameStateManager.GetGameState("PlayingLevelState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });
-            centerStartButton();
-            uiContainer.AddChild(levelExplorer);
-            uiContainer.AddChild(aiExplorer);
-            uiContainer.AddChild(startButton);
+            menuContainer.AddChild(levelExplorer);
+            menuContainer.AddChild(aiExplorer);
+            menuContainer.AddChild(startButton);
 
-            levelExplorer.OnFileSelected += OnLevelSelect;
+            levelExplorer.FileSelected += OnLevelSelect;
         }
 
         public void UpdateFileExplorers()
@@ -56,35 +55,26 @@ namespace MeesGame
             aiExplorer.generateFileList();
         }
 
-        private void centerStartButton()
-        {
-            startButton.RelativeLocation = new Vector2(GameEnvironment.Screen.X / 2 - startButton.Dimensions.X / 2, 700);
-        }
-
         public void OnLevelSelect(FileExplorer fileExplorer)
         {
-            startButton.UpdateText(Strings.loadLevel, true);
-            startButton.Dimensions = Vector2.Zero;
-            centerStartButton();
+            startButton.Text = Strings.loadLevel;
             foreach (Button button in levelExplorer.Children)
             {
                 if (button.Selected)
                 {
-                    startButton.UpdateText(Strings.loadLevel, true);
-                    startButton.Dimensions = Vector2.Zero;
-                    centerStartButton();
+                    startButton.Text = Strings.loadLevel;
                 }
             }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            uiContainer.Draw(gameTime, spriteBatch);
+            menuContainer.Draw(gameTime, spriteBatch);
         }
 
         public void HandleInput(InputHelper inputHelper)
         {
-            uiContainer.HandleInput(inputHelper);
+            menuContainer.HandleInput(inputHelper);
         }
 
         public void Reset()
@@ -93,7 +83,7 @@ namespace MeesGame
 
         public void Update(GameTime gameTime)
         {
-            uiContainer.Update(gameTime);
+            menuContainer.Update(gameTime);
         }
     }
 }

@@ -120,6 +120,10 @@
   <data name="begin" xml:space="preserve">
     <value>Begin game</value>
   </data>
+  <data name="color_picker_text" xml:space="preserve">
+    <value>Pick your
+color.</value>
+  </data>
   <data name="exit" xml:space="preserve">
     <value>Exit</value>
   </data>

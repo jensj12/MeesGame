@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MeesGame
 {
@@ -17,6 +18,7 @@ namespace MeesGame
             get; private set;
         }
         protected SpriteSheet secondarySprite;
+
         protected Color secondarySpriteColor = Color.White;
 
         public Tile() : base("")
@@ -152,6 +154,13 @@ namespace MeesGame
             }
         }
 
+        [Editor]
+        public Color SecondarySpriteColor
+        {
+            get { return secondarySpriteColor; }
+            set { secondarySpriteColor = value; }
+        }
+
         /// <summary>
         /// The four direct neighbors of this Tile
         /// </summary>
@@ -263,7 +272,7 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Updates the graphics of the tile according to things happining while playing.
+        /// Updates the graphics of the tile according to things happening while playing.
         /// </summary>
         public abstract void UpdateGraphics();
     }

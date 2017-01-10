@@ -28,7 +28,7 @@ public class SpriteSheet
         sheetColumns = 1;
         sheetRows = 1;
 
-        // see if we can extract the number of sheet elements from the assetname
+        // see if we can extract the number of sheet elements from the asset-name
         string[] assetSplit = assetname.Split('@');
         if (assetSplit.Length <= 1)
         {
@@ -49,7 +49,7 @@ public class SpriteSheet
     /// </summary>
     /// <param name="spriteBatch">spritebatch on which to draw</param>
     /// <param name="position">the position the sprite should be drawn at</param>
-    /// <param name="origin">locaiton the sprite should consider its reference point for drawing and rotating</param>
+    /// <param name="origin">location the sprite should consider its reference point for drawing and rotating</param>
     /// <param name="width">width of the image</param>
     /// <param name="height">height of the sprite</param>
     public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, int width = -1, int height = -1, Color? drawColor = null)

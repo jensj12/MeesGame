@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 public class InputHelper
 {
@@ -51,6 +52,17 @@ public class InputHelper
     public bool MouseLeftButtonDown()
     {
         return currentMouseState.LeftButton == ButtonState.Pressed;
+    }
+
+    public List<Keys> PressedKeys()
+    {
+        List<Keys> pressedKeys = new List<Keys>();
+        foreach (Keys key in currentKeyboardState.GetPressedKeys())
+        {
+            if (!previousKeyboardState.IsKeyDown(key))
+                pressedKeys.Add(key);
+        }
+        return pressedKeys;
     }
 
     public bool KeyPressed(Keys k)
