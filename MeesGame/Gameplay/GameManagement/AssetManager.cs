@@ -21,10 +21,10 @@ public class AssetManager
         return contentManager.Load<Texture2D>(assetName);
     }
 
-    public void PlaySound(string assetName)
+    public void PlaySound(string assetName, float soundLevel = 1.0f)
     {
         SoundEffect snd = contentManager.Load<SoundEffect>(assetName);
-        snd.Play();
+        snd.Play(soundLevel, 0.0f, 0.0f);
     }
 
     public void PlayMusic(string assetName, bool repeat = true)

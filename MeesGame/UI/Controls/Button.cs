@@ -24,8 +24,6 @@ namespace MeesGame
         /// The textbox inside the Button.
         /// </summary>
         private Textbox textBox;
-
-        private SoundEffect buttonClickSound;
         
         /// <summary>
         /// Creates a button.
