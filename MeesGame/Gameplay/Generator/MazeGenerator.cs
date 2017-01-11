@@ -20,42 +20,47 @@ namespace MeesGen
         /// <returns>The populated TileField</returns>
         public static TileField GenerateMaze(int numRows = DEFAULT_NUM_ROWS, int numCols = DEFAULT_NUM_COLS, int difficulty = 3)
         {
-            double loopChance = 0, loopDoorChance = 0, splitChance = 0, doorChance = 0;
+            double loopChance = 0, loopDoorChance = 0, loopHoleChance = 0, splitChance = 0, doorChance = 0;
             int numKeys = 0;
             difficulty = MathHelper.Clamp(difficulty, 1, 5);
             switch (difficulty)
             {
                 case 1:
-                    loopChance = 0.05;
-                    loopDoorChance = 0.5;
+                    loopChance = 0.06;
+                    loopDoorChance = 0.45;
+                    loopHoleChance = 0.15;
                     splitChance = 0.03;
                     doorChance = 0;
                     numKeys = 3;
                     break;
                 case 2:
                     loopChance = 0.04;
-                    loopDoorChance = 0.8;
+                    loopDoorChance = 0.7;
+                    loopHoleChance = 0.1;
                     splitChance = 0.04;
                     doorChance = 0.01;
                     numKeys = 2;
                     break;
                 case 3:
                     loopChance = 0.03;
-                    loopDoorChance = 0.9;
+                    loopDoorChance = 0.8;
+                    loopHoleChance = 0.1;
                     splitChance = 0.03;
                     doorChance = 0.03;
                     numKeys = 2;
                     break;
                 case 4:
                     loopChance = 0.02;
-                    loopDoorChance = 0.95;
+                    loopDoorChance = 0.8;
+                    loopHoleChance = 0.15;
                     splitChance = 0.03;
                     doorChance = 0.05;
                     numKeys = 1;
                     break;
                 case 5:
-                    loopChance = 0.005;
-                    loopDoorChance = 1;
+                    loopChance = 0.01;
+                    loopDoorChance = 0.3;
+                    loopHoleChance = 0.7;
                     splitChance = 0.02;
                     doorChance = 0.08;
                     numKeys = 1;
@@ -146,10 +151,9 @@ namespace MeesGen
                             if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is WallTile)
                             {
                                 tileToAdd = new FloorTile();
-                                if (random.Next(BIGINT) < loopDoorChance * BIGINT)
-                                {
-                                    tileToAdd = new DoorTile();
-                                }
+                                int randNumb = random.Next(BIGINT);
+                                if (randNumb < (loopDoorChance + loopHoleChance) * BIGINT) tileToAdd = new DoorTile();
+                                if (randNumb < loopHoleChance * BIGINT) tileToAdd = new HoleTile();
                                 tiles.Add(tileToAdd, (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                             }
                         }
