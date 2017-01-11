@@ -33,7 +33,7 @@ namespace MeesGame
             Parent = parent;
             this.scrollbarColor = scrollbarColor ?? Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ScrollbarColor);
 
-            AddComponent(new Background(Utility.SolidWhiteTexture, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ScrollbarBackgroundColor)));
+            AddConstantComponent(new Background(Utility.SolidWhiteTexture, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ScrollbarBackgroundColor)));
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)

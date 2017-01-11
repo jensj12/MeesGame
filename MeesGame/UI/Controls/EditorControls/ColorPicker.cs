@@ -53,7 +53,7 @@ namespace MeesGame
 
             Dimensions = new SimpleDimensions(width, height);
 
-            AddComponent(new Textbox(SimpleLocation.Zero, null, Strings.color_picker_text, DefaultUIValues.Default.DefaultEditorControlSpriteFont));
+            AddConstantComponent(new Textbox(SimpleLocation.Zero, null, Strings.color_picker_text, DefaultUIValues.Default.DefaultEditorControlSpriteFont));
 
             for(int i = 0; i < 8; i++)
             {
@@ -66,7 +66,7 @@ namespace MeesGame
                     colors[i].Selected = true;
                 }
                 colors[i].Click += OnColorClick;
-                AddComponent(colors[i]);
+                AddConstantComponent(colors[i]);
             }
         }
 

@@ -27,5 +27,10 @@
             this.horizontalCenter = horizontalCenter;
             this.verticalCenter = verticalCenter;
         }
+
+        public static CenteredLocation All
+        {
+            get { return new CenteredLocation(horizontalCenter: true, verticalCenter: true); }
+        }
     }
 }

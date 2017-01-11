@@ -46,7 +46,7 @@ namespace MeesGame
 
             if (dimensions == null)
                 Dimensions = new MeasuredDimensions(textBox);
-            AddComponent(textBox);
+            AddConstantComponent(textBox);
 
             Click += (UIComponent component) =>
             {
@@ -62,8 +62,8 @@ namespace MeesGame
             selectedOverlay.AddSpritesheets(selectedOverlayNames ?? new string[] { DefaultUIValues.Default.DefaultButtonSelectedBackground });
             selectedOverlay.Visible = false;
 
-            AddComponent(hoveringOverlay);
-            AddComponent(selectedOverlay);
+            AddConstantComponent(hoveringOverlay);
+            AddConstantComponent(selectedOverlay);
         }
 
         /// <summary>
