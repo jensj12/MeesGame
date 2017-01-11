@@ -4,10 +4,12 @@
     {
         protected WallTile(TileType tt = TileType.Wall, int layer = 0, string id = "") : base(tt, layer, id)
         {
+            obstructsVision = true;
         }
 
         public WallTile(int layer = 0, string id = "") : base(TileType.Wall, layer, id)
         {
+            obstructsVision = true;
         }
 
         public override bool CanPlayerMoveHere(Player player)

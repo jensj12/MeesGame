@@ -11,12 +11,17 @@ namespace MeesGame
         {
             get; private set;
         }
+
         public Point location = Point.Zero;
-        protected bool revealed = false;
+        protected int revealed = 0;
+        protected bool obstructsVision;
+
         public bool IsVisited
         {
             get; private set;
         }
+
+        protected SpriteSheet fog = new SpriteSheet("fog@16");
         protected SpriteSheet secondarySprite;
 
         protected Color secondarySpriteColor = Color.White;
@@ -32,15 +37,19 @@ namespace MeesGame
                 secondarySprite = new SpriteSheet(GetAssetNamesFromTileType(tileType)[1]);
         }
 
-        public bool Revealed
+        public int Revealed
+        {
+            set
+            {
+                revealed |= value;
+            }
+        }
+
+        public bool ObstructsVision
         {
             get
             {
-                return revealed;
-            }
-            set
-            {
-                revealed = value;
+                return obstructsVision;
             }
         }
 
@@ -73,13 +82,17 @@ namespace MeesGame
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!(Parent as TileField).FogOfWar || Revealed)
+            base.Draw(gameTime, spriteBatch);
+
+            if (secondarySprite != null && visible)
             {
-                base.Draw(gameTime, spriteBatch);
-                if (secondarySprite != null && visible)
-                {
-                    secondarySprite.Draw(spriteBatch, this.GlobalPosition, origin, drawColor: secondarySpriteColor);
-                }
+                secondarySprite.Draw(spriteBatch, this.GlobalPosition, origin, drawColor: secondarySpriteColor);
+            }
+
+            if ((parent as TileField).FogOfWar)
+            {
+                fog.SheetIndex = revealed;
+                fog.Draw(spriteBatch, this.GlobalPosition, origin);
             }
         }
 

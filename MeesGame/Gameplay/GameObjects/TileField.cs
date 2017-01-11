@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace MeesGame
 {
@@ -135,11 +136,68 @@ namespace MeesGame
 
         public void RevealArea(Point a)
         {
+            revealAroundTile(a);
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                revealPath(a, direction.ToPoint(), 3, direction);
+            }
+        }
+
+        public void revealAroundTile(Point a)
+        {
             for (int i = a.X - 1; i <= a.X + 1; i++)
             {
                 for (int j = a.Y - 1; j <= a.Y + 1; j++)
                 {
-                    if (i >= 0 && i < this.Columns && j >= 0 && j < this.Rows) ((Tile)this.grid[i, j]).Revealed = true;
+                    if (!OutOfTileField(i, j))
+                    {
+                        //using bitwise or-operator in the setter
+                        if (i <= a.X && j >= a.Y) { GetTile(i, j).Revealed = 1; }
+                        if (i <= a.X && j <= a.Y) { GetTile(i, j).Revealed = 2; }
+                        if (i >= a.X && j <= a.Y) { GetTile(i, j).Revealed = 4; }
+                        if (i >= a.X && j >= a.Y) { GetTile(i, j).Revealed = 8; }
+                    }
+                }
+            }
+        }
+
+        public void revealPath(Point a, Point direction, int limit, Direction startDirection)
+        {
+            //check if you're still on the map, while that is the case, vision is not obstructed, 
+            //and the distance limit has not been reached reveal the area around the tile.
+            if (!OutOfTileField((a.X += direction.X), (a.Y += direction.Y))
+                && !GetTile(a.X, a.Y).ObstructsVision
+                && limit > 0)
+            {
+                revealAroundTile(a);
+
+                if (startDirection == Direction.NORTH)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        revealPath(a, new Point(direction.X + i, direction.Y), limit - 1, startDirection);
+                    }
+                }
+                else if (startDirection == Direction.EAST)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        revealPath(a, new Point(direction.X, direction.Y + i), limit - 1, startDirection);
+                    }
+                }
+                else if (startDirection == Direction.SOUTH)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        revealPath(a, new Point(direction.X + i, direction.Y), limit - 1, startDirection);
+                    }
+                }
+                else if (startDirection == Direction.WEST)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        revealPath(a, new Point(direction.X, direction.Y + i), limit - 1, startDirection);
+                    }
                 }
             }
         }

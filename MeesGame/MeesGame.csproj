@@ -144,6 +144,7 @@
     <Content Include="Gameplay\Content\button_click.wav" />
     <Content Include="Gameplay\Content\floorTile.png" />
     <Content Include="Gameplay\Content\footsteps.wav" />
+    <Content Include="Gameplay\Content\fog%4016.png" />
     <Content Include="Gameplay\Content\guard.png" />
     <Content Include="Gameplay\Content\hole.png" />
     <Content Include="Gameplay\Content\horizontalDoor.png" />
