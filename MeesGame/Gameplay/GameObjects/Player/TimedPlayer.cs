@@ -15,7 +15,7 @@ namespace MeesGame
         /// </summary>
         protected TimeSpan lastActionTime;
 
-        // Used for starting and stopping the (walking) sound
+        /// Used for starting and stopping the (walking) sound
         SoundEffectInstance sndInstance;
 
         public TimedPlayer(Level level, Point location, int score = 0) : base(level, location, score)
