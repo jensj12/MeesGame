@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using System.Media;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -24,7 +25,7 @@ public class AssetManager
     public void PlaySound(string assetName, float soundLevel = 1.0f)
     {
         SoundEffect snd = contentManager.Load<SoundEffect>(assetName);
-        snd.Play(soundLevel, 0.0f, 0.0f);
+        SoundEffectInstance sndInstance = snd.CreateInstance();
     }
 
     public void PlayMusic(string assetName, bool repeat = true)

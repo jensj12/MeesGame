@@ -18,6 +18,7 @@ namespace MeesGame
         public override void EnterTile(Player player)
         {
             player.Inventory.Items.Add(new InventoryKey());
+            GameEnvironment.AssetManager.PlaySound("key_pickup");
             base.EnterTile(player);
         }
     }
