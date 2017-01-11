@@ -70,7 +70,7 @@ namespace MeesGame.UI {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("horizontalEnd")]
+        [global::System.Configuration.DefaultSettingValueAttribute("editorOverlay")]
         public string DefaultButtonSelectedBackground {
             get {
                 return ((string)(this["DefaultButtonSelectedBackground"]));

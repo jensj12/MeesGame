@@ -18,7 +18,7 @@
       <Value Profile="(Default)">keyOverlay</Value>
     </Setting>
     <Setting Name="DefaultButtonSelectedBackground" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">horizontalEnd</Value>
+      <Value Profile="(Default)">editorOverlay</Value>
     </Setting>
     <Setting Name="FileExplorerBackground" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Wheat</Value>
