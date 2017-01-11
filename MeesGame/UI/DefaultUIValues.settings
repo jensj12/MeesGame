@@ -26,5 +26,8 @@
     <Setting Name="DefaultEditorControlSpriteFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">smallfont</Value>
     </Setting>
+    <Setting Name="ButtonSound" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">button_click</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

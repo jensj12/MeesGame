@@ -94,5 +94,14 @@ namespace MeesGame.UI {
                 return ((string)(this["DefaultEditorControlSpriteFont"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("button_click")]
+        public string ButtonSound {
+            get {
+                return ((string)(this["ButtonSound"]));
+            }
+        }
     }
 }
