@@ -25,7 +25,7 @@ public class AssetManager
     public void PlaySound(string assetName, float soundLevel = 1.0f)
     {
         SoundEffect snd = contentManager.Load<SoundEffect>(assetName);
-        SoundEffectInstance sndInstance = snd.CreateInstance();
+        snd.Play(soundLevel, 0.0f, 0.0f);
     }
 
     public void PlayMusic(string assetName, bool repeat = true)

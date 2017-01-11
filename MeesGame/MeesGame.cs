@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
 using System;
 
 namespace MeesGame
@@ -35,6 +36,8 @@ namespace MeesGame
             gameStateManager.AddGameState("LoadMenuState", new LoadMenuState());
             gameStateManager.AddGameState("GameOverState", new GameOverState());
             gameStateManager.SwitchTo("TitleMenuState");
+
+            assetManager.PlayMusic("theme_song");
         }
     }
 }

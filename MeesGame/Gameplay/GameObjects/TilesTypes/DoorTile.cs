@@ -51,6 +51,7 @@ namespace MeesGame
             if (player.HasKey())
             {
                 doorIsOpen = true;
+                GameEnvironment.AssetManager.PlaySound("open_door");
             }
         }
 
