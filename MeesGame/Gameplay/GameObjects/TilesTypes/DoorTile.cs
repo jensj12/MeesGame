@@ -51,8 +51,13 @@ namespace MeesGame
             if (player.HasKey())
             {
                 doorIsOpen = true;
-                GameEnvironment.AssetManager.PlaySound("open_door");
             }
+        }
+
+        public override void EnterTile(Player player)
+        {
+            GameEnvironment.AssetManager.PlaySound("open_door");
+            base.EnterTile(player);
         }
 
         public override void UpdateGraphicsToMatchSurroundings()
