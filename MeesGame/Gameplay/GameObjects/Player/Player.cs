@@ -25,16 +25,20 @@ namespace MeesGame
         /// </summary>
         public event PlayerEventHandler PlayerAction;
 
+        //whether a player can reveal an area or not
+        private bool canRevealArea;
+
         /// <summary>
         /// Creates a new player for a specific level
         /// </summary>
         /// <param name="level">The Level that the player should play in</param>
         /// <param name="location">The starting location of the player</param>
         /// <param name="score">The initial score of the player. Default is 0.</param>
-        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "player@4x4", 0, "")
+        public Player(Level level, Point location, int score = 0, bool canRevealArea = true) : base(level.Tiles, level.TimeBetweenActions, "player@4x4", 0, "")
         {
             Score = score;
             Level = level;
+            this.canRevealArea = canRevealArea;
             Teleport(location);
             Inventory = new Inventory();
             Level.Tiles.RevealArea(location);
@@ -125,7 +129,10 @@ namespace MeesGame
 
             CurrentTile.PerformAction(this, action);
 
-            Level.Tiles.RevealArea(Location);
+            if(canRevealArea)
+            {
+                Level.Tiles.RevealArea(Location);
+            }
 
             PlayerAction?.Invoke(this);
         }

@@ -103,7 +103,7 @@ namespace MeesGame
         /// Adds a component at the end of the components list. For more direct control, Use the Components property.
         /// </summary>
         /// <param name="component"></param>
-        protected void AddComponent(UIComponent component)
+        public void AddConstantComponent(UIComponent component)
         {
             constantComponents.Add(component);
             component.Parent = this;

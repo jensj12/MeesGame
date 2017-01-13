@@ -33,7 +33,7 @@ namespace MeesGame
         public SortedList(Location location = null, Dimensions dimensions = null, int DistanceBetweenChildren = 10, Color? backgroundColor = null) : base(location, dimensions)
         {
             this.distanceBetweenChildren = DistanceBetweenChildren;
-            AddComponent(new Background(Utility.SolidWhiteTexture, backgroundColor ?? Utility.DrawingColorToXNAColor(DefaultUIValues.Default.FileExplorerBackground)));
+            AddConstantComponent(new Background(Utility.SolidWhiteTexture, backgroundColor ?? Utility.DrawingColorToXNAColor(DefaultUIValues.Default.FileExplorerBackground)));
             scrollBar = new ScrollBar(this);
             scrollBar.Visible = false;
         }
