@@ -21,6 +21,11 @@ namespace MeesGame
         public event PlayerEventHandler PlayerWin;
 
         /// <summary>
+        /// Event called when the player has lost the game
+        /// </summary>
+        public event PlayerEventHandler PlayerLose;
+
+        /// <summary>
         /// Event called when a player performs an action
         /// </summary>
         public event PlayerEventHandler PlayerAction;
@@ -169,10 +174,12 @@ namespace MeesGame
             PlayerWin?.Invoke(this);
         }
 
-        // TODO: make the player lose instead of win
+        /// <summary>
+        /// Makes the player lose the game
+        /// </summary>
         public void Lose()
         {
-            PlayerWin?.Invoke(this);
+            PlayerLose?.Invoke(this);
         }
 
         /// <summary>

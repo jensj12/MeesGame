@@ -3,6 +3,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
+/// <summary>
+/// State of the current game.
+/// </summary>
+enum PlayingState
+{
+    Playing, Victory, Defeat
+}
+
 namespace MeesGame
 {
     class PlayingLevelState : IGameLoopObject
@@ -11,6 +19,7 @@ namespace MeesGame
         private const int inventoryHeight = 600;
         private const int timerDistance = 30;
         private const int timeBackgroundOffset = 20;
+        private PlayingState currentState = PlayingState.Playing;
 
         UIComponent overlay;
         PlayingLevel level;
@@ -29,6 +38,7 @@ namespace MeesGame
             level = lvl;
             level.Player.PlayerAction += OnPlayerAction;
             level.Player.PlayerWin += ShowVictoryScreen;
+            level.Player.PlayerLose += ShowDefeatScreen;
         }
 
         private void InitOverlay()
@@ -69,6 +79,21 @@ namespace MeesGame
 
         public void ShowVictoryScreen(Player player)
         {
+            this.currentState = PlayingState.Victory;
+
+            //add the child to the overlay of the GameOverState here because you need the currrentstate.
+            (GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState).overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, currentState.ToString(), (UIComponent o) =>
+                GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
+            GameEnvironment.GameStateManager.SwitchTo("GameOverState");
+        }
+
+        public void ShowDefeatScreen(Player player)
+        {
+            this.currentState = PlayingState.Defeat;
+
+            //add the child to the overlay of the GameOverState here because you need the currrentstate.
+            (GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState).overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, currentState.ToString(), (UIComponent o) =>
+                GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
 
