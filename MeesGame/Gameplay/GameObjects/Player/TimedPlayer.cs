@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using static MeesGame.PlayerAction;
 
@@ -14,8 +15,13 @@ namespace MeesGame
         /// </summary>
         protected TimeSpan lastActionTime;
 
+        /// Used for starting and stopping the (walking) sound
+        SoundEffectInstance soundFootsteps;
+
         public TimedPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
+            SoundEffect sndFootsteps = GameEnvironment.AssetManager.Content.Load<SoundEffect>("footsteps");
+            soundFootsteps = sndFootsteps.CreateInstance();          
         }
 
         public override void Update(GameTime gameTime)
@@ -30,7 +36,9 @@ namespace MeesGame
 
                     lastActionTime = gameTime.TotalGameTime;
                     NextAction = NONE;
+                    soundFootsteps.Play();
                 }
+                else soundFootsteps.Stop();
             }
         }
 

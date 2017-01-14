@@ -54,6 +54,12 @@ namespace MeesGame
             }
         }
 
+        public override void EnterTile(Player player)
+        {
+            GameEnvironment.AssetManager.PlaySound("open_door");
+            base.EnterTile(player);
+        }
+
         public override void UpdateGraphicsToMatchSurroundings()
         {
             int x = Location.X;
