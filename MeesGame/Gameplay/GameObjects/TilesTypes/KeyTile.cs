@@ -1,12 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
+using System.ComponentModel;
 
 namespace MeesGame
 {
     class KeyTile : FloorTile
     {
+        protected KeyColor keyColor;
+
         public KeyTile(int layer = 0, string id = "") : base(TileType.Key, layer, id)
         {
-            secondarySpriteColor = Color.Blue;
+            secondarySpriteColor = keyColor.ToColor();
+        }
+
+        [Editor]
+        public Color SecondarySpriteColor
+        {
+            get
+            {
+                return base.secondarySpriteColor;
+            }
+            set
+            {
+                base.secondarySpriteColor = value;
+                keyColor = KeyColorExtensions.FromColor(value);
+                TileData tileData = Data;
+                tileData.AdditionalInfo = (int)keyColor;
+                Data = tileData;
+            }
         }
 
         public override void UpdateGraphics()
@@ -17,9 +37,15 @@ namespace MeesGame
 
         public override void EnterTile(Player player)
         {
-            player.Inventory.Items.Add(new InventoryKey());
+            player.Inventory.Items.Add(new InventoryKey(keyColor));
             GameEnvironment.AssetManager.PlaySound("key_pickup");
             base.EnterTile(player);
+        }
+
+        public override void UpdateToAdditionalInfo()
+        {
+            keyColor = (KeyColor)Data.AdditionalInfo;
+            secondarySpriteColor = keyColor.ToColor();
         }
     }
 }

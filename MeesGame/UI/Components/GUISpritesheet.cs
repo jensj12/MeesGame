@@ -11,10 +11,14 @@ namespace MeesGame
     {
         private List<SpriteSheet> spritesheets;
 
-        public UISpriteSheet(Location location, Dimensions dimensions, string[] spritesheetsToAdd = null) : base(location, dimensions)
+        Color color;
+
+        public UISpriteSheet(Location location, Dimensions dimensions, string[] spritesheetsToAdd = null, Color? color = null) : base(location, dimensions)
         {
             spritesheets = new List<SpriteSheet>();
             AddSpritesheets(spritesheetsToAdd ?? new string[] { });
+
+            this.color = color ?? Color.White;
         }
 
         public void AddSpritesheets(string[] spritesheetsToAdd)
@@ -33,7 +37,7 @@ namespace MeesGame
         {
             for (int i = 0; i < spritesheets.Count; i++)
             {
-                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CurrentDimensions.X, CurrentDimensions.Y);
+                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CurrentDimensions.X, CurrentDimensions.Y, color);
             }
         }
 

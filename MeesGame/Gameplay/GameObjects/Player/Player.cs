@@ -158,10 +158,10 @@ namespace MeesGame
         /// Checks if the player has a key
         /// </summary>
         /// <returns></returns>
-        public bool HasKey()
+        public bool HasItem(InventoryItemType itemType)
         {
             foreach (InventoryItem item in (Inventory.Items))
-                if (item.type == InventoryItemType.Key)
+                if (item.type == itemType)
                     return true;
             return false;
         }

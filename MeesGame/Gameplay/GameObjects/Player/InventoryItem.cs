@@ -2,7 +2,12 @@
 {
     public enum InventoryItemType
     {
-        Key
+        KeyBlue,
+        KeyCyan,
+        KeyGreen,
+        KeyMagenta,
+        KeyRed,
+        KeyYellow
     }
 
     public abstract class InventoryItem
@@ -10,16 +15,6 @@
         public InventoryItemType type
         {
             get; set;
-        }
-
-        public static string inventoryItemAsset(InventoryItemType ii)
-        {
-            switch (ii)
-            {
-                case InventoryItemType.Key:
-                    return Tile.GetAssetNamesFromTileType(TileType.Key)[1];
-            }
-            return null;
         }
 
         public override int GetHashCode()

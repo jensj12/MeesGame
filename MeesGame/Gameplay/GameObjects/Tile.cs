@@ -9,7 +9,7 @@ namespace MeesGame
     {
         public TileData Data
         {
-            get; private set;
+            get; set;
         }
 
         public Point location = Point.Zero;
@@ -167,13 +167,6 @@ namespace MeesGame
             }
         }
 
-        [Editor]
-        public Color SecondarySpriteColor
-        {
-            get { return secondarySpriteColor; }
-            set { secondarySpriteColor = value; }
-        }
-
         /// <summary>
         /// The four direct neighbors of this Tile
         /// </summary>
@@ -188,16 +181,6 @@ namespace MeesGame
                 }
                 return neighbours;
             }
-        }
-
-        public bool IsNextToSpecialTile()
-        {
-            foreach (Tile tile in Neighbours)
-            {
-                if (tile.TileType == TileType.Door)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -288,5 +271,7 @@ namespace MeesGame
         /// Updates the graphics of the tile according to things happening while playing.
         /// </summary>
         public abstract void UpdateGraphics();
+
+        public virtual void UpdateToAdditionalInfo() { }
     }
 }

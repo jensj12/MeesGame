@@ -39,7 +39,7 @@ namespace MeesGame
         /// Check if the player has a key
         /// </summary>
         /// <returns></returns>
-        bool HasKey();
+        bool HasItem(InventoryItemType itemType);
 
         /// <summary>
         /// Creates of copy of the player at its current position
