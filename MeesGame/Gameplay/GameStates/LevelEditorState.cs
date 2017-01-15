@@ -86,20 +86,21 @@ namespace MeesGame
 
         private void LoadLevel(UIComponent o)
         {
-            string fileName = null;
-            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
-            DirectoryInfo info = Directory.CreateDirectory(directory);
-            openFileDialog.InitialDirectory = info.FullName;
-            openFileDialog.Filter = "lvl Files| *.lvl";
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            try
             {
-                fileName = openFileDialog.FileName;
-                level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(fileName));
-                level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
-                PlayerMoved(level[currentLevelIndex].Player);
+                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+                string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
+                DirectoryInfo info = Directory.CreateDirectory(directory);
+                openFileDialog.InitialDirectory = info.FullName;
+                openFileDialog.Filter = "lvl Files| *.lvl";
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(openFileDialog.FileName));
+                    level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
+                    PlayerMoved(level[currentLevelIndex].Player);
+                }
             }
-
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -202,7 +203,7 @@ namespace MeesGame
                 foreach (EditorAttribute editorAttribute in property.GetCustomAttributes(true))
                 {
                     UIComponent editorComponent = GetEditorControl(playerTile, property);
-                    if(editorComponent != null)
+                    if (editorComponent != null)
                         tilePropertiesList.AddChild(editorComponent);
                 }
             }
@@ -216,7 +217,7 @@ namespace MeesGame
         /// <returns></returns>
         private UIComponent GetEditorControl(Tile tile, PropertyInfo property)
         {
-            if(property.GetMethod.ReturnType == typeof(Color))
+            if (property.GetMethod.ReturnType == typeof(Color))
             {
                 return new ColorPicker(SimpleLocation.Zero, property, tile);
             }
