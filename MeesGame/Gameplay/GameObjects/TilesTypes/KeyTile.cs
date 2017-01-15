@@ -35,7 +35,7 @@ namespace MeesGame
                 secondarySprite = null;
         }
 
-        public override void EnterTile(Player player)
+        public override void EnterTile(ITileFieldPlayer player)
         {
             player.Inventory.Items.Add(new InventoryKey(keyColor));
             GameEnvironment.AssetManager.PlaySound("key_pickup");

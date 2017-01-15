@@ -3,12 +3,17 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    interface IPlayer
+    public interface IPlayer
     {
         /// <summary>
         /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
         IList<PlayerAction> PossibleActions { get; }
+
+        /// <summary>
+        /// The TileField the player is playing on
+        /// </summary>
+        TileField TileField { get; }
 
         /// <summary>
         /// The Tile the player is currently on

@@ -36,9 +36,9 @@ namespace MeesGame
         public void StartLevel(PlayingLevel lvl)
         {
             level = lvl;
-            level.Player.PlayerAction += OnPlayerAction;
-            level.Player.PlayerWin += ShowVictoryScreen;
-            level.Player.PlayerLose += ShowDefeatScreen;
+            level.Player.OnPlayerAction += OnPlayerAction;
+            level.Player.OnPlayerWin += ShowVictoryScreen;
+            level.Player.OnPlayerLose += ShowDefeatScreen;
         }
 
         private void InitOverlay()
@@ -62,7 +62,7 @@ namespace MeesGame
             overlay.AddChild(timerUIBackground);
         }
 
-        private void OnPlayerAction(Player player)
+        private void OnPlayerAction(PlayerGameObject player)
         {
             UpdateInventoryUI();
         }
@@ -77,7 +77,7 @@ namespace MeesGame
             }
         }
 
-        public void ShowVictoryScreen(Player player)
+        public void ShowVictoryScreen(PlayerGameObject player)
         {
             this.currentState = PlayingState.Victory;
 
@@ -87,7 +87,7 @@ namespace MeesGame
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
 
-        public void ShowDefeatScreen(Player player)
+        public void ShowDefeatScreen(PlayerGameObject player)
         {
             this.currentState = PlayingState.Defeat;
 

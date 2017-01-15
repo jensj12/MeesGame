@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace MeesGame
 {
@@ -78,7 +77,7 @@ namespace MeesGame
             }
         }
 
-        public virtual void EnterCenterOfTile(Player player) { }
+        public virtual void EnterCenterOfTile(ITileFieldPlayer player) { }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -102,14 +101,14 @@ namespace MeesGame
         /// <param name="player">The player at this Tile that wants to perform the action</param>
         /// <param name="action">The action to check</param>
         /// <returns>true if the action is forbidden by this Tile. false otherwise.</returns>
-        public abstract bool IsActionForbiddenFromHere(Player player, PlayerAction action);
+        public abstract bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action);
 
         /// <summary>
         /// Checks if the player can move to this tile when he is next to it.
         /// </summary>
         /// <param name="player"></param>
         /// <returns>true if the player can move here. false otherwise.</returns>
-        public abstract bool CanPlayerMoveHere(Player player);
+        public abstract bool CanPlayerMoveHere(ITileFieldPlayer player);
 
         /// <summary>
         /// The location that the player will be on after performing the specified action
@@ -141,11 +140,11 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the Player appropriately
+        /// Perform an action for the player. Modifies the ITileFieldPlayer appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerAction action)
+        public virtual void PerformAction(ITileFieldPlayer player, PlayerAction action)
         {
             if (action.IsDirection())
                 player.MoveSmoothly(action.ToDirection());
@@ -175,7 +174,7 @@ namespace MeesGame
             get
             {
                 List<Tile> neighbours = new List<Tile>();
-                foreach (PlayerAction action in Player.MOVEMENT_ACTIONS)
+                foreach (PlayerAction action in DummyPlayer.MOVEMENT_ACTIONS)
                 {
                     neighbours.Add(TileField.GetTile(GetLocationAfterAction(action)));
                 }
@@ -222,9 +221,8 @@ namespace MeesGame
             return new FloorTile();
         }
 
-        public virtual void EnterTile(Player player)
+        public virtual void EnterTile(ITileFieldPlayer player)
         {
-            IsVisited = true;
         }
 
         public static Tile CreateTileFromTileData(TileData data)
@@ -273,5 +271,10 @@ namespace MeesGame
         public abstract void UpdateGraphics();
 
         public virtual void UpdateToAdditionalInfo() { }
+
+        public void MarkVisited()
+        {
+            IsVisited = true;
+        }
     }
 }

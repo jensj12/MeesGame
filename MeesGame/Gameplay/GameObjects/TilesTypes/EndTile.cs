@@ -6,7 +6,7 @@
         {
         }
 
-        public override void EnterCenterOfTile(Player player)
+        public override void EnterCenterOfTile(ITileFieldPlayer player)
         {
             player.Win();
         }

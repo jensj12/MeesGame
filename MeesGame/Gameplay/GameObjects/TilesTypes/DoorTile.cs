@@ -33,7 +33,7 @@ namespace MeesGame
             }
         }
 
-        public override bool CanPlayerMoveHere(Player player)
+        public override bool CanPlayerMoveHere(ITileFieldPlayer player)
         {
             // A player is allowed to move onto a horizontalDoor from the tile above or below it.
             // A player is allowed to move onto a verticalDoor from the Tile to the left or to the right of it.
@@ -48,7 +48,7 @@ namespace MeesGame
             else return false;
         }
 
-        public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
             //A player can only move back to where he came from or into the opposite direction
             if (action == EAST || action == WEST)
@@ -69,7 +69,7 @@ namespace MeesGame
                 return true;
         }
 
-        public bool CanMoveOntoDoor(Player player)
+        public bool CanMoveOntoDoor(ITileFieldPlayer player)
         {
             //A player is only allowed to open a door if he has the right key.
             if (player.HasItem(doorColor.ToInventeryItemType()))
@@ -80,7 +80,7 @@ namespace MeesGame
                 return false;
         }
 
-        public override void EnterTile(Player player)
+        public override void EnterTile(ITileFieldPlayer player)
         {
             GameEnvironment.AssetManager.PlaySound("open_door");
             base.EnterTile(player);

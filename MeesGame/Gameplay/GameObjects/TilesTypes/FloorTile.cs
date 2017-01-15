@@ -10,13 +10,13 @@
         {
         }
 
-        public override bool CanPlayerMoveHere(Player player)
+        public override bool CanPlayerMoveHere(ITileFieldPlayer player)
         {
             //A player is allowed to move onto floors
             return true;
         }
 
-        public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
             //A player can move into all directions from a floor tile.
             return action == PlayerAction.SPECIAL;

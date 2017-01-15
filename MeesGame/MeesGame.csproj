@@ -42,10 +42,15 @@
     <Compile Include="AI\RandomWalker.cs" />
     <Compile Include="Gameplay\GameObjects\AnimatedMovingGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Direction.cs" />
+    <Compile Include="Gameplay\GameObjects\DirectionalGameObject.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\DummyPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\KeyColor.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\AIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
+    <Compile Include="Gameplay\Generator\MazeGenerator.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
@@ -67,7 +72,6 @@
     <Compile Include="Gameplay\GameObjects\Tile.cs" />
     <Compile Include="Gameplay\GameObjects\TileField.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\WallTile.cs" />
-    <Compile Include="Gameplay\GameObjects\Player\TimedPlayer.cs" />
     <Compile Include="Gameplay\GameStates\GameOverState.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorInit.cs" />

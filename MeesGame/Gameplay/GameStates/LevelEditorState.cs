@@ -53,7 +53,7 @@ namespace MeesGame
             level.Add(newLevel);
             currentLevelIndex = 0;
 
-            level[currentLevelIndex].Player.PlayerAction += PlayerMoved;
+            level[currentLevelIndex].Player.OnMove += PlayerMoved;
 
             InitUI();
         }
@@ -184,7 +184,7 @@ namespace MeesGame
         /// Called every time the players moves to update the UI accordingly.
         /// </summary>
         /// <param name="player">The player that moved.</param>
-        public void PlayerMoved(Player player)
+        public void PlayerMoved(EditorPlayer player)
         {
             Tile playerTile = (Tile)level[currentLevelIndex].Tiles.Objects[player.Location.X, player.Location.Y];
             CurrentTileChanged(playerTile);
