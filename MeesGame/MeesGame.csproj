@@ -50,7 +50,6 @@
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
     <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
-    <Compile Include="Gameplay\Generator\MazeGenerator.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
