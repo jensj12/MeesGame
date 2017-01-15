@@ -10,7 +10,7 @@ namespace MeesGame
         public AIPlayer(IAI AI, Level level, Point location, int score = 0) : base(level, location, score)
         {
             this.AI = AI;
-            AI.GameStart(DummyPlayer);
+            AI.GameStart(DummyPlayer, 3);
         }
 
         protected override PlayerAction NextAction

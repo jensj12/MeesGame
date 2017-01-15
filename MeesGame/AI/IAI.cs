@@ -12,7 +12,8 @@
         /// Only called at game start.
         /// </summary>
         /// <param name="player">The player the AI will take control of.</param>
-        void GameStart(MeesGame.IPlayer player);
+        /// <param name="difficulty">The difficulty level (1-5) of the AI</param>
+        void GameStart(MeesGame.IPlayer player, int difficulty);
 
         /// <summary>
         /// Whenever the AI player needs a new action, this function is called.

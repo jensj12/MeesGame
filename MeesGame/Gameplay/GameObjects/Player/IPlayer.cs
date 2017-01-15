@@ -26,6 +26,11 @@ namespace MeesGame
         PlayerAction LastAction { get; }
 
         /// <summary>
+        /// Make the player perform a specified action
+        /// </summary>
+        void PerformAction(PlayerAction action);
+
+        /// <summary>
         /// The player's location on the TileField
         /// </summary>
         Point Location { get; }
