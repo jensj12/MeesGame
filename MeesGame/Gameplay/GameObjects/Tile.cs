@@ -146,6 +146,7 @@ namespace MeesGame
         /// <param name="action">The action to perform</param>
         public virtual void PerformAction(ITileFieldPlayer player, PlayerAction action)
         {
+            player.LastAction = action;
             if (action.IsDirection())
                 player.MoveSmoothly(action.ToDirection());
         }
@@ -216,6 +217,9 @@ namespace MeesGame
 
                 case TileType.Hole:
                     return new HoleTile();
+
+                case TileType.Ice:
+                    return new IceTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
@@ -260,6 +264,9 @@ namespace MeesGame
                 case TileType.Start:
                     return new string[] { "ladder" };
 
+                case TileType.Ice:
+                    return new string[] { "floorTile", "Ice" };
+
             }
             //If no Tile can be made of the specified tiletype, return null
             return null;
@@ -275,6 +282,14 @@ namespace MeesGame
         public void MarkVisited()
         {
             IsVisited = true;
+        }
+
+        public virtual bool StopsSliding
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

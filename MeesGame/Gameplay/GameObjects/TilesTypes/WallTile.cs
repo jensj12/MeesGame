@@ -40,5 +40,13 @@
         public override void UpdateGraphics()
         {
         }
+
+        public override bool StopsSliding
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

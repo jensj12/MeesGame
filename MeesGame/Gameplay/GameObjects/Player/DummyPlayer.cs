@@ -82,10 +82,7 @@ namespace MeesGame
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
         public virtual bool CanPerformAction(PlayerAction action)
         {
-            if (CurrentTile.IsActionForbiddenFromHere(this, action)) return false;
-
-            Point newLocation = CurrentTile.GetLocationAfterAction(action);
-            return TileField.GetTile(newLocation).CanPlayerMoveHere(this);
+            return !CurrentTile.IsActionForbiddenFromHere(this, action);
         }
 
         /// <summary>
@@ -95,7 +92,6 @@ namespace MeesGame
         public void PerformAction(PlayerAction action)
         {
             if (!CanPerformAction(action)) throw new PlayerActionNotAllowedException();
-            LastAction = action;
 
             CurrentTile.PerformAction(this, action);
 
@@ -115,7 +111,7 @@ namespace MeesGame
         /// </summary>
         public PlayerAction LastAction
         {
-            get; private set;
+            get; set;
         }
 
         /// <summary>

@@ -40,6 +40,11 @@ namespace MeesGame
         /// </summary>
         protected IDiscreteField field;
 
+        public Direction LastDirection
+        {
+            get; private set;
+        }
+
         public SmoothlyMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(assetName, layer, id, sheetIndex)
         {
             this.field = field;
@@ -90,6 +95,7 @@ namespace MeesGame
         {
             Direction = direction;
             JumpToAnchorPosition();
+            LastDirection = direction;
             Location += direction.ToPoint();
             Vector2 translation = Vector2.Multiply(field.CellDimensions, direction.ToVector2());
             velocity = Vector2.Divide(translation, (float)TravelTime.TotalSeconds);

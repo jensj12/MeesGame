@@ -18,7 +18,7 @@ namespace MeesGame
         /// <summary>
         /// The last action performed by this player
         /// </summary>
-        PlayerAction LastAction { get; }
+        PlayerAction LastAction { get; set; }
 
         /// <summary>
         /// The location of the player on the TileField

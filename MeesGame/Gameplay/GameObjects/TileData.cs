@@ -9,6 +9,7 @@
         Start,
         End,
         Hole,
+        Ice,
         Unknown
     }
 

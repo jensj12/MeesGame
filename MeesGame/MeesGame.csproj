@@ -59,6 +59,7 @@
     <Compile Include="Gameplay\GameObjects\TileData.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player\IPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\IceTile.cs" />
     <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\EndTile.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\FloorTile.cs" />

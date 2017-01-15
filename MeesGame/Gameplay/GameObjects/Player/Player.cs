@@ -29,11 +29,6 @@ namespace MeesGame
         /// </summary>
         public event PlayerEventHandler OnPlayerAction;
 
-        /// <summary>
-        /// The time that the last action was performed
-        /// </summary>
-        protected TimeSpan lastActionTime;
-
         /// Used for starting and stopping the (walking) sound
         SoundEffectInstance soundFootsteps;
 
@@ -59,8 +54,14 @@ namespace MeesGame
             player.OnPlayerAction += delegate (DummyPlayer player) { OnPlayerAction?.Invoke(this); };
             player.OnPlayerWin += delegate (DummyPlayer player) { OnPlayerWin?.Invoke(this); };
             player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this); };
-            player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) { MoveSmoothly(direction); };
-            StoppedMoving += delegate (GameObject obj) { player.EndMoveSmoothly(); };
+            player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) {
+                MoveSmoothly(direction);
+                soundFootsteps.Play();
+            };
+            StoppedMoving += delegate (GameObject obj) {
+                player.EndMoveSmoothly();
+                soundFootsteps.Stop();
+            };
         }
 
         /// <summary>
@@ -151,16 +152,9 @@ namespace MeesGame
 
             PlayerAction nextAction = NextAction;
 
-            if (!IsMoving)
+            if (!IsMoving && player.CanPerformAction(nextAction))
             {
-                if (player.CanPerformAction(nextAction) && nextAction != PlayerAction.NONE)
-                {
-                    PerformAction(nextAction);
-
-                    lastActionTime = gameTime.TotalGameTime;
-                    soundFootsteps.Play();
-                }
-                else soundFootsteps.Stop();
+                PerformAction(nextAction);
             }
         }
     }

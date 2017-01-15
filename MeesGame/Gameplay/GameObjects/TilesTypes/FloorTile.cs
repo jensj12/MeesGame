@@ -18,8 +18,7 @@
 
         public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
-            //A player can move into all directions from a floor tile.
-            return action == PlayerAction.SPECIAL;
+            return action == PlayerAction.SPECIAL || !TileField.GetTile(GetLocationAfterAction(action)).CanPlayerMoveHere(player);
         }
 
         public override void UpdateGraphicsToMatchSurroundings()
