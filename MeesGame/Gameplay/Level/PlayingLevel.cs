@@ -29,9 +29,9 @@
             usePlayer(new AIPlayer(new AI.RandomWalker() ,this, start));
         }
 
-        public PlayerGameObject Player
+        public Player Player
         {
-            get { return player as PlayerGameObject; }
+            get { return player as Player; }
         }
     }
 }

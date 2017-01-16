@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MeesGame
 {
-    public interface IPlayer
+    public interface ICharacter
     {
         /// <summary>
         /// A list of all possible actions the player can take in the current state of the game
@@ -55,6 +55,6 @@ namespace MeesGame
         /// Creates of copy of the player at its current position
         /// </summary>
         /// <returns></returns>
-        IPlayer Clone();
+        ICharacter Clone();
     }
 }

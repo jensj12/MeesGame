@@ -4,16 +4,17 @@ namespace AI
 {
     class RandomWalker : IAI
     {
-        IPlayer player;
+        IAIPlayer player;
 
-        public void GameStart(IPlayer player, int difficulty)
+        public void GameStart(IAIPlayer player, int difficulty)
         {
             this.player = player;
         }
 
         public PlayerAction GetNextAction()
         {
-            return player.PossibleActions[GameEnvironment.Random.Next(player.PossibleActions.Count)];
+            ICharacter dummy = player.Character;
+            return dummy.PossibleActions[GameEnvironment.Random.Next(dummy.PossibleActions.Count)];
         }
     }
 }

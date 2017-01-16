@@ -5,15 +5,15 @@ using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
-    class DummyPlayer : ITileFieldPlayer, IPlayer
+    class Character : ITileFieldPlayer, ICharacter
     {
         /// <summary>
         /// List of actions that can be used to move players
         /// </summary>
         public static readonly PlayerAction[] MOVEMENT_ACTIONS = new PlayerAction[] { NORTH, WEST, SOUTH, EAST };
 
-        public delegate void DummyPlayerEventHandler(DummyPlayer player);
-        public delegate void DummyPlayerDirectionEventHandler(DummyPlayer player, Direction direction);
+        public delegate void DummyPlayerEventHandler(Character player);
+        public delegate void DummyPlayerDirectionEventHandler(Character player, Direction direction);
 
         /// <summary>
         /// Event called when the player moves smoothly in a direction
@@ -35,7 +35,7 @@ namespace MeesGame
         /// </summary>
         public event DummyPlayerEventHandler OnPlayerAction;
 
-        public DummyPlayer(TileField tileField, Point location, int score = 0)
+        public Character(TileField tileField, Point location, int score = 0)
         {
             TileField = tileField;
             this.location = location;
@@ -176,9 +176,9 @@ namespace MeesGame
             CurrentTile.EnterCenterOfTile(this);
         }
 
-        public IPlayer Clone()
+        public ICharacter Clone()
         {
-            DummyPlayer clone = new UntimedPlayer(TileField, Location, Score);
+            Character clone = new UntimedPlayer(TileField, Location, Score);
             foreach (InventoryItem item in Inventory.Items)
             {
                 clone.Inventory.Items.Add(item);

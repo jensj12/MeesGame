@@ -43,8 +43,9 @@
     <Compile Include="Gameplay\GameObjects\AnimatedMovingGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Direction.cs" />
     <Compile Include="Gameplay\GameObjects\DirectionalGameObject.cs" />
-    <Compile Include="Gameplay\GameObjects\Player\DummyPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\Character.cs" />
     <Compile Include="Gameplay\GameObjects\KeyColor.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\IAIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\AIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Gameplay\GameObjects\SmoothlyMovingGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\TileData.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\DoorTile.cs" />
-    <Compile Include="Gameplay\GameObjects\Player\IPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\ICharacter.cs" />
     <Compile Include="Gameplay\GameObjects\IceTile.cs" />
     <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\EndTile.cs" />

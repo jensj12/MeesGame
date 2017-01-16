@@ -62,7 +62,7 @@ namespace MeesGame
             overlay.AddChild(timerUIBackground);
         }
 
-        private void OnPlayerAction(PlayerGameObject player)
+        private void OnPlayerAction(Player player)
         {
             UpdateInventoryUI();
         }
@@ -77,7 +77,7 @@ namespace MeesGame
             }
         }
 
-        public void ShowVictoryScreen(PlayerGameObject player)
+        public void ShowVictoryScreen(Player player)
         {
             this.currentState = PlayingState.Victory;
 
@@ -87,7 +87,7 @@ namespace MeesGame
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
 
-        public void ShowDefeatScreen(PlayerGameObject player)
+        public void ShowDefeatScreen(Player player)
         {
             this.currentState = PlayingState.Defeat;
 

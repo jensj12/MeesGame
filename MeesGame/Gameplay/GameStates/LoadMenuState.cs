@@ -46,7 +46,7 @@ namespace MeesGame
                     tileField = MeesGen.MazeGenerator.GenerateMaze();
                 }
                 GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
-                state.StartLevel(new PlayingLevel(tileField));
+                state.StartLevel(new PlayingLevel(tileField, 0, false));
                 GameEnvironment.GameStateManager.GetGameState("PlayingLevelState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");
             });

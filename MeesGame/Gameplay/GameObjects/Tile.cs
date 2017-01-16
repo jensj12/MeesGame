@@ -175,7 +175,7 @@ namespace MeesGame
             get
             {
                 List<Tile> neighbours = new List<Tile>();
-                foreach (PlayerAction action in DummyPlayer.MOVEMENT_ACTIONS)
+                foreach (PlayerAction action in Character.MOVEMENT_ACTIONS)
                 {
                     neighbours.Add(TileField.GetTile(GetLocationAfterAction(action)));
                 }

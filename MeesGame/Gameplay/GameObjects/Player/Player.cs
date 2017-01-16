@@ -10,9 +10,9 @@ namespace MeesGame
     /// win or lose.
     /// Has a score and an inventory.
     /// </summary>
-    public class PlayerGameObject : AnimatedMovingGameObject
+    public class Player : AnimatedMovingGameObject
     {
-        public delegate void PlayerEventHandler(PlayerGameObject player);
+        public delegate void PlayerEventHandler(Player player);
 
         /// <summary>
         /// Event called when the player has won the game
@@ -33,9 +33,9 @@ namespace MeesGame
         SoundEffectInstance soundFootsteps;
 
         /// <summary>
-        /// The DummyPlayer that this object represents
+        /// The Character that this player represents
         /// </summary>
-        DummyPlayer player;
+        Character character;
 
         /// <summary>
         /// Creates a new player for a specific level
@@ -43,23 +43,23 @@ namespace MeesGame
         /// <param name="level">The Level that the player should play in</param>
         /// <param name="location">The starting location of the player</param>
         /// <param name="score">The initial score of the player. Default is 0.</param>
-        public PlayerGameObject(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "player@4x4", 0, "")
+        public Player(Level level, Point location, int score = 0) : base(level.Tiles, level.TimeBetweenActions, "player@4x4", 0, "")
         {
-            player = new DummyPlayer(level.Tiles, location, score);
+            character = new Character(level.Tiles, location, score);
             Level = level;
             Teleport(location);
             TileField.RevealArea(location);
             soundFootsteps = GameEnvironment.AssetManager.Content.Load<SoundEffect>("footsteps").CreateInstance();
 
-            player.OnPlayerAction += delegate (DummyPlayer player) { OnPlayerAction?.Invoke(this); };
-            player.OnPlayerWin += delegate (DummyPlayer player) { OnPlayerWin?.Invoke(this); };
-            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this); };
-            player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) {
+            character.OnPlayerAction += delegate (Character player) { OnPlayerAction?.Invoke(this); };
+            character.OnPlayerWin += delegate (Character player) { OnPlayerWin?.Invoke(this); };
+            character.OnPlayerLose += delegate (Character player) { OnPlayerLose?.Invoke(this); };
+            character.OnMoveSmoothly += delegate (Character player, Direction direction) {
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
             };
             StoppedMoving += delegate (GameObject obj) {
-                player.EndMoveSmoothly();
+                character.EndMoveSmoothly();
                 soundFootsteps.Stop();
             };
         }
@@ -86,12 +86,12 @@ namespace MeesGame
         /// <param name="action">The PlayerAction to perform</param>
         protected void PerformAction(PlayerAction action)
         {
-            if (!player.CanPerformAction(action)) throw new PlayerActionNotAllowedException();
+            if (!character.CanPerformAction(action)) throw new PlayerActionNotAllowedException();
 
             LastAction = action;
             if (action.IsDirection()) Direction = action.ToDirection();
 
-            player.PerformAction(action);
+            character.PerformAction(action);
 
             TileField.Visit(Location);
         }
@@ -115,7 +115,7 @@ namespace MeesGame
         {
             get
             {
-                return player.Inventory;
+                return character.Inventory;
             }
         }
 
@@ -130,11 +130,11 @@ namespace MeesGame
         /// <summary>
         /// A DummyPlayer that is in the same state as this one.
         /// </summary>
-        public IPlayer DummyPlayer
+        public ICharacter Character
         {
             get
             {
-                return player.Clone();
+                return character.Clone();
             }
         }
 
@@ -152,7 +152,7 @@ namespace MeesGame
 
             PlayerAction nextAction = NextAction;
 
-            if (!IsMoving && player.CanPerformAction(nextAction))
+            if (!IsMoving && character.CanPerformAction(nextAction))
             {
                 PerformAction(nextAction);
             }
