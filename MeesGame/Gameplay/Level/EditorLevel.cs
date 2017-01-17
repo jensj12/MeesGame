@@ -10,7 +10,6 @@ namespace MeesGame
         {
             start = Point.Zero;
             FillLevelWithEmptyTiles();
-            Tiles.UpdateGraphicsToMatchSurroundings();
             usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
         }
 
@@ -18,7 +17,12 @@ namespace MeesGame
         {
             for (int x = 0; x < numRows; x++)
                 for (int y = 0; y < numColumns; y++)
-                    Tiles.Add(new FloorTile(), x, y);
+                    if (Tiles.OnEdgeOfTileField(x, y))
+                        Tiles.Add(new WallTile(), x, y);
+                    else
+                        Tiles.Add(new FloorTile(), x, y);
+
+            Tiles.UpdateGraphicsToMatchSurroundings();
         }
 
         public void FillLevelWithTiles(TileField tiles)
@@ -26,6 +30,8 @@ namespace MeesGame
             for (int x = 0; x < numRows; x++)
                 for (int y = 0; y < numColumns; y++)
                     Tiles.Add(tiles.Objects[x, y], x, y);
+
+            Tiles.UpdateGraphicsToMatchSurroundings();
         }
 
         public EditorPlayer Player

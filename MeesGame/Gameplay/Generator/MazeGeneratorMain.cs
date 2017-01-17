@@ -97,7 +97,8 @@ namespace MeesGen
                     tiles.Add(tileToAdd, (next.X + current.X) / 2, (next.Y + current.Y) / 2);
 
                     // The best exit is the one hardest to reach from the start.
-                    if (exitScore[next.X, next.Y] > exitScore[bestExit.X, bestExit.Y])
+                    // It also has to be next to the edge of the tilefield, next will never be on the edge itself.
+                    if (exitScore[next.X, next.Y] > exitScore[bestExit.X, bestExit.Y] && tiles.NearEdgeOfTileField(next.X, next.Y))
                     {
                         bestExit = next;
                     }
@@ -117,7 +118,8 @@ namespace MeesGen
             // Add the startTile.
             tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
-            // Add an end tile on the best exit.
+            // Add an end tile on the edge next to the best exit.
+            bestExit = FindEdgeTile(bestExit);
             tiles.Add(new EndTile(), bestExit.X, bestExit.Y);
         }
     }
