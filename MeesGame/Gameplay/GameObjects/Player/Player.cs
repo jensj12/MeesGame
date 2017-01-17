@@ -6,9 +6,7 @@ namespace MeesGame
 {
     /// <summary>
     /// Smoothly moving, animated game object that is affected by the tiles on the tilefield.
-    /// Can perform PlayerActions on the TileField affecting himself. After a while he might either
-    /// win or lose.
-    /// Has a score and an inventory.
+    /// Visual timed representation of a Character
     /// </summary>
     public class Player : AnimatedMovingGameObject
     {
