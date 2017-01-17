@@ -12,7 +12,7 @@
       <Value Profile="(Default)">menufont</Value>
     </Setting>
     <Setting Name="DefaultButtonBackground" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">floorTile</Value>
+      <Value Profile="(Default)">defaultButtonOverlay</Value>
     </Setting>
     <Setting Name="DefaultButtonHoverBackground" Type="System.String" Scope="Application">
       <Value Profile="(Default)">keyOverlay</Value>

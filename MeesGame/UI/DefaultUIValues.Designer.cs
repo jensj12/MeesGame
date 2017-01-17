@@ -52,7 +52,7 @@ namespace MeesGame.UI {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("floorTile")]
+        [global::System.Configuration.DefaultSettingValueAttribute("defaultButtonOverlay")]
         public string DefaultButtonBackground {
             get {
                 return ((string)(this["DefaultButtonBackground"]));
