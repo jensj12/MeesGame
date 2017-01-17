@@ -1,7 +1,4 @@
-﻿using System;
-using static MeesGame.PlayerAction;
-
-namespace MeesGame
+﻿namespace MeesGame
 {
     class IceTile : FloorTile
     {
@@ -18,7 +15,7 @@ namespace MeesGame
             lastDirection = player.LastAction.ToDirection();
         }
 
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, CharacterAction action)
         {
             if (!TileField.GetTile(Location + lastDirection.ToPoint()).StopsSliding)
                 return false;
@@ -26,7 +23,7 @@ namespace MeesGame
             return base.IsActionForbiddenFromHere(player, action);
         }
 
-        public override void PerformAction(ITileFieldPlayer player, PlayerAction action)
+        public override void PerformAction(ITileFieldPlayer player, CharacterAction action)
         {
             if (!TileField.GetTile(Location + lastDirection.ToPoint()).StopsSliding)
             {

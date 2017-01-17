@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using static MeesGame.PlayerAction;
+using static MeesGame.CharacterAction;
 
 namespace MeesGame
 {
@@ -9,7 +9,7 @@ namespace MeesGame
     /// </summary>
     class HumanPlayer : Player
     {
-        private PlayerAction nextAction = NONE;
+        private CharacterAction nextAction = NONE;
         public HumanPlayer(Level level, Point location, int score = 0) : base(level, location, score)
         {
         }
@@ -38,7 +38,7 @@ namespace MeesGame
             }
         }
 
-        protected override PlayerAction NextAction
+        protected override CharacterAction NextAction
         {
             get
             {

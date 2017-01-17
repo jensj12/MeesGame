@@ -51,9 +51,9 @@ namespace MeesGame
             TileField.RevealArea(location);
             soundFootsteps = GameEnvironment.AssetManager.Content.Load<SoundEffect>("footsteps").CreateInstance();
 
-            character.OnPlayerAction += delegate (Character player) { OnPlayerAction?.Invoke(this); };
-            character.OnPlayerWin += delegate (Character player) { OnPlayerWin?.Invoke(this); };
-            character.OnPlayerLose += delegate (Character player) { OnPlayerLose?.Invoke(this); };
+            character.OnCharacterAction += delegate (Character player) { OnPlayerAction?.Invoke(this); };
+            character.OnCharacterWin += delegate (Character player) { OnPlayerWin?.Invoke(this); };
+            character.OnCharacterLose += delegate (Character player) { OnPlayerLose?.Invoke(this); };
             character.OnMoveSmoothly += delegate (Character player, Direction direction) {
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
@@ -75,7 +75,7 @@ namespace MeesGame
         /// <summary>
         /// The last action performed by this player
         /// </summary>
-        public PlayerAction LastAction
+        public CharacterAction LastAction
         {
             get; private set;
         }
@@ -84,7 +84,7 @@ namespace MeesGame
         /// Performs the specified action
         /// </summary>
         /// <param name="action">The PlayerAction to perform</param>
-        protected void PerformAction(PlayerAction action)
+        protected void PerformAction(CharacterAction action)
         {
             if (!character.CanPerformAction(action)) throw new PlayerActionNotAllowedException();
 
@@ -138,11 +138,11 @@ namespace MeesGame
             }
         }
 
-        protected virtual PlayerAction NextAction
+        protected virtual CharacterAction NextAction
         {
             get
             {
-                return PlayerAction.NONE;
+                return CharacterAction.NONE;
             }
         }
 
@@ -150,7 +150,7 @@ namespace MeesGame
         {
             base.Update(gameTime);
 
-            PlayerAction nextAction = NextAction;
+            CharacterAction nextAction = NextAction;
 
             if (!IsMoving && character.CanPerformAction(nextAction))
             {

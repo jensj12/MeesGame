@@ -8,7 +8,14 @@ namespace MeesGame
     /// </summary>
     public class AnimatedMovingGameObject : SmoothlyMovingGameObject
     {
+        /// <summary>
+        /// The time the last animation sprite was started
+        /// </summary>
         private TimeSpan lastAnimationTime;
+
+        /// <summary>
+        /// The time between 2 animation frames
+        /// </summary>
         private TimeSpan timeBetweenAnimations;
 
         public AnimatedMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(field, travelTime, assetName, layer, id, sheetIndex)

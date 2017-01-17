@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.ComponentModel;
-using static MeesGame.PlayerAction;
+using static MeesGame.CharacterAction;
 
 namespace MeesGame
 {
@@ -48,7 +48,7 @@ namespace MeesGame
             else return false;
         }
 
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, CharacterAction action)
         {
             //A player can only move back to where he came from or into the opposite direction
             if (action == EAST || action == WEST)

@@ -8,7 +8,7 @@ namespace MeesGame
         /// <summary>
         /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
-        IList<PlayerAction> PossibleActions { get; }
+        IList<CharacterAction> PossibleActions { get; }
 
         /// <summary>
         /// The TileField the player is playing on
@@ -23,12 +23,12 @@ namespace MeesGame
         /// <summary>
         /// The last action the player performed
         /// </summary>
-        PlayerAction LastAction { get; }
+        CharacterAction LastAction { get; }
 
         /// <summary>
         /// Make the player perform a specified action
         /// </summary>
-        void PerformAction(PlayerAction action);
+        void PerformAction(CharacterAction action);
 
         /// <summary>
         /// The player's location on the TileField

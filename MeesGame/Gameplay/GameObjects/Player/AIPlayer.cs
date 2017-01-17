@@ -13,7 +13,7 @@ namespace MeesGame
             AI.GameStart(this, 3);
         }
 
-        protected override PlayerAction NextAction
+        protected override CharacterAction NextAction
         {
             get
             {

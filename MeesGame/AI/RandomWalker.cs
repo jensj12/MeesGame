@@ -11,7 +11,7 @@ namespace AI
             this.player = player;
         }
 
-        public PlayerAction GetNextAction()
+        public CharacterAction GetNextAction()
         {
             ICharacter dummy = player.Character;
             return dummy.PossibleActions[GameEnvironment.Random.Next(dummy.PossibleActions.Count)];

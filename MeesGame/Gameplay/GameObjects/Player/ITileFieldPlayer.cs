@@ -18,7 +18,7 @@ namespace MeesGame
         /// <summary>
         /// The last action performed by this player
         /// </summary>
-        PlayerAction LastAction { get; set; }
+        CharacterAction LastAction { get; set; }
 
         /// <summary>
         /// The location of the player on the TileField
@@ -28,12 +28,16 @@ namespace MeesGame
         /// <summary>
         /// A list of all possible actions the player can take in the current state of the game
         /// </summary>
-        IList<PlayerAction> PossibleActions { get; }
+        IList<CharacterAction> PossibleActions { get; }
 
         /// <summary>
         /// Current score of the player
         /// </summary>
         int Score { get; set; }
+
+        /// <summary>
+        /// The TileField this ITileFieldPlayer is playing on
+        /// </summary>
         TileField TileField { get; }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="action">The action to check</param>
         /// <returns>true, if the player can perform the action. false otherwise.</returns>
-        bool CanPerformAction(PlayerAction action);
+        bool CanPerformAction(CharacterAction action);
 
         /// <summary>
         /// Checks if the player has a key
@@ -69,7 +73,7 @@ namespace MeesGame
         /// Performs the specified action
         /// </summary>
         /// <param name="action">The PlayerAction to perform</param>
-        void PerformAction(PlayerAction action);
+        void PerformAction(CharacterAction action);
 
         /// <summary>
         /// Makes the player win the game

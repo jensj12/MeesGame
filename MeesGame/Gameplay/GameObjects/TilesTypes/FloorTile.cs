@@ -16,9 +16,9 @@
             return true;
         }
 
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, CharacterAction action)
         {
-            return action == PlayerAction.SPECIAL || !TileField.GetTile(GetLocationAfterAction(action)).CanPlayerMoveHere(player);
+            return action == CharacterAction.SPECIAL || !TileField.GetTile(GetLocationAfterAction(action)).CanPlayerMoveHere(player);
         }
 
         public override void UpdateGraphicsToMatchSurroundings()

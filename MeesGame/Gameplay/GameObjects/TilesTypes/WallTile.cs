@@ -18,7 +18,7 @@
             return false;
         }
 
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, CharacterAction action)
         {
             //A player should never even be on a Wall Tile
             return true;

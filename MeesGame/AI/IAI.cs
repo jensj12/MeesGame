@@ -19,6 +19,6 @@
         /// Whenever the AI player needs a new action, this function is called.
         /// </summary>
         /// <returns>Next action to perform by the AI player</returns>
-        MeesGame.PlayerAction GetNextAction();
+        MeesGame.CharacterAction GetNextAction();
     }
 }

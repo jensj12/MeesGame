@@ -43,31 +43,31 @@ namespace MeesGame
             return new Vector2(p.X, p.Y);
         }
 
-        public static bool IsDirection(this PlayerAction action)
+        public static bool IsDirection(this CharacterAction action)
         {
             switch (action)
             {
-                case PlayerAction.NORTH:
-                case PlayerAction.EAST:
-                case PlayerAction.SOUTH:
-                case PlayerAction.WEST:
+                case CharacterAction.NORTH:
+                case CharacterAction.EAST:
+                case CharacterAction.SOUTH:
+                case CharacterAction.WEST:
                     return true;
                 default:
                     return false;
             }
         }
 
-        public static Direction ToDirection(this PlayerAction action)
+        public static Direction ToDirection(this CharacterAction action)
         {
             switch (action)
             {
-                case PlayerAction.NORTH:
+                case CharacterAction.NORTH:
                     return Direction.NORTH;
-                case PlayerAction.EAST:
+                case CharacterAction.EAST:
                     return Direction.EAST;
-                case PlayerAction.SOUTH:
+                case CharacterAction.SOUTH:
                     return Direction.SOUTH;
-                case PlayerAction.WEST:
+                case CharacterAction.WEST:
                     return Direction.WEST;
                 default:
                     throw new PlayerActionNotAllowedException();

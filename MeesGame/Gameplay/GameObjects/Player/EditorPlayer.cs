@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using static MeesGame.PlayerAction;
+using static MeesGame.CharacterAction;
 using Microsoft.Xna.Framework.Input;
 
 namespace MeesGame
@@ -9,7 +9,7 @@ namespace MeesGame
     /// </summary>
     class EditorPlayer : AnimatedMovingGameObject
     {
-        PlayerAction action = NONE;
+        CharacterAction action = NONE;
         public delegate void EditorPlayerEvent(EditorPlayer player);
         public event EditorPlayerEvent OnMove;
 

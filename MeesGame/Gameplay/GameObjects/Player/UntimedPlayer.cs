@@ -2,9 +2,12 @@
 
 namespace MeesGame
 {
-    class UntimedPlayer : Character
+    /// <summary>
+    /// A character that moves instantly. That is, EndMoveSmoothly() is called immediately after MoveSmoothly
+    /// </summary>
+    class UntimedCharacter : Character
     {
-        public UntimedPlayer(TileField tileField, Point location, int score = 0) : base(tileField, location, score)
+        public UntimedCharacter(TileField tileField, Point location, int score = 0) : base(tileField, location, score)
         {
             OnMoveSmoothly += delegate (Character player, Direction direction) { EndMoveSmoothly(); };
         }

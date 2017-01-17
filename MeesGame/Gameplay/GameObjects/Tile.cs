@@ -101,7 +101,7 @@ namespace MeesGame
         /// <param name="player">The player at this Tile that wants to perform the action</param>
         /// <param name="action">The action to check</param>
         /// <returns>true if the action is forbidden by this Tile. false otherwise.</returns>
-        public abstract bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action);
+        public abstract bool IsActionForbiddenFromHere(ITileFieldPlayer player, CharacterAction action);
 
         /// <summary>
         /// Checks if the player can move to this tile when he is next to it.
@@ -115,24 +115,24 @@ namespace MeesGame
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public Point GetLocationAfterAction(PlayerAction action)
+        public Point GetLocationAfterAction(CharacterAction action)
         {
             Point newLocation = this.location;
             switch (action)
             {
-                case PlayerAction.NORTH:
+                case CharacterAction.NORTH:
                     newLocation.Y--;
                     break;
 
-                case PlayerAction.EAST:
+                case CharacterAction.EAST:
                     newLocation.X++;
                     break;
 
-                case PlayerAction.SOUTH:
+                case CharacterAction.SOUTH:
                     newLocation.Y++;
                     break;
 
-                case PlayerAction.WEST:
+                case CharacterAction.WEST:
                     newLocation.X--;
                     break;
             }
@@ -144,7 +144,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(ITileFieldPlayer player, PlayerAction action)
+        public virtual void PerformAction(ITileFieldPlayer player, CharacterAction action)
         {
             player.LastAction = action;
             if (action.IsDirection())
@@ -175,7 +175,7 @@ namespace MeesGame
             get
             {
                 List<Tile> neighbours = new List<Tile>();
-                foreach (PlayerAction action in Character.MOVEMENT_ACTIONS)
+                foreach (CharacterAction action in Character.MOVEMENT_ACTIONS)
                 {
                     neighbours.Add(TileField.GetTile(GetLocationAfterAction(action)));
                 }
