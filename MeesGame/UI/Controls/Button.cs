@@ -1,5 +1,6 @@
 ﻿using MeesGame.UI;
-using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
@@ -13,12 +14,9 @@ namespace MeesGame
         /// <summary>
         /// The overlays over the background shown when hovering over the button.
         /// </summary>
-        private UISpriteSheet hoveringOverlay;
+        private Texture hoveringOverlay;
 
-        /// <summary>
-        /// The overlays shown when the button is selected.
-        /// </summary>
-        private UISpriteSheet selectedOverlay;
+        private EdgeTexture edgeTexture;
 
         /// <summary>
         /// The textbox inside the Button.
@@ -32,21 +30,19 @@ namespace MeesGame
         /// <param name="dimensions">When this parameter is set to null, automatically set the Dimensions to inhertDimesions(this.Textbox)</param>
         /// <param name="text">The text displayed inside the button.</param>
         /// <param name="onClick">Method called when the button is clicked.</param>
-        /// <param name="backgroundNames">Resource names of the used backgrounds.</param>
-        /// <param name="hoverOverlayNames">Resource names of the used overlays when the button is being hovered.</param>
-        /// <param name="selectedOverlayNames">Resource names of the used overlays when the button is selected.</param>
-        /// <param name="textFont"></param>
-        public Button(Location location, Dimensions dimensions, string text, string[] hoverOverlayNames = null, string[] selectedOverlayNames = null, OnClickEventHandler onClick = null, string textFont = null) : base(location, dimensions)
+        /// <param name="hoverColor">Color that is drawn over the background of the Button.</param>
+        /// <param name="textFont">Font the textbox uses.</param>
+        public Button(Location location, Dimensions dimensions, string text, OnClickEventHandler onClick = null, int? edgeThickness = null, Color? hoverColor = null, string textFont = null) : base(location, dimensions)
         {
-            hoveringOverlay = new UISpriteSheet(SimpleLocation.Zero, InheritDimensions.All);
+            hoveringOverlay = new Background(Utility.SolidWhiteTexture, hoverColor ?? Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ButtonHoverColor));
 
-            selectedOverlay = new UISpriteSheet(SimpleLocation.Zero, InheritDimensions.All);
+            textBox = new Textbox(CenteredLocation.All, null, text);
+            hoveringOverlay.Visible = false;
 
-            textBox = new Textbox(SimpleLocation.Zero, InheritDimensions.All, text);
+            edgeTexture = new EdgeTexture(edgeThickness, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonEdgeColor));
 
             if (dimensions == null)
-                Dimensions = new MeasuredDimensions(textBox);
-            AddConstantComponent(textBox);
+                Dimensions = new MeasuredDimensions(textBox, 2 * DefaultUIValues.Default.DefaultEdgeThickness, 2 * DefaultUIValues.Default.DefaultEdgeThickness);
 
             Click += (UIComponent component) =>
             {
@@ -56,14 +52,9 @@ namespace MeesGame
             if (onClick != null)
                 Click += onClick;
 
-            hoveringOverlay.AddSpritesheets(hoverOverlayNames ?? new string[] { DefaultUIValues.Default.DefaultButtonHoverBackground });
-            hoveringOverlay.Visible = false;
-
-            selectedOverlay.AddSpritesheets(selectedOverlayNames ?? new string[] { DefaultUIValues.Default.DefaultButtonSelectedBackground });
-            selectedOverlay.Visible = false;
-
             AddConstantComponent(hoveringOverlay);
-            AddConstantComponent(selectedOverlay);
+            AddConstantComponent(textBox);
+            AddConstantComponent(edgeTexture);
         }
 
         /// <summary>
@@ -104,6 +95,11 @@ namespace MeesGame
             hoveringOverlay.Visible = MouseHovering;
         }
 
+        public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)
+        {
+            base.DrawTask(gameTime, spriteBatch, anchorPoint);
+        }
+
         /// <summary>
         /// If the button is in the Selected state.
         /// </summary>
@@ -115,7 +111,10 @@ namespace MeesGame
                 if (selected != value)
                 {
                     selected = value;
-                    selectedOverlay.Visible = value;
+                    if(selected)
+                        edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonSelectedEdgeColor);
+                    else
+                        edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonEdgeColor);
                 }
             }
         }

@@ -53,7 +53,7 @@ namespace MeesGame
             level.Add(newLevel);
             currentLevelIndex = 0;
 
-            level[currentLevelIndex].Player.PlayerAction += PlayerMoved;
+            level[currentLevelIndex].Player.OnMove += PlayerMoved;
 
             InitUI();
         }
@@ -86,20 +86,21 @@ namespace MeesGame
 
         private void LoadLevel(UIComponent o)
         {
-            string fileName = null;
-            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
-            DirectoryInfo info = Directory.CreateDirectory(directory);
-            openFileDialog.InitialDirectory = info.FullName;
-            openFileDialog.Filter = "lvl Files| *.lvl";
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            try
             {
-                fileName = openFileDialog.FileName;
-                level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(fileName));
-                level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
-                PlayerMoved(level[currentLevelIndex].Player);
+                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+                string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
+                DirectoryInfo info = Directory.CreateDirectory(directory);
+                openFileDialog.InitialDirectory = info.FullName;
+                openFileDialog.Filter = "lvl Files| *.lvl";
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    level[currentLevelIndex].FillLevelWithTiles(FileIO.Load(openFileDialog.FileName));
+                    level[currentLevelIndex].Tiles.UpdateGraphicsToMatchSurroundings();
+                    PlayerMoved(level[currentLevelIndex].Player);
+                }
             }
-
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace MeesGame
                 string[] tileBackgroundAndOverlays = Tile.GetAssetNamesFromTileType(tt);
                 if (tileBackgroundAndOverlays != null)
                 {
-                    Button newButton = new SpriteSheetButton(new CenteredLocation(yOffset: buttonDistanceFromTop, horizontalCenter: true), new SimpleDimensions(tilesListWidth - buttonDistanceFromTop * 2 - 10, tilesListWidth - buttonDistanceFromTop * 2 - 10), "", OnItemSelect, tileBackgroundAndOverlays);
+                    Button newButton = new SpriteSheetButton(new CenteredLocation(yOffset: buttonDistanceFromTop, horizontalCenter: true), new SimpleDimensions(tilesListWidth - buttonDistanceFromTop * 2 - 10, tilesListWidth - buttonDistanceFromTop * 2 - 10), "", OnItemSelect, null, tileBackgroundAndOverlays);
                     tilesList.AddChild(newButton);
                 }
             }
@@ -183,7 +184,7 @@ namespace MeesGame
         /// Called every time the players moves to update the UI accordingly.
         /// </summary>
         /// <param name="player">The player that moved.</param>
-        public void PlayerMoved(Player player)
+        public void PlayerMoved(EditorPlayer player)
         {
             Tile playerTile = (Tile)level[currentLevelIndex].Tiles.Objects[player.Location.X, player.Location.Y];
             CurrentTileChanged(playerTile);
@@ -202,7 +203,7 @@ namespace MeesGame
                 foreach (EditorAttribute editorAttribute in property.GetCustomAttributes(true))
                 {
                     UIComponent editorComponent = GetEditorControl(playerTile, property);
-                    if(editorComponent != null)
+                    if (editorComponent != null)
                         tilePropertiesList.AddChild(editorComponent);
                 }
             }
@@ -216,7 +217,7 @@ namespace MeesGame
         /// <returns></returns>
         private UIComponent GetEditorControl(Tile tile, PropertyInfo property)
         {
-            if(property.GetMethod.ReturnType == typeof(Color))
+            if (property.GetMethod.ReturnType == typeof(Color))
             {
                 return new ColorPicker(SimpleLocation.Zero, property, tile);
             }

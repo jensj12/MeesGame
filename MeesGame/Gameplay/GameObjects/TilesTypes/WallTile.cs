@@ -12,13 +12,13 @@
             obstructsVision = true;
         }
 
-        public override bool CanPlayerMoveHere(Player player)
+        public override bool CanPlayerMoveHere(ITileFieldPlayer player)
         {
             //A player can never walk onto a wall
             return false;
         }
 
-        public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
             //A player should never even be on a Wall Tile
             return true;
@@ -39,6 +39,14 @@
 
         public override void UpdateGraphics()
         {
+        }
+
+        public override bool StopsSliding
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace MeesGame
@@ -35,6 +36,12 @@ namespace MeesGame
             gameStateManager.AddGameState("LoadMenuState", new LoadMenuState());
             gameStateManager.AddGameState("GameOverState", new GameOverState());
             gameStateManager.SwitchTo("TitleMenuState");
+
+            /// Used for playing the background music
+            SoundEffect snd = AssetManager.Content.Load<SoundEffect>("theme_song");
+            SoundEffectInstance sndInstance = snd.CreateInstance();
+            sndInstance.IsLooped = true;
+            sndInstance.Play();
         }
     }
 }

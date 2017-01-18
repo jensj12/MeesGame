@@ -9,20 +9,28 @@
         Start,
         End,
         Hole,
+        Ice,
+        Guard,
         Unknown
     }
 
     public struct TileData
     {
         public TileType TileType { get; set; }
-        public TileData(TileType tileType)
+        public int AdditionalInfo { get; set; }
+
+        public TileData(TileType tileType, int additionalInfo = 0)
         {
             TileType = tileType;
+            AdditionalInfo = additionalInfo;
         }
 
         public Tile ToTile()
         {
-            return Tile.CreateTileFromTileType(TileType);
+            Tile tile = Tile.CreateTileFromTileType(TileType);
+            tile.Data = this;
+            tile.UpdateToAdditionalInfo();
+            return tile;
         }
 
         public static implicit operator Tile(TileData data)

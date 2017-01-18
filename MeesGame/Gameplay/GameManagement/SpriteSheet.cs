@@ -110,7 +110,7 @@ public class SpriteSheet
         set { mirror = value; }
     }
 
-    public int SpriteRowIndex
+    public int SheetRowIndex
     {
         get
         {
@@ -118,7 +118,19 @@ public class SpriteSheet
         }
         set
         {
-            sheetIndex = value * NumberColumns + (sheetIndex % NumberColumns);
+            sheetIndex = value * NumberColumns + SheetColIndex;
+        }
+    }
+
+    public int SheetColIndex
+    {
+        get
+        {
+            return sheetIndex % NumberColumns;
+        }
+        set
+        {
+            sheetIndex = SheetRowIndex * NumberColumns + value % NumberColumns;
         }
     }
 

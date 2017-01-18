@@ -24,19 +24,14 @@
             usePlayer(new HumanPlayer(this, start));
         }
 
-        public void UseTimedPlayer()
-        {
-            usePlayer(new TimedPlayer(this, start));
-        }
-
-        public void UseUntimedPlayer()
-        {
-            usePlayer(new Player(this, start));
-        }
-
         public void UseRandomWalkingAIPlayer()
         {
             usePlayer(new AIPlayer(new AI.RandomWalker() ,this, start));
+        }
+
+        public PlayerGameObject Player
+        {
+            get { return player as PlayerGameObject; }
         }
     }
 }
