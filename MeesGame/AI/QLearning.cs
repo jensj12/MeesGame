@@ -21,9 +21,36 @@ namespace AI
             this.location = location;
             this.keysInInventory = keysInInventory;
         }
+
+        public override int GetHashCode()
+        {
+            const int START_PRIME = 17;
+            const int MULTIPLY_PRIME = 37;
+
+            int result = START_PRIME;
+            foreach(bool b in keysInInventory)
+            {
+                result = MULTIPLY_PRIME * result + (b ? 0 : 1);
+            }
+            result = MULTIPLY_PRIME * result + location.X;
+            result = MULTIPLY_PRIME * result + location.Y;
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is AILevelState)
+            {
+                AILevelState state = (AILevelState)obj;
+                return keysInInventory.SequenceEqual(state.keysInInventory) && location.Equals(state.location);
+            }else
+            {
+                return false;
+            }
+        }
     }
 
-    class QLearning : GameObject
+    class QLearning : IAI
     {
         /// <summary>
         /// beginState is the state in which the agent begins a maze.
@@ -33,7 +60,7 @@ namespace AI
 
         private Level level;
 
-        private Player player;
+        private IPlayer player;
 
         /// <summary>
         /// currentState is the state in which the agent currently is.
@@ -207,7 +234,7 @@ namespace AI
             {
                 temporaryKeyList.Add(element); //zorg dat de tijdelijke lijst geupdatet wordt als je op een vakje met een sleutel komt
             }
-            Player clone = player.Clone();
+            DummyPlayer clone = player.Clone();
             clone.PerformAction(a);
             AILevelState newAILevelState = new AILevelState(clone.Location, temporaryKeyList);
 
@@ -252,15 +279,6 @@ namespace AI
         }
 
         /// <summary>
-        /// AIPlayGame receives ILevelStates, determines which action it wants to perform and then performs this action.
-        /// </summary>
-        public void AIPlayGame()
-        {
-            player = new TimedPlayer(level,level.Start);
-            level.UsePlayer(player);
-        }
-
-        /// <summary>
         /// Returns the score of the performed action a on the ILevelSTate s.
         /// </summary>
         /// <param name="s"></param>
@@ -280,6 +298,16 @@ namespace AI
         {
             Tuple<AILevelState, PlayerAction> StateAndAction = new Tuple<AILevelState, PlayerAction>(s, a);
             qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(s, a) + discountFactor * EstimatedOptimalFutureValue(s, a) - qValues[StateAndAction]);
+        }
+
+        public void GameStart(IPlayer player, int difficulty)
+        {
+            this.player = player;
+        }
+
+        public PlayerAction GetNextAction()
+        {
+            
         }
     }
 }
