@@ -38,7 +38,7 @@ namespace MeesGame
             gameStateManager.SwitchTo("TitleMenuState");
 
             /// Used for playing the background music
-            SoundEffect snd = AssetManager.Content.Load<SoundEffect>("theme_song");
+            SoundEffect snd = AssetManager.Content.Load<SoundEffect>("Theme_Song");
             SoundEffectInstance sndInstance = snd.CreateInstance();
             sndInstance.IsLooped = true;
             sndInstance.Play();
