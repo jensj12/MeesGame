@@ -58,6 +58,10 @@ namespace MeesGen
                             {
                                 // Add a tile between the hallways.
                                 tileToAdd = ChooseLoopTile();
+                                if(tileToAdd is DoorTile)
+                                {
+                                    (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(numKeys, true);
+                                }
                                 tiles.Add(tileToAdd, (next.X + current.X) / 2, (next.Y + current.Y) / 2);
                             }
                         }
@@ -76,6 +80,8 @@ namespace MeesGen
                         {
                             // Once a key has been placed, a door can be placed.
                             tileToAdd = new KeyTile();
+                            (tileToAdd as KeyTile).SecondarySpriteColor = ChooseColor(keysPlaced);
+                            keysPlaced++;
                             placeDoors = true;
                         }
                     }
@@ -88,9 +94,11 @@ namespace MeesGen
                     tileToAdd = new FloorTile();
 
                     // If a key has been placed, placeDoors is true and there is a chance to place doors.
-                    if (placeDoors && random.Next(BIGINT) < doorChance * BIGINT)
+                    if (doorsPlaced < keysPlaced && placeDoors && random.Next(BIGINT) < doorChance * BIGINT)
                     {
                         tileToAdd = new DoorTile();
+                        (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(doorsPlaced);
+                        doorsPlaced++;
                         // If there's a door between the tiles, it's more difficult to get from one to another, so the exit score should increase by more.
                         exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + 10;
                     }

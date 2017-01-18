@@ -95,6 +95,32 @@ namespace MeesGen
             return new FloorTile();
         }
 
+        private Color ChooseColor(int max, bool randomly = false)
+        {
+            if (randomly)
+            {
+                Random randomNumber = new Random();
+                max = (int)(randomNumber.Next(0, numKeys));
+            }
+            switch(max)
+            {
+                case 0:
+                    return Color.Blue;
+                case 1:
+                    return Color.Cyan;
+                case 2:
+                    return Color.Green;
+                case 3:
+                    return Color.Magenta;
+                case 4:
+                    return Color.Red;
+                case 5:
+                    return Color.Yellow;
+                default:
+                    return Color.Blue;
+            }
+        }
+
         /// <summary>
         /// Finds the edge tile next to a specified tile.
         /// </summary>

@@ -28,6 +28,7 @@ namespace MeesGen
         private int nodesDone;
         private int position;
         private int numKeys;
+        private int keysPlaced, doorsPlaced;
         private int numRows, numCols;
 
         private void InitMazeGen(int numRows, int numCols, int difficulty)
@@ -46,44 +47,44 @@ namespace MeesGen
             switch (difficulty)
             {
                 case 1:
-                    loopChance = 0.06;
-                    loopDoorChance = 0.45;
-                    loopHoleChance = 0.15;
+                    loopChance = 0.04;
+                    loopDoorChance = 0.2;
+                    loopHoleChance = 0.55;
                     splitChance = 0.03;
                     doorChance = 0;
-                    numKeys = 3;
+                    numKeys = 2;
                     break;
                 case 2:
-                    loopChance = 0.04;
-                    loopDoorChance = 0.7;
-                    loopHoleChance = 0.1;
+                    loopChance = 0.03;
+                    loopDoorChance = 0.2;
+                    loopHoleChance = 0.6;
                     splitChance = 0.04;
                     doorChance = 0.01;
-                    numKeys = 2;
+                    numKeys = 3;
                     break;
                 case 3:
-                    loopChance = 0.03;
-                    loopDoorChance = 0.8;
-                    loopHoleChance = 0.1;
+                    loopChance = 0.025;
+                    loopDoorChance = 0.2;
+                    loopHoleChance = 0.7;
                     splitChance = 0.03;
                     doorChance = 0.03;
-                    numKeys = 2;
+                    numKeys = 4;
                     break;
                 case 4:
                     loopChance = 0.02;
-                    loopDoorChance = 0.8;
-                    loopHoleChance = 0.15;
+                    loopDoorChance = 0.2;
+                    loopHoleChance = 0.75;
                     splitChance = 0.03;
                     doorChance = 0.05;
-                    numKeys = 1;
+                    numKeys = 5;
                     break;
                 case 5:
                     loopChance = 0.01;
-                    loopDoorChance = 0.3;
-                    loopHoleChance = 0.7;
+                    loopDoorChance = 0.1;
+                    loopHoleChance = 0.9;
                     splitChance = 0.02;
                     doorChance = 0.08;
-                    numKeys = 1;
+                    numKeys = 6;
                     break;
             }
         }
