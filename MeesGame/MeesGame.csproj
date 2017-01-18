@@ -168,7 +168,8 @@
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\open_door.wav" />
     <Content Include="Gameplay\Content\player%404x4.png" />
-    <Content Include="Gameplay\Content\theme_song.wav" />
+    <Content Include="Gameplay\Content\scream.wav" />
+    <Content Include="Gameplay\Content\Theme_Song.wav" />
     <Content Include="Gameplay\Content\verticalDoor.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />

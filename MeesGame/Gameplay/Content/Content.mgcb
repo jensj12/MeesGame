@@ -247,3 +247,9 @@
 /processorParam:TextureFormat=Color
 /build:verticalDoorOverlay.png
 
+#begin scream.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:scream.wav
+
