@@ -10,7 +10,7 @@ namespace MeesGame
 
         public EdgeTexture(int? edgeThickness = null, Color? color = null) : base(color: color)
         {
-            this.edgeThickness = edgeThickness ?? DefaultUIValues.Default.DefaultEdgeThickness;
+            this.edgeThickness = edgeThickness ?? DefaultUIValues.Default.EdgeThickness;
         }
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)

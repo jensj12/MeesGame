@@ -98,18 +98,18 @@ namespace MeesGame.UI {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8")]
-        public int DefaultEdgeThickness {
+        public int EdgeThickness {
             get {
-                return ((int)(this["DefaultEdgeThickness"]));
+                return ((int)(this["EdgeThickness"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SlateGray")]
-        public global::System.Drawing.Color DefaultButtonEdgeColor {
+        public global::System.Drawing.Color ButtonEdgeColor {
             get {
-                return ((global::System.Drawing.Color)(this["DefaultButtonEdgeColor"]));
+                return ((global::System.Drawing.Color)(this["ButtonEdgeColor"]));
             }
         }
         
@@ -119,6 +119,27 @@ namespace MeesGame.UI {
         public global::System.Drawing.Color DefaultButtonSelectedEdgeColor {
             get {
                 return ((global::System.Drawing.Color)(this["DefaultButtonSelectedEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        public global::System.Drawing.Color BoxEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["BoxEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
+        public global::System.Drawing.Color BoxInnerColor {
+            get {
+                return ((global::System.Drawing.Color)(this["BoxInnerColor"]));
+            }
+            set {
+                this["BoxInnerColor"] = value;
             }
         }
     }

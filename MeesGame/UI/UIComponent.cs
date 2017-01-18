@@ -93,7 +93,7 @@ namespace MeesGame
         public UIComponent(Location location, Dimensions dimensions)
         {
             this.location = location ?? SimpleLocation.Zero;
-            this.dimensions = dimensions;
+            this.dimensions = dimensions ?? InheritDimensions.All;
 
             children = new ComponentList<UIComponent>();
             constantComponents = new ComponentList<UIComponent>();

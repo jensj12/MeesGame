@@ -70,12 +70,30 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string cancel {
+            get {
+                return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick your
         ///color..
         /// </summary>
         internal static string color_picker_text {
             get {
                 return ResourceManager.GetString("color_picker_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to columns.
+        /// </summary>
+        internal static string columns_edit_text {
+            get {
+                return ResourceManager.GetString("columns_edit_text", resourceCulture);
             }
         }
         
@@ -121,6 +139,24 @@ namespace MeesGame {
         internal static string map_editor {
             get {
                 return ResourceManager.GetString("map_editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string ok {
+            get {
+                return ResourceManager.GetString("ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rows.
+        /// </summary>
+        internal static string rows_edit_text {
+            get {
+                return ResourceManager.GetString("rows_edit_text", resourceCulture);
             }
         }
         

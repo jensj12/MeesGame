@@ -53,7 +53,7 @@ public class GameStateManager : IGameLoopObject
 
     public void HandleInput(InputHelper inputHelper)
     {
-        if (inputHelper.KeyPressed(Keys.Back)) SwitchTo("TitleMenuState");
+        if (inputHelper.KeyPressed(Keys.P)) SwitchTo("TitleMenuState");
         if (currentGameState != null)
         {
             currentGameState.HandleInput(inputHelper);

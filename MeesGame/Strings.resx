@@ -120,9 +120,15 @@
   <data name="begin" xml:space="preserve">
     <value>Begin game</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="color_picker_text" xml:space="preserve">
     <value>Pick your
 color.</value>
+  </data>
+  <data name="columns_edit_text" xml:space="preserve">
+    <value>columns</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Exit</value>
@@ -138,6 +144,12 @@ color.</value>
   </data>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="rows_edit_text" xml:space="preserve">
+    <value>rows</value>
   </data>
   <data name="victory" xml:space="preserve">
     <value>Victory!</value>

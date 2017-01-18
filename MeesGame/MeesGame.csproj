@@ -82,12 +82,14 @@
     <Compile Include="Gameplay\Level\Level.cs" />
     <Compile Include="UI\Controls\EdgeTexture.cs" />
     <Compile Include="UI\Components\InputBox.cs" />
+    <Compile Include="UI\Components\NumberInputBox.cs" />
     <Compile Include="UI\Controls\Background.cs" />
     <Compile Include="UI\Components\GUISpriteSheet.cs" />
     <Compile Include="UI\Components\Textbox.cs" />
     <Compile Include="UI\Components\Texture.cs" />
     <Compile Include="Gameplay\Level\LevelData.cs" />
     <Compile Include="UI\Controls\EditorControls\ColorPicker.cs" />
+    <Compile Include="UI\Controls\EditorControls\NewLevelBox.cs" />
     <Compile Include="UI\Controls\SpriteSheetButton.cs" />
     <Compile Include="UI\Controls\TextureButton.cs" />
     <Compile Include="UI\DefaultUIValues.Designer.cs">
@@ -97,12 +99,16 @@
     </Compile>
     <Compile Include="UI\Interfaces\IMeasuredDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions.cs" />
+    <Compile Include="UI\Properties\Dimensions\CombinationDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\InheritDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\MeasuredDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\SimpleDimensions.cs" />
+    <Compile Include="UI\Properties\Dimensions\WrapperDimensions.cs" />
     <Compile Include="UI\Properties\Location.cs" />
     <Compile Include="UI\Properties\Location\CenteredLocation.cs" />
+    <Compile Include="UI\Properties\Location\CombinationLocation.cs" />
     <Compile Include="UI\Properties\Location\DirectionLocation.cs" />
+    <Compile Include="UI\Properties\Location\RelativeToLocation.cs" />
     <Compile Include="UI\Properties\Location\SimpleLocation.cs" />
     <Compile Include="UI\Components\ScrollBar.cs" />
     <Compile Include="UI\TextureRenderer.cs" />

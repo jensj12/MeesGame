@@ -6,32 +6,27 @@ namespace MeesGame
     {
         private const string tileFieldName = "editorTiles";
 
-        public EditorLevel(int levelindex = 0, int screenWidth = -1, int screenHeight = -1) : base(false)
+        public EditorLevel(TileField tileField, int levelindex = 0, int screenWidth = -1, int screenHeight = -1)
         {
-            start = Point.Zero;
-            FillLevelWithEmptyTiles();
+            start = new Point(1, 1);
+            numRows = tileField.Rows;
+            numColumns = tileField.Columns;
+            Tiles = tileField;
+            Tiles.UpdateGraphicsToMatchSurroundings();
+            Tiles.FogOfWar = false;
             usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
         }
 
-        public void FillLevelWithEmptyTiles()
+        public static void FillWithEmptyTiles(TileField tf)
         {
-            for (int x = 0; x < numRows; x++)
-                for (int y = 0; y < numColumns; y++)
-                    if (Tiles.OnEdgeOfTileField(x, y))
-                        Tiles.Add(new WallTile(), x, y);
+            for (int x = 0; x < tf.Columns; x++)
+                for (int y = 0; y < tf.Rows; y++)
+                    if (tf.OnEdgeOfTileField(x, y))
+                        tf.Add(new WallTile(), x, y);
                     else
-                        Tiles.Add(new FloorTile(), x, y);
+                        tf.Add(new FloorTile(), x, y);
 
-            Tiles.UpdateGraphicsToMatchSurroundings();
-        }
-
-        public void FillLevelWithTiles(TileField tiles)
-        {
-            for (int x = 0; x < numRows; x++)
-                for (int y = 0; y < numColumns; y++)
-                    Tiles.Add(tiles.Objects[x, y], x, y);
-
-            Tiles.UpdateGraphicsToMatchSurroundings();
+            tf.UpdateGraphicsToMatchSurroundings();
         }
 
         public EditorPlayer Player

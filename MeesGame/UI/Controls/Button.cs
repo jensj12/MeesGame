@@ -39,10 +39,10 @@ namespace MeesGame
             textBox = new Textbox(CenteredLocation.All, null, text);
             hoveringOverlay.Visible = false;
 
-            edgeTexture = new EdgeTexture(edgeThickness, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonEdgeColor));
+            edgeTexture = new EdgeTexture(edgeThickness, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ButtonEdgeColor));
 
             if (dimensions == null)
-                Dimensions = new MeasuredDimensions(textBox, 2 * DefaultUIValues.Default.DefaultEdgeThickness, 2 * DefaultUIValues.Default.DefaultEdgeThickness);
+                Dimensions = new MeasuredDimensions(textBox, 2 * DefaultUIValues.Default.EdgeThickness, 2 * DefaultUIValues.Default.EdgeThickness);
 
             Click += (UIComponent component) =>
             {
@@ -114,7 +114,7 @@ namespace MeesGame
                     if(selected)
                         edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonSelectedEdgeColor);
                     else
-                        edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonEdgeColor);
+                        edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ButtonEdgeColor);
                 }
             }
         }
