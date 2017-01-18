@@ -84,15 +84,27 @@ namespace MeesGame
                 return new WallTile();
             return (Tile)Get(x, y);
         }
-
-        ///this bool returns if the x and y are outside the bounds of the tilefield
+        
+        /// <summary>
+        /// Checks if the x and y are outside the bounds of the tilefield
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool OutOfTileField(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
-            {
-                return true;
-            }
-            return false;
+            return x < 0 || y < 0 || x >= Columns || y >= Rows;
+        }
+
+        /// <summary>
+        /// Checks if the location is outside the bounds of the tilefield
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool OutOfTileField(Point location)
+        {
+            return OutOfTileField(location.X, location.Y);
         }
 
         public Tile GetTile(Point location)
@@ -225,6 +237,16 @@ namespace MeesGame
             {
                 return new Vector2(CellWidth, CellHeight);
             }
+        }
+
+        /// <summary>
+        /// Should be called when the player enters a Tile so that the graphics can be adjusted.
+        /// </summary>
+        /// <param name="location">The location of the Tile the player visits</param>
+        public void Visit(Point location)
+        {
+            RevealArea(location);
+            GetTile(location).MarkVisited();
         }
     }
 }

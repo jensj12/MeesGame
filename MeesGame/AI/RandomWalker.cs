@@ -6,7 +6,7 @@ namespace AI
     {
         IPlayer player;
 
-        public void GameStart(IPlayer player)
+        public void GameStart(IPlayer player, int difficulty)
         {
             this.player = player;
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace MeesGame
 {
@@ -9,7 +8,7 @@ namespace MeesGame
     {
         public TileData Data
         {
-            get; private set;
+            get; set;
         }
 
         public Point location = Point.Zero;
@@ -78,7 +77,7 @@ namespace MeesGame
             }
         }
 
-        public virtual void EnterCenterOfTile(Player player) { }
+        public virtual void EnterCenterOfTile(ITileFieldPlayer player) { }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -102,14 +101,14 @@ namespace MeesGame
         /// <param name="player">The player at this Tile that wants to perform the action</param>
         /// <param name="action">The action to check</param>
         /// <returns>true if the action is forbidden by this Tile. false otherwise.</returns>
-        public abstract bool IsActionForbiddenFromHere(Player player, PlayerAction action);
+        public abstract bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action);
 
         /// <summary>
         /// Checks if the player can move to this tile when he is next to it.
         /// </summary>
         /// <param name="player"></param>
         /// <returns>true if the player can move here. false otherwise.</returns>
-        public abstract bool CanPlayerMoveHere(Player player);
+        public abstract bool CanPlayerMoveHere(ITileFieldPlayer player);
 
         /// <summary>
         /// The location that the player will be on after performing the specified action
@@ -141,12 +140,13 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Perform an action for the player. Modifies the Player appropriately
+        /// Perform an action for the player. Modifies the ITileFieldPlayer appropriately
         /// </summary>
         /// <param name="player">The player that is performing the action</param>
         /// <param name="action">The action to perform</param>
-        public virtual void PerformAction(Player player, PlayerAction action)
+        public virtual void PerformAction(ITileFieldPlayer player, PlayerAction action)
         {
+            player.LastAction = action;
             if (action.IsDirection())
                 player.MoveSmoothly(action.ToDirection());
         }
@@ -167,13 +167,6 @@ namespace MeesGame
             }
         }
 
-        [Editor]
-        public Color SecondarySpriteColor
-        {
-            get { return secondarySpriteColor; }
-            set { secondarySpriteColor = value; }
-        }
-
         /// <summary>
         /// The four direct neighbors of this Tile
         /// </summary>
@@ -182,22 +175,12 @@ namespace MeesGame
             get
             {
                 List<Tile> neighbours = new List<Tile>();
-                foreach (PlayerAction action in Player.MOVEMENT_ACTIONS)
+                foreach (PlayerAction action in DummyPlayer.MOVEMENT_ACTIONS)
                 {
                     neighbours.Add(TileField.GetTile(GetLocationAfterAction(action)));
                 }
                 return neighbours;
             }
-        }
-
-        public bool IsNextToSpecialTile()
-        {
-            foreach (Tile tile in Neighbours)
-            {
-                if (tile.TileType == TileType.Door)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -234,14 +217,16 @@ namespace MeesGame
 
                 case TileType.Hole:
                     return new HoleTile();
+
+                case TileType.Ice:
+                    return new IceTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
         }
 
-        public virtual void EnterTile(Player player)
+        public virtual void EnterTile(ITileFieldPlayer player)
         {
-            IsVisited = true;
         }
 
         public static Tile CreateTileFromTileData(TileData data)
@@ -279,6 +264,9 @@ namespace MeesGame
                 case TileType.Start:
                     return new string[] { "ladder" };
 
+                case TileType.Ice:
+                    return new string[] { "floorTile", "Ice" };
+
             }
             //If no Tile can be made of the specified tiletype, return null
             return null;
@@ -288,5 +276,20 @@ namespace MeesGame
         /// Updates the graphics of the tile according to things happening while playing.
         /// </summary>
         public abstract void UpdateGraphics();
+
+        public virtual void UpdateToAdditionalInfo() { }
+
+        public void MarkVisited()
+        {
+            IsVisited = true;
+        }
+
+        public virtual bool StopsSliding
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

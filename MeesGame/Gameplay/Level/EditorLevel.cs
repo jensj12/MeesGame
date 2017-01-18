@@ -27,5 +27,13 @@ namespace MeesGame
                 for (int y = 0; y < numColumns; y++)
                     Tiles.Add(tiles.Objects[x, y], x, y);
         }
+
+        public EditorPlayer Player
+        {
+            get
+            {
+                return player as EditorPlayer;
+            }
+        }
     }
 }

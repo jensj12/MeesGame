@@ -14,17 +14,12 @@ namespace MeesGame
         protected const int CELL_WIDTH = 64;
         protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(300);
         protected Point start;
-        protected Player player;
+        protected AnimatedMovingGameObject player;
         private TileField tiles;
 
         public Level(bool fogOfWar = true)
         {
             Tiles = new TileField(numRows, numColumns, fogOfWar, 0, "tiles");
-        }
-
-        public Player Player
-        {
-            get { return player; }
         }
 
         public TileField Tiles
@@ -57,7 +52,7 @@ namespace MeesGame
             camera.ResetCamera();
         }
 
-        protected void usePlayer(Player player, int screenWidth = -1, int screenHeight = -1)
+        protected void usePlayer(AnimatedMovingGameObject player, int screenWidth = -1, int screenHeight = -1)
         {
             this.player = player;
 

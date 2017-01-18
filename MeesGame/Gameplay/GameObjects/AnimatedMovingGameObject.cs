@@ -23,13 +23,13 @@ namespace MeesGame
             {
                 if (gameTime.TotalGameTime - lastAnimationTime >= timeBetweenAnimations)
                 {
-                    Sprite.SheetIndex = Sprite.SpriteRowIndex * Sprite.NumberColumns + ((Sprite.SheetIndex + 1) % Sprite.NumberColumns);
+                    Sprite.SheetColIndex++;
                     lastAnimationTime = gameTime.TotalGameTime;
                 }
             }
             else
             {
-                Sprite.SheetIndex = Sprite.SpriteRowIndex * Sprite.NumberColumns;
+                Sprite.SheetIndex = Sprite.SheetRowIndex * Sprite.NumberColumns;
             }
         }
     }

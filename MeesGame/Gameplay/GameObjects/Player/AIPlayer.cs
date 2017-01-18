@@ -3,23 +3,22 @@ using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
-    class AIPlayer : TimedPlayer
+    class AIPlayer : PlayerGameObject
     {
         IAI AI;
 
-        public AIPlayer(IAI AI, Level level, Point location, int score = 0):base(level, location, score)
+        public AIPlayer(IAI AI, Level level, Point location, int score = 0) : base(level, location, score)
         {
             this.AI = AI;
-            AI.GameStart(this);
+            AI.GameStart(DummyPlayer, 3);
         }
 
-        public override void Update(GameTime gameTime)
+        protected override PlayerAction NextAction
         {
-            if (NextAction == MeesGame.PlayerAction.NONE && !IsMoving)
+            get
             {
-                NextAction = AI.GetNextAction();
+                return AI.GetNextAction();
             }
-            base.Update(gameTime);
         }
     }
 }

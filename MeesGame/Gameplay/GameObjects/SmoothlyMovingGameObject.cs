@@ -7,12 +7,13 @@ namespace MeesGame
     {
         Vector2 GetAnchorPosition(Point location);
         Vector2 CellDimensions { get; }
+        bool OutOfTileField(Point location);
     }
 
     /// <summary>
     /// Game object that exists at discrete positions but animates smoothly to its new position when moving
     /// </summary>
-    public class SmoothlyMovingGameObject : SpriteGameObject
+    public class SmoothlyMovingGameObject : DirectionalGameObject
     {
         /// <summary>
         /// Event called when the location of the object changes
@@ -37,7 +38,12 @@ namespace MeesGame
         /// <summary>
         /// The field that this object is moving on
         /// </summary>
-        private IDiscreteField field;
+        protected IDiscreteField field;
+
+        public Direction LastDirection
+        {
+            get; private set;
+        }
 
         public SmoothlyMovingGameObject(IDiscreteField field, TimeSpan travelTime, string assetName, int layer = 0, string id = "", int sheetIndex = 0) : base(assetName, layer, id, sheetIndex)
         {
@@ -87,7 +93,9 @@ namespace MeesGame
         /// <param name="direction"></param>
         public void MoveSmoothly(Direction direction)
         {
+            Direction = direction;
             JumpToAnchorPosition();
+            LastDirection = direction;
             Location += direction.ToPoint();
             Vector2 translation = Vector2.Multiply(field.CellDimensions, direction.ToVector2());
             velocity = Vector2.Divide(translation, (float)TravelTime.TotalSeconds);

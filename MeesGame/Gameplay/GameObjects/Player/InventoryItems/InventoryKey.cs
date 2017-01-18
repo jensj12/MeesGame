@@ -2,9 +2,9 @@
 {
     class InventoryKey : InventoryItem
     {
-        public InventoryKey()
+        public InventoryKey(KeyColor color)
         {
-            type = InventoryItemType.Key;
+            type = color.ToInventeryItemType();
         }
     }
 }
