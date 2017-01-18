@@ -51,6 +51,7 @@
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
     <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\TilesTypes\GuardTile.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="Gameplay\GameObjects\TileData.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player\IPlayer.cs" />
-    <Compile Include="Gameplay\GameObjects\IceTile.cs" />
+    <Compile Include="Gameplay\GameObjects\TilesTypes\IceTile.cs" />
     <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\EndTile.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\FloorTile.cs" />
