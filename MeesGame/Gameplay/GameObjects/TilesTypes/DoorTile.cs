@@ -1,30 +1,54 @@
 ﻿using Microsoft.Xna.Framework;
+using System.ComponentModel;
 using static MeesGame.PlayerAction;
 
 namespace MeesGame
 {
     class DoorTile : WallTile
     {
-        protected bool doorIsOpen = false;
+        protected bool isHorizontal = true;
+        protected KeyColor doorColor;
 
-        //TODO: Pair a door with a specific key.
+        public Color Background { get; set; }
+
         public DoorTile(int layer = 0, string id = "") : base(TileType.Door, layer, id)
         {
-            secondarySpriteColor = Color.Blue;
+            secondarySpriteColor = doorColor.ToColor();
         }
 
-        public override bool CanPlayerMoveHere(Player player)
+        [Editor]
+        public Color SecondarySpriteColor
         {
-            //Temporary OpenDoor call.
-            OpenDoor(player);
-            //A player is allowed to move onto a door tile if the door is open.
-            if (doorIsOpen)
-                return true;
-            else
-                return false;
+            get
+            {
+                return base.secondarySpriteColor;
+            }
+            set
+            {
+                base.secondarySpriteColor = value;
+                doorColor = KeyColorExtensions.FromColor(value);
+                TileData tileData = Data;
+                tileData.AdditionalInfo = (int)doorColor;
+                Data = tileData;
+            }
         }
 
-        public override bool IsActionForbiddenFromHere(Player player, PlayerAction action)
+        public override bool CanPlayerMoveHere(ITileFieldPlayer player)
+        {
+            // A player is allowed to move onto a horizontalDoor from the tile above or below it.
+            // A player is allowed to move onto a verticalDoor from the Tile to the left or to the right of it.
+            if ((isHorizontal && player.Location.X == location.X) || (!isHorizontal && player.Location.Y == location.Y))
+            {
+                //A player is allowed to move onto a door tile if the door is open.
+                if (CanMoveOntoDoor(player))
+                    return true;
+                else
+                    return false;
+            }
+            else return false;
+        }
+
+        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
             //A player can only move back to where he came from or into the opposite direction
             if (action == EAST || action == WEST)
@@ -45,30 +69,50 @@ namespace MeesGame
                 return true;
         }
 
-        public void OpenDoor(Player player)
+        public bool CanMoveOntoDoor(ITileFieldPlayer player)
         {
             //A player is only allowed to open a door if he has the right key.
-            if (player.HasKey())
+            if (player.HasItem(doorColor.ToInventeryItemType()))
             {
-                doorIsOpen = true;
+                return true;
             }
+            else
+                return false;
+        }
+
+        public override void EnterTile(ITileFieldPlayer player)
+        {
+            GameEnvironment.AssetManager.PlaySound("open_door");
+            base.EnterTile(player);
         }
 
         public override void UpdateGraphicsToMatchSurroundings()
         {
+            int useHorizontal = 0;
             int x = Location.X;
             int y = Location.Y;
             TileField tileField = Parent as TileField;
-            if (tileField.GetTile(x, y - 1) is WallTile)
+            if (tileField.GetTile(x, y - 1) is WallTile) useHorizontal -= 1;
+            if (tileField.GetTile(x + 1, y) is WallTile) useHorizontal += 1;
+            if (tileField.GetTile(x, y + 1) is WallTile) useHorizontal -= 1;
+            if (tileField.GetTile(x - 1, y) is WallTile) useHorizontal += 1;
+            if (useHorizontal <= -1)
             {
-                sprite = new SpriteSheet("verticalDoor");
-                secondarySprite = new SpriteSheet("verticalDoorOverlay");
+                sprite = new SpriteSheet("VerticalDoor");
+                secondarySprite = new SpriteSheet("VerticalDoorOverlay");
+                isHorizontal = false;
             }
-            if (tileField.GetTile(x - 1, y) is WallTile)
+            else
             {
-                sprite = new SpriteSheet("horizontalDoor");
-                secondarySprite = new SpriteSheet("horizontalDoorOverlay");
+                sprite = new SpriteSheet("HorizontalDoor");
+                secondarySprite = new SpriteSheet("HorizontalDoorOverlay");
             }
+        }
+
+        public override void UpdateToAdditionalInfo()
+        {
+            doorColor = (KeyColor)Data.AdditionalInfo;
+            secondarySpriteColor = doorColor.ToColor();
         }
     }
 }

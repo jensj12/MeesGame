@@ -73,5 +73,21 @@ namespace MeesGame
                     throw new PlayerActionNotAllowedException();
             }
         }
+
+        public static int ToSheetIndex(this Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.NORTH:
+                    return 0;
+                case Direction.EAST:
+                    return 1;
+                case Direction.SOUTH:
+                    return 2;
+                case Direction.WEST:
+                    return 3;
+            }
+            throw new NotImplementedException();
+        }
     }
 }

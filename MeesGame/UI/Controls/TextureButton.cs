@@ -7,7 +7,7 @@ namespace MeesGame
     {
         Background background;
 
-        public TextureButton(Location location, Dimensions dimensions, string text, Texture2D texture = null, Color? color = null, string[] hoverOverlayNames = null, string[] selectedOverlayNames = null, OnClickEventHandler onClick = null, string textFont = null) : base(location, dimensions, text, hoverOverlayNames, selectedOverlayNames, onClick, textFont)
+        public TextureButton(Location location, Dimensions dimensions, string text, Texture2D texture = null, Color? color = null, OnClickEventHandler onClick = null, int? edgeThickness = null, Color? hoverColor = null, string textFont = null) : base(location, dimensions, text, onClick, edgeThickness, hoverColor, textFont)
         {
             background = new Background(texture, color);
             background.Parent = this;

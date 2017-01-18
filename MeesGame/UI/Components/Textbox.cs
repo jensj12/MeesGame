@@ -20,7 +20,7 @@ namespace MeesGame
         public Textbox(Location location, Dimensions dimensions, String text, string spritefont = null) : base(location, dimensions)
         {
             this.text = text;
-            spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(spritefont ?? DefaultUIValues.Default.DefaultSpriteFont);
+            spriteFont = GameEnvironment.AssetManager.Content.Load<SpriteFont>(spritefont ?? DefaultUIValues.Default.SpriteFont);
             if (dimensions == null)
                 Dimensions = new MeasuredDimensions(this);
         }

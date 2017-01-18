@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.IO;
 
 namespace MeesGame
@@ -27,17 +28,24 @@ namespace MeesGame
             aiExplorer = new FileExplorer(new SimpleLocation(700, 100), new SimpleDimensions(500, 500), "ai", directory);
             startButton = new SpriteSheetButton(new CenteredLocation(0, 700, true, false), null, Strings.generate_random_maze, (UIComponent o) =>
             {
-                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
                 PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
                 TileField tileField;
                 if (levelExplorer.SelectedFile != null)
                 {
-                    tileField = FileIO.Load(levelExplorer.SelectedFile);
+                    try
+                    {
+                        tileField = FileIO.Load(levelExplorer.SelectedFile);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
                 }
                 else
                 {
                     tileField = MeesGen.MazeGenerator.GenerateMaze();
                 }
+                GameEnvironment.GameStateManager.PreviousGameState = "LoadMenuState";
                 state.StartLevel(new PlayingLevel(tileField));
                 GameEnvironment.GameStateManager.GetGameState("PlayingLevelState").Reset();
                 GameEnvironment.GameStateManager.SwitchTo("PlayingLevelState");

@@ -10,8 +10,6 @@ namespace MeesGame
         public GameOverState()
         {
             overlay.AddChild(new UIComponent(SimpleLocation.Zero, InheritDimensions.All));
-            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, Strings.victory, (UIComponent o) =>
-                GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
         }
 
         //Upon pressing space, return to the menu/editor
@@ -23,11 +21,9 @@ namespace MeesGame
             overlay.HandleInput(inputHelper);
         }
 
-        //No need to update anything, it's game over
         public void Update(GameTime gameTime)
         {
             overlay.Update(gameTime);
-            return;
         }
 
         //Draw the correct gameover overlay
@@ -36,10 +32,8 @@ namespace MeesGame
             overlay.Draw(gameTime, spriteBatch);
         }
 
-        //Switching to a different state already resets everything
         public void Reset()
         {
-            return;
         }
     }
 }

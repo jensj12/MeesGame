@@ -23,10 +23,24 @@ namespace MeesGame
             base.DrawTask(gameTime, spriteBatch, anchorPoint);
         }
 
+        public Texture2D CurrentTexture
+        {
+            get { return texture; }
+            set
+            {
+                texture?.Dispose();
+                texture = value;
+            }
+        }
+
         public Color Color
         {
             get { return color; }
-            set { color = value; }
+            set
+            {
+                color = value;
+                Invalidate();
+            }
         }
     }
 }

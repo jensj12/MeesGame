@@ -138,6 +138,7 @@ namespace MeesGame
                     childOffset = value;
                 else
                     childOffset = MaxChildOffset;
+                scrollBar?.Invalidate();
             }
         }
 
