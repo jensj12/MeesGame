@@ -79,6 +79,7 @@
     <Compile Include="Gameplay\Level\EditorLevel.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />
     <Compile Include="Gameplay\Level\Level.cs" />
+    <Compile Include="UI\Controls\EdgeTexture.cs" />
     <Compile Include="UI\Components\InputBox.cs" />
     <Compile Include="UI\Controls\Background.cs" />
     <Compile Include="UI\Components\GUISpriteSheet.cs" />

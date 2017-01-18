@@ -44,36 +44,27 @@ namespace MeesGame.UI {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("menufont")]
-        public string DefaultSpriteFont {
+        public string SpriteFont {
             get {
-                return ((string)(this["DefaultSpriteFont"]));
+                return ((string)(this["SpriteFont"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("floorTile")]
-        public string DefaultButtonBackground {
+        public string ButtonBackground {
             get {
-                return ((string)(this["DefaultButtonBackground"]));
+                return ((string)(this["ButtonBackground"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("keyOverlay")]
-        public string DefaultButtonHoverBackground {
+        [global::System.Configuration.DefaultSettingValueAttribute("150, 50, 50, 50")]
+        public global::System.Drawing.Color ButtonHoverColor {
             get {
-                return ((string)(this["DefaultButtonHoverBackground"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("horizontalEnd")]
-        public string DefaultButtonSelectedBackground {
-            get {
-                return ((string)(this["DefaultButtonSelectedBackground"]));
+                return ((global::System.Drawing.Color)(this["ButtonHoverColor"]));
             }
         }
         
@@ -101,6 +92,33 @@ namespace MeesGame.UI {
         public string ButtonSound {
             get {
                 return ((string)(this["ButtonSound"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int DefaultEdgeThickness {
+            get {
+                return ((int)(this["DefaultEdgeThickness"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SlateGray")]
+        public global::System.Drawing.Color DefaultButtonEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["DefaultButtonEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        public global::System.Drawing.Color DefaultButtonSelectedEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["DefaultButtonSelectedEdgeColor"]));
             }
         }
     }

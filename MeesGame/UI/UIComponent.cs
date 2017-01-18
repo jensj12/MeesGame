@@ -255,12 +255,14 @@ namespace MeesGame
             {
                 if (selfTexture == null || selfTexture.IsDisposed || selfTexture.Bounds.Size != CurrentDimensions)
                 {
+                    Invalidate();
                     if (selfTexture != null && selfTexture.Bounds.Size != CurrentDimensions)
                         Dispose();
                     selfTexture = new RenderTarget2D(spriteBatch.GraphicsDevice, CurrentDimensions.X, CurrentDimensions.Y, false,
                         spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
                 }
                 TextureRenderer.Render(gameTime, DrawTask, spriteBatch, selfTexture);
+                invalid = false;
             }
         }
 
@@ -413,7 +415,6 @@ namespace MeesGame
         {
             get
             {
-                Vector2 test = location.ToVector2(this);
                 return location.ToVector2(this) + Parent?.ChildAnchorPoint(this) ?? Vector2.Zero;
             }
         }

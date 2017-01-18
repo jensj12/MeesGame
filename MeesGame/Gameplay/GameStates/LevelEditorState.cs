@@ -116,7 +116,7 @@ namespace MeesGame
                 string[] tileBackgroundAndOverlays = Tile.GetAssetNamesFromTileType(tt);
                 if (tileBackgroundAndOverlays != null)
                 {
-                    Button newButton = new SpriteSheetButton(new CenteredLocation(yOffset: buttonDistanceFromTop, horizontalCenter: true), new SimpleDimensions(tilesListWidth - buttonDistanceFromTop * 2 - 10, tilesListWidth - buttonDistanceFromTop * 2 - 10), "", OnItemSelect, tileBackgroundAndOverlays);
+                    Button newButton = new SpriteSheetButton(new CenteredLocation(yOffset: buttonDistanceFromTop, horizontalCenter: true), new SimpleDimensions(tilesListWidth - buttonDistanceFromTop * 2 - 10, tilesListWidth - buttonDistanceFromTop * 2 - 10), "", OnItemSelect, null, tileBackgroundAndOverlays);
                     tilesList.AddChild(newButton);
                 }
             }

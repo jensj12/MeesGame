@@ -8,7 +8,7 @@ namespace MeesGame
     /// </summary>
     class Background : Texture
     {
-        public Background(Texture2D texture, Color? color = default(Color?)) : base(new SimpleLocation(), new InheritDimensions(true, true), texture, color)
+        public Background(Texture2D texture = null, Color? color = default(Color?)) : base(new SimpleLocation(), new InheritDimensions(true, true), texture, color)
         {
         }
     }
