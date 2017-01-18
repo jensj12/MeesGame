@@ -19,31 +19,31 @@ namespace MeesGame
             calculatingDimensions = true;
 
             //Stores the deference between the element furthest to the left and the one furthest to the right.
-            int smallestLeft = 0, hbiggestRight = 0;
+            int smallestLeft = 0, biggestRight = 0;
 
             if (wrapX)
             {
                 foreach (UIComponent child in component.Children)
                 {
-                    Rectangle childRectangle = child.RelativeRectangle;
+                    Rectangle childRectangle = new Rectangle(child.CurrentRelativeLocation.ToPoint(), child.CurrentDimensions);
                     if (childRectangle.Left < smallestLeft)
                         smallestLeft = childRectangle.Left;
-                    if (childRectangle.Right > hbiggestRight)
-                        hbiggestRight = childRectangle.Right;
+                    if (childRectangle.Right > biggestRight)
+                        biggestRight = childRectangle.Right;
                 }
 
                 foreach (UIComponent constantComponent in component.ConstantComponents)
                 {
-                    Rectangle componentRectangle = constantComponent.RelativeRectangle;
+                    Rectangle componentRectangle = new Rectangle(constantComponent.CurrentRelativeLocation.ToPoint(), constantComponent.CurrentDimensions);
                     if (componentRectangle.Left < smallestLeft)
                         smallestLeft = componentRectangle.Left;
-                    if (componentRectangle.Right > hbiggestRight)
-                        hbiggestRight = componentRectangle.Right;
+                    if (componentRectangle.Right > biggestRight)
+                        biggestRight = componentRectangle.Right;
                 }
             }
 
             calculatingDimensions = false;
-            return base.Width(component) + hbiggestRight - smallestLeft; ;
+            return base.Width(component) + biggestRight - smallestLeft; ;
         }
 
         public override int Height(UIComponent component)
@@ -59,7 +59,7 @@ namespace MeesGame
             {
                 foreach (UIComponent child in component.Children)
                 {
-                    Rectangle childRectangle = child.RelativeRectangle;
+                    Rectangle childRectangle = new Rectangle(child.CurrentRelativeLocation.ToPoint(), child.CurrentDimensions);
                     if (childRectangle.Top < smallesttTop)
                         smallesttTop = childRectangle.Top;
                     if (childRectangle.Bottom > biggestBottom)
@@ -68,7 +68,7 @@ namespace MeesGame
 
                 foreach (UIComponent constantComponent in component.ConstantComponents)
                 {
-                    Rectangle componentRectangle = constantComponent.RelativeRectangle;
+                    Rectangle componentRectangle = new Rectangle(constantComponent.CurrentRelativeLocation.ToPoint(), constantComponent.CurrentDimensions);
                     if (componentRectangle.Top < smallesttTop)
                         smallesttTop = componentRectangle.Top;
                     if (componentRectangle.Bottom > biggestBottom)

@@ -37,7 +37,7 @@ namespace MeesGame
         {
             for (int i = 0; i < spritesheets.Count; i++)
             {
-                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CurrentDimensions.X, CurrentDimensions.Y, color);
+                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CachedDimensions.X, CachedDimensions.Y, color);
             }
         }
 

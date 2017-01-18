@@ -150,14 +150,14 @@ namespace MeesGame
             if (children.Count > 0)
             {
                 int childrenHeight = (int)(Children[Children.Count - 1].AbsoluteRectangle.Bottom - AbsoluteLocation.Y);
-                if (childrenHeight > CurrentDimensions.Y)
+                if (childrenHeight > CachedDimensions.Y)
                 {
                     heightWhenExpanded = childrenHeight;
                     scrollBar.Visible = true;
                 }
                 else
                 {
-                    heightWhenExpanded = CurrentDimensions.Y;
+                    heightWhenExpanded = CachedDimensions.Y;
                     scrollBar.Visible = false;
                 }
             }
@@ -179,7 +179,7 @@ namespace MeesGame
         /// </summary>
         public int MaxChildOffset
         {
-            get { return HeightWhenExpanded - CurrentDimensions.Y; }
+            get { return HeightWhenExpanded - CachedDimensions.Y; }
         }
 
         public int DistanceBetweenChildren

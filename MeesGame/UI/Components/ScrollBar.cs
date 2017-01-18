@@ -91,13 +91,13 @@ namespace MeesGame
             get
             {
                 if (((SortedList)Parent).MaxChildOffset != 0)
-                    return (int)(((SortedList)Parent).ChildOffset / (double)((SortedList)Parent).MaxChildOffset * (CurrentDimensions.Y - Barheight));
+                    return (int)(((SortedList)Parent).ChildOffset / (double)((SortedList)Parent).MaxChildOffset * (CachedDimensions.Y - Barheight));
                 return 0;
             }
             set
             {
                 if (((SortedList)Parent).MaxChildOffset != 0)
-                    ((SortedList)Parent).ChildOffset = (int)(value / (double)(CurrentDimensions.Y - Barheight) * ((SortedList)Parent).MaxChildOffset);
+                    ((SortedList)Parent).ChildOffset = (int)(value / (double)(CachedDimensions.Y - Barheight) * ((SortedList)Parent).MaxChildOffset);
                 else
                     ((SortedList)Parent).ChildOffset = 0;
             }
@@ -119,7 +119,7 @@ namespace MeesGame
         /// </summary>
         public Rectangle RelativeScrollbarRectangle
         {
-            get { return ScrollbarRectangleFromPoint(CurrentRelativeLocation.ToPoint()); }
+            get { return ScrollbarRectangleFromPoint(CachedRelativeLocation.ToPoint()); }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace MeesGame
         /// <returns></returns>
         private Rectangle ScrollbarRectangleFromPoint(Point point)
         {
-            return new Rectangle(point.X, point.Y + ScrollDistance, CurrentDimensions.X, Barheight);
+            return new Rectangle(point.X, point.Y + ScrollDistance, CachedDimensions.X, Barheight);
         }
 
         /// <summary>
@@ -148,8 +148,8 @@ namespace MeesGame
             get
             {
                 if (((SortedList)Parent).MaxChildOffset == 0)
-                    return CurrentDimensions.Y;
-                return (int)(CurrentDimensions.Y * CurrentDimensions.Y / (float)((SortedList)Parent).HeightWhenExpanded);
+                    return CachedDimensions.Y;
+                return (int)(CachedDimensions.Y * CachedDimensions.Y / (float)((SortedList)Parent).HeightWhenExpanded);
             }
         }
 

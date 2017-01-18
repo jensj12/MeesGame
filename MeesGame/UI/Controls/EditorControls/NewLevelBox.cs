@@ -1,10 +1,8 @@
 ﻿using MeesGame.UI;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
-    class NewLevelBox : Texture
+    class NewLevelBox : EdgeTexture
     {
         public event OnClickEventHandler Succes;
 
@@ -16,9 +14,14 @@ namespace MeesGame
 
         private UIComponent innerComponentsContainer;
 
-        public NewLevelBox(Location location, int startNumRows, int startNumColumns) : base(location, null, null, null)
+        public NewLevelBox(Location location, int startNumRows, int startNumColumns) : base(edgeThickness, null)
         {
             Dimensions = new WrapperDimensions(edgeThickness * 2 + padding, edgeThickness * 2 + padding, true, true);
+
+            Location = CenteredLocation.All;
+
+            edgeColor = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.BoxEdgeColor);
+            innerColor = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.BoxInnerColor);
 
             innerComponentsContainer = new UIComponent(CenteredLocation.All, WrapperDimensions.All);
 
@@ -44,8 +47,6 @@ namespace MeesGame
             innerComponentsContainer.AddConstantComponent(centerSpanner);
 
             AddConstantComponent(innerComponentsContainer);
-
-            CurrentTexture = Utility.EdgeTexture(CurrentDimensions.X, CurrentDimensions.Y, edgeThickness, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.BoxEdgeColor), Utility.DrawingColorToXNAColor(DefaultUIValues.Default.BoxInnerColor));
         }
 
         public int Columns

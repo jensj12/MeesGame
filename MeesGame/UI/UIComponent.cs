@@ -23,7 +23,7 @@ namespace MeesGame
         private static SpriteBatch uiSpriteBatch;
 
         /// <summary>
-        /// specifies if spriteBactch.begin(); has been called.
+        /// If spriteBactch.begin(); has been called.
         /// </summary>
         private static bool uiSpriteBatchBegun = false;
 
@@ -33,9 +33,19 @@ namespace MeesGame
         private Location location;
 
         /// <summary>
+        /// Location cached at the beginning of the drawing method,
+        /// </summary>
+        private Vector2? cachedLocation;
+
+        /// <summary>
         /// Size of the UIComponent.
         /// </summary>
         private Dimensions dimensions;
+
+        /// <summary>
+        /// Location cached at the beginning of the drawing method,
+        /// </summary>
+        private Point? cachedDimensions;
 
         /// <summary>
         /// Components that make up the object, for example a textbox and a background for a button.
@@ -116,10 +126,21 @@ namespace MeesGame
         /// <param name="component"></param>
         public virtual void AddChild(UIComponent child)
         {
-            child.Parent = this;
             children.Add(child);
+            child.Parent = this;
             child.UpdatePermanentInvalidProperty();
             child.Click += ChildClick;
+        }
+
+        /// <summary>
+        /// Refreshes the bounds of the UIComponent and it's children and it's component's bounds.
+        /// </summary>
+        public void RefreshCachedBounds()
+        {
+            cachedDimensions = CurrentDimensions;
+            cachedLocation = CurrentRelativeLocation;
+            children.UpdateBounds();
+            constantComponents.UpdateBounds();
         }
 
         /// <summary>
@@ -204,6 +225,7 @@ namespace MeesGame
             //Starts the uiSpritebatch if it hadn't been started already and draws the component through a texture to the screen, again to prevent graphical glitches.
             if (!uiSpriteBatchBegun)
             {
+                RefreshCachedBounds();
                 if (uiSpriteBatch == null)
                 {
                     uiSpriteBatch = new SpriteBatch(spriteBatch.GraphicsDevice);
@@ -227,16 +249,18 @@ namespace MeesGame
 
                 spriteBatch.Begin(rasterizerState: new RasterizerState() { ScissorTestEnable = true });
 
-                spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((CurrentRelativeLocation + (anchorPoint ?? Vector2.Zero)).ToPoint(), CurrentDimensions);
+                spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((CachedRelativeLocation + (anchorPoint ?? Vector2.Zero)).ToPoint(), CachedDimensions);
 
-                DrawTask(gameTime, spriteBatch, CurrentRelativeLocation + (anchorPoint ?? Vector2.Zero));
+                DrawTask(gameTime, spriteBatch, CachedRelativeLocation + (anchorPoint ?? Vector2.Zero));
 
                 spriteBatch.End();
 
                 spriteBatch.Begin();
             }
             else
-                spriteBatch.Draw(selfTexture, new Rectangle((CurrentRelativeLocation + (anchorPoint ?? Vector2.Zero)).ToPoint(), CurrentDimensions), Color.White);
+            {
+                spriteBatch.Draw(selfTexture, new Rectangle((CachedRelativeLocation + (anchorPoint ?? Vector2.Zero)).ToPoint(), CachedDimensions), Color.White);
+            }
         }
 
         /// <summary>
@@ -253,12 +277,12 @@ namespace MeesGame
 
             if (Invalid)
             {
-                if (selfTexture == null || selfTexture.IsDisposed || selfTexture.Bounds.Size != CurrentDimensions)
+                if (selfTexture == null || selfTexture.IsDisposed || selfTexture.Bounds.Size != CachedDimensions)
                 {
                     Invalidate();
-                    if (selfTexture != null && selfTexture.Bounds.Size != CurrentDimensions)
+                    if (selfTexture != null && selfTexture.Bounds.Size != CachedDimensions)
                         Dispose();
-                    selfTexture = new RenderTarget2D(spriteBatch.GraphicsDevice, CurrentDimensions.X, CurrentDimensions.Y, false,
+                    selfTexture = new RenderTarget2D(spriteBatch.GraphicsDevice, CachedDimensions.X, CachedDimensions.Y, false,
                         spriteBatch.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
                 }
                 TextureRenderer.Render(gameTime, DrawTask, spriteBatch, selfTexture);
@@ -401,15 +425,45 @@ namespace MeesGame
             {
                 if (parent != null)
                 {
-                    return CurrentRelativeLocation + parent.AbsoluteLocation;
+                    return CachedRelativeLocation + parent.AbsoluteLocation;
                 }
 
-                return CurrentRelativeLocation;
+                return CachedRelativeLocation;
             }
         }
 
         /// <summary>
-        /// Location relative to the location of its parent
+        /// Location relative to the location of its parent.
+        /// </summary>
+        public virtual Vector2 CachedRelativeLocation
+        {
+            get
+            {
+                if(cachedLocation == null)
+                {
+                    cachedLocation = CurrentRelativeLocation;
+                }
+                return (Vector2)cachedLocation;
+            }
+        }
+
+        /// <summary>
+        /// Dimensions of the UIObject.
+        /// </summary>
+        public virtual Point CachedDimensions
+        {
+            get
+            {
+                if(cachedDimensions == null)
+                {
+                    cachedDimensions = CurrentDimensions;
+                }
+                return (Point)cachedDimensions;
+            }
+        }
+
+        /// <summary>
+        /// Relative location as calculated by the Location property.
         /// </summary>
         public virtual Vector2 CurrentRelativeLocation
         {
@@ -419,9 +473,15 @@ namespace MeesGame
             }
         }
 
+        /// <summary>
+        /// Relative location as calculated by the Location property.
+        /// </summary>
         public virtual Point CurrentDimensions
         {
-            get { return dimensions.ToPoint(this); }
+            get
+            {
+                return dimensions.ToPoint(this);
+            }
         }
 
         public Location Location
@@ -448,7 +508,7 @@ namespace MeesGame
         /// </summary>
         public Rectangle AbsoluteRectangle
         {
-            get { return new Rectangle(AbsoluteLocation.ToPoint(), CurrentDimensions); }
+            get { return new Rectangle(AbsoluteLocation.ToPoint(), CachedDimensions); }
         }
 
         /// <summary>
@@ -457,7 +517,7 @@ namespace MeesGame
         /// </summary>
         public Rectangle RelativeRectangle
         {
-            get { return new Rectangle(CurrentRelativeLocation.ToPoint(), CurrentDimensions); }
+            get { return new Rectangle(CachedRelativeLocation.ToPoint(), CachedDimensions); }
         }
 
         /// <summary>
@@ -466,7 +526,7 @@ namespace MeesGame
         /// </summary>
         public Rectangle PointZeroLocationRectangle
         {
-            get { return new Rectangle(Point.Zero, CurrentDimensions); }
+            get { return new Rectangle(Point.Zero, CachedDimensions); }
         }
 
         /// <summary>
@@ -535,7 +595,7 @@ namespace MeesGame
         /// </summary>
         public bool Visible
         {
-            get { return visible && Parent?.Visible != false && CurrentDimensions != Point.Zero; }
+            get { return visible && Parent?.Visible != false && CachedDimensions != Point.Zero; }
             set
             {
                 if (visible != value)
