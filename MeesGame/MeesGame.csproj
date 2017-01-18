@@ -45,6 +45,7 @@
     <Compile Include="Gameplay\GameObjects\DirectionalGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Player\DummyPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\KeyColor.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\IAIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\AIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
