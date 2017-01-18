@@ -11,8 +11,8 @@
     <Setting Name="SpriteFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">menufont</Value>
     </Setting>
-    <Setting Name="ButtonBackground" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">floorTile</Value>
+    <Setting Name="DefaultButtonBackground" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">defaultButtonOverlay</Value>
     </Setting>
     <Setting Name="ButtonHoverColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">150, 50, 50, 50</Value>

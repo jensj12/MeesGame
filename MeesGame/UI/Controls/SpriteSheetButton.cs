@@ -16,7 +16,7 @@ namespace MeesGame
 
             background.Parent = this;
 
-            background.AddSpritesheets(backgroundNames ?? new string[] { DefaultUIValues.Default.ButtonBackground });
+            background.AddSpritesheets(backgroundNames ?? new string[] { DefaultUIValues.Default.DefaultButtonBackground });
 
             ConstantComponents.Insert(0, background);
         }

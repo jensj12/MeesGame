@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gameplay\Content\button_click.wav" />
+    <Content Include="Gameplay\Content\defaultButtonOverlay.png" />
+    <Content Include="Gameplay\Content\editorOverlay.png" />
     <Content Include="Gameplay\Content\floorTile.png" />
     <Content Include="Gameplay\Content\footsteps.wav" />
     <Content Include="Gameplay\Content\fog%4016.png" />
@@ -165,6 +167,8 @@
     <Content Include="Gameplay\Content\keyOverlay.png" />
     <Content Include="Gameplay\Content\key_pickup.wav" />
     <Content Include="Gameplay\Content\ladder.png" />
+    <Content Include="Gameplay\Content\loadScreenOverlay.png" />
+    <Content Include="Gameplay\Content\mainMenuOverlay.png" />
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\open_door.wav" />
     <Content Include="Gameplay\Content\player%404x4.png" />
