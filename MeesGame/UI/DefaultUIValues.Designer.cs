@@ -55,7 +55,7 @@ namespace MeesGame.UI {
         [global::System.Configuration.DefaultSettingValueAttribute("defaultButtonOverlay")]
         public string DefaultButtonBackground {
             get {
-                return ((string)(this["ButtonBackground"]));
+                return ((string)(this["DefaultButtonBackground"]));
             }
         }
         
