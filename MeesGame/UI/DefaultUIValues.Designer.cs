@@ -44,15 +44,15 @@ namespace MeesGame.UI {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("menufont")]
-        public string DefaultSpriteFont {
+        public string SpriteFont {
             get {
-                return ((string)(this["DefaultSpriteFont"]));
+                return ((string)(this["SpriteFont"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("floorTile")]
+        [global::System.Configuration.DefaultSettingValueAttribute("defaultButtonOverlay")]
         public string DefaultButtonBackground {
             get {
                 return ((string)(this["DefaultButtonBackground"]));
@@ -61,19 +61,10 @@ namespace MeesGame.UI {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("keyOverlay")]
-        public string DefaultButtonHoverBackground {
+        [global::System.Configuration.DefaultSettingValueAttribute("150, 50, 50, 50")]
+        public global::System.Drawing.Color ButtonHoverColor {
             get {
-                return ((string)(this["DefaultButtonHoverBackground"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("horizontalEnd")]
-        public string DefaultButtonSelectedBackground {
-            get {
-                return ((string)(this["DefaultButtonSelectedBackground"]));
+                return ((global::System.Drawing.Color)(this["ButtonHoverColor"]));
             }
         }
         
@@ -101,6 +92,54 @@ namespace MeesGame.UI {
         public string ButtonSound {
             get {
                 return ((string)(this["ButtonSound"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int EdgeThickness {
+            get {
+                return ((int)(this["EdgeThickness"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SlateGray")]
+        public global::System.Drawing.Color ButtonEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["ButtonEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        public global::System.Drawing.Color DefaultButtonSelectedEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["DefaultButtonSelectedEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        public global::System.Drawing.Color BoxEdgeColor {
+            get {
+                return ((global::System.Drawing.Color)(this["BoxEdgeColor"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
+        public global::System.Drawing.Color BoxInnerColor {
+            get {
+                return ((global::System.Drawing.Color)(this["BoxInnerColor"]));
+            }
+            set {
+                this["BoxInnerColor"] = value;
             }
         }
     }

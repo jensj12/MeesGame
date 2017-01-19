@@ -19,14 +19,28 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)
         {
-            spriteBatch.Draw(texture, new Rectangle(anchorPoint.ToPoint(), CurrentDimensions), color);
+            spriteBatch.Draw(texture, new Rectangle(anchorPoint.ToPoint(), CachedDimensions), color);
             base.DrawTask(gameTime, spriteBatch, anchorPoint);
+        }
+
+        public Texture2D CurrentTexture
+        {
+            get { return texture; }
+            set
+            {
+                texture?.Dispose();
+                texture = value;
+            }
         }
 
         public Color Color
         {
             get { return color; }
-            set { color = value; }
+            set
+            {
+                color = value;
+                Invalidate();
+            }
         }
     }
 }

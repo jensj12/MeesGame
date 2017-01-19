@@ -23,13 +23,27 @@ namespace MeesGame
             {
                 if (gameTime.TotalGameTime - lastAnimationTime >= timeBetweenAnimations)
                 {
-                    Sprite.SheetColIndex++;
+                    if(IsSliding)
+                    {
+                        Sprite.SheetRowIndex++;
+                    } else
+                    {
+                        Sprite.SheetColIndex++;
+                    }
                     lastAnimationTime = gameTime.TotalGameTime;
                 }
             }
             else
             {
                 Sprite.SheetIndex = Sprite.SheetRowIndex * Sprite.NumberColumns;
+            }
+        }
+
+        protected virtual bool IsSliding
+        {
+            get
+            {
+                return false;
             }
         }
     }

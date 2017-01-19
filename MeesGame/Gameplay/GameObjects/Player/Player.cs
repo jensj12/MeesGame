@@ -53,7 +53,8 @@ namespace MeesGame
 
             player.OnPlayerAction += delegate (DummyPlayer player) { OnPlayerAction?.Invoke(this); };
             player.OnPlayerWin += delegate (DummyPlayer player) { OnPlayerWin?.Invoke(this); };
-            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this); };
+            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this);
+                                                                   GameEnvironment.AssetManager.PlaySound("scream");};
             player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) {
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
@@ -145,6 +146,21 @@ namespace MeesGame
                 return PlayerAction.NONE;
             }
         }
+
+        protected override bool IsSliding
+        {
+            get
+            {
+                if((TileField.GetTile(Location) is IceTile) || TileField.GetTile(Location - Direction.ToPoint()) is IceTile)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+        }
+
 
         public override void Update(GameTime gameTime)
         {

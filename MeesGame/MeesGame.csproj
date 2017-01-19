@@ -45,11 +45,13 @@
     <Compile Include="Gameplay\GameObjects\DirectionalGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Player\DummyPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\KeyColor.cs" />
+    <Compile Include="Gameplay\GameObjects\Player\IAIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\AIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
     <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
+    <Compile Include="Gameplay\GameObjects\TilesTypes\GuardTile.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
@@ -59,7 +61,7 @@
     <Compile Include="Gameplay\GameObjects\TileData.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\DoorTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player\IPlayer.cs" />
-    <Compile Include="Gameplay\GameObjects\IceTile.cs" />
+    <Compile Include="Gameplay\GameObjects\TilesTypes\IceTile.cs" />
     <Compile Include="Gameplay\GameObjects\ITileField.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\EndTile.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\FloorTile.cs" />
@@ -78,13 +80,16 @@
     <Compile Include="Gameplay\Level\EditorLevel.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />
     <Compile Include="Gameplay\Level\Level.cs" />
+    <Compile Include="UI\Controls\EdgeTexture.cs" />
     <Compile Include="UI\Components\InputBox.cs" />
+    <Compile Include="UI\Components\NumberInputBox.cs" />
     <Compile Include="UI\Controls\Background.cs" />
     <Compile Include="UI\Components\GUISpriteSheet.cs" />
     <Compile Include="UI\Components\Textbox.cs" />
     <Compile Include="UI\Components\Texture.cs" />
     <Compile Include="Gameplay\Level\LevelData.cs" />
     <Compile Include="UI\Controls\EditorControls\ColorPicker.cs" />
+    <Compile Include="UI\Controls\EditorControls\NewLevelBox.cs" />
     <Compile Include="UI\Controls\SpriteSheetButton.cs" />
     <Compile Include="UI\Controls\TextureButton.cs" />
     <Compile Include="UI\DefaultUIValues.Designer.cs">
@@ -94,12 +99,16 @@
     </Compile>
     <Compile Include="UI\Interfaces\IMeasuredDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions.cs" />
+    <Compile Include="UI\Properties\Dimensions\CombinationDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\InheritDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\MeasuredDimensions.cs" />
     <Compile Include="UI\Properties\Dimensions\SimpleDimensions.cs" />
+    <Compile Include="UI\Properties\Dimensions\WrapperDimensions.cs" />
     <Compile Include="UI\Properties\Location.cs" />
     <Compile Include="UI\Properties\Location\CenteredLocation.cs" />
+    <Compile Include="UI\Properties\Location\CombinationLocation.cs" />
     <Compile Include="UI\Properties\Location\DirectionLocation.cs" />
+    <Compile Include="UI\Properties\Location\RelativeToLocation.cs" />
     <Compile Include="UI\Properties\Location\SimpleLocation.cs" />
     <Compile Include="UI\Components\ScrollBar.cs" />
     <Compile Include="UI\TextureRenderer.cs" />
@@ -150,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gameplay\Content\button_click.wav" />
+    <Content Include="Gameplay\Content\defaultButtonOverlay.png" />
+    <Content Include="Gameplay\Content\editorOverlay.png" />
     <Content Include="Gameplay\Content\floorTile.png" />
     <Content Include="Gameplay\Content\footsteps.wav" />
     <Content Include="Gameplay\Content\fog%4016.png" />
@@ -162,10 +173,14 @@
     <Content Include="Gameplay\Content\keyOverlay.png" />
     <Content Include="Gameplay\Content\key_pickup.wav" />
     <Content Include="Gameplay\Content\ladder.png" />
+    <Content Include="Gameplay\Content\loadScreenOverlay.png" />
+    <Content Include="Gameplay\Content\mainMenuOverlay.png" />
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\open_door.wav" />
     <Content Include="Gameplay\Content\player%404x4.png" />
-    <Content Include="Gameplay\Content\theme_song.wav" />
+    <Content Include="Gameplay\Content\start.png" />
+    <Content Include="Gameplay\Content\scream.wav" />
+    <Content Include="Gameplay\Content\Theme_Song.wav" />
     <Content Include="Gameplay\Content\verticalDoor.png" />
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />

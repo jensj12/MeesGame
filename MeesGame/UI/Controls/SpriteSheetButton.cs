@@ -1,4 +1,5 @@
 ﻿using MeesGame.UI;
+using Microsoft.Xna.Framework;
 
 namespace MeesGame
 {
@@ -9,7 +10,7 @@ namespace MeesGame
         /// </summary>
         private UISpriteSheet background;
 
-        public SpriteSheetButton(Location location, Dimensions dimensions, string text, OnClickEventHandler onClick = null, string[] backgroundNames = null, string[] hoverOverlayNames = null, string[] selectedOverlayNames = null, string textFont = null) : base(location, dimensions, text, hoverOverlayNames, selectedOverlayNames, onClick, textFont)
+        public SpriteSheetButton(Location location, Dimensions dimensions, string text, OnClickEventHandler onClick = null, int? edgeThickness = null, string[] backgroundNames = null, Color? hoverColor = null, string textFont = null) : base(location, dimensions, text, onClick, edgeThickness, hoverColor, textFont)
         {
             background = new UISpriteSheet(SimpleLocation.Zero, InheritDimensions.All);
 

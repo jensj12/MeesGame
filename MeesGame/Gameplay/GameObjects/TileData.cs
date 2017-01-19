@@ -10,6 +10,7 @@
         End,
         Hole,
         Ice,
+        Guard,
         Unknown
     }
 

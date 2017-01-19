@@ -8,7 +8,7 @@ namespace MeesGame
         protected bool fogOfWar;
 
         private static readonly Point NO_POINT = new Point(-1, -1);
-        private static readonly Point DEFAULT_START = Point.Zero;
+        private static readonly Point DEFAULT_START = new Point(1, 1);
         private Point start = NO_POINT;
         public Point Start
         {
@@ -53,6 +53,24 @@ namespace MeesGame
 
         public void Add(Tile obj, int x, int y)
         {
+            if (OnCornerOfTileField(x, y))
+                // On the corners only Wall tiles are allowed
+                if (obj.TileType != TileType.Wall)
+                    return;
+
+            if (OnEdgeOfTileField(x, y))
+            {
+                // If You are on the edge, but not on a corner, you can place and EndTile or a wallTile
+                if (obj.TileType != TileType.Wall && obj.TileType != TileType.End)
+                    return;
+            }
+            else
+            {
+                // If you are not on the edge, you can't place and EndTile
+                if (obj.TileType == TileType.End)
+                    return;
+            }
+
             base.Add(obj, x, y);
             obj.Location = new Point(x, y);
         }
@@ -84,28 +102,64 @@ namespace MeesGame
                 return new WallTile();
             return (Tile)Get(x, y);
         }
-        
+
+        #region tile position methods
+
         /// <summary>
-        /// Checks if the x and y are outside the bounds of the tilefield
+        /// Checks if the x and y are outside the bounds of the tilefield.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> Whether a tile is out of the tilefield </returns>
         public bool OutOfTileField(int x, int y)
         {
-            return x < 0 || y < 0 || x >= Columns || y >= Rows;
+            return x < 0 || y < 0 || x >= base.Columns || y >= base.Rows;
         }
 
         /// <summary>
-        /// Checks if the location is outside the bounds of the tilefield
+        /// Checks if a location is outside the bounds of the tilefield.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="location"> Location </param>
+        /// <returns> Whether a tile is out of the tilefield </returns>
         public bool OutOfTileField(Point location)
         {
             return OutOfTileField(location.X, location.Y);
         }
+
+        /// <summary>
+        /// Checks if the location is on the edge of the TileField.
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> Whether a tile is on the edge of the tilefield. </returns>
+        public bool OnEdgeOfTileField(int x, int y)
+        {
+            return (x == 0 || y == 0 || x == base.Columns - 1 || y == base.Rows - 1);
+        }
+
+        /// <summary>
+        /// Checks if the location is on the corner of the TileField.
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> Whether a tile is on a corner of the tilefield. </returns>
+        public bool OnCornerOfTileField(int x, int y)
+        {
+            return ((x == 0 || x == base.Columns - 1) && (y == 0 || y == base.Rows - 1));
+        }
+
+        /// <summary>
+        /// Checks if the location is near the edge of the TileField.
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> This bool returns whether a tile is next to the edge of the tilefield. </returns>
+        public bool NearEdgeOfTileField(int x, int y)
+        {
+            return (x == 1 || y == 1 || x == base.Columns - 2 || y == base.Rows - 2);
+        }
+
+        #endregion
 
         public Tile GetTile(Point location)
         {

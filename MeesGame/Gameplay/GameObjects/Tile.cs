@@ -220,6 +220,9 @@ namespace MeesGame
 
                 case TileType.Ice:
                     return new IceTile();
+
+                case TileType.Guard:
+                    return new GuardTile();
             }
             //If no Tile can be made of the specified tiletype, return a floortile
             return new FloorTile();
@@ -259,13 +262,16 @@ namespace MeesGame
                     return new string[] { "hole" };
 
                 case TileType.End:
-                    return new string[] { "floorTile", "money" };
+                    return new string[] { "horizontalEnd" };
 
                 case TileType.Start:
-                    return new string[] { "ladder" };
+                    return new string[] { "start" };
 
                 case TileType.Ice:
                     return new string[] { "floorTile", "Ice" };
+
+                case TileType.Guard:
+                    return new string[] { "guard" };
 
             }
             //If no Tile can be made of the specified tiletype, return null

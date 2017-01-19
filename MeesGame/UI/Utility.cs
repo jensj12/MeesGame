@@ -38,5 +38,23 @@ namespace MeesGame
         {
             return new Color(color.R, color.G, color.B, color.A);
         }
+
+        /// <summary>
+        /// Returns a transparent textures with white edges.
+        /// </summary>
+        /// <param name="width">Width of the desired texture.</param>
+        /// <param name="height">Height of the desired texture.</param>
+        /// <param name="thickness">Thickness of the edge.</param>
+        /// <returns></returns>
+        public static Texture2D EdgeTexture(int width, int height, int thickness, Color? edgeColor = null, Color? innerColor = null)
+        {
+            Color[] colorData = new Color[width * height];
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    colorData[x + y * width] = (x < thickness || y < thickness || x > width - thickness || y > height - thickness) ? (edgeColor ?? Color.White) : (innerColor ?? Color.Transparent);
+            Texture2D edgeTexture = new Texture2D(GameEnvironment.Instance.GraphicsDevice, width, height);
+            edgeTexture.SetData(colorData);
+            return edgeTexture;
+        }
     }
 }

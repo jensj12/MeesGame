@@ -15,6 +15,7 @@ namespace MeesGame
         private const int height = 250;
         private const int colorsPerRow = 3;
         private const int colorsDistanceFromTop = 100;
+        private const int edgeThickness = 5;
 
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace MeesGame
             for (int i = 0; i < colors.Count; i++)
             {
                 Color color = colors[i];
-                colorButtons[i] = new TextureButton(new SimpleLocation(width / colorsPerRow * (i % colorsPerRow), width / colorsPerRow * (i / colorsPerRow) + colorsDistanceFromTop), new SimpleDimensions(width / colorsPerRow, width / colorsPerRow), "", Utility.SolidWhiteTexture, color);
+                colorButtons[i] = new TextureButton(new SimpleLocation(width / colorsPerRow * (i % colorsPerRow), width / colorsPerRow * (i / colorsPerRow) + colorsDistanceFromTop), new SimpleDimensions(width / colorsPerRow, width / colorsPerRow), "", Utility.SolidWhiteTexture, color, edgeThickness: edgeThickness);
                 Color tileColor = (Color)ColorProperty.GetValue(colorPropertyContainingObject);
                 if (color == tileColor)
                 {
