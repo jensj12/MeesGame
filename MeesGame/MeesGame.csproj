@@ -168,6 +168,7 @@
     <Content Include="Gameplay\Content\key_pickup.wav" />
     <Content Include="Gameplay\Content\ladder.png" />
     <Content Include="Gameplay\Content\loadScreenOverlay.png" />
+    <Content Include="Gameplay\Content\loseScreenOverlay.png" />
     <Content Include="Gameplay\Content\mainMenuOverlay.png" />
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\open_door.wav" />
@@ -179,6 +180,7 @@
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Gameplay\Content\walls%4016.png" />
+    <Content Include="Gameplay\Content\winScreenOverlay.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
