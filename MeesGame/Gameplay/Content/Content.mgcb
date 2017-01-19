@@ -223,7 +223,6 @@
 /processorParam:TextureFormat=Color
 /build:fog@16.png
 
-
 #begin editorOverlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -235,7 +234,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:editorOverlay.png
-
 
 #begin horizontalDoorOverlay.png
 /importer:TextureImporter
@@ -249,7 +247,6 @@
 /processorParam:TextureFormat=Color
 /build:horizontalDoorOverlay.png
 
-
 #begin verticalDoorOverlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -262,9 +259,20 @@
 /processorParam:TextureFormat=Color
 /build:verticalDoorOverlay.png
 
+#begin loseScreenOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:loseScreenOverlay.png
+
 
 #begin mainMenuOverlay.png
->>>>>>> refs/remotes/origin/master
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -277,6 +285,18 @@
 /build:mainMenuOverlay.png
 
 
+#begin winScreenOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:winScreenOverlay.png
+
 
 #begin loadScreenOverlay.png
 /importer:TextureImporter
@@ -288,6 +308,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+/build:defaultButtonOverlay.png
 /build:loadScreenOverlay.png
 
 
@@ -320,5 +341,3 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:scream.wav
->>>>>>> refs/remotes/origin/master
-
