@@ -58,14 +58,14 @@ namespace AI
         private AILevelState beginState;
 
 
-        private Level level;
+        private ITileField level;
 
         private IPlayer player;
 
         /// <summary>
-        /// currentState is the state in which the agent currently is.
+        /// currentState is the state in which the agent currently is, initialState is the state in which the agent begins the level.
         /// </summary>
-        private AILevelState currentState;
+        private AILevelState currentState, initialState; // TODO: zorg dat de initialState een waarde krijgt
 
         /// <summary>
         /// learningRate is a number that determines how important it is to try out new ways of completing the maze. 
@@ -77,10 +77,13 @@ namespace AI
         private double learningRate, discountFactor;
 
         /// <summary>
-        /// This list contains bools that show wether you have a certain key or not. 
+        /// This list contains bools that show whether you have a certain key or not. 
         /// currentKeyList[i] == 1 if you have the key corresponding with index i, it is 0 if you don't have that key.
         /// </summary>
         private List<bool> currentKeyList;
+
+        //TODO: zorg dat deze lijst met de goede lengte begint.
+        private List<bool> initialKeyList;
 
         /// <summary>
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
@@ -92,11 +95,14 @@ namespace AI
         
         //er moet nog iets zijn wat bijhoudt welke keys zijn opgepakt om te weten in welke qValue je moet zijn
 
-        public QLearning(Level level, double learningRate, double discountFactor) {
+        public QLearning(ITileField level, double learningRate, double discountFactor)
+        {
             this.level = level;
 
             //TODO this.currentKeyList = currentKeyList;
-            this.currentState = new AILevelState(player.Location, currentKeyList);
+            currentState = new AILevelState(player.Location, currentKeyList);
+
+            initialState = new AILevelState(player.Location, initialKeyList);
 
             //voor als we verschillende opties doen; als we altijd op dezelfde manier beginnen kunnen we dit ook weglaten uit de constructor en gewoon een waarde geven.
             this.learningRate = learningRate;
@@ -105,48 +111,37 @@ namespace AI
             //beginState is nodig elke keer dat er opnieuw wordt begonnen en wanneer het leren klaar is
             //this.beginState = level;
         }
-        
-        public override void HandleInput(InputHelper inputHelper)
+        // voor mees: gebruik voor elke trainingsessie een clone!
+        public void GameStart(MeesGame.IPlayer player)
         {
-            Thread train = new Thread(AIStartTrainingMode);
-
-            if (inputHelper.IsKeyDown(Keys.Q))
-            {
-                level.timeBetweenActions = TimeSpan.FromMilliseconds(5);
-
-                train.Start();
-                train.IsBackground = true;
-            }
-            else if (inputHelper.IsKeyDown(Keys.S))
-            {
-                //stop met leren, ook het level 'resetten'
-                train.Abort();
-                //level = beginState;
-            }
-            else if (inputHelper.IsKeyDown(Keys.G))
-            {
-                //doe het voor het echie, learning rate op 1 zetten zoat hij neit gekke dingen gaat doen
-                learningRate = 1;
-
-                level.timeBetweenActions = TimeSpan.FromMilliseconds(300);
-            }
+            this.beginState = new AILevelState(player.Location, ); // TODO: zorg dat de keys in inventory klopt
+            AIStartTrainingMode();
         }
 
-        public int numberOfKeys()
+        public MeesGame.PlayerAction GetNextAction()
         {
-            int numKeys = 0;
-
-            for (int i = 0; i < level.NumRows; i++)
+            MeesGame.PlayerAction action;
+            if (bestAction.ContainsKey(currentState))
             {
-                for (int j = 0; j < level.NumColumns; j++)
-                {
-                    if (level.Tiles.GetType(i, j) == TileType.Key)
-                    {
-                        numKeys++;
-                    }
-                }
+                action = bestAction[currentState];
             }
-            return numKeys;
+            else
+            {
+                int r2 = GameEnvironment.Random.Next();
+
+                List<PlayerAction> possibleActions = new List<PlayerAction>();
+
+                foreach (PlayerAction a in player.PossibleActions)
+                {
+                    possibleActions.Add(a);
+                }
+
+                action = possibleActions[r2 % possibleActions.Count];
+            }
+
+            currentState = GetNewAILevelState(player, action);
+
+            return action;
         }
 
         /// <summary>
@@ -154,70 +149,73 @@ namespace AI
         /// </summary>
         public void AIStartTrainingMode()
         {
-            while (true)
+            for (int x = 0; x < 1000; x++)
             {
-                while (level.Tiles.GetType(player.Location.X,player.Location.Y) != TileType.End)
+                MeesGame.IPlayer clone = player.Clone();
+                while (clone.CurrentTile.TileType != TileType.End)
                 {
-                    AITrainingModeDoMove(currentState);
+                    AITrainingModeDoMove(clone, currentState);
                 }
+                // TODO: reset de currentState naar de initialState zonder dat de initialState verandert
             }
         }
 
         /// <summary>
-        /// This function picks an action to perform during the trainins phase.
+        /// This function picks an action to perform during the training phase.
         /// It receives an ILevelState s and semi-randomly (depending on the learningRate) chooses an PlayerAction a to perform.
         /// It performs the action and calls the Q function to update the qValues entry for (s, a).
         /// </summary>
         /// <param name="s"></param>
         /// <param name="learningRate"></param>
-        public void AITrainingModeDoMove(AILevelState s)
+        public void AITrainingModeDoMove(IPlayer clone, AILevelState s)
         {
             double r1 = ((double) GameEnvironment.Random.Next()) / 2147483646;
             
-            //als het random getal r1 (tussen 0 en 1) kleiner is dan learningRate, dan kiest hij de beste actie voor deze positie
+            // If the random number r1 (between 0 and 1) is smaller than learningRate, the best known action for this position is chosen
             if (r1 <= learningRate && bestAction.ContainsKey(s))
             {
-                currentState = GetNewAILevelState(bestAction[s]);
-                player.PerformAction(bestAction[s]);
+                Q(clone, currentState, bestAction[s]);
+                currentState = GetNewAILevelState(clone, bestAction[s]);
+                clone.PerformAction(bestAction[s]);
             }
 
-            //zo niet, dan kiest hij een random actie
-            else // misschien moet er nog iets gebeuren als er geen mogelijke acties zijn
+            // Otherwise, a random action will be chosen
+            else // TODO: misschien moet er nog iets gebeuren als er geen mogelijke acties zijn
             {
                 int r2 = GameEnvironment.Random.Next();
 
                 List<PlayerAction> possibleActions = new List<PlayerAction>();
 
-                foreach (PlayerAction action in player.Actions)
+                foreach (PlayerAction action in clone.PossibleActions) 
                 {
-                    currentState = GetNewAILevelState(bestAction[s]);
                     possibleActions.Add(action);
                 }
+                
+                PlayerAction a = possibleActions[r2 % possibleActions.Count];
+                Tuple<AILevelState, PlayerAction> StateAndAction = new Tuple<AILevelState, PlayerAction>(s, a);
 
-                player.PerformAction(possibleActions[r2 % possibleActions.Count]);
+                Q(clone, currentState, a);
+                currentState = GetNewAILevelState(clone, a);
+                clone.PerformAction(a);
+
+                // If the randomly chosen action is better than the previous best action, bestAction is updated
+                if (bestAction.ContainsKey(s))
+                {
+                    PlayerAction b = bestAction[s];
+                    Tuple<AILevelState, PlayerAction> StateAndBestAction = new Tuple<AILevelState, PlayerAction>(s, b);
+                    if (qValues[StateAndAction] > qValues[StateAndBestAction])
+                    {
+                        bestAction[s] = a;
+                    }
+                }
+
+                // If there no known best action, the randomly chosen action automatically becomes the new best action.
+                else
+                {
+                    bestAction[s] = a;
+                }
             }
-            //zorg dat bestActions geupdatet wordt
-            //zorg dat de currentKeyList wordt geupdatet
-        }
-
-        /// <summary>
-        /// AIDecideAction receives AILevelStates, determines which action it wants to perform and then performs this action.
-        /// </summary>
-        //waarom performt deze methode de action al als er een methode AITrainingPerformAction is? Omdat dit níét voor de trainingmodus is maar voor de echte modus.
-        //Oké misschien heb je gelijk, misschien moet deze methode weg.
-        public void AIPerformAction()
-        {
-            //zorg dat de currentKeyList wordt geupdatet
-        }
-
-        /// <summary>
-        /// Returns the score of the performed action a on the Level s.
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="a"></param>
-        private int GetResultOfAction(Level s, PlayerAction a)
-        {
-            return 0;
+            //TODO: zorg dat de currentKeyList wordt geupdatet
         }
 
         /// <summary>
@@ -226,13 +224,13 @@ namespace AI
         /// <param name="s"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        private AILevelState GetNewAILevelState(PlayerAction a)
+        private AILevelState GetNewAILevelState(IPlayer clone, PlayerAction a)
         {
             List<bool> temporaryKeyList = new List<bool>();
 
             foreach (bool element in currentKeyList)
             {
-                temporaryKeyList.Add(element); //zorg dat de tijdelijke lijst geupdatet wordt als je op een vakje met een sleutel komt
+                temporaryKeyList.Add(element); //TODO: zorg dat de tijdelijke lijst geupdatet wordt als je op een vakje met een sleutel komt
             }
             DummyPlayer clone = player.Clone();
             clone.PerformAction(a);
@@ -247,13 +245,13 @@ namespace AI
         /// <param name="s"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        private double EstimatedOptimalFutureValue(AILevelState s, PlayerAction a)
+        private double EstimatedOptimalFutureValue(IPlayer clone, AILevelState s, PlayerAction a)
         {
-            Tuple<AILevelState, PlayerAction> northKey = getKey(GetNewAILevelState(a), PlayerAction.NORTH);
-            Tuple<AILevelState, PlayerAction> eastKey = getKey(GetNewAILevelState(a), PlayerAction.EAST);
-            Tuple<AILevelState, PlayerAction> westKey = getKey(GetNewAILevelState(a), PlayerAction.WEST);
-            Tuple<AILevelState, PlayerAction> southKey = getKey(GetNewAILevelState(a), PlayerAction.SOUTH);
-            Tuple<AILevelState, PlayerAction> noneKey = getKey(GetNewAILevelState(a), PlayerAction.NONE);
+            Tuple<AILevelState, PlayerAction> northKey = getKey(GetNewAILevelState(clone, a), PlayerAction.NORTH);
+            Tuple<AILevelState, PlayerAction> eastKey = getKey(GetNewAILevelState(clone, a), PlayerAction.EAST);
+            Tuple<AILevelState, PlayerAction> westKey = getKey(GetNewAILevelState(clone, a), PlayerAction.WEST);
+            Tuple<AILevelState, PlayerAction> southKey = getKey(GetNewAILevelState(clone, a), PlayerAction.SOUTH);
+            Tuple<AILevelState, PlayerAction> noneKey = getKey(GetNewAILevelState(clone, a), PlayerAction.NONE);
 
             double northValue = qValues[northKey];
             double eastValue = qValues[eastKey];
@@ -283,9 +281,14 @@ namespace AI
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private int GetResultOfAction(AILevelState s, PlayerAction a)
+        private int GetResultOfAction(IPlayer clone, AILevelState s, PlayerAction a)
         {
-            return 0;
+            IPlayer clone2 = clone.Clone();
+            clone2.PerformAction(a);
+
+            if (clone2.CurrentTile.TileType == TileType.End) return 1;
+            else if (clone2.CurrentTile.TileType == TileType.Hole) return -1;
+            else return 0; 
         }
 
         /// <summary>
@@ -294,10 +297,10 @@ namespace AI
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        private void Q(AILevelState s, PlayerAction a)
+        private void Q(IPlayer clone, AILevelState s, PlayerAction a)
         {
             Tuple<AILevelState, PlayerAction> StateAndAction = new Tuple<AILevelState, PlayerAction>(s, a);
-            qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(s, a) + discountFactor * EstimatedOptimalFutureValue(s, a) - qValues[StateAndAction]);
+            qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(clone, s, a) + discountFactor * EstimatedOptimalFutureValue(clone, s, a) - qValues[StateAndAction]);
         }
 
         public void GameStart(IPlayer player, int difficulty)
