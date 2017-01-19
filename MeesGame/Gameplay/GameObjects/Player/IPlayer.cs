@@ -26,6 +26,13 @@ namespace MeesGame
         PlayerAction LastAction { get; }
 
         /// <summary>
+        /// Checks if a player can perform a specific action
+        /// </summary>
+        /// <param name="action">The action to check for</param>
+        /// <returns>Whether the player can perform the action</returns>
+        bool CanPerformAction(PlayerAction action);
+
+        /// <summary>
         /// Make the player perform a specified action
         /// </summary>
         void PerformAction(PlayerAction action);
