@@ -113,6 +113,7 @@ public class GameObjectGrid : GameObject
     {
         foreach (GameObject obj in grid)
         {
+            if (obj == null) continue;
             obj.Draw(gameTime, spriteBatch);
         }
     }

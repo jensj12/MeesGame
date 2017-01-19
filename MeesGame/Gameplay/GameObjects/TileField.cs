@@ -53,6 +53,9 @@ namespace MeesGame
 
         public void Add(Tile obj, int x, int y)
         {
+            if (OutOfTileField(x, y))
+                return;
+
             if (OnCornerOfTileField(x, y))
                 // On the corners only Wall tiles are allowed
                 if (obj.TileType != TileType.Wall)
