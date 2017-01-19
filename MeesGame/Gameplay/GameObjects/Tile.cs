@@ -265,7 +265,7 @@ namespace MeesGame
                     return new string[] { "horizontalEnd" };
 
                 case TileType.Start:
-                    return new string[] { "ladder" };
+                    return new string[] { "start" };
 
                 case TileType.Ice:
                     return new string[] { "floorTile", "Ice" };

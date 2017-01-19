@@ -53,7 +53,8 @@ namespace MeesGame
 
             player.OnPlayerAction += delegate (DummyPlayer player) { OnPlayerAction?.Invoke(this); };
             player.OnPlayerWin += delegate (DummyPlayer player) { OnPlayerWin?.Invoke(this); };
-            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this); };
+            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this);
+                                                                   GameEnvironment.AssetManager.PlaySound("scream");};
             player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) {
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
