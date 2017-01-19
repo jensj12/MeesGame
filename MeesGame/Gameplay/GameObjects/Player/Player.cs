@@ -147,6 +147,21 @@ namespace MeesGame
             }
         }
 
+        protected override bool IsSliding
+        {
+            get
+            {
+                if((TileField.GetTile(Location) is IceTile) || TileField.GetTile(Location - Direction.ToPoint()) is IceTile)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+        }
+
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
