@@ -1,4 +1,6 @@
-﻿namespace AI
+﻿using MeesGame;
+
+namespace AI
 {
     /// <summary>
     /// This interface defines all functions the AI player will ever call.
@@ -13,12 +15,20 @@
         /// </summary>
         /// <param name="player">The player the AI will take control of.</param>
         /// <param name="difficulty">The difficulty level (1-5) of the AI</param>
-        void GameStart(MeesGame.IAIPlayer player, int difficulty);
+        void GameStart(IAIPlayer player, int difficulty);
 
         /// <summary>
-        /// Whenever the AI player needs a new action, this function is called.
+        /// Whenever the AI player needs a new action, this function is called. 
+        /// N.B. This function is called async to ThinkAboutNextAction. ThinkAboutNextAction might still be running while this function is called.
+        /// This function should update player.NextAIAction. After this function finishes, the specified action will be performed by the IAIPlayer 
+        /// This function should not take more time than AIPlayer.MAX_UPDATE_NEXT_ACTION_TIME or it will be ignored.
         /// </summary>
-        /// <returns>Next action to perform by the AI player</returns>
-        MeesGame.PlayerAction GetNextAction();
+        void UpdateNextAction();
+
+        /// <summary>
+        /// Called whenever the NextAction has been performed and a new action is required.
+        /// Can do some work so that it does not need to be done in UpdateNextAction
+        /// </summary>
+        void ThinkAboutNextAction();
     }
 }

@@ -22,5 +22,13 @@
         {
             get;
         }
+
+        /// <summary>
+        /// The next action that should be performed according to the AI
+        /// </summary>
+        PlayerAction NextAIAction
+        {
+            set;
+        }
     }
 }
