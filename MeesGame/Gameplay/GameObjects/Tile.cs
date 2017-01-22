@@ -285,7 +285,7 @@ namespace MeesGame
 
         public virtual void UpdateToAdditionalInfo() { }
 
-        public void MarkVisited()
+        public virtual void MarkVisited()
         {
             IsVisited = true;
         }

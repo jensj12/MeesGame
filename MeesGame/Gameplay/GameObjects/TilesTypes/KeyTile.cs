@@ -38,7 +38,6 @@ namespace MeesGame
         public override void EnterTile(ITileFieldPlayer player)
         {
             player.Inventory.Items.Add(new InventoryKey(keyColor));
-            GameEnvironment.AssetManager.PlaySound("key_pickup");
             base.EnterTile(player);
         }
 
@@ -46,6 +45,13 @@ namespace MeesGame
         {
             keyColor = (KeyColor)Data.AdditionalInfo;
             secondarySpriteColor = keyColor.ToColor();
+        }
+
+        public override void MarkVisited()
+        {
+            if (!IsVisited)
+                GameEnvironment.AssetManager.PlaySound("key_pickup");
+            base.MarkVisited();
         }
     }
 }
