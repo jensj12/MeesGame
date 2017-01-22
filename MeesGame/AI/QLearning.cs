@@ -14,12 +14,12 @@ namespace AI
     class AILevelState
     {
         private Point location;
-        private List<bool> keysInInventory; 
+        private ISet<InventoryItem> itemsInInventory; 
 
-        public AILevelState(Point location, List<bool> keysInInventory)
+        public AILevelState(Point location, ISet<InventoryItem> itemsInInventory)
         {
             this.location = location;
-            this.keysInInventory = keysInInventory;
+            this.itemsInInventory = itemsInInventory;
         }
 
         public override int GetHashCode()
@@ -28,9 +28,9 @@ namespace AI
             const int MULTIPLY_PRIME = 37;
 
             int result = START_PRIME;
-            foreach(bool b in keysInInventory)
+            foreach(InventoryItem item in itemsInInventory)
             {
-                result = MULTIPLY_PRIME * result + (b ? 0 : 1);
+                result = MULTIPLY_PRIME * result + item.GetHashCode();
             }
             result = MULTIPLY_PRIME * result + location.X;
             result = MULTIPLY_PRIME * result + location.Y;
@@ -42,11 +42,16 @@ namespace AI
             if(obj is AILevelState)
             {
                 AILevelState state = (AILevelState)obj;
-                return keysInInventory.SequenceEqual(state.keysInInventory) && location.Equals(state.location);
+                return itemsInInventory.SequenceEqual(state.itemsInInventory) && location.Equals(state.location);
             }else
             {
                 return false;
             }
+        }
+
+        public AILevelState Clone()
+        {
+            return new AILevelState(location, itemsInInventory);
         }
     }
 
@@ -76,14 +81,8 @@ namespace AI
         /// </summary>
         private double learningRate, discountFactor;
 
-        /// <summary>
-        /// This list contains bools that show whether you have a certain key or not. 
-        /// currentKeyList[i] == 1 if you have the key corresponding with index i, it is 0 if you don't have that key.
-        /// </summary>
-        private List<bool> currentKeyList;
 
-        //TODO: zorg dat deze lijst met de goede lengte begint.
-        private List<bool> initialKeyList;
+        IAIPlayer aiPlayer;
 
         /// <summary>
         /// qValues is the library in which the Q function assigns the rewards it gets to the states it visits.
@@ -100,9 +99,9 @@ namespace AI
             this.level = level;
 
             //TODO this.currentKeyList = currentKeyList;
-            currentState = new AILevelState(player.Location, currentKeyList);
+            currentState = new AILevelState(player.Location, player.Inventory.Items);
 
-            initialState = new AILevelState(player.Location, initialKeyList);
+            initialState = new AILevelState(player.Location, player.Inventory.Items);
 
             //voor als we verschillende opties doen; als we altijd op dezelfde manier beginnen kunnen we dit ook weglaten uit de constructor en gewoon een waarde geven.
             this.learningRate = learningRate;
@@ -111,16 +110,16 @@ namespace AI
             //beginState is nodig elke keer dat er opnieuw wordt begonnen en wanneer het leren klaar is
             //this.beginState = level;
         }
-        // voor mees: gebruik voor elke trainingsessie een clone!
-        public void GameStart(MeesGame.IPlayer player)
+        
+        public void GameStart(IPlayer player)
         {
-            this.beginState = new AILevelState(player.Location, ); // TODO: zorg dat de keys in inventory klopt
+            beginState = new AILevelState(player.Location, player.Inventory.Items); // TODO: zorg dat de keys in inventory klopt
             AIStartTrainingMode();
         }
 
-        public MeesGame.PlayerAction GetNextAction()
+        public PlayerAction GetNextAction()
         {
-            MeesGame.PlayerAction action;
+            PlayerAction action;
             if (bestAction.ContainsKey(currentState))
             {
                 action = bestAction[currentState];
@@ -151,11 +150,12 @@ namespace AI
         {
             for (int x = 0; x < 1000; x++)
             {
-                MeesGame.IPlayer clone = player.Clone();
+                IPlayer clone = player.Clone();
                 while (clone.CurrentTile.TileType != TileType.End)
                 {
                     AITrainingModeDoMove(clone, currentState);
                 }
+                currentState = initialState.Clone();
                 // TODO: reset de currentState naar de initialState zonder dat de initialState verandert
             }
         }
@@ -224,17 +224,11 @@ namespace AI
         /// <param name="s"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        private AILevelState GetNewAILevelState(IPlayer clone, PlayerAction a)
+        private AILevelState GetNewAILevelState(IPlayer player, PlayerAction a)
         {
-            List<bool> temporaryKeyList = new List<bool>();
-
-            foreach (bool element in currentKeyList)
-            {
-                temporaryKeyList.Add(element); //TODO: zorg dat de tijdelijke lijst geupdatet wordt als je op een vakje met een sleutel komt
-            }
-            DummyPlayer clone = player.Clone();
+            IPlayer clone = player.Clone();
             clone.PerformAction(a);
-            AILevelState newAILevelState = new AILevelState(clone.Location, temporaryKeyList);
+            AILevelState newAILevelState = new AILevelState(clone.Location, clone.Inventory.Items);
 
             return newAILevelState;
         }
@@ -247,47 +241,30 @@ namespace AI
         /// <returns></returns>
         private double EstimatedOptimalFutureValue(IPlayer clone, AILevelState s, PlayerAction a)
         {
-            Tuple<AILevelState, PlayerAction> northKey = getKey(GetNewAILevelState(clone, a), PlayerAction.NORTH);
-            Tuple<AILevelState, PlayerAction> eastKey = getKey(GetNewAILevelState(clone, a), PlayerAction.EAST);
-            Tuple<AILevelState, PlayerAction> westKey = getKey(GetNewAILevelState(clone, a), PlayerAction.WEST);
-            Tuple<AILevelState, PlayerAction> southKey = getKey(GetNewAILevelState(clone, a), PlayerAction.SOUTH);
-            Tuple<AILevelState, PlayerAction> noneKey = getKey(GetNewAILevelState(clone, a), PlayerAction.NONE);
-
-            double northValue = qValues[northKey];
-            double eastValue = qValues[eastKey];
-            double westValue = qValues[westKey];
-            double southValue = qValues[southKey];
-            double noneValue = qValues[noneKey];
-
-            double[] array = { northValue, eastValue, westValue, southValue, noneValue };
-
-            return array.Max();
+            List<double> possibleValues = new List<double>();
+            foreach(PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
+            {
+                Tuple<AILevelState, PlayerAction> actionKey = new Tuple<AILevelState, PlayerAction>(s, a);
+                if (qValues.ContainsKey(actionKey))
+                {
+                    possibleValues.Add(qValues[actionKey]);
+                }
+            }
+            return possibleValues.Max();
         }
 
         /// <summary>
-        /// Given a AILevelState s and a PlayerAction a, this returns a usable key for the qValues dictionary.
+        /// Returns the score of the performed action a on the ILevelState s.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="a"></param>
-        /// <returns></returns>
-        private Tuple<AILevelState, PlayerAction> getKey(AILevelState s, PlayerAction a)
+        private int GetResultOfAction(IPlayer player, AILevelState s, PlayerAction a)
         {
-            Tuple<AILevelState, PlayerAction> newKey = new Tuple<AILevelState, PlayerAction>(s, a);
-            return newKey;
-        }
+            IPlayer clone = player.Clone();
+            clone.PerformAction(a);
 
-        /// <summary>
-        /// Returns the score of the performed action a on the ILevelSTate s.
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="a"></param>
-        private int GetResultOfAction(IPlayer clone, AILevelState s, PlayerAction a)
-        {
-            IPlayer clone2 = clone.Clone();
-            clone2.PerformAction(a);
-
-            if (clone2.CurrentTile.TileType == TileType.End) return 1;
-            else if (clone2.CurrentTile.TileType == TileType.Hole) return -1;
+            if (clone.CurrentTile is EndTile) return 1;
+            else if (clone.CurrentTile is HoleTile) return -1;
             else return 0; 
         }
 
@@ -308,9 +285,21 @@ namespace AI
             this.player = player;
         }
 
-        public PlayerAction GetNextAction()
+        public void UpdateNextAction()
         {
-            
+            aiPlayer.NextAIAction = PlayerAction.NONE;
+        }
+
+        public void GameStart(IAIPlayer player, int difficulty)
+        {
+            this.aiPlayer = player;
+        }
+
+        public void ThinkAboutNextAction()
+        {
+            IPlayer player = aiPlayer.DummyPlayer;
+            beginState = new AILevelState(player.Location, player.Inventory.Items);
+            AIStartTrainingMode();
         }
     }
 }
