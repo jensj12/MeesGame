@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace MeesGame
 {
-    class FileIO
+    static class FileIO
     {
         /// <summary>
         /// Shows a Dialog to select a file location for saving
@@ -18,7 +18,7 @@ namespace MeesGame
             string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
             DirectoryInfo info = Directory.CreateDirectory(directory);
             saveFileDialog.InitialDirectory = info.FullName;
-            saveFileDialog.Filter = "lvl Files| *.lvl";
+            saveFileDialog.Filter = Strings.file_dialog_filter_lvl;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 return saveFileDialog.FileName;
             else
@@ -42,7 +42,7 @@ namespace MeesGame
                 }
                 catch (IOException e)
                 {
-                    MessageBox.Show("An error occurred trying to save file: " + e.Message);
+                    MessageBox.Show(Strings.save_file_error_with_comment + e.Message);
                 }
             }
         }
@@ -61,13 +61,13 @@ namespace MeesGame
             }
             catch (IOException e)
             {
-                MessageBox.Show("An error occurred trying to load the level: " + e.Message);
-                throw e;
+                MessageBox.Show(Strings.load_file_error_with_comment + e.Message);
+                throw;
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
-                MessageBox.Show("An error occurred parsing the level. Please check if the level file is valid");
-                throw e;
+                MessageBox.Show(Strings.load_file_error_parse);
+                throw;
             }
         }
     }

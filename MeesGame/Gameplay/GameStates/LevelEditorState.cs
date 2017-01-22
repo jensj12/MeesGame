@@ -13,7 +13,6 @@ namespace MeesGame
         const int tilesListWidth = 150;
         const int tilePropertiesListWidth = 200;
         const int buttonDistanceFromTop = 20;
-        readonly Color listsBackgroundColor = new Color(122, 122, 122, 255);
 
         /// <summary>
         ///Ordered list of tiletypes to match the buttons with.
@@ -79,9 +78,9 @@ namespace MeesGame
             overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
             tilesList = new SortedList(SimpleLocation.Zero, new SimpleDimensions(tilesListWidth, GameEnvironment.Screen.Y));
             tilePropertiesList = new SortedList(new DirectionLocation(leftToRight: false), new InheritDimensions(false, true, tilePropertiesListWidth));
-            saveLevel = new SpriteSheetButton(new DirectionLocation(20, 720, false), null, "Save", SaveLevel);
-            loadLevel = new SpriteSheetButton(new DirectionLocation(20, 600, false), null, "Load", LoadLevel);
-            showResizeLevelButton = new SpriteSheetButton(new DirectionLocation(20, 480, false), null, "New", (UIComponent component) => {
+            saveLevel = new SpriteSheetButton(new DirectionLocation(20, 720, false), null, Strings.save, SaveLevel);
+            loadLevel = new SpriteSheetButton(new DirectionLocation(20, 600, false), null, Strings.load, LoadLevel);
+            showResizeLevelButton = new SpriteSheetButton(new DirectionLocation(20, 480, false), null, Strings.newmaze, (UIComponent component) => {
                 newLevelBox.Visible = true;
             });
 
@@ -119,7 +118,7 @@ namespace MeesGame
                 string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
                 DirectoryInfo info = Directory.CreateDirectory(directory);
                 openFileDialog.InitialDirectory = info.FullName;
-                openFileDialog.Filter = "lvl Files| *.lvl";
+                openFileDialog.Filter = Strings.file_dialog_filter_lvl;
                 if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     InitLevel(FileIO.Load(openFileDialog.FileName));
@@ -216,6 +215,7 @@ namespace MeesGame
         /// <param name="player">The player that moved.</param>
         public void PlayerMoved(EditorPlayer player)
         {
+            if (level.Tiles.OutOfTileField(player.Location)) return;
             Tile playerTile = (Tile)level.Tiles.Objects[player.Location.X, player.Location.Y];
             CurrentTileChanged(playerTile);
         }
@@ -245,7 +245,7 @@ namespace MeesGame
         /// <param name="tile">The tile containing the property.</param>
         /// <param name="property">The property to be changed.</param>
         /// <returns></returns>
-        private UIComponent GetEditorControl(Tile tile, PropertyInfo property)
+        private static UIComponent GetEditorControl(Tile tile, PropertyInfo property)
         {
             if (property.GetMethod.ReturnType == typeof(Color))
             {

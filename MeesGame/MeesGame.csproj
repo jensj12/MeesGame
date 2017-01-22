@@ -125,7 +125,6 @@
     <Compile Include="Gameplay\GameManagement\AnimatedGameObject.cs" />
     <Compile Include="Gameplay\GameManagement\Animation.cs" />
     <Compile Include="Gameplay\GameManagement\AssetManager.cs" />
-    <Compile Include="Gameplay\GameManagement\Collision.cs" />
     <Compile Include="Gameplay\GameManagement\DrawingHelper.cs" />
     <Compile Include="Gameplay\GameManagement\GameEnvironment.cs" />
     <Compile Include="Gameplay\GameManagement\GameObject.cs" />

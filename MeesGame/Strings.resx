@@ -133,23 +133,44 @@ color.</value>
   <data name="exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="file_dialog_filter_lvl" xml:space="preserve">
+    <value>Level files| *.lvl</value>
+  </data>
   <data name="generate_random_maze" xml:space="preserve">
     <value>Generate random maze</value>
   </data>
   <data name="level_complete" xml:space="preserve">
     <value>Level complete</value>
   </data>
+  <data name="load" xml:space="preserve">
+    <value>Load</value>
+  </data>
   <data name="loadLevel" xml:space="preserve">
     <value>Load Level</value>
   </data>
+  <data name="load_file_error_parse" xml:space="preserve">
+    <value>An error occurred parsing the level. Please check if the level file is valid</value>
+  </data>
+  <data name="load_file_error_with_comment" xml:space="preserve">
+    <value>An error occurred trying to load the level: </value>
+  </data>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
+  </data>
+  <data name="newmaze" xml:space="preserve">
+    <value>New</value>
   </data>
   <data name="ok" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="rows_edit_text" xml:space="preserve">
     <value>rows</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="save_file_error_with_comment" xml:space="preserve">
+    <value>An error occurred trying to save file: </value>
   </data>
   <data name="victory" xml:space="preserve">
     <value>Victory!</value>

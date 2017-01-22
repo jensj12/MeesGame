@@ -10,7 +10,7 @@ public class SpriteGameObject : GameObject
     public SpriteGameObject(string assetName, int layer = 0, string id = "", int sheetIndex = 0)
         : base(layer, id)
     {
-        if (assetName != "")
+        if (!string.IsNullOrWhiteSpace(assetName))
         {
             sprite = new SpriteSheet(assetName, sheetIndex);
         }
@@ -75,33 +75,5 @@ public class SpriteGameObject : GameObject
             int top = (int)(GlobalPosition.Y - origin.Y);
             return new Rectangle(left, top, Width, Height);
         }
-    }
-
-    public bool CollidesWith(SpriteGameObject obj)
-    {
-        if (!visible || !obj.visible || !BoundingBox.Intersects(obj.BoundingBox))
-        {
-            return false;
-        }
-        if (!PerPixelCollisionDetection)
-        {
-            return true;
-        }
-        Rectangle b = Collision.Intersection(BoundingBox, obj.BoundingBox);
-        for (int x = 0; x < b.Width; x++)
-        {
-            for (int y = 0; y < b.Height; y++)
-            {
-                int thisx = b.X - (int)(GlobalPosition.X - origin.X) + x;
-                int thisy = b.Y - (int)(GlobalPosition.Y - origin.Y) + y;
-                int objx = b.X - (int)(obj.GlobalPosition.X - obj.origin.X) + x;
-                int objy = b.Y - (int)(obj.GlobalPosition.Y - obj.origin.Y) + y;
-                if (sprite.IsTranslucent(thisx, thisy) && obj.sprite.IsTranslucent(objx, objy))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

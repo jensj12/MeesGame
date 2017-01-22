@@ -42,11 +42,5 @@ namespace MeesGame
         {
             position = Vector2.Zero;
         }
-
-        public GameObject ObjectToFollow
-        {
-            get { return objectToFollow; }
-            set { objectToFollow = value; }
-        }
     }
 }

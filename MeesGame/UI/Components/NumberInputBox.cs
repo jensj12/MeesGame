@@ -52,7 +52,7 @@ namespace MeesGame
         public int Number
         {
             get {
-                if (Text == "")
+                if (string.IsNullOrEmpty(Text))
                     return min;
                 return number; }
             set {

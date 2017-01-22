@@ -37,7 +37,7 @@ namespace MeesGame
         {
             // A player is allowed to move onto a horizontalDoor from the tile above or below it.
             // A player is allowed to move onto a verticalDoor from the Tile to the left or to the right of it.
-            if ((isHorizontal && player.Location.X == location.X) || (!isHorizontal && player.Location.Y == location.Y))
+            if ((isHorizontal && player.Location.X == Location.X) || (!isHorizontal && player.Location.Y == Location.Y))
             {
                 //A player is allowed to move onto a door tile if the door is open.
                 if (CanMoveOntoDoor(player))

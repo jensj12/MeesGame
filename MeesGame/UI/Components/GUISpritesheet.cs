@@ -29,11 +29,11 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)
         {
-            DrawSpritesheets(spritesheets, spriteBatch, anchorPoint.ToPoint());
+            DrawSpritesheets(spriteBatch, anchorPoint.ToPoint());
             base.DrawTask(gameTime, spriteBatch, anchorPoint);
         }
 
-        private void DrawSpritesheets(List<SpriteSheet> spritesheets, SpriteBatch spriteBatch, Point anchorPoint)
+        private void DrawSpritesheets(SpriteBatch spriteBatch, Point anchorPoint)
         {
             for (int i = 0; i < spritesheets.Count; i++)
             {
@@ -44,11 +44,6 @@ namespace MeesGame
         protected override void InputPropertyChanged()
         {
             Invalidate();
-        }
-
-        public List<SpriteSheet> DefaultSpritesheets
-        {
-            get { return spritesheets; }
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class DrawingHelper
 {
-    protected static Texture2D pixel;
+    private static Texture2D pixel;
 
     public static void Initialize(GraphicsDevice graphics)
     {

@@ -107,6 +107,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level files| *.lvl.
+        /// </summary>
+        internal static string file_dialog_filter_lvl {
+            get {
+                return ResourceManager.GetString("file_dialog_filter_lvl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate random maze.
         /// </summary>
         internal static string generate_random_maze {
@@ -121,6 +130,33 @@ namespace MeesGame {
         internal static string level_complete {
             get {
                 return ResourceManager.GetString("level_complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load.
+        /// </summary>
+        internal static string load {
+            get {
+                return ResourceManager.GetString("load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred parsing the level. Please check if the level file is valid.
+        /// </summary>
+        internal static string load_file_error_parse {
+            get {
+                return ResourceManager.GetString("load_file_error_parse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred trying to load the level: .
+        /// </summary>
+        internal static string load_file_error_with_comment {
+            get {
+                return ResourceManager.GetString("load_file_error_with_comment", resourceCulture);
             }
         }
         
@@ -143,6 +179,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        internal static string newmaze {
+            get {
+                return ResourceManager.GetString("newmaze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string ok {
@@ -157,6 +202,24 @@ namespace MeesGame {
         internal static string rows_edit_text {
             get {
                 return ResourceManager.GetString("rows_edit_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string save {
+            get {
+                return ResourceManager.GetString("save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred trying to save file: .
+        /// </summary>
+        internal static string save_file_error_with_comment {
+            get {
+                return ResourceManager.GetString("save_file_error_with_comment", resourceCulture);
             }
         }
         

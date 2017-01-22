@@ -11,7 +11,11 @@ namespace MeesGame
             get; set;
         }
 
-        public Point location = Point.Zero;
+        public Point Location
+        {
+            get; set;
+        } = Point.Zero;
+
         protected int revealed = 0;
         protected bool obstructsVision;
 
@@ -25,7 +29,7 @@ namespace MeesGame
 
         protected Color secondarySpriteColor = Color.White;
 
-        public Tile() : base("")
+        protected Tile() : base("")
         {
         }
 
@@ -58,15 +62,6 @@ namespace MeesGame
         public TileType TileType
         {
             get { return Data.TileType; }
-        }
-
-        /// <summary>
-        /// The location on the TileField
-        /// </summary>
-        public Point Location
-        {
-            get { return location; }
-            set { location = value; }
         }
 
         public override Vector2 Position
@@ -117,7 +112,7 @@ namespace MeesGame
         /// <returns></returns>
         public Point GetLocationAfterAction(PlayerAction action)
         {
-            Point newLocation = this.location;
+            Point newLocation = this.Location;
             switch (action)
             {
                 case PlayerAction.NORTH:
