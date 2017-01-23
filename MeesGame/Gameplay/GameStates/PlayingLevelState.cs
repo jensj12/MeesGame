@@ -81,8 +81,12 @@ namespace MeesGame
         {
             this.currentState = PlayingState.Victory;
 
+            GameOverState gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState);
+
+            gameOverStateOverlay.overlay.AddChild(new Background(new SpriteSheet("winScreenOverlay").Sprite));
+
             //add the child to the overlay of the GameOverState here because you need the currrentstate.
-            (GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState).overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, currentState.ToString(), (UIComponent o) =>
+            gameOverStateOverlay.overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
@@ -91,8 +95,12 @@ namespace MeesGame
         {
             this.currentState = PlayingState.Defeat;
 
+            GameOverState gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState);
+
+            gameOverStateOverlay.overlay.AddChild(new Background(new SpriteSheet("loseScreenOverlay").Sprite));
+
             //add the child to the overlay of the GameOverState here because you need the currrentstate.
-            (GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState).overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 400), null, currentState.ToString(), (UIComponent o) =>
+            gameOverStateOverlay.overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }

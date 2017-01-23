@@ -10,6 +10,9 @@ namespace MeesGame
         public TitleMenuState()
         {
             MenuContainer = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
+
+            MenuContainer.AddChild(new Background(new SpriteSheet("mainMenuOverlay").Sprite));
+
             MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(10, 10), null, Strings.begin, (UIComponent o) =>
             {
                 ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateFileExplorers();
