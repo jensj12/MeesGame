@@ -194,7 +194,7 @@ namespace MeesGame
                     level.Tiles.Add(CurrentTile, playerLocation.X, playerLocation.Y);
                     //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
                     level.Tiles.UpdateGraphicsToMatchSurroundings(playerLocation);
-                    CurrentTileChanged(CurrentTile);
+                    CurrentTileChanged(level.Tiles.GetTile(playerLocation));
                 }
             }
         }
