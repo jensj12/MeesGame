@@ -53,13 +53,19 @@ namespace MeesGame
 
             player.OnPlayerAction += delegate (DummyPlayer player) { OnPlayerAction?.Invoke(this); };
             player.OnPlayerWin += delegate (DummyPlayer player) { OnPlayerWin?.Invoke(this); };
-            player.OnPlayerLose += delegate (DummyPlayer player) { OnPlayerLose?.Invoke(this);
-                                                                   GameEnvironment.AssetManager.PlaySound("scream");};
-            player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction) {
+            player.OnPlayerLose += delegate (DummyPlayer player)
+            {
+                OnPlayerLose?.Invoke(this);
+                GameEnvironment.AssetManager.PlaySound("scream");
+            };
+            player.OnMoveSmoothly += delegate (DummyPlayer player, Direction direction)
+            {
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
             };
-            StoppedMoving += delegate (GameObject obj) {
+            player.OnTeleport += delegate (DummyPlayer player) { Teleport(player.Location); };
+            StoppedMoving += delegate (GameObject obj)
+            {
                 player.EndMoveSmoothly();
                 soundFootsteps.Stop();
             };
@@ -151,10 +157,11 @@ namespace MeesGame
         {
             get
             {
-                if((TileField.GetTile(Location) is IceTile) || TileField.GetTile(Location - Direction.ToPoint()) is IceTile)
+                if ((TileField.GetTile(Location) is IceTile) || TileField.GetTile(Location - Direction.ToPoint()) is IceTile)
                 {
                     return true;
-                } else
+                }
+                else
                 {
                     return false;
                 }

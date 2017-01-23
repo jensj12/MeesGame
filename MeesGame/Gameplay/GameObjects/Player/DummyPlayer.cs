@@ -35,6 +35,8 @@ namespace MeesGame
         /// </summary>
         public event DummyPlayerEventHandler OnPlayerAction;
 
+        public event DummyPlayerEventHandler OnTeleport;
+
         public DummyPlayer(TileField tileField, Point location, int score = 0)
         {
             TileField = tileField;
@@ -174,6 +176,12 @@ namespace MeesGame
         public void EndMoveSmoothly()
         {
             CurrentTile.EnterCenterOfTile(this);
+        }
+
+        public void Teleport(Point location)
+        {
+            Location = location;
+            OnTeleport?.Invoke(this);
         }
 
         public IPlayer Clone()

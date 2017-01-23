@@ -125,7 +125,7 @@
   </data>
   <data name="color_picker_text" xml:space="preserve">
     <value>Pick your
-color.</value>
+color</value>
   </data>
   <data name="columns_edit_text" xml:space="preserve">
     <value>columns</value>
@@ -138,6 +138,10 @@ color.</value>
   </data>
   <data name="generate_random_maze" xml:space="preserve">
     <value>Generate random maze</value>
+  </data>
+  <data name="index_picker_text" xml:space="preserve">
+    <value>Choose an 
+index</value>
   </data>
   <data name="level_complete" xml:space="preserve">
     <value>Level complete</value>

@@ -9,6 +9,7 @@
             numColumns = tileField.Columns;
             Tiles = tileField;
             Tiles.UpdateGraphicsToMatchSurroundings();
+            Tiles.UpdatePortals();
             if (human)
             {
                 UseHumanPlayer();

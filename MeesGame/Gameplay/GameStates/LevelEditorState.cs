@@ -251,6 +251,10 @@ namespace MeesGame
             {
                 return new ColorPicker(SimpleLocation.Zero, property, tile);
             }
+            else if (property.GetMethod.ReturnType == typeof(int))
+            {
+                return new IndexPicker(SimpleLocation.Zero, property, tile);
+            }
             return null;
         }
     }

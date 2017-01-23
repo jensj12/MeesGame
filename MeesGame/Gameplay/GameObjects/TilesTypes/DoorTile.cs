@@ -9,8 +9,6 @@ namespace MeesGame
         protected bool isHorizontal = true;
         protected KeyColor doorColor;
 
-        public Color Background { get; set; }
-
         public DoorTile(int layer = 0, string id = "") : base(TileType.Door, layer, id)
         {
             secondarySpriteColor = doorColor.ToColor();

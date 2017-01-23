@@ -49,6 +49,7 @@
     <Compile Include="Gameplay\GameObjects\Player\InventoryItem.cs" />
     <Compile Include="Gameplay\GameObjects\Player\AIPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\InventoryItems\InventoryKey.cs" />
+    <Compile Include="Gameplay\GameObjects\TilesTypes\PortalTile.cs" />
     <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\GuardTile.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="UI\Components\Texture.cs" />
     <Compile Include="Gameplay\Level\LevelData.cs" />
     <Compile Include="UI\Controls\EditorControls\ColorPicker.cs" />
+    <Compile Include="UI\Controls\EditorControls\IndexPicker.cs" />
     <Compile Include="UI\Controls\EditorControls\NewLevelBox.cs" />
     <Compile Include="UI\Controls\SpriteSheetButton.cs" />
     <Compile Include="UI\Controls\TextureButton.cs" />

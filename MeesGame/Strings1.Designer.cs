@@ -125,6 +125,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose an index.
+        /// </summary>
+        internal static string index_picker_text {
+            get {
+                return ResourceManager.GetString("index_picker_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Level complete.
         /// </summary>
         internal static string level_complete {

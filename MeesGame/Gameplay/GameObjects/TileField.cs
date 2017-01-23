@@ -203,6 +203,14 @@ namespace MeesGame
             }
         }
 
+        public void UpdatePortals()
+        {
+            foreach (Tile tile in Objects)
+            {
+                tile.UpdatePortals();
+            }
+        }
+
         public void RevealArea(Point a)
         {
             revealAroundTile(a);

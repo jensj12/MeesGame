@@ -75,5 +75,11 @@ namespace MeesGame
         /// Makes the player win the game
         /// </summary>
         void Win();
+
+        /// <summary>
+        /// Immediately moves the player from one field to another, player does not move smoothly.
+        /// </summary>
+        /// <param name="location"></param>
+        void Teleport(Point location);
     }
 }

@@ -110,7 +110,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public Point GetLocationAfterAction(PlayerAction action)
+        public virtual Point GetLocationAfterAction(PlayerAction action)
         {
             Point newLocation = this.Location;
             switch (action)
@@ -184,6 +184,13 @@ namespace MeesGame
         public abstract void UpdateGraphicsToMatchSurroundings();
 
         /// <summary>
+        /// Updates the information of the portals to set the destination after a special action.
+        /// </summary>
+        public virtual void UpdatePortals()
+        {
+        }
+
+        /// <summary>
         /// Used to create Tiles solemnly on a tileType
         /// </summary>
         /// <param name="tt">Specifies which Tile we want to get</param>
@@ -212,6 +219,9 @@ namespace MeesGame
 
                 case TileType.Hole:
                     return new HoleTile();
+
+                case TileType.Portal:
+                    return new PortalTile();
 
                 case TileType.Ice:
                     return new IceTile();
@@ -262,12 +272,14 @@ namespace MeesGame
                 case TileType.Start:
                     return new string[] { "start" };
 
+                case TileType.Portal:
+                    return new string[] { "ladder" };
+
                 case TileType.Ice:
                     return new string[] { "floorTile", "Ice" };
 
                 case TileType.Guard:
                     return new string[] { "guard" };
-
             }
             //If no Tile can be made of the specified tiletype, return null
             return null;

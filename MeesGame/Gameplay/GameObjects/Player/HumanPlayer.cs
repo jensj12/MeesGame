@@ -32,6 +32,10 @@ namespace MeesGame
             {
                 nextAction = WEST;
             }
+            else if (inputHelper.KeyPressed(Keys.Space))
+            {
+                nextAction = SPECIAL;
+            }
             else
             {
                 nextAction = NONE;
