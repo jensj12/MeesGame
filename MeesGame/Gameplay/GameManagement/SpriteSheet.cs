@@ -146,7 +146,7 @@ public class SpriteSheet
             }
         }
     }
-    
+
     public int NumberColumns
     {
         get { return sheetColumns; }
@@ -156,7 +156,7 @@ public class SpriteSheet
     {
         get { return sheetRows; }
     }
- 
+
     public int NumberSheetElements
     {
         get { return sheetColumns * sheetRows; }

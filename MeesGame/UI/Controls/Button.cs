@@ -111,7 +111,7 @@ namespace MeesGame
                 if (selected != value)
                 {
                     selected = value;
-                    if(selected)
+                    if (selected)
                         edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonSelectedEdgeColor);
                     else
                         edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ButtonEdgeColor);

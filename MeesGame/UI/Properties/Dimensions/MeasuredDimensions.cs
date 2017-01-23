@@ -27,7 +27,7 @@
         /// <param name="measuredDimensionsComponent">If left to 0, assumes the measuredDimensionsComponent is the component calling the method</param>
         /// <param name="widthOffset"></param>
         /// <param name="heightOffset"></param>
-        public MeasuredDimensions(IMeasuredDimensions measuredDimensionsComponent = null, int widthOffset = 0, int heightOffset = 0): base(widthOffset, heightOffset)
+        public MeasuredDimensions(IMeasuredDimensions measuredDimensionsComponent = null, int widthOffset = 0, int heightOffset = 0) : base(widthOffset, heightOffset)
         {
             this.measuredDimensionsComponent = measuredDimensionsComponent;
         }

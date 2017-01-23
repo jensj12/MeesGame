@@ -15,7 +15,7 @@
             return base.Y(component) + (relativeToTop ? relativeToComponent.RelativeRectangle.Top : relativeToComponent.RelativeRectangle.Bottom);
         }
 
-        public RelativeToLocation(UIComponent relativeToComponent, int xOffset = 0, int yOffset = 0, bool relativeToLeft = true, bool relativeToTop = true) : base (xOffset, yOffset)
+        public RelativeToLocation(UIComponent relativeToComponent, int xOffset = 0, int yOffset = 0, bool relativeToLeft = true, bool relativeToTop = true) : base(xOffset, yOffset)
         {
             this.relativeToComponent = relativeToComponent;
             this.relativeToTop = relativeToTop;

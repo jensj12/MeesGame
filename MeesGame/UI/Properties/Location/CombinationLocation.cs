@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MeesGame
+﻿namespace MeesGame
 {
     class CombinationLocation : Location
     {

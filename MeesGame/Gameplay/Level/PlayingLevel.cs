@@ -27,7 +27,7 @@
 
         public void UseRandomWalkingAIPlayer()
         {
-            usePlayer(new AIPlayer(new AI.RandomWalker() ,this, start));
+            usePlayer(new AIPlayer(new AI.RandomWalker(), this, start));
         }
 
         public PlayerGameObject Player

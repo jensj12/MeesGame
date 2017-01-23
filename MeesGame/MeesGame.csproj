@@ -197,9 +197,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Gameplay\Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Gameplay\Menu\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

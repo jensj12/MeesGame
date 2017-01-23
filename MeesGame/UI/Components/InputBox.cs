@@ -78,7 +78,7 @@ namespace MeesGame
         {
             base.DrawTask(gameTime, spriteBatch, anchorPoint);
             //simple way to simulate an animated blinking ticker blinks every half a second.
-            if(selected && gameTime.TotalGameTime.Milliseconds / 500 % 2 == 1)
+            if (selected && gameTime.TotalGameTime.Milliseconds / 500 % 2 == 1)
             {
                 Vector2 measuredCharacterDimensions = spriteFont.MeasureString(" ");
                 spriteBatch.Draw(Utility.SolidWhiteTexture, new Rectangle((int)(anchorPoint.X + MeasuredDimensions().X - measuredCharacterDimensions.X), (int)anchorPoint.Y, (int)measuredCharacterDimensions.X, (int)measuredCharacterDimensions.Y), textColor);
@@ -88,7 +88,9 @@ namespace MeesGame
         public bool Selected
         {
             get { return selected; }
-            set { selected = value;
+            set
+            {
+                selected = value;
                 PermanentInvalid = value;
             }
         }

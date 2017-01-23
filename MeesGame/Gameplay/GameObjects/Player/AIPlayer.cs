@@ -28,7 +28,8 @@ namespace MeesGame
             new Thread(startNextActionThread).Start();
         }
 
-        private void startNextActionThread() {
+        private void startNextActionThread()
+        {
             // to prevent this function from being called at the same time by multiple threads
             if (!startingThinkNextActionThread)
             {

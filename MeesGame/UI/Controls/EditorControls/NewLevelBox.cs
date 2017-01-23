@@ -34,10 +34,10 @@ namespace MeesGame
             {
                 Succes?.Invoke(this);
             });
-            Button cancelButton = new SpriteSheetButton(new RelativeToLocation(okButton, 40, 0 , false), null, Strings.cancel, onClick: (UIComponent component) =>
-            {
-                Visible = false;
-            });
+            Button cancelButton = new SpriteSheetButton(new RelativeToLocation(okButton, 40, 0, false), null, Strings.cancel, onClick: (UIComponent component) =>
+           {
+               Visible = false;
+           });
 
             centerSpanner.AddConstantComponent(okButton);
             centerSpanner.AddConstantComponent(cancelButton);

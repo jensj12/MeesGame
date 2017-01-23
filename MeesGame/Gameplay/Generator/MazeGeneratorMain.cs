@@ -58,7 +58,7 @@ namespace MeesGen
                             {
                                 // Add a tile between the hallways.
                                 tileToAdd = ChooseLoopTile();
-                                if(tileToAdd is DoorTile)
+                                if (tileToAdd is DoorTile)
                                 {
                                     (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(numKeys, true);
                                 }

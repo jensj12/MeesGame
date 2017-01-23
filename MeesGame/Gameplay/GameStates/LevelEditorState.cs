@@ -80,12 +80,14 @@ namespace MeesGame
             tilePropertiesList = new SortedList(new DirectionLocation(leftToRight: false), new InheritDimensions(false, true, tilePropertiesListWidth));
             saveLevel = new SpriteSheetButton(new DirectionLocation(20, 720, false), null, Strings.save, SaveLevel);
             loadLevel = new SpriteSheetButton(new DirectionLocation(20, 600, false), null, Strings.load, LoadLevel);
-            showResizeLevelButton = new SpriteSheetButton(new DirectionLocation(20, 480, false), null, Strings.newmaze, (UIComponent component) => {
+            showResizeLevelButton = new SpriteSheetButton(new DirectionLocation(20, 480, false), null, Strings.newmaze, (UIComponent component) =>
+            {
                 newLevelBox.Visible = true;
             });
 
             newLevelBox = new NewLevelBox(CenteredLocation.All, level.Tiles.Rows, level.Tiles.Columns);
-            newLevelBox.Succes += (UIComponent component) => {
+            newLevelBox.Succes += (UIComponent component) =>
+            {
                 InitLevel();
                 newLevelBox.Visible = false;
             };

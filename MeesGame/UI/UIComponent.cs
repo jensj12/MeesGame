@@ -439,7 +439,7 @@ namespace MeesGame
         {
             get
             {
-                if(cachedLocation == null)
+                if (cachedLocation == null)
                 {
                     cachedLocation = CurrentRelativeLocation;
                 }
@@ -454,7 +454,7 @@ namespace MeesGame
         {
             get
             {
-                if(cachedDimensions == null)
+                if (cachedDimensions == null)
                 {
                     cachedDimensions = CurrentDimensions;
                 }

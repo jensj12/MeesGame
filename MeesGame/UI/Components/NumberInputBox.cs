@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
 using System.Text.RegularExpressions;
 
 namespace MeesGame
@@ -45,18 +44,21 @@ namespace MeesGame
             this.min = min;
             this.max = max;
         }
-        
+
         /// <summary>
         /// The number the numberinputbox holds.
         /// </summary>
         public int Number
         {
-            get {
+            get
+            {
                 if (string.IsNullOrEmpty(Text))
                     return min;
-                return number; }
-            set {
-                if(number == value)
+                return number;
+            }
+            set
+            {
+                if (number == value)
                 {
                     return;
                 }
@@ -67,7 +69,7 @@ namespace MeesGame
                 else
                 {
                     number = value;
-                    NumberChanged?.Invoke(this);    
+                    NumberChanged?.Invoke(this);
                 }
                 Text = number.ToString();
             }
