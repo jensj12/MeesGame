@@ -91,7 +91,19 @@ namespace MeesGen
             int randNumb = random.Next(BIGINT);
             if (randNumb < loopDoorChance * BIGINT) return new DoorTile();
             // Since the function already returns if the loop is a door, add the chance to the loopHoleChance
-            if (randNumb < (loopHoleChance + loopDoorChance) * BIGINT) return new HoleTile();
+            if (randNumb < (loopHoleChance + loopDoorChance) * BIGINT)
+            {
+                // Guards and Holes have the same effect, so they can be placed on the same way.
+                if (random.Next(2) == 1)
+                {
+                    return new HoleTile();
+                }
+                else
+                {
+                    return new GuardTile();
+                }
+            }
+
             return new FloorTile();
         }
 
@@ -102,7 +114,7 @@ namespace MeesGen
                 Random randomNumber = new Random();
                 max = (int)(randomNumber.Next(0, numKeys));
             }
-            switch(max)
+            switch (max)
             {
                 case 0:
                     return Color.Blue;
@@ -130,7 +142,7 @@ namespace MeesGen
         {
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
-                if(tiles.OnEdgeOfTileField(a.X + direction.ToPoint().X, a.Y + direction.ToPoint().Y))
+                if (tiles.OnEdgeOfTileField(a.X + direction.ToPoint().X, a.Y + direction.ToPoint().Y))
                 {
                     return new Point(a.X + direction.ToPoint().X, a.Y + direction.ToPoint().Y);
                 }
