@@ -75,14 +75,17 @@ namespace MeesGame
 
             int myIndex = Location.X + tileFieldWitdth * Location.Y;
 
-            int targetIndex = myIndex +1;
+            int targetIndex = myIndex + 1;
 
-            while (true)
+            //if no other destination is found, use the tile itself as a destination.
+            destination = Location;
+
+            while (targetIndex != myIndex)
             {
-                if(maxTileIndex > targetIndex)
+                if (maxTileIndex > targetIndex)
                 {
                     Tile targetTile = TileField.Objects[targetIndex % tileFieldWitdth, targetIndex / tileFieldWitdth] as Tile;
-                    if (targetTile.Data.AdditionalInfo == portalIndex && targetTile != this && targetTile.TileType == TileType.Portal)
+                    if (targetTile.Data.AdditionalInfo == portalIndex && targetTile.TileType == TileType.Portal)
                     {
                         destination = targetTile.Location;
                         return;
