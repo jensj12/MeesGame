@@ -53,5 +53,10 @@ namespace MeesGame
                 GameEnvironment.AssetManager.PlaySound("key_pickup");
             base.MarkVisited();
         }
+
+        public KeyColor KeyColor
+        {
+            get { return keyColor; }
+        }
     }
 }

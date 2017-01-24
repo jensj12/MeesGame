@@ -28,6 +28,14 @@ namespace MeesGame
             }
         }
 
+        public Point Destination
+        {
+            get
+            {
+                return destination;
+            }
+        }
+
         public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
             if (action == PlayerAction.SPECIAL)

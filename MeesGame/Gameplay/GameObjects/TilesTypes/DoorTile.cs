@@ -112,5 +112,10 @@ namespace MeesGame
             doorColor = (KeyColor)Data.AdditionalInfo;
             secondarySpriteColor = doorColor.ToColor();
         }
+
+        public KeyColor DoorColor
+        {
+            get { return doorColor; }
+        }
     }
 }

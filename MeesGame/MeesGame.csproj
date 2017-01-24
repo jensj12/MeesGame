@@ -56,6 +56,7 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\AStar.cs" />
     <Compile Include="AI\IAI.cs" />
     <Compile Include="AI\RandomWalker.cs" />
     <Compile Include="Gameplay\GameObjects\AnimatedMovingGameObject.cs" />
