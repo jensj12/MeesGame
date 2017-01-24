@@ -10,15 +10,7 @@ namespace MeesGame
         private static readonly Point NO_POINT = new Point(-1, -1);
         private static readonly Point DEFAULT_START = new Point(1, 1);
         private Point start = NO_POINT;
-        public Point Start
-        {
-            get
-            {
-                if (start == NO_POINT)
-                    UpdateStart();
-                return start;
-            }
-        }
+        private int sightRadius = 3;
 
         public TileField() : base(0, 0, 0, "")
         {
@@ -29,18 +21,12 @@ namespace MeesGame
             this.fogOfWar = fogOfWar;
         }
 
-        public bool FogOfWar
-        {
-            get
-            {
-                return fogOfWar;
-            }
-            set
-            {
-                fogOfWar = value;
-            }
-        }
-
+        /// <summary>
+        /// Return the type of the tile on location (x,y).
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> type of the tile on location (x,y)</returns>
         public TileType GetType(int x, int y)
         {
             if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
@@ -51,6 +37,12 @@ namespace MeesGame
             return tile.TileType;
         }
 
+        /// <summary>
+        /// Add a tile to the tilefield on location (x,y).
+        /// </summary>
+        /// <param name="obj"> type of tile to add </param>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-cordinate </param>
         public void Add(Tile obj, int x, int y)
         {
             if (OutOfTileField(x, y))
@@ -99,6 +91,12 @@ namespace MeesGame
             }
         }
 
+        /// <summary>
+        /// Return the tile on the given location.
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> Tile on location (x,y) </returns>
         public Tile GetTile(int x, int y)
         {
             if (OutOfTileField(x, y))
@@ -195,6 +193,9 @@ namespace MeesGame
             }
         }
 
+        /// <summary>
+        /// Update the graphics of the tiles.
+        /// </summary>
         public void UpdateGraphics()
         {
             foreach (Tile tile in Objects)
@@ -211,70 +212,76 @@ namespace MeesGame
             }
         }
 
-        public void RevealArea(Point a)
+        #region reveal area methods
+
+        /// <summary>
+        /// Reveals an area of tiles.
+        /// </summary>
+        /// <param name="point"> Center point of the area </param>
+        public void RevealArea(Point point)
         {
-            revealAroundTile(a);
+            revealAroundTile(point);
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
-                revealPath(a, direction.ToPoint(), 3, direction);
+                revealPath(point, direction.ToPoint(), sightRadius, point, direction);
             }
         }
 
-        public void revealAroundTile(Point a)
+        /// <summary>
+        /// Reveals a tile and part of the area around it.
+        /// </summary>
+        /// <param name="point"> The tile to be revealed </param>
+        private void revealAroundTile(Point point)
         {
-            for (int i = a.X - 1; i <= a.X + 1; i++)
+            for (int i = point.X - 1; i <= point.X + 1; i++)
             {
-                for (int j = a.Y - 1; j <= a.Y + 1; j++)
+                for (int j = point.Y - 1; j <= point.Y + 1; j++)
                 {
                     if (!OutOfTileField(i, j))
                     {
                         //using bitwise or-operator in the setter
-                        if (i <= a.X && j >= a.Y) { GetTile(i, j).Revealed = 1; }
-                        if (i <= a.X && j <= a.Y) { GetTile(i, j).Revealed = 2; }
-                        if (i >= a.X && j <= a.Y) { GetTile(i, j).Revealed = 4; }
-                        if (i >= a.X && j >= a.Y) { GetTile(i, j).Revealed = 8; }
+                        if (i <= point.X && j >= point.Y) { GetTile(i, j).Revealed = 1; }
+                        if (i <= point.X && j <= point.Y) { GetTile(i, j).Revealed = 2; }
+                        if (i >= point.X && j <= point.Y) { GetTile(i, j).Revealed = 4; }
+                        if (i >= point.X && j >= point.Y) { GetTile(i, j).Revealed = 8; }
                     }
                 }
             }
         }
 
-        public void revealPath(Point a, Point direction, int limit, Direction startDirection)
+        /// <summary>
+        /// Recursively reveals the path until the limit has been reached or vision is obstructed.
+        /// </summary>
+        /// <param name="point"> Current point </param>
+        /// <param name="direction"> Current direction </param>
+        /// <param name="limit"> Limit, how far you can see from here</param>
+        /// <param name="startPoint"> Starting Point </param>
+        /// <param name="startDirection"> Starting Direction </param>
+        private void revealPath(Point point, Point direction, int limit, Point startPoint, Direction startDirection)
         {
             //check if you're still on the map, while that is the case, vision is not obstructed, 
             //and the distance limit has not been reached reveal the area around the tile.
-            if (!OutOfTileField((a.X += direction.X), (a.Y += direction.Y))
-                && !GetTile(a.X, a.Y).ObstructsVision
+            if (!OutOfTileField((point.X += direction.X), (point.Y += direction.Y))
+                && !GetTile(point.X, point.Y).ObstructsVision
                 && limit > 0)
             {
-                revealAroundTile(a);
+                // Don't reveal the corners beacuse it looks better.
+                if ((point.X - startPoint.X != sightRadius && point.X - startPoint.X != -sightRadius) ||
+                   (point.Y - startPoint.Y != sightRadius && point.Y - startPoint.Y != -sightRadius))
+                {
+                    revealAroundTile(point);
+                }
 
-                if (startDirection == Direction.NORTH)
+                // All of the directions branch off, for example if the startDirection is North, 
+                // you'll want to continue in the directions North-West, North and North-East.
+                for (int i = -1; i <= 1; i++)
                 {
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        revealPath(a, new Point(direction.X + i, direction.Y), limit - 1, startDirection);
-                    }
-                }
-                else if (startDirection == Direction.EAST)
-                {
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        revealPath(a, new Point(direction.X, direction.Y + i), limit - 1, startDirection);
-                    }
-                }
-                else if (startDirection == Direction.SOUTH)
-                {
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        revealPath(a, new Point(direction.X + i, direction.Y), limit - 1, startDirection);
-                    }
-                }
-                else if (startDirection == Direction.WEST)
-                {
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        revealPath(a, new Point(direction.X, direction.Y + i), limit - 1, startDirection);
-                    }
+                    Point newDirection = direction;
+                    if (startDirection.ToPoint().X == 0)
+                        newDirection.X += i;
+                    else
+                        newDirection.Y += i;
+                    revealPath(point, newDirection, limit - 1, startPoint, startDirection);
                 }
             }
         }
@@ -296,14 +303,6 @@ namespace MeesGame
             return false;
         }
 
-        public Vector2 CellDimensions
-        {
-            get
-            {
-                return new Vector2(CellWidth, CellHeight);
-            }
-        }
-
         /// <summary>
         /// Should be called when the player enters a Tile so that the graphics can be adjusted.
         /// </summary>
@@ -313,5 +312,41 @@ namespace MeesGame
             RevealArea(location);
             GetTile(location).MarkVisited();
         }
+
+        #endregion
+
+        #region properties
+
+        public Point Start
+        {
+            get
+            {
+                if (start == NO_POINT)
+                    UpdateStart();
+                return start;
+            }
+        }
+
+        public bool FogOfWar
+        {
+            get
+            {
+                return fogOfWar;
+            }
+            set
+            {
+                fogOfWar = value;
+            }
+        }
+
+        public Vector2 CellDimensions
+        {
+            get
+            {
+                return new Vector2(CellWidth, CellHeight);
+            }
+        }
+
+        #endregion
     }
 }
