@@ -30,8 +30,11 @@ namespace MeesGame
 
         public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
-            // All actions are allowed on a PortalTile.
-            return false;
+            if (action == PlayerAction.SPECIAL)
+                // Special actions are allowed on portalTiles.
+                return false;
+
+            return base.IsActionForbiddenFromHere(player, action);
         }
 
         /// <summary>
