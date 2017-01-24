@@ -2,6 +2,8 @@
 The something and only game without a number!
 This is gonna "git" gud
 
+### Dependencies
+ - For building the release with an installer, install [NSIS](http://nsis.sourceforge.net/Download) in `C:\Program Files (x86)\NSIS`
 
 ### How to work on the project:
  - Clone the repository
