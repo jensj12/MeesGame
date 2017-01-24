@@ -77,11 +77,32 @@ namespace MeesGame
         /// </summary>
         public override void UpdatePortals()
         {
-            foreach (Tile tile in this.TileField.Objects)
+            int tileFieldWitdth = TileField.Objects.GetLength(0);
+            int tileFieldHeight = TileField.Objects.GetLength(1);
+            int maxTileIndex = tileFieldHeight * tileFieldWitdth;
+
+            int myIndex = Location.X + tileFieldWitdth * Location.Y;
+
+            int targetIndex = myIndex + 1;
+
+            //if no other destination is found, use the tile itself as a destination.
+            destination = Location;
+
+            while (targetIndex != myIndex)
             {
-                if (tile.Data.AdditionalInfo == portalIndex && tile != this && tile.TileType == TileType.Portal)
+                if (maxTileIndex > targetIndex)
                 {
-                    destination = tile.Location;
+                    Tile targetTile = TileField.Objects[targetIndex % tileFieldWitdth, targetIndex / tileFieldWitdth] as Tile;
+                    if (targetTile.Data.AdditionalInfo == portalIndex && targetTile.TileType == TileType.Portal)
+                    {
+                        destination = targetTile.Location;
+                        return;
+                    }
+                    targetIndex++;
+                }
+                else
+                {
+                    targetIndex = 0;
                 }
             }
         }
