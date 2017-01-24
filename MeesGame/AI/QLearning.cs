@@ -65,7 +65,13 @@ namespace AI
 
         private ITileField level;
 
-        private IPlayer player;
+        private IPlayer Player
+        {
+            get
+            {
+                return aiPlayer.DummyPlayer;
+            }
+        }
 
         /// <summary>
         /// currentState is the state in which the agent currently is, initialState is the state in which the agent begins the level.
@@ -94,14 +100,10 @@ namespace AI
         
         //er moet nog iets zijn wat bijhoudt welke keys zijn opgepakt om te weten in welke qValue je moet zijn
 
-        public QLearning(ITileField level, double learningRate, double discountFactor)
+        public QLearning(double learningRate, double discountFactor)
         {
-            this.level = level;
-
-            //TODO this.currentKeyList = currentKeyList;
-            currentState = new AILevelState(player.Location, player.Inventory.Items);
-
-            initialState = new AILevelState(player.Location, player.Inventory.Items);
+            bestAction = new Dictionary<AILevelState, PlayerAction>();
+            qValues = new Dictionary<Tuple<AILevelState, PlayerAction>, double>();
 
             //voor als we verschillende opties doen; als we altijd op dezelfde manier beginnen kunnen we dit ook weglaten uit de constructor en gewoon een waarde geven.
             this.learningRate = learningRate;
@@ -111,16 +113,22 @@ namespace AI
             //this.beginState = level;
         }
         
-        public void GameStart(IPlayer player)
+        public void GameStart(IAIPlayer aiPlayer)
         {
-            beginState = new AILevelState(player.Location, player.Inventory.Items); // TODO: zorg dat de keys in inventory klopt
-            AIStartTrainingMode();
+            this.aiPlayer = aiPlayer;
+            //TODO this.currentKeyList = currentKeyList;
+            
+
+            initialState = new AILevelState(Player.Location, Player.Inventory.Items);
+            this.level = aiPlayer.Level.Tiles;
         }
 
         public PlayerAction GetNextAction()
-        {
+        { 
+            currentState = new AILevelState(Player.Location, Player.Inventory.Items);
+            initialState = currentState.Clone();
             PlayerAction action;
-            if (bestAction.ContainsKey(currentState))
+            if (bestAction.ContainsKey(currentState) && Player.CanPerformAction(bestAction[currentState]))
             {
                 action = bestAction[currentState];
             }
@@ -128,17 +136,10 @@ namespace AI
             {
                 int r2 = GameEnvironment.Random.Next();
 
-                List<PlayerAction> possibleActions = new List<PlayerAction>();
-
-                foreach (PlayerAction a in player.PossibleActions)
-                {
-                    possibleActions.Add(a);
-                }
-
-                action = possibleActions[r2 % possibleActions.Count];
+                action = Player.PossibleActions[r2 % Player.PossibleActions.Count];
             }
 
-            currentState = GetNewAILevelState(player, action);
+            currentState = GetNewAILevelState(Player, action);
 
             return action;
         }
@@ -146,11 +147,13 @@ namespace AI
         /// <summary>
         /// This function starts the training mode.
         /// </summary>
-        public void AIStartTrainingMode()
+        /// <param name="numTrials">The number of simulations the ai should try</param>
+        public void AIStartTrainingMode(int numTrials)
         {
-            for (int x = 0; x < 1000; x++)
+            currentState = initialState.Clone();
+            for (int x = 0; x < numTrials; x++)
             {
-                IPlayer clone = player.Clone();
+                IPlayer clone = Player.Clone();
                 while (clone.CurrentTile.TileType != TileType.End)
                 {
                     AITrainingModeDoMove(clone, currentState);
@@ -183,15 +186,8 @@ namespace AI
             else // TODO: misschien moet er nog iets gebeuren als er geen mogelijke acties zijn
             {
                 int r2 = GameEnvironment.Random.Next();
-
-                List<PlayerAction> possibleActions = new List<PlayerAction>();
-
-                foreach (PlayerAction action in clone.PossibleActions) 
-                {
-                    possibleActions.Add(action);
-                }
                 
-                PlayerAction a = possibleActions[r2 % possibleActions.Count];
+                PlayerAction a = clone.PossibleActions[r2 % clone.PossibleActions.Count];
                 Tuple<AILevelState, PlayerAction> StateAndAction = new Tuple<AILevelState, PlayerAction>(s, a);
 
                 Q(clone, currentState, a);
@@ -250,7 +246,7 @@ namespace AI
                     possibleValues.Add(qValues[actionKey]);
                 }
             }
-            return possibleValues.Max();
+            return possibleValues.Count > 0 ? possibleValues.Max() : 0;
         }
 
         /// <summary>
@@ -265,7 +261,7 @@ namespace AI
 
             if (clone.CurrentTile is EndTile) return 1;
             else if (clone.CurrentTile is HoleTile) return -1;
-            else return 0; 
+            else return 0;
         }
 
         /// <summary>
@@ -277,29 +273,26 @@ namespace AI
         private void Q(IPlayer clone, AILevelState s, PlayerAction a)
         {
             Tuple<AILevelState, PlayerAction> StateAndAction = new Tuple<AILevelState, PlayerAction>(s, a);
-            qValues[StateAndAction] = qValues[StateAndAction] + learningRate * ((double)GetResultOfAction(clone, s, a) + discountFactor * EstimatedOptimalFutureValue(clone, s, a) - qValues[StateAndAction]);
-        }
-
-        public void GameStart(IPlayer player, int difficulty)
-        {
-            this.player = player;
-        }
-
-        public void UpdateNextAction()
-        {
-            aiPlayer.NextAIAction = PlayerAction.NONE;
+            double oldValue = qValues.ContainsKey(StateAndAction) ? qValues[StateAndAction] : 0;
+            qValues[StateAndAction] = oldValue + learningRate * (GetResultOfAction(clone, s, a) + discountFactor * EstimatedOptimalFutureValue(clone, s, a) -oldValue);
         }
 
         public void GameStart(IAIPlayer player, int difficulty)
         {
             this.aiPlayer = player;
+            initialState = new AILevelState(Player.Location, Player.Inventory.Items);
+        }
+
+        public void UpdateNextAction()
+        {
+            aiPlayer.NextAIAction = GetNextAction();
         }
 
         public void ThinkAboutNextAction()
         {
             IPlayer player = aiPlayer.DummyPlayer;
             beginState = new AILevelState(player.Location, player.Inventory.Items);
-            AIStartTrainingMode();
+            AIStartTrainingMode(100);
         }
     }
 }

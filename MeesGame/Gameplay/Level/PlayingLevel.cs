@@ -15,7 +15,7 @@
             }
             else
             {
-                UseRandomWalkingAIPlayer();
+                UseQLearningAIPlayer();
             }
         }
 
@@ -27,6 +27,11 @@
         public void UseRandomWalkingAIPlayer()
         {
             usePlayer(new AIPlayer(new AI.RandomWalker() ,this, start));
+        }
+
+        public void UseQLearningAIPlayer()
+        {
+            usePlayer(new AIPlayer(new AI.QLearning(1,1), this, start));
         }
 
         public PlayerGameObject Player
