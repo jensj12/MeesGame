@@ -223,7 +223,6 @@
 /processorParam:TextureFormat=Color
 /build:fog@16.png
 
-
 #begin editorOverlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -235,7 +234,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:editorOverlay.png
-
 
 #begin horizontalDoorOverlay.png
 /importer:TextureImporter
@@ -249,7 +247,6 @@
 /processorParam:TextureFormat=Color
 /build:horizontalDoorOverlay.png
 
-
 #begin verticalDoorOverlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -261,7 +258,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:verticalDoorOverlay.png
-
 
 #begin mainMenuOverlay.png
 /importer:TextureImporter
@@ -275,8 +271,6 @@
 /processorParam:TextureFormat=Color
 /build:mainMenuOverlay.png
 
-
-
 #begin loadScreenOverlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -288,7 +282,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:loadScreenOverlay.png
-
 
 #begin defaultButtonOverlay.png
 /importer:TextureImporter
@@ -302,7 +295,6 @@
 /processorParam:TextureFormat=Color
 /build:defaultButtonOverlay.png
 
-
 #begin start.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -314,7 +306,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:start.png
-
 
 #begin scream.wav
 /importer:WavImporter
@@ -345,16 +336,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:loseScreenOverlay.png
-
-#begin icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:icon.png
 
