@@ -213,6 +213,12 @@ namespace MeesGame
             constantComponents.Update(gameTime);
         }
 
+        public static void BeginUISpriteBatch(SpriteBatch spriteBatch)
+        {
+            uiSpriteBatch.Begin(samplerState: SamplerState.LinearWrap);
+            uiSpriteBatchBegun = true;
+        }
+
         /// <summary>
         /// Draws the UIComponent to the SpriteBatch.
         /// </summary>
@@ -230,10 +236,7 @@ namespace MeesGame
                 {
                     uiSpriteBatch = new SpriteBatch(spriteBatch.GraphicsDevice);
                 }
-
-                uiSpriteBatch.Begin();
-
-                uiSpriteBatchBegun = true;
+                BeginUISpriteBatch(spriteBatch);
 
                 RenderTargetBinding[] renderTargets = spriteBatch.GraphicsDevice.GetRenderTargets();
                 RenderTexture(gameTime, uiSpriteBatch);
@@ -247,7 +250,7 @@ namespace MeesGame
             {
                 spriteBatch.End();
 
-                spriteBatch.Begin(rasterizerState: new RasterizerState() { ScissorTestEnable = true });
+                spriteBatch.Begin(rasterizerState: new RasterizerState() { ScissorTestEnable = true }, samplerState: SamplerState.LinearWrap);
 
                 spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((CachedRelativeLocation + (anchorPoint ?? Vector2.Zero)).ToPoint(), CachedDimensions);
 
@@ -255,7 +258,7 @@ namespace MeesGame
 
                 spriteBatch.End();
 
-                spriteBatch.Begin();
+                BeginUISpriteBatch(spriteBatch);
             }
             else
             {

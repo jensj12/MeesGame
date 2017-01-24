@@ -13,12 +13,15 @@ namespace MeesGame
 
         Color color;
 
-        public UISpriteSheet(Location location, Dimensions dimensions, string[] spritesheetsToAdd = null, Color? color = null) : base(location, dimensions)
+        bool tiled;
+
+        public UISpriteSheet(Location location, Dimensions dimensions, string[] spritesheetsToAdd = null, Color? color = null, bool tiled = true) : base(location, dimensions)
         {
             spritesheets = new List<SpriteSheet>();
             AddSpritesheets(spritesheetsToAdd ?? new string[] { });
 
             this.color = color ?? Color.White;
+            this.tiled = tiled;
         }
 
         public void AddSpritesheets(string[] spritesheetsToAdd)
@@ -37,13 +40,24 @@ namespace MeesGame
         {
             for (int i = 0; i < spritesheets.Count; i++)
             {
-                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CachedDimensions.X, CachedDimensions.Y, color);
+                spritesheets[i].Draw(spriteBatch, anchorPoint.ToVector2(), anchorPoint.ToVector2(), CurrentDimensions, color, tiled);
             }
         }
 
         protected override void InputPropertyChanged()
         {
             Invalidate();
+        }
+
+        public List<SpriteSheet> DefaultSpritesheets
+        {
+            get { return spritesheets; }
+        }
+
+        public bool Tiled
+        {
+            get { return tiled; }
+            set { tiled = value; }
         }
     }
 }

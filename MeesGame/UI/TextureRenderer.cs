@@ -26,7 +26,7 @@ namespace MeesGame
             task(gameTime, spriteBatch, Vector2.Zero);
 
             spriteBatch.End();
-            spriteBatch.Begin();
+            UIComponent.BeginUISpriteBatch(spriteBatch) ;
         }
     }
 }

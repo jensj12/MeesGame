@@ -72,7 +72,7 @@ namespace MeesGame
 
             foreach (InventoryItem item in level.Player.Inventory.Items)
             {
-                inventoryUI.AddChild(new UISpriteSheet(new CenteredLocation(horizontalCenter: true), new SimpleDimensions(80, 80), new string[] { "KeyOverlay" }, item.type.ToKeyColorType().ToColor())); ;
+                inventoryUI.AddChild(new UISpriteSheet(new CenteredLocation(horizontalCenter: true), new SimpleDimensions(80, 80), new string[] { "KeyOverlay" }, item.type.ToKeyColorType().ToColor(), false));
             }
         }
 
