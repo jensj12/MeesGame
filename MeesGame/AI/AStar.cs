@@ -425,11 +425,13 @@ namespace AI
         public void GameStart(IAIPlayer player, int difficulty)
         {
             this.player = player;
-            path = FindPath();
+            path = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>();
         }
 
         public void ThinkAboutNextAction()
         {
+            if (path.Count == 0)
+                path = FindPath();
         }
 
         /// <summary>
@@ -440,26 +442,20 @@ namespace AI
         {
             Level = new AStarLevel(player.TileField);
             Level.SolveLevel();
-            if (Level.OptimalPath.Count == 0)
-                throw new PathNotFoundException();
             return Level.OptimalPath;
         }
 
         public void UpdateNextAction()
         {
-            HashSet<KeyColor> currentKeys = new HashSet<KeyColor>();
-            foreach (InventoryItem item in player.DummyPlayer.Inventory.Items)
-                currentKeys.Add(item.type.ToKeyColorType());
-            Dictionary<Point, PlayerAction> CurrentPath = path[currentKeys];
-            if (CurrentPath.ContainsKey(player.DummyPlayer.Location))
-                player.NextAIAction = CurrentPath[player.DummyPlayer.Location];
+            if(path.Count != 0)
+            {
+                HashSet<KeyColor> currentKeys = new HashSet<KeyColor>();
+                foreach (InventoryItem item in player.DummyPlayer.Inventory.Items)
+                    currentKeys.Add(item.type.ToKeyColorType());
+                Dictionary<Point, PlayerAction> CurrentPath = path[currentKeys];
+                if (CurrentPath.ContainsKey(player.DummyPlayer.Location))
+                    player.NextAIAction = CurrentPath[player.DummyPlayer.Location];
+            }
         }
-    }
-
-    /// <summary>
-    /// Error message thrown when no path has been found.
-    /// </summary>
-    public class PathNotFoundException : Exception
-    {
     }
 }
