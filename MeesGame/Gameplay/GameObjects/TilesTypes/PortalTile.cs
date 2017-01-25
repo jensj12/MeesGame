@@ -77,34 +77,37 @@ namespace MeesGame
         /// </summary>
         public override void UpdatePortals()
         {
-            int tileFieldWitdth = TileField.Objects.GetLength(0);
-            int tileFieldHeight = TileField.Objects.GetLength(1);
-            int maxTileIndex = tileFieldHeight * tileFieldWitdth;
+            int width = TileField.Objects.GetLength(0);
+            int Height = TileField.Objects.GetLength(1);
 
-            int myIndex = Location.X + tileFieldWitdth * Location.Y;
+            int x = Location.X + 1;
+            int y = Location.Y;
 
-            int targetIndex = myIndex + 1;
+            bool found = false;
 
-            //if no other destination is found, use the tile itself as a destination.
-            destination = Location;
-
-            while (targetIndex != myIndex)
+            while (!found)
             {
-                if (maxTileIndex > targetIndex)
+                y %= Height;
+                while (x < width)
                 {
-                    Tile targetTile = TileField.Objects[targetIndex % tileFieldWitdth, targetIndex / tileFieldWitdth] as Tile;
-                    if (targetTile.Data.AdditionalInfo == portalIndex && targetTile.TileType == TileType.Portal)
+                    Tile target = (Tile)TileField.Objects[x, y];
+                    if(target.TileType == TileType.Portal)
                     {
-                        destination = targetTile.Location;
-                        return;
+                        destination = target.Location;
+                        found = true;
+                        break;
                     }
-                    targetIndex++;
+                    if (target == this)
+                    {
+                        found = true;
+                        break;
+                    }
+                    x++;
                 }
-                else
-                {
-                    targetIndex = 0;
-                }
+                x = 0;
+                y++;
             }
+
         }
     }
 }

@@ -387,8 +387,8 @@ namespace AI
                             {
                                 destination.Score = newTile.Score + 1;
                                 destination.SetOldTile(newTile, 0, 0);
+                                OpenTiles.Add(destination);
                             }
-                            OpenTiles.Add(destination);
                             goto case AStarTileType.passable;
                     }
             }
