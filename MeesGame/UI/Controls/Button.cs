@@ -6,6 +6,8 @@ namespace MeesGame
 {
     public class Button : UIComponent
     {
+        public event OnClickEventHandler SelectedChanged;
+
         /// <summary>
         /// Indicates if the button is selected, for example when choosing a file in the fileExplorer.
         /// </summary>
@@ -115,6 +117,8 @@ namespace MeesGame
                         edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.DefaultButtonSelectedEdgeColor);
                     else
                         edgeTexture.Color = Utility.DrawingColorToXNAColor(DefaultUIValues.Default.ButtonEdgeColor);
+                    SelectedChanged?.Invoke(this);
+                    Invalidate();
                 }
             }
         }

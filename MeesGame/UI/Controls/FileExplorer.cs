@@ -1,4 +1,5 @@
 ﻿using MeesGame.UI;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MeesGame
@@ -12,7 +13,7 @@ namespace MeesGame
         /// <summary>
         /// Distance between each of the buttons in the file explorer.
         /// </summary>
-        private int buttonDistance = 10;
+        private const int DistanceBetweenChildren = 20;
 
         /// <summary>
         /// The files with the extension "EG. .txt" the fileExplorer shows.
@@ -27,12 +28,12 @@ namespace MeesGame
         /// <summary>
         /// Index of the selected button.
         /// </summary>
-        private int selectedIndex = -1;
+        private Button selectedChild = null;
 
         /// <summary>
-        /// A list of strings the fileExplorer is currently showing.
+        /// Maps children to their paths.
         /// </summary>
-        private string[] fileList;
+        private Dictionary<UIComponent, string> childToPath;
 
         /// <summary>
         /// Creates a fileExplorer.
@@ -41,31 +42,42 @@ namespace MeesGame
         /// <param name="dimensions"></param>
         /// <param name="fileExtension">Extension the file explorer looks for, for example .txt</param>
         /// <param name="path">path of the folder the files are located in</param>
-        public FileExplorer(Location location = null, Dimensions dimensions = null, string fileExtension = "", string path = "", Background background = null) : base(location, dimensions)
+        public FileExplorer(Location location = null, Dimensions dimensions = null, string fileExtension = "", string path = "", Background background = null) : base(location, dimensions, DistanceBetweenChildren: DistanceBetweenChildren)
         {
             Background uiBackground = background ?? new Background(Utility.SolidWhiteTexture, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.FileExplorerBackground));
 
             currentDirectory = path;
             this.fileExtension = fileExtension;
 
-            generateFileList();
-            UpdateHeightWhenExpanded();
+            childToPath = new Dictionary<UIComponent, string>();
+
+            GenerateFileList();
+        }
+
+        public override void AddChild(UIComponent child)
+        {
+            AddChild(child, "");
+        }
+
+        public void AddChild(UIComponent child, string path = "")
+        {
+            base.AddChild(child);
+            childToPath.Add(child, path);
+            child.Click += ChildClickHandler;
         }
 
         /// <summary>
         /// lists the file in the directory and puts them into buttons for the file explorer
         /// </summary>
-        public void generateFileList()
+        public void GenerateFileList()
         {
-            children.Clear();
-            fileList = Directory.GetFiles(currentDirectory);
+            string[] foundFiles = Directory.GetFiles(currentDirectory);
             Location nextButtonLocation = SimpleLocation.Zero;
-            for (int i = 0; i < fileList.Length; i++)
+            for (int i = 0; i < foundFiles.Length; i++)
             {
-                if (fileList[i].EndsWith("." + fileExtension))
+                if (foundFiles[i].EndsWith("." + fileExtension))
                 {
-                    AddChild(new SpriteSheetButton(nextButtonLocation, null, fileList[i].Substring(currentDirectory.Length + 1, fileList[i].Length - currentDirectory.Length - fileExtension.Length - 2), OnItemClicked));
-                    nextButtonLocation = new SimpleLocation(0, buttonDistance);
+                    AddChild(new SpriteSheetButton(SimpleLocation.Zero, null, foundFiles[i].Substring(currentDirectory.Length + 1, foundFiles[i].Length - currentDirectory.Length - fileExtension.Length - 2), ChildClickHandler), foundFiles[i]);
                 }
             }
         }
@@ -75,26 +87,40 @@ namespace MeesGame
         /// updates the selected variable
         /// </summary>
         /// <param name="button">Button that was just pressed</param>
-        public void OnItemClicked(UIComponent button)
+        public void ChildClickHandler(UIComponent clickedChild)
         {
-            Button btn = (Button)button;
-            if (selectedIndex != -1)
-                ((Button)children[selectedIndex]).Selected = false;
-            btn.Selected = true;
-            selectedIndex = children.IndexOf(btn);
+            if (selectedChild is Button)
+                selectedChild.Selected = false;
+            if(clickedChild is Button)
+            {
+                selectedChild = (Button)clickedChild;
+                selectedChild.Selected = true;
+            }
             FileSelected?.Invoke(this);
         }
 
         /// <summary>
         /// Index of the selected button.
         /// </summary>
-        public string SelectedFile
+        public Button SelectedFile
         {
             get
             {
-                if (selectedIndex == -1) return null;
-                return fileList[selectedIndex];
+                return selectedChild;
             }
+        }
+
+        public string GetPathFromChild(UIComponent button)
+        {
+            if(childToPath.ContainsKey(button))
+                return childToPath[button];
+            return "";
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            childToPath.Clear();
         }
     }
 }

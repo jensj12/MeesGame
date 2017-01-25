@@ -30,7 +30,7 @@ namespace MeesGame
 
             UIComponent centerSpanner = new UIComponent(new CombinationLocation(new CenteredLocation(horizontalCenter: true), new RelativeToLocation(rowsEdit, 0, 50, true, false)), WrapperDimensions.All);
 
-            Button okButton = new SpriteSheetButton(SimpleLocation.Zero, null, Strings.ok, onClick: (UIComponent component) =>
+            Button okButton = new SpriteSheetButton(SimpleLocation.Zero, null, Strings.begin, onClick: (UIComponent component) =>
             {
                 Succes?.Invoke(this);
             });

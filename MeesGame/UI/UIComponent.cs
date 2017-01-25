@@ -472,7 +472,7 @@ namespace MeesGame
         {
             get
             {
-                return location.ToVector2(this) + Parent?.ChildAnchorPoint(this) ?? Vector2.Zero;
+                return location.ToVector2(this) + (Parent?.ChildAnchorPoint(this) ?? Vector2.Zero);
             }
         }
 

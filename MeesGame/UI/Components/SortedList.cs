@@ -14,11 +14,6 @@ namespace MeesGame
         protected ScrollBar scrollBar;
 
         /// <summary>
-        /// cached height when expanded
-        /// </summary>
-        private int heightWhenExpanded;
-
-        /// <summary>
         /// Distance from the parent at which the children should be drawn.
         /// </summary>
         public int childOffset;
@@ -55,17 +50,6 @@ namespace MeesGame
 
             //if we only scale the first element, the rest will follow.
             return new Vector2(0, -childOffset);
-        }
-
-        /// <summary>
-        /// Adds a child to the sorted list
-        /// </summary>
-        /// <param name="child"></param>
-        public override void AddChild(UIComponent child)
-        {
-            base.AddChild(child);
-
-            UpdateHeightWhenExpanded();
         }
 
         public override void RenderTexture(GameTime gameTime, SpriteBatch spriteBatch)
@@ -143,34 +127,24 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Updates the height the parent would have if it were fully expanded.
-        /// </summary>
-        public void UpdateHeightWhenExpanded()
-        {
-            if (children.Count > 0)
-            {
-                int childrenHeight = (int)(Children[Children.Count - 1].AbsoluteRectangle.Bottom - AbsoluteLocation.Y);
-                if (childrenHeight > CachedDimensions.Y)
-                {
-                    heightWhenExpanded = childrenHeight;
-                    scrollBar.Visible = true;
-                }
-                else
-                {
-                    heightWhenExpanded = CachedDimensions.Y;
-                    scrollBar.Visible = false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Height when every child would be fully visible.
         /// </summary>
         public int HeightWhenExpanded
         {
             get
             {
-                return heightWhenExpanded;
+                if (children.Count > 0)
+                {
+                    int childrenHeight = Children[Children.Count - 1].RelativeRectangle.Bottom - Children[0].RelativeRectangle.Top;
+                    if (childrenHeight > CachedDimensions.Y)
+                    {
+                        scrollBar.Visible = true;
+                        return childrenHeight;
+
+                    }
+                }
+                scrollBar.Visible = false;
+                return CachedDimensions.Y;
             }
         }
 

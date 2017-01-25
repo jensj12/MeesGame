@@ -15,7 +15,7 @@ namespace MeesGame
 
             MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(10, 10), null, Strings.begin, (UIComponent o) =>
             {
-                ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateFileExplorers();
+                ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateLevelExplorer();
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
             MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(10, 120), null, Strings.map_editor, (UIComponent o) =>
