@@ -7,6 +7,52 @@ namespace MeesGen
 {
     partial class MazeGenerator
     {
+        enum behindDoorFlags
+        {
+            behindBlue = 1,
+            behindCyan = 2,
+            behindGreen = 4,
+            behindMagenta = 8,
+            behindRed = 16,
+            behindYellow = 32
+        }
+
+        /// <summary>
+        /// Returns the behindDoorFlags from the specified color.
+        /// </summary>
+        /// <param name="color"> color </param>
+        /// <returns></returns>
+        private behindDoorFlags GetFlagFromColor(Color color)
+        {
+            //series of if / else if / ... 
+            //because color can not be used in a switch
+            if(color == Color.Blue)
+            {
+                return behindDoorFlags.behindBlue;
+            } else if(color == Color.Cyan)
+            {
+                return behindDoorFlags.behindCyan;
+            }
+            else if (color == Color.Green)
+            {
+                return behindDoorFlags.behindGreen;
+            }
+            else if (color == Color.Magenta)
+            {
+                return behindDoorFlags.behindMagenta;
+            }
+            else if (color == Color.Red)
+            {
+                return behindDoorFlags.behindRed;
+            }
+            else if (color == Color.Yellow)
+            {
+                return behindDoorFlags.behindYellow;
+            }
+
+            return behindDoorFlags.behindBlue;
+        }
+
         /// <summary>
         /// Decide the next point from the current point, taking two steps from the current point.
         /// </summary>
@@ -75,10 +121,13 @@ namespace MeesGen
             return false;
         }
 
+        /// <summary>
+        /// Determines the position to expand the maze from: continue the path or from a random position.
+        /// </summary>
         private void DetermineNextPositionToExpandFrom()
         {
             position = nodesToDo.Count - 1;
-            if (randomNext || random.Next(BIGINT) < splitChance * BIGINT)
+            if (randomNext || randomChance(splitChance))
             {
                 // Swap the last node with another node
                 int nodeToDoNext = random.Next(nodesToDo.Count);
@@ -86,33 +135,26 @@ namespace MeesGen
             }
         }
 
-        private Tile ChooseLoopTile()
+        /// <summary>
+        /// Determines the position to place the exit of the portal, make sure it aligns with the rest of the maze.
+        /// </summary>
+        /// <returns> position to place the second portal </returns>
+        private Point DetermineSecondPortalPosition()
         {
-            int randNumb = random.Next(BIGINT);
-            if (randNumb < loopDoorChance * BIGINT) return new DoorTile();
-            // Since the function already returns if the loop is a door, add the chance to the loopHoleChance
-            if (randNumb < (loopHoleChance + loopDoorChance) * BIGINT)
-            {
-                // Guards and Holes have the same effect, so they can be placed on the same way.
-                if (random.Next(2) == 1)
-                {
-                    return new HoleTile();
-                }
-                else
-                {
-                    return new GuardTile();
-                }
-            }
-
-            return new FloorTile();
+            return new Point(random.Next(tiles.Columns / 2 - 1) * 2 + 1, random.Next(tiles.Rows / 2 - 1) * 2 + 1);
         }
 
+        /// <summary>
+        /// Chooses a color for the key/door to be placed.
+        /// </summary>
+        /// <param name="max"> Maximum int to make sure there are no doors placed for which there is no key. </param>
+        /// <param name="randomly"> In case of a door, whether the color of the door may be chosen randomly. </param>
+        /// <returns> Color of the door/key </returns>
         private Color ChooseColor(int max, bool randomly = false)
         {
             if (randomly)
             {
-                Random randomNumber = new Random();
-                max = (int)(randomNumber.Next(0, numKeys));
+                max = random.Next(max);
             }
             switch (max)
             {
@@ -150,6 +192,35 @@ namespace MeesGen
 
             // The default end location in case of an error.
             return new Point(0, 1);
+        }
+
+        /// <summary>
+        /// Checks if the new exit point is better than the current exit.
+        /// </summary>
+        private void UpdateBestExit(Point newPoint)
+        {
+            // The best exit is the one hardest to reach from the start.
+            // It also has to be next to the edge of the tilefield, it will never be on the edge itself.
+            if (exitScore[newPoint.X, newPoint.Y] > exitScore[bestExit.X, bestExit.Y] && tiles.NearEdgeOfTileField(newPoint.X, newPoint.Y))
+            {
+                bestExit = newPoint;
+            }
+        }
+
+        /// <summary>
+        /// The point between two given points
+        /// </summary>
+        private Point PointBetween(Point one, Point two)
+        {
+            return new Point((one.X + two.X) / 2, (one.Y + two.Y) / 2);
+        }
+
+        /// <summary>
+        /// Returns true with the given chance
+        /// </summary>
+        private bool randomChance(double chance)
+        {
+            return random.Next(BIGINT) < chance * BIGINT;
         }
 
         /// <returns>The TileField generated by the generator.</returns>

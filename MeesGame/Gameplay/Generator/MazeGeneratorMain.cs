@@ -1,5 +1,6 @@
 ﻿using MeesGame;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace MeesGen
 {
@@ -22,6 +23,9 @@ namespace MeesGen
 
         private void MazeGenMain()
         {
+            // Add the startTile, this makes sure no keys are placed there.
+            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
+
             // Add hallways until all tiles are filled (main algorithm).
             while (nodesToDo.Count != 0)
             {
@@ -30,14 +34,13 @@ namespace MeesGen
                 // Continue from the last node, or take a random one
                 DetermineNextPositionToExpandFrom();
 
-                Point current = nodesToDo[position];
-                Point next;
+                current = nodesToDo[position];
 
                 // Make an arrray and fill it with 0-3 in a random order.
                 int[] possible = getZeroToThreeInRandomOrder();
 
                 // Set randomNext to true, it gets set to false if we can extend the hallway
-                randomNext = true;
+                didAddHallway = false;
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -47,88 +50,155 @@ namespace MeesGen
                     // Check if it's in the tilefield.
                     if (next.X < 0 || next.Y < 0 || next.X >= tiles.Columns || next.Y >= tiles.Rows) continue;
 
-                    // If it's not a walltile.
-                    if (!(tiles.GetTile(next) is WallTile))
+                    // If it's not a walltile, the tile has alreade been visited by the generator.
+                    if (!(tiles.GetType(next) == TileType.Wall))
                     {
                         // Making a path there would create a loop.
-                        if (random.Next(BIGINT) < loopChance * BIGINT)
+                        if (randomChance(loopChance))
                         {
                             // If the wall inbetween is a walltile.
-                            if (tiles.GetTile((next.X + current.X) / 2, (next.Y + current.Y) / 2) is WallTile)
+                            if (tiles.GetType(PointBetween(next, current)) == TileType.Wall)
                             {
                                 // Add a tile between the hallways.
-                                tileToAdd = ChooseLoopTile();
-                                if (tileToAdd is DoorTile)
-                                {
-                                    (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(numKeys, true);
-                                }
-                                tiles.Add(tileToAdd, (next.X + current.X) / 2, (next.Y + current.Y) / 2);
+                                AddLoopTile(next, current);
                             }
                         }
-                        // Next is not a wall, so continue another direction.
+                        // Next is already a hallway, so continue another direction.
                         continue;
                     }
+
+                    // We can add another hallway, so try to continue from there in the next iteration
+                    didAddHallway = true;
+                    randomNext = false;
+                    pointBetween = PointBetween(current, next);
 
                     // Current and the tile inbetween current and next have been done, so continue on from next.
                     nodesToDo.Add(next);
 
-                    // Add the path to the next tile, and check if keys/doors need to be placed.
-                    tileToAdd = new FloorTile();
-                    foreach (int keyNode in keyNodes)
-                    {
-                        if (nodesDone == keyNode)
-                        {
-                            // Once a key has been placed, a door can be placed.
-                            tileToAdd = new KeyTile();
-                            (tileToAdd as KeyTile).SecondarySpriteColor = ChooseColor(keysPlaced);
-                            keysPlaced++;
-                            placeDoors = true;
-                        }
-                    }
-                    tiles.Add(tileToAdd, next.X, next.Y);
+                    // Add the two tiles, the tile in between first to prevent a door being placed in front of the corresponding key
+                    AddTileInBetween();
+                    AddNextTile();
 
-                    // Exitscore is higher the further you are from the start, following the paths.
-                    exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + 1;
+                    UpdateBestExit(next);
 
-                    // Re-initialise tileToAdd with the default, a floor tile
-                    tileToAdd = new FloorTile();
-
-                    // If a key has been placed, placeDoors is true and there is a chance to place doors.
-                    if (doorsPlaced < keysPlaced && placeDoors && random.Next(BIGINT) < doorChance * BIGINT)
-                    {
-                        tileToAdd = new DoorTile();
-                        (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(doorsPlaced);
-                        doorsPlaced++;
-                        // If there's a door between the tiles, it's more difficult to get from one to another, so the exit score should increase by more.
-                        exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + 10;
-                    }
-                    tiles.Add(tileToAdd, (next.X + current.X) / 2, (next.Y + current.Y) / 2);
-
-                    // The best exit is the one hardest to reach from the start.
-                    // It also has to be next to the edge of the tilefield, next will never be on the edge itself.
-                    if (exitScore[next.X, next.Y] > exitScore[bestExit.X, bestExit.Y] && tiles.NearEdgeOfTileField(next.X, next.Y))
-                    {
-                        bestExit = next;
-                    }
-
-                    // We placed another hallway, so try to continue from there in the next iteration
-                    randomNext = false;
+                    // Don't continue searching for more pathways from this point
                     break;
                 }
 
-                if (randomNext)
+                if (!didAddHallway)
                 {
                     // We can't extend any further from this tile, so remove it from the list
                     nodesToDo.RemoveAt(position);
+                    randomNext = true;
                 }
             }
-
-            // Add the startTile.
-            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
 
             // Add an end tile on the edge next to the best exit.
             bestExit = FindEdgeTile(bestExit);
             tiles.Add(new EndTile(), bestExit.X, bestExit.Y);
+        }
+
+        /// <summary>
+        /// Add a tile on the next tile, next to the tileInBetween
+        /// </summary>
+        private void AddNextTile()
+        {
+            //Add the path to the next tile, and check if keys / doors need to be placed.
+            tileToAdd = new FloorTile();
+
+            // Add a key if the time has come
+            foreach (int keyNode in keyNodes)
+            {
+                if (nodesDone == keyNode)
+                {
+                    // Once a key has been placed, a door can be placed.
+                    tileToAdd = new KeyTile();
+                    (tileToAdd as KeyTile).SecondarySpriteColor = ChooseColor(keysPlaced);
+                    keysPlaced++;
+                    placeDoors = true;
+                    // Choosing a random position next time generally makes it harder to find keys
+                    randomNext = true;
+                }
+            }
+
+            // Exitscore is higher the further you are from the start, following the paths.
+            exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + 1;
+
+            // Only place portals if we haven't placed a key
+            if (randomChance(portalChance) && !randomNext)
+            {
+                Point secondPortalPosition = DetermineSecondPortalPosition();
+                if (tiles.GetType(secondPortalPosition) == TileType.Wall)
+                {
+                    tileToAdd = new PortalTile();
+                    (tileToAdd as PortalTile).PortalIndex = portalsPlaced;
+                    tiles.Add(tileToAdd, secondPortalPosition.X, secondPortalPosition.Y);
+                    tileToAdd = new PortalTile();
+                    (tileToAdd as PortalTile).PortalIndex = portalsPlaced;
+                    // Tile will be added below
+
+                    portalsPlaced++;
+                    nodesToDo.Add(secondPortalPosition);
+                    exitScore[secondPortalPosition.X, secondPortalPosition.Y] = exitScore[next.X, next.Y] + portalScore;
+                    behindDoorInfo[secondPortalPosition.X, secondPortalPosition.Y] = behindDoorInfo[next.X, next.Y];
+                }
+            }
+
+            tiles.Add(tileToAdd, next.X, next.Y);
+        }
+
+        private void AddTileInBetween()
+        {
+            // Default is a FloorTile
+            tileToAdd = new FloorTile();
+
+            // If a key has been placed, immediately place a door
+            if (doorsPlaced < keysPlaced)
+            {
+                tileToAdd = new DoorTile();
+                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(doorsPlaced);
+                doorsPlaced++;
+                // If there's a door between the tiles, a key is needed to pass, so the exit score should increase by more.
+                exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + firstDoorScore;
+            }
+            // Always have a chance to place a door after a key has been placed
+            else if (placeDoors && randomChance(doorChance))
+            {
+                tileToAdd = new DoorTile();
+                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(keysPlaced, true);
+                // If there's a door between the tiles, a key is needed to pass, so the exit score should increase by more.
+                exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + extraDoorScore;
+            }
+            tiles.Add(tileToAdd, pointBetween.X, pointBetween.Y);
+
+            behindDoorInfo[next.X, next.Y] = behindDoorInfo[current.X, current.Y];
+            if(tiles.GetType(pointBetween) == TileType.Door)
+            {
+                // If a door is placed, next is behind all the doors it is currently behind as well as the newly placed door.
+                behindDoorInfo[next.X, next.Y] |= GetFlagFromColor((tiles.GetTile(pointBetween.X, pointBetween.Y) as DoorTile).SecondarySpriteColor);
+            }
+        }
+        
+        /// <summary>
+        /// Places a tile between the two points, creating the loop.
+        /// </summary>
+        private void AddLoopTile(Point one, Point two)
+        {
+            tileToAdd = new FloorTile();
+            behindDoorFlags difference = behindDoorInfo[one.X, one.Y] ^ behindDoorInfo[two.X, two.Y];
+            // Check if the difference is exactly one door color
+            if (Enum.IsDefined(typeof(behindDoorFlags), difference))
+            {
+                tileToAdd = new DoorTile();
+                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor((int)Math.Log((int)difference, 2));
+            } 
+            else if (difference != 0 || randomChance(loopHoleChance))
+            {
+                tileToAdd = new HoleTile();
+                if (randomChance(0.5))
+                    tileToAdd = new GuardTile();
+            }
+            tiles.Add(tileToAdd, PointBetween(one, two).X, PointBetween(one, two).Y);
         }
     }
 }
