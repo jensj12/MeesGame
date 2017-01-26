@@ -90,7 +90,7 @@ namespace MeesGame
                 y %= Height;
                 while (x < width)
                 {
-                    Tile target = (Tile)TileField.Objects[x, y];
+                    Tile target = TileField.GetTile(x, y);
                     if(target.TileType == TileType.Portal)
                     {
                         destination = target.Location;
