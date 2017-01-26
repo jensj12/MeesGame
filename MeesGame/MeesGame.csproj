@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gameplay\Content\button_click.wav" />
+    <Content Include="Gameplay\Content\climbing_sound.wav" />
     <Content Include="Gameplay\Content\defaultButtonOverlay.png" />
     <Content Include="Gameplay\Content\editorOverlay.png" />
     <Content Include="Gameplay\Content\floorTile.png" />

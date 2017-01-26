@@ -337,3 +337,8 @@
 /processorParam:TextureFormat=Color
 /build:loseScreenOverlay.png
 
+#begin climbing_sound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:climbing_sound.wav

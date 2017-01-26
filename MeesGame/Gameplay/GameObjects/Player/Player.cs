@@ -63,7 +63,11 @@ namespace MeesGame
                 MoveSmoothly(direction);
                 soundFootsteps.Play();
             };
-            player.OnTeleport += delegate (DummyPlayer player) { Teleport(player.Location); };
+            player.OnTeleport += delegate (DummyPlayer player) 
+            {
+                Teleport(player.Location);
+                GameEnvironment.AssetManager.PlaySound("climbing_sound");
+            };
             StoppedMoving += delegate (GameObject obj)
             {
                 player.EndMoveSmoothly();
