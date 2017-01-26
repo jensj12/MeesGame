@@ -192,7 +192,7 @@ namespace AI
             {
                 for (int y = 0; y < tileField.Objects.GetLength(1); y++)
                 {
-                    Tile tileAtLocation = ((Tile)tileField.Objects[x, y]);
+                    Tile tileAtLocation = tileField.GetTile(x, y);
                     switch (tileAtLocation.TileType)
                     {
                         case TileType.Floor:

@@ -92,7 +92,7 @@ namespace MeesGame
             {
                 if (maxTileIndex > targetIndex)
                 {
-                    Tile targetTile = TileField.Objects[targetIndex % tileFieldWitdth, targetIndex / tileFieldWitdth] as Tile;
+                    Tile targetTile = TileField.GetTile(targetIndex % tileFieldWitdth, targetIndex / tileFieldWitdth);
                     if (targetTile.Data.AdditionalInfo == portalIndex && targetTile.TileType == TileType.Portal)
                     {
                         destination = targetTile.Location;
