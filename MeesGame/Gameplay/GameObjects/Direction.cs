@@ -89,5 +89,22 @@ namespace MeesGame
             }
             throw new NotImplementedException();
         }
+        
+        public static PlayerAction ReverseAction(this PlayerAction action)
+        {
+            switch (action)
+            {
+                case PlayerAction.NORTH:
+                    return PlayerAction.SOUTH;
+                case PlayerAction.EAST:
+                    return PlayerAction.WEST;
+                case PlayerAction.SOUTH:
+                    return PlayerAction.NORTH;
+                case PlayerAction.WEST:
+                    return PlayerAction.EAST;
+                default:
+                    return PlayerAction.NONE;
+            }
+        }
     }
 }

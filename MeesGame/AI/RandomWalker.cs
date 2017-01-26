@@ -1,4 +1,5 @@
 ﻿using MeesGame;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace AI
@@ -11,6 +12,7 @@ namespace AI
     {
         IAIPlayer player;
         PlayerAction nextAction = PlayerAction.NONE;
+        PlayerAction lastAction = PlayerAction.NONE;
 
         public void GameStart(IAIPlayer player, int difficulty)
         {
@@ -26,14 +28,35 @@ namespace AI
             //granted, it was only tested on humans, but it probably applies to computers as well
             Thread.Sleep(10);
 
-            // Pick a random action out of the possible action
-            nextAction = dummy.PossibleActions[GameEnvironment.Random.Next(dummy.PossibleActions.Count)];
+            IList<PlayerAction> possibleActions = new List<PlayerAction>();
+            // Pick a random action out of the possible actions
+            foreach (PlayerAction action in dummy.PossibleActions)
+            {
+                if (action == PlayerAction.NONE) continue;
+                IPlayer extraDummy = dummy.Clone();
+                extraDummy.PerformAction(nextAction);
+                if (extraDummy.CurrentTile is HoleTile) continue;
+                possibleActions.Add(action);
+            }
+            if (possibleActions.Count != 1)
+            {
+                for (int i = possibleActions.Count - 1; i >= 0; i--)
+                {
+                    if (lastAction.ReverseAction() == possibleActions[i])
+                        possibleActions.RemoveAt(i);
+                }
+            }
+            nextAction = possibleActions[GameEnvironment.Random.Next(possibleActions.Count)];
         }
 
         public void UpdateNextAction()
         {
             if (player.DummyPlayer.CanPerformAction(nextAction))
+            {
                 player.NextAIAction = nextAction;
+                if (nextAction != PlayerAction.NONE)
+                    lastAction = nextAction;
+            }
             else
                 player.NextAIAction = PlayerAction.NONE;
         }
