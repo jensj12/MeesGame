@@ -219,6 +219,9 @@
     <Content Include="Content\levels\04 prison.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\levels\05 all%401ce.lvl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="PlayerIcon.ico" />
   </ItemGroup>
   <ItemGroup>
