@@ -50,13 +50,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>PlayerIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\AStar.cs" />
     <Compile Include="AI\IAI.cs" />
+    <Compile Include="AI\MonteCarlo.cs" />
     <Compile Include="AI\RandomWalker.cs" />
     <Compile Include="Gameplay\GameObjects\AnimatedMovingGameObject.cs" />
     <Compile Include="Gameplay\GameObjects\Direction.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="UI\Controls\EditorControls\ColorPicker.cs" />
     <Compile Include="UI\Controls\EditorControls\IndexPicker.cs" />
     <Compile Include="UI\Controls\EditorControls\NewLevelBox.cs" />
+    <Compile Include="UI\Controls\RadioButton.cs" />
     <Compile Include="UI\Controls\SpriteSheetButton.cs" />
     <Compile Include="UI\Controls\TextureButton.cs" />
     <Compile Include="UI\DefaultUIValues.Designer.cs">
@@ -204,7 +207,7 @@
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Gameplay\Content\walls%4016.png" />
-	<Content Include="Content\levels\00 demo.lvl">
+    <Content Include="Content\levels\00 demo.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\levels\01 introduction.lvl">
@@ -213,19 +216,34 @@
     <Content Include="Content\levels\02 danger.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-	<Content Include="Content\levels\04 prison.lvl">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>
-    <Content Include="Icon.ico" />
+    <Content Include="Content\levels\04 prison.lvl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\levels\05 all%401ce.lvl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PlayerIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Gameplay\Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

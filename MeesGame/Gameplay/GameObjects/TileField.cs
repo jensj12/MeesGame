@@ -36,7 +36,17 @@ namespace MeesGame
             Tile tile = Get(x, y) as Tile;
             return tile.TileType;
         }
-
+        
+        /// <summary>
+        /// Return the type of the tile on the given location
+        /// </summary>
+        /// <param name="location"> Coordinates </param>
+        /// <returns> Type of the tile on the given location </returns>
+        public TileType GetType(Point location)
+        {
+            return GetType(location.X, location.Y);
+        }
+        
         /// <summary>
         /// Add a tile to the tilefield on location (x,y).
         /// </summary>

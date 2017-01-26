@@ -1,8 +1,10 @@
-﻿namespace MeesGame
+﻿using System;
+
+namespace MeesGame
 {
     class PlayingLevel : Level
     {
-        public PlayingLevel(TileField tileField, int levelindex = 0, bool human = true)
+        public PlayingLevel(TileField tileField, int levelindex = 0, int playerIndex = 0, int playerDifficulty = 0)
         {
             start = tileField.Start;
             numRows = tileField.Rows;
@@ -10,14 +12,41 @@
             Tiles = tileField;
             Tiles.UpdateGraphicsToMatchSurroundings();
             Tiles.UpdatePortals();
-            if (human)
+            switch (playerIndex)
             {
-                UseHumanPlayer();
+                case 0:
+                    UseHumanPlayer();
+                    break;
+                case 1:
+                    UseRandomWalkingAIPlayer();
+                    break;
+                case 2:
+                    try
+                    {
+                        UseAStarAIPlayer();
+                    }
+                    catch (Exception e)
+                    {
+                        goto default;
+                    }
+                    break;
+                case 3:
+                    UseMonteCarloAIPlayer();
+                    break;
+                default:
+                    UseHumanPlayer();
+                    break;
             }
-            else
-            {
-                UseRandomWalkingAIPlayer();
-            }
+        }
+
+        private void UseMonteCarloAIPlayer()
+        {
+            usePlayer(new AIPlayer(new AI.MonteCarlo(), this, start));
+        }
+
+        private void UseAStarAIPlayer()
+        {
+            usePlayer(new AIPlayer(new AI.AStar(), this, start));
         }
 
         public void UseHumanPlayer()

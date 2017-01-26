@@ -38,8 +38,14 @@
     <Setting Name="BoxEdgeColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Gold</Value>
     </Setting>
-    <Setting Name="BoxInnerColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="BoxInnerColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="RadioButtonDimen1" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="RadioButtonDimen" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20</Value>
     </Setting>
   </Settings>
 </SettingsFile>

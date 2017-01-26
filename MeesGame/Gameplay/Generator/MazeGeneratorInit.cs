@@ -11,24 +11,30 @@ namespace MeesGen
         private const int DEFAULT_NUM_COLS = Level.DEFAULT_NUM_COLS;
 
         private double loopChance = 0;
-        private double loopDoorChance = 0;
         private double loopHoleChance = 0;
         private double splitChance = 0;
+        private double portalChance = 0;
         private double doorChance = 0;
         private TileField tiles;
         private Point bestExit;
         private int[,] exitScore;
+        private behindDoorFlags[,] behindDoorInfo;
         private IList<Point> nodesToDo;
         private int totalNodesToDo;
         private int[] keyNodes;
         private Point start;
+        private Point current;
+        private Point next;
+        private Point pointBetween;
         private bool placeDoors;
         private bool randomNext;
+        private bool didAddHallway;
         private Tile tileToAdd;
         private int nodesDone;
         private int position;
         private int numKeys;
-        private int keysPlaced, doorsPlaced;
+        private int portalScore = 10, firstDoorScore = 50, extraDoorScore = 25;
+        private int keysPlaced, doorsPlaced, portalsPlaced;
         private int numRows, numCols;
 
         private void InitMazeGen(int numRows, int numCols, int difficulty)
@@ -48,41 +54,41 @@ namespace MeesGen
             {
                 case 1:
                     loopChance = 0.04;
-                    loopDoorChance = 0.2;
                     loopHoleChance = 0.55;
                     splitChance = 0.03;
+                    portalChance = 0;
                     doorChance = 0;
                     numKeys = 2;
                     break;
                 case 2:
                     loopChance = 0.03;
-                    loopDoorChance = 0.2;
                     loopHoleChance = 0.6;
                     splitChance = 0.04;
+                    portalChance = 0.005;
                     doorChance = 0.01;
                     numKeys = 3;
                     break;
                 case 3:
                     loopChance = 0.025;
-                    loopDoorChance = 0.2;
                     loopHoleChance = 0.7;
                     splitChance = 0.03;
+                    portalChance = 0.01;
                     doorChance = 0.03;
                     numKeys = 4;
                     break;
                 case 4:
                     loopChance = 0.02;
-                    loopDoorChance = 0.2;
                     loopHoleChance = 0.75;
                     splitChance = 0.03;
+                    portalChance = 0.015;
                     doorChance = 0.05;
                     numKeys = 5;
                     break;
                 case 5:
                     loopChance = 0.01;
-                    loopDoorChance = 0.1;
                     loopHoleChance = 0.9;
                     splitChance = 0.02;
+                    portalChance = 0.02;
                     doorChance = 0.08;
                     numKeys = 6;
                     break;
@@ -104,9 +110,9 @@ namespace MeesGen
 
             // Create a tilefield filled with walls with the specified dimensions.
             tiles = new TileField(numRows, numCols);
-            for (int y = 0; y < tiles.Columns; y++)
+            for (int y = 0; y < tiles.Rows; y++)
             {
-                for (int x = 0; x < tiles.Rows; x++)
+                for (int x = 0; x < tiles.Columns; x++)
                 {
                     tiles.Add(new WallTile(), x, y);
                 }
@@ -139,7 +145,7 @@ namespace MeesGen
             {
                 do
                 {
-                    keyNodes[i] = (random.Next(totalNodesToDo) + random.Next(totalNodesToDo)) / 2; // Try to get it halfway.
+                    keyNodes[i] = (random.Next(totalNodesToDo - 1) + random.Next(totalNodesToDo - 1)) / 2 + 1; // Try to get it halfway.
                 } while (isDuplicate(keyNodes, i)); // Every value has to be different.
             }
         }
@@ -154,7 +160,8 @@ namespace MeesGen
         private void InitialiseExitSearch()
         {
             // The exit will be placed at the hardest to reach tile, so keep an array for that.
-            exitScore = new int[numRows, numCols];
+            exitScore = new int[numCols, numRows];
+            behindDoorInfo = new behindDoorFlags[numCols, numRows];
             bestExit = start;
         }
     }

@@ -131,15 +131,30 @@ namespace MeesGame.UI {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
         public global::System.Drawing.Color BoxInnerColor {
             get {
                 return ((global::System.Drawing.Color)(this["BoxInnerColor"]));
             }
-            set {
-                this["BoxInnerColor"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int RadioButtonDimen1 {
+            get {
+                return ((int)(this["RadioButtonDimen1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int RadioButtonDimen {
+            get {
+                return ((int)(this["RadioButtonDimen"]));
             }
         }
     }

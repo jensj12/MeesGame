@@ -197,19 +197,20 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to Start Level!.
         /// </summary>
-        internal static string ok {
+        internal static string start {
             get {
-                return ResourceManager.GetString("ok", resourceCulture);
+                return ResourceManager.GetString("start", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to rows.
-        /// </summary>
+
+        /// <summary>		
+        ///   Looks up a localized string similar to rows.		
+        /// </summary>		
         internal static string rows_edit_text {
-            get {
+            get
+            {
                 return ResourceManager.GetString("rows_edit_text", resourceCulture);
             }
         }

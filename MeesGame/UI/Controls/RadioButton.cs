@@ -1,0 +1,79 @@
+﻿using MeesGame.UI;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace MeesGame
+{
+    class RadioButton : UIComponent
+    {
+        private const int distance = 20;
+
+        private List<RadioButton> radioGroup;
+
+        private Button button;
+
+        private Textbox textbox;
+
+        public RadioButton(Location location, string text = "", List<RadioButton> radioGroup = null, OnClickEventHandler onClick = null) : base(location, null) 
+        {
+            Dimensions = WrapperDimensions.All;
+
+            SetRadiogroup(radioGroup);
+
+            button = new Button(SimpleLocation.Zero, new SimpleDimensions(DefaultUIValues.Default.RadioButtonDimen, DefaultUIValues.Default.RadioButtonDimen), "");
+
+            textbox = new Textbox(new SimpleLocation(DefaultUIValues.Default.RadioButtonDimen + distance, 0), null, text, DefaultUIValues.Default.DefaultEditorControlSpriteFont, Color.Black);
+
+            AddConstantComponent(button);
+            AddConstantComponent(textbox);
+        }
+
+        public void SetRadiogroup(List<RadioButton> radioGroup)
+        {
+            this.radioGroup?.Remove(this);
+            radioGroup.Add(this);
+            this.radioGroup = radioGroup;
+        }
+
+        public override void HandleInput(InputHelper inputHelper)
+        {
+            base.HandleInput(inputHelper);
+            if (MouseHovering)
+            {
+                button.MouseHovering = true;
+            }
+            if ((button.MouseClicked || MouseClicked) && !Selected && radioGroup != null)
+            {
+                foreach(RadioButton radioButton in radioGroup)
+                {
+                    radioButton.Selected = false;
+                }
+                Selected = true;
+            }
+        }
+
+        /// <summary>
+        /// Returns the Button inside the radioButton.
+        /// </summary>
+        public Button Button
+        {
+            get { return button; }
+        }
+
+        public bool Selected
+        {
+            get { return button.Selected; }
+            set { button.Selected = value; }
+        }
+
+        /// <summary>
+        /// Contains the group of radiobuttons. Only one radiobutton in the group can be selected at any given time.
+        /// </summary>
+        public List<RadioButton> RadioGroup
+        {
+            get { return radioGroup; }
+            set { radioGroup = value; }
+        }
+    }
+}
