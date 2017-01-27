@@ -13,43 +13,9 @@ namespace AI
         passable, blocked, ice, target, portal, end
     }
 
-    /// <summary>
-    /// Reference to the location of a tile which requires a color to be passed, or gives a color.
-    /// </summary>
-    struct ColoredTile
-    {
-        /// <summary>
-        /// Location of the referenced tile.
-        /// </summary>
-        public Point TileLocation
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Color of the referenced tile.
-        /// </summary>
-        public KeyColor Color
-        {
-            get;
-        }
-
-        public ColoredTile(Point tileLocation, KeyColor color)
-        {
-            TileLocation = tileLocation;
-            Color = color;
-        }
-    }
-
     class AStarTile
     {
-        /// <summary>
-        /// Location as in the multidimensional array.
-        /// </summary>
-        public Point Location
-        {
-            get;
-        }
+        private readonly Tile tile;
 
         /// <summary>
         /// Action that is required to enter this tile from the previous tile.
@@ -75,17 +41,66 @@ namespace AI
             get; set;
         }
 
-        public AStarTileType TileType;
+        /// <summary>
+        /// Location as in the multidimensional array.
+        /// </summary>
+        public Point Location
+        {
+            get { return tile.Location; }
+        }
+
+        public AStarTileType TileType(HashSet<KeyColor> inventoryKeys)
+        {
+            switch (tile.TileType)
+            {
+                case MeesGame.TileType.Floor:
+                    return AStarTileType.passable;
+                case MeesGame.TileType.Wall:
+                    return AStarTileType.blocked;
+                case MeesGame.TileType.Ice:
+                    return AStarTileType.ice;
+                case MeesGame.TileType.End:
+                    return AStarTileType.end;
+                case MeesGame.TileType.Start:
+                    return AStarTileType.passable;
+                case MeesGame.TileType.Key:
+                    return AStarTileType.passable;
+                case MeesGame.TileType.Door:
+                    if(inventoryKeys != null)
+                        foreach (KeyColor key in inventoryKeys)
+                            if ((tile as DoorTile).DoorColor == key)
+                                return AStarTileType.passable;
+                    return AStarTileType.blocked;
+                case MeesGame.TileType.Portal:
+                    return AStarTileType.portal;
+                default:
+                    return AStarTileType.blocked;
+            }
+        }
 
         /// <summary>
         /// If standing on this tile kills the player.
         /// </summary>
-        public bool Kills = false;
+        public bool Kills
+        {
+            get { return tile.TileType == MeesGame.TileType.Guard || tile.TileType == MeesGame.TileType.Hole; }
+        }
 
         /// <summary>
         /// Location of the tile this portal connects with.
         /// </summary>
-        public Point Destination;
+        public Point Destination
+        {
+            get { return (tile as PortalTile).Destination; }
+        }
+
+        /// <summary>
+        /// Color of the referenced tile.
+        /// </summary>
+        public KeyColor Color
+        {
+            get { return (tile as KeyTile).KeyColor; }
+        }
 
         /// <summary>
         /// Sets which tile was entered before this tile and what action the player has to take when standing on that tile.
@@ -108,14 +123,10 @@ namespace AI
             else ActionToEnter = PlayerAction.NORTH;
         }
 
-        public AStarTile(Point location, AStarTileType tileType, bool kills = false, Point? destination = null, long score = long.MaxValue)
+        public AStarTile(Tile tile, long score = long.MaxValue)
         {
-            ActionToEnter = null;
+            this.tile = tile;
             Score = score;
-            Kills = kills;
-            Destination = destination ?? Point.Zero;
-            Location = location;
-            TileType = tileType;
         }
 
         /// <summary>
@@ -123,7 +134,7 @@ namespace AI
         /// </summary>
         public AStarTile Clone
         {
-            get { return new AStarTile(Location, TileType, Kills, Destination); }
+            get { return new AStarTile(tile); }
         }
     }
 
@@ -145,17 +156,12 @@ namespace AI
         /// <summary>
         /// Tiles which contain a key of a color that hasn't been picked up yet.
         /// </summary>
-        internal HashSet<ColoredTile> PotentialKeys;
-
-        /// <summary>
-        /// Tiles which contain a locked door.
-        /// </summary>
-        internal HashSet<ColoredTile> ClosedDoors;
+        internal HashSet<AStarTile> PotentialKeys;
 
         /// <summary>
         /// Keys that have been reached while solving this level, and can thus be used as a starting point next level.
         /// </summary>
-        internal HashSet<ColoredTile> ReachedKeys;
+        internal HashSet<AStarTile> ReachedKeys;
 
         /// <summary>
         /// The finish tile, null if it hasn't been reached yet.
@@ -165,7 +171,16 @@ namespace AI
         /// <summary>
         /// Tile from which the level started.
         /// </summary>
-        internal AStarTile Start;
+        private AStarTile start;
+
+        internal AStarTile Start
+        {
+            get { return start; }
+            set {
+                start = value;
+                OpenTiles.Add(start);
+            }
+        }
 
         /// <summary>
         /// The path that requires the least amount of actions to reach the finish or the next key leading to the finish.
@@ -180,9 +195,8 @@ namespace AI
         public AStarLevel(TileField tileField)
         {
             OpenTiles = new List<AStarTile>();
-            PotentialKeys = new HashSet<ColoredTile>();
-            ReachedKeys = new HashSet<ColoredTile>();
-            ClosedDoors = new HashSet<ColoredTile>();
+            PotentialKeys = new HashSet<AStarTile>();
+            ReachedKeys = new HashSet<AStarTile>();
             obtainedKeys = new HashSet<KeyColor>();
             OptimalPath = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>(HashSet<KeyColor>.CreateSetComparer());
 
@@ -193,50 +207,26 @@ namespace AI
                 for (int y = 0; y < tileField.Objects.GetLength(1); y++)
                 {
                     Tile tileAtLocation = tileField.GetTile(x, y);
-                    switch (tileAtLocation.TileType)
+                    AStarTile convertedTile;
+                    if (tileAtLocation.TileType == TileType.Start)
                     {
-                        case TileType.Floor:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.passable);
-                            break;
-                        case TileType.Wall:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.blocked);
-                            break;
-                        case TileType.Ice:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.ice);
-                            break;
-                        case TileType.End:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.end);
-                            break;
-                        case TileType.Start:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.passable, score: 0);
-                            Start = Field[x, y];
-                            OpenTiles.Add(Field[x, y]);
-                            break;
-                        case TileType.Key:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.target);
-                            PotentialKeys.Add(new ColoredTile(new Point(x, y), ((KeyTile)tileAtLocation).KeyColor));
-                            break;
-                        case TileType.Door:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.blocked);
-                            ClosedDoors.Add(new ColoredTile(new Point(x, y), ((DoorTile)tileAtLocation).DoorColor));
-                            break;
-                        case TileType.Portal:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.portal, destination: ((PortalTile)tileAtLocation).Destination);
-                            break;
-                        default:
-                            Field[x, y] = new AStarTile(new Point(x, y), AStarTileType.blocked, true);
-                            break;
+                        convertedTile = new AStarTile(tileAtLocation, 0);
+                        Start = convertedTile;
                     }
+                    else
+                        convertedTile = new AStarTile(tileAtLocation);
+                    Field[x, y] = convertedTile;
+                    if (tileAtLocation.TileType == TileType.Key)
+                        PotentialKeys.Add(convertedTile);
                 }
             }
         }
 
-        public AStarLevel(AStarLevel oldField, ColoredTile newKey, long score)
+        public AStarLevel(AStarLevel oldField, AStarTile newKey)
         {
             OpenTiles = new List<AStarTile>();
-            PotentialKeys = new HashSet<ColoredTile>();
-            ReachedKeys = new HashSet<ColoredTile>();
-            ClosedDoors = new HashSet<ColoredTile>();
+            PotentialKeys = new HashSet<AStarTile>();
+            ReachedKeys = new HashSet<AStarTile>();
             obtainedKeys = new HashSet<KeyColor>();
             OptimalPath = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>();
 
@@ -245,23 +235,12 @@ namespace AI
                 for (int y = 0; y < Field.GetLength(1); y++)
                     Field[x, y] = oldField.Field[x, y].Clone;
 
-            Field[newKey.TileLocation.X, newKey.TileLocation.Y] = new AStarTile(newKey.TileLocation, AStarTileType.passable, score: score);
-            Start = Field[newKey.TileLocation.X, newKey.TileLocation.Y];
-            OpenTiles.Add(Field[newKey.TileLocation.X, newKey.TileLocation.Y]);
+            Start = Field[newKey.Location.X, newKey.Location.Y];
+            Start.Score = newKey.Score;
 
-            //Copy keys exept the reached key
-            foreach (ColoredTile key in oldField.PotentialKeys)
+            foreach (AStarTile key in oldField.PotentialKeys)
                 if (key.Color != newKey.Color)
-                    PotentialKeys.Add(key);
-                else
-                    Field[key.TileLocation.X, key.TileLocation.Y].TileType = AStarTileType.passable;
-
-            //Copy doors exept the doors of the color of the new key.
-            foreach (ColoredTile door in oldField.ClosedDoors)
-                if (door.Color != newKey.Color)
-                    PotentialKeys.Add(door);
-                else
-                    Field[door.TileLocation.X, door.TileLocation.Y].TileType = AStarTileType.passable;
+                    PotentialKeys.Add(Field[key.Location.X, key.Location.Y]);
 
             foreach (KeyColor key in oldField.obtainedKeys)
                 obtainedKeys.Add(key);
@@ -279,13 +258,17 @@ namespace AI
                 VisitTile(OpenTiles[0]);
             }
 
+            foreach(AStarTile key in PotentialKeys)
+                if (key.PreviousTile != null)
+                    ReachedKeys.Add(key);
+
             HashSet<AStarLevel> innerFields = new HashSet<AStarLevel>();
 
             AStarLevel optimalField = null;
 
-            foreach (ColoredTile t in ReachedKeys)
+            foreach (AStarTile t in ReachedKeys)
             {
-                AStarLevel newField = new AStarLevel(this, t, Field[t.TileLocation.X, t.TileLocation.Y].Score);
+                AStarLevel newField = new AStarLevel(this, t);
                 innerFields.Add(newField);
                 newField.SolveLevel();
                 if (newField.Finish?.Score < (Finish?.Score ?? long.MaxValue))
@@ -348,8 +331,8 @@ namespace AI
             {
                 AStarTile newTile = Field[startTile.Location.X + dx, startTile.Location.Y + dy];
                 //score +1 to check if not out of range.
-                if (newTile.Score > startTile.Score + 1 && newTile.TileType != AStarTileType.blocked && startTile.Score + 1 > 0)
-                    switch (newTile.TileType)
+                if (newTile.Score > startTile.Score + 1 && newTile.TileType(obtainedKeys) != AStarTileType.blocked && startTile.Score + 1 > 0)
+                    switch (newTile.TileType(obtainedKeys))
                     {
                         case AStarTileType.end:
                             newTile.Score = startTile.Score + 1;
@@ -360,7 +343,7 @@ namespace AI
                         case AStarTileType.ice:
                             AStarTile nextTile = AStar.Level.Field[startTile.Location.X + NextIncrementInSameDirection(dx), startTile.Location.Y + NextIncrementInSameDirection(dy)];
                             if (!nextTile.Kills)
-                                if (nextTile.TileType == AStarTileType.blocked || nextTile.TileType == AStarTileType.end)
+                                if (nextTile.TileType(null) == AStarTileType.blocked || nextTile.TileType(null) == AStarTileType.end)
                                     goto case AStarTileType.passable;
                                 else
                                     TestTileInDirection(startTile, NextIncrementInSameDirection(dx), NextIncrementInSameDirection(dy));
@@ -372,10 +355,10 @@ namespace AI
                             break;
                         case AStarTileType.target:
                             newTile.Score = startTile.Score + 1;
-                            foreach (ColoredTile ct in PotentialKeys)
-                                if (ct.TileLocation == newTile.Location)
+                            foreach (AStarTile t in PotentialKeys)
+                                if (t.Location == newTile.Location)
                                 {
-                                    ReachedKeys.Add(ct);
+                                    ReachedKeys.Add(t);
                                     break;
                                 }
                             newTile.SetOldTile(startTile, dx, dy);
@@ -426,12 +409,11 @@ namespace AI
         {
             this.player = player;
             path = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>();
+            path = FindPath();
         }
 
         public void ThinkAboutNextAction()
         {
-            if (path.Count == 0)
-                path = FindPath();
         }
 
         /// <summary>
