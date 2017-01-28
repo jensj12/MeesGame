@@ -33,10 +33,18 @@ namespace MeesGame
                 case 3:
                     UseMonteCarloAIPlayer();
                     break;
+                case 4:
+                    UseFloodFillAIPlayer();
+                    break;
                 default:
                     UseHumanPlayer();
                     break;
             }
+        }
+
+        private void UseFloodFillAIPlayer()
+        {
+            usePlayer(new AIPlayer(new AI.FloodFill(), this, start));
         }
 
         private void UseMonteCarloAIPlayer()

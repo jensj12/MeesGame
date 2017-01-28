@@ -16,7 +16,8 @@ namespace MeesGame
             {0, "Human" },
             {1, "Random" },
             {2, "A*" },
-            {3, "MonteCarlo" }
+            {3, "MonteCarlo" },
+            {4, "Flood Fill" }
         };
 
         public static readonly Dictionary<int, string> difficultyLevels = new Dictionary<int, string>()

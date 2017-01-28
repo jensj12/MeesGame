@@ -61,9 +61,12 @@ namespace MeesGame
         {
             get
             {
-                Thread updateNextActionThread = new Thread(AI.UpdateNextAction);
-                updateNextActionThread.Start();
-                updateNextActionThread.Join(MAX_UPDATE_NEXT_ACTION_TIME);
+                if (!IsMoving)
+                {
+                    Thread updateNextActionThread = new Thread(AI.UpdateNextAction);
+                    updateNextActionThread.Start();
+                    updateNextActionThread.Join(MAX_UPDATE_NEXT_ACTION_TIME);
+                }
                 return NextAIAction;
             }
         }

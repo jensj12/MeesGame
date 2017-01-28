@@ -57,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI\AStar.cs" />
+    <Compile Include="AI\FloodFill.cs" />
     <Compile Include="AI\IAI.cs" />
     <Compile Include="AI\MonteCarlo.cs" />
     <Compile Include="AI\RandomWalker.cs" />
