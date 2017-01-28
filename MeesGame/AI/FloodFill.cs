@@ -5,6 +5,50 @@ using System.Collections.Generic;
 
 namespace AI
 {
+    class FloodNode //  ---
+    {
+        private Point point;
+        private int keyIndex;
+        private int slidingIndex;
+
+        public FloodNode(Point point, int keyIndex, int slidingIndex)
+        {
+            this.point = point;
+            this.keyIndex = keyIndex;
+            this.slidingIndex = slidingIndex;
+        }
+
+        public Point Point
+        {
+            get
+            {
+                return point;
+            }
+        }
+
+        public int KeyIndex
+        {
+            get
+            {
+                return keyIndex;
+            }
+
+            set
+            {
+                keyIndex |= value;
+            }
+        }
+
+        public int SlidingIndex
+        {
+            get
+            {
+                return slidingIndex;
+            }
+        }
+
+    }
+
     class FloodFill : IAI
     {
         private Dictionary<KeyColor, int> keys = new Dictionary<KeyColor, int>()
@@ -26,8 +70,9 @@ namespace AI
             };
 
         IAIPlayer player;
-        private Stack<Point> route;
-        private bool exitFound;
+        private Stack<FloodNode> nodes; //  ---
+        //private Stack<Point> route;
+        //private bool exitFound;
         private bool[,,,] visited;
         private List<PlayerAction> path;
         private TileField tileField;
@@ -39,9 +84,10 @@ namespace AI
 
         public void GameStart(IAIPlayer player, int difficulty)
         {
-            // Initiate path, route and slidingDirection.
+            // Initiate path, nodes, route and slidingDirection.
             path = new List<PlayerAction>();
-            route = new Stack<Point>();
+            nodes = new Stack<FloodNode>(); //  ---
+            //route = new Stack<Point>();
             slidingDirection = new Point();
 
             this.player = player;
@@ -50,11 +96,13 @@ namespace AI
             tileField = this.player.DummyPlayer.TileField;
             visited = new bool[tileField.Columns, tileField.Rows, 128, 4];
 
+            nodes.Push(new FloodNode(player.DummyPlayer.Location, 0, 0));   //  ---
+
             // Start the FloodFill algorithm.
-            Flood(player.DummyPlayer.Location, 0, 0);
+            //Flood();    //  ---
 
             // Turn the route into a list of actions for UpdateNextAction().
-            RouteToPath(route);
+            RouteToPath(Flood());
         }
 
         public void ThinkAboutNextAction()
@@ -66,8 +114,8 @@ namespace AI
             if (path.Count > 0)
             {
                 // Follow the path while there is one.
-                player.NextAIAction = path[0];
-                path.RemoveAt(0);
+                player.NextAIAction = path[path.Count - 1];
+                path.RemoveAt(path.Count - 1);
             }
             else
             {
@@ -79,101 +127,116 @@ namespace AI
         /// <summary>
         /// The main method of the FloodFill AI.
         /// </summary>
-        /// <param name="p"> Point to start/continue the flooding from. </param>
-        private void Flood(Point p, int keyIndex, int slidingIndex)
+  //      /// <param name="p"> Point to start/continue the flooding from. </param>
+        private Stack<FloodNode> Flood()    //  ---
         {
-            // If the exit has already been found or we have already visited this tile, stop the flooding.
-            if (exitFound || visited[p.X, p.Y, keyIndex, slidingIndex])
-                return;
-
-            // GuardTile is subclass of HoleTile so this will return for both.
-            // Can't use the same for walls because DoorTile is a subclass of WallTile.
-            // Can't use doors for which you don't have the key.
-            if (tileField.GetTile(p.X, p.Y) is HoleTile ||
-                tileField.GetType(p.X, p.Y) == TileType.Wall ||
-                (tileField.GetType(p.X, p.Y) == TileType.Door && (keyIndex & keys[(tileField.GetTile(p.X, p.Y) as DoorTile).DoorColor]) == 0))
-                return;
-
-            // The current tile has been visited.
-            visited[p.X, p.Y, keyIndex, slidingIndex] = true;
-
-            // Add the current tile to the route.
-            route.Push(p);
-
-            // If this is the exit, the algorithm is done. 
-            // Make sure this is after pushing p to route, otherwise you will stand still before the exit.
-            if (tileField.GetTile(p.X, p.Y).TileType == TileType.End)
+            while (nodes.Count > 0) //  ---
             {
-                exitFound = true;
-                return;
-            }
+                FloodNode node = nodes.Pop();
+                
+                // If the exit has already been found or we have already visited this tile, stop the flooding.
+                if (visited[node.Point.X, node.Point.Y, node.KeyIndex, node.SlidingIndex])
+                    continue;
 
-            // Check if the current tile is a keytile,
-            // and whether we have already picked up a key of this color.
-            if (tileField.GetTile(p.X, p.Y).TileType == TileType.Key)
-            {
-                // Add the key to the keyIndex
-                keyIndex |= keys[(tileField.GetTile(p.X, p.Y) as KeyTile).KeyColor];
-            }
+                // GuardTile is subclass of HoleTile so this will return for both.
+                // Can't use the same for walls because DoorTile is a subclass of WallTile.
+                // Can't use doors for which you don't have the key.
+                if (tileField.GetTile(node.Point.X, node.Point.Y) is HoleTile ||
+                    tileField.GetType(node.Point.X, node.Point.Y) == TileType.Wall ||
+                    (tileField.GetType(node.Point.X, node.Point.Y) == TileType.Door && (node.KeyIndex & keys[(tileField.GetTile(node.Point.X, node.Point.Y) as DoorTile).DoorColor]) == 0))
+                    continue;
 
-            // If we're on an ice tile, we need the sliding direction to see if we can change direction.
-            if (tileField.GetType(p.X, p.Y) == TileType.Ice)
-            {
-                // Retrieve the current and previous point in the route.
-                Point current = route.Pop();
-                Point previous = route.Pop();
+                // The current tile has been visited.
+                visited[node.Point.X, node.Point.Y, node.KeyIndex, node.SlidingIndex] = true;
 
-                // Calculate the direction you're moving at.
-                slidingDirection = current - previous;
+                // Add the current tile to the route.
+                //route.Push(node.Point);
 
-                // Return the current and previous point to the route.
-                route.Push(previous);
-                route.Push(current);
-            }
-
-            //If you can move onto the tile behind the ice tile, you can't change direction
-            if (tileField.GetType(p.X, p.Y) == TileType.Ice &&
-                !(tileField.GetTile(p.X + slidingDirection.X, p.Y + slidingDirection.Y) is WallTile))
-            {
-                //Only keep going in this direction
-                Flood(p + slidingDirection, keyIndex, slides[GetDirectionFromPoint(slidingDirection)]);
-            }
-            // Otherwise we can move in all directions.
-            else
-            {
-                foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
+                // If this is the exit, the algorithm is done. 
+                // Make sure this is after pushing p to route, otherwise you will stand still before the exit.
+                if (tileField.GetTile(node.Point.X, node.Point.Y).TileType == TileType.End)
                 {
-                    if (action == PlayerAction.SPECIAL && tileField.GetTile(p.X, p.Y).TileType == TileType.Portal)
-                        Flood((tileField.GetTile(p) as PortalTile).Destination, keyIndex, 0);
-                    else if (action.IsDirection())
+                    //exitFound = true;
+                    return nodes;
+                }
+
+                // Check if the current tile is a keytile,
+                // and whether we have already picked up a key of this color.
+                if (tileField.GetTile(node.Point.X, node.Point.Y).TileType == TileType.Key)
+                {
+                    // Add the key to the keyIndex
+                    node.KeyIndex = keys[(tileField.GetTile(node.Point.X, node.Point.Y) as KeyTile).KeyColor];
+                }
+
+                // If we're on an ice tile, we need the sliding direction to see if we can change direction.
+                if (tileField.GetType(node.Point.X, node.Point.Y) == TileType.Ice)
+                {
+                    // Retrieve the current and previous point in the route.
+                    FloodNode current = nodes.Pop();
+                    FloodNode previous = nodes.Pop();
+
+                    // Calculate the direction you're moving at.
+                    slidingDirection = current.Point - previous.Point;
+
+                    // Return the current and previous point to the route.
+                    nodes.Push(previous);
+                    nodes.Push(current);
+                }
+
+                //If you can move onto the tile behind the ice tile, you can't change direction
+                if (tileField.GetType(node.Point.X, node.Point.Y) == TileType.Ice &&
+                    !(tileField.GetTile(node.Point.X + slidingDirection.X, node.Point.Y + slidingDirection.Y) is WallTile))
+                {
+                    //Only keep going in this direction
+                    nodes.Push(new FloodNode(node.Point + slidingDirection, node.KeyIndex, slides[GetDirectionFromPoint(slidingDirection)]));
+                    continue;
+                }
+                // Otherwise we can move in all directions.
+                else
+                {
+                    foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
                     {
-                        // Obstacles are checked earlier in Flood() so we only need to check whether the new point is in the tilefield.
-                        if (!tileField.OutOfTileField(p + action.ToDirection().ToPoint()))
+                        if (action == PlayerAction.SPECIAL && tileField.GetTile(node.Point.X, node.Point.Y).TileType == TileType.Portal)
                         {
-                            Flood(p + action.ToDirection().ToPoint(), keyIndex, 0);
+                            nodes.Push(new FloodNode((tileField.GetTile(node.Point) as PortalTile).Destination, node.KeyIndex, 0));
+                            continue;
+                        }
+                        else if (action.IsDirection())
+                        {
+                            // Obstacles are checked earlier in Flood() so we only need to check whether the new point is in the tilefield.
+                            if (!tileField.OutOfTileField(node.Point + action.ToDirection().ToPoint()))
+                            {
+                                //Flood(p + action.ToDirection().ToPoint(), keyIndex, 0);   ---
+                                nodes.Push(new FloodNode(node.Point + action.ToDirection().ToPoint(), node.KeyIndex, 0));
+                                continue;
+                            }
                         }
                     }
                 }
+
+                // All directions are done, return to the previous point.
+                // If the exit has been found, keep the route intact.
+                //if (!exitFound && route.Count > 0)
+                //    route.Pop();
+
+                nodes.Pop();
             }
 
-            // All directions are done, return to the previous point.
-            // If the exit has been found, keep the route intact.
-            if (!exitFound && route.Count > 0)
-                route.Pop();
+            return nodes;
         }
 
         /// <summary>
         /// Converts a route to a path.
         /// </summary>
         /// <param name="route"> the route to be converted to a path</param>
-        private void RouteToPath(Stack<Point> route)
+        private void RouteToPath(Stack<FloodNode> route)
         {
             // route.Count will be 0 if the Flood algorithm can not find the exit.
             if (route.Count == 0) return;
-            Point end = route.Pop();
+            Point end = route.Pop().Point;
             while (route.Count > 0)
             {
-                Point start = route.Pop();
+                Point start = route.Pop().Point;
                 path.Insert(0, GetActionFromPoints(start, end));
                 end = start;
             }
