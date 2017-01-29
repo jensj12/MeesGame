@@ -80,7 +80,7 @@ namespace MeesGame {
         
         /// <summary>
         ///   Looks up a localized string similar to Pick your
-        ///color..
+        ///color.
         /// </summary>
         internal static string color_picker_text {
             get {
@@ -98,7 +98,16 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit.
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        internal static string def {
+            get {
+                return ResourceManager.GetString("def", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit Game.
         /// </summary>
         internal static string exit {
             get {
@@ -116,11 +125,47 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fog of War.
+        /// </summary>
+        internal static string fow {
+            get {
+                return ResourceManager.GetString("fow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1080p (Full HD).
+        /// </summary>
+        internal static string full_hd {
+            get {
+                return ResourceManager.GetString("full_hd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fullscreen.
+        /// </summary>
+        internal static string fullscreen {
+            get {
+                return ResourceManager.GetString("fullscreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate random maze.
         /// </summary>
         internal static string generate_random_maze {
             get {
                 return ResourceManager.GetString("generate_random_maze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 720p (HD).
+        /// </summary>
+        internal static string hd {
+            get {
+                return ResourceManager.GetString("hd", resourceCulture);
             }
         }
         
@@ -188,6 +233,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main Menu.
+        /// </summary>
+        internal static string menu {
+            get {
+                return ResourceManager.GetString("menu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         internal static string newmaze {
@@ -202,6 +256,24 @@ namespace MeesGame {
         internal static string start {
             get {
                 return ResourceManager.GetString("start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1440p (Quad HD).
+        /// </summary>
+        internal static string qhd {
+            get {
+                return ResourceManager.GetString("qhd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set custom resolution.
+        /// </summary>
+        internal static string resolution {
+            get {
+                return ResourceManager.GetString("resolution", resourceCulture);
             }
         }
 
@@ -234,11 +306,38 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string settings {
+            get {
+                return ResourceManager.GetString("settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2160p (Ultra HD).
+        /// </summary>
+        internal static string uhd {
+            get {
+                return ResourceManager.GetString("uhd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Victory!.
         /// </summary>
         internal static string victory {
             get {
                 return ResourceManager.GetString("victory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume Level.
+        /// </summary>
+        internal static string volume {
+            get {
+                return ResourceManager.GetString("volume", resourceCulture);
             }
         }
     }

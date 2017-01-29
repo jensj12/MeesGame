@@ -28,13 +28,13 @@ namespace MeesGame
         {
             base.LoadContent();
             screen = new Point(1440, 825);
-            windowSize = new Point(1024, 586);
             FullScreen = false;
             gameStateManager.AddGameState("PlayingLevelState", new PlayingLevelState());
             gameStateManager.AddGameState("TitleMenuState", new TitleMenuState());
             gameStateManager.AddGameState("EditorState", new LevelEditorState());
             gameStateManager.AddGameState("LoadMenuState", new LoadMenuState());
             gameStateManager.AddGameState("GameOverState", new GameOverState());
+            gameStateManager.AddGameState("SettingsMenuState", new SettingsMenuState());
             gameStateManager.SwitchTo("TitleMenuState");
 
             /// Used for playing the background music

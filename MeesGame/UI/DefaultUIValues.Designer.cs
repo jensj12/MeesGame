@@ -157,5 +157,23 @@ namespace MeesGame.UI {
                 return ((int)(this["RadioButtonDimen"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
+        public global::System.Drawing.Color SliderBarColor {
+            get {
+                return ((global::System.Drawing.Color)(this["SliderBarColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color SliderColor {
+            get {
+                return ((global::System.Drawing.Color)(this["SliderColor"]));
+            }
+        }
     }
 }

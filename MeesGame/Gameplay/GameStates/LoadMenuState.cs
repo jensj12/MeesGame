@@ -43,6 +43,7 @@ namespace MeesGame
 
         private Button startButton;
         private Button randomButton;
+        private Button editorButton;
 
         public LoadMenuState()
         {
@@ -54,7 +55,7 @@ namespace MeesGame
 
             menuContainer = new UIComponent(SimpleLocation.Zero, null);
 
-            UIComponent centerContainer = new UIComponent(new CenteredLocation(0, 100, true), WrapperDimensions.All);
+            UIComponent centerContainer = new UIComponent(new CenteredLocation(0, 150, true), WrapperDimensions.All);
             levelExplorer = new FileExplorer(SimpleLocation.Zero, new SimpleDimensions(500, 500), "lvl", directory);
             levelSettings = new SortedList(new RelativeToLocation(levelExplorer, 100, relativeToLeft: false), new SimpleDimensions(500, 500), settingsDistance * 2);
             levelSettings.AddConstantComponent(new Background(Utility.SolidWhiteTexture, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.FileExplorerBackground)));
@@ -64,10 +65,18 @@ namespace MeesGame
                 BeginLevel();
             });
 
+            editorButton = new SpriteSheetButton(new CenteredLocation(0, 25, true, false), null, Strings.map_editor, (UIComponent o) =>
+            {
+                GameEnvironment.GameStateManager.SwitchTo("EditorState");
+                //reset the gamestate to open blank;
+                GameEnvironment.GameStateManager.CurrentGameState.Reset();
+            });
+
             centerContainer.AddChild(levelExplorer);
             centerContainer.AddChild(levelSettings);
             menuContainer.AddChild(centerContainer);
             menuContainer.AddChild(startButton);
+            menuContainer.AddChild(editorButton);
 
             InitializeLevelSettingsMenu();
         }

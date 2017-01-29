@@ -10,6 +10,7 @@ namespace MeesGame
         private static readonly Point NO_POINT = new Point(-1, -1);
         private static readonly Point DEFAULT_START = new Point(1, 1);
         private Point start = NO_POINT;
+
         private int sightRadius = 3;
 
         public TileField() : base(0, 0, 0, "")
@@ -36,7 +37,7 @@ namespace MeesGame
             Tile tile = Get(x, y) as Tile;
             return tile.TileType;
         }
-        
+
         /// <summary>
         /// Return the type of the tile on the given location
         /// </summary>
@@ -46,7 +47,7 @@ namespace MeesGame
         {
             return GetType(location.X, location.Y);
         }
-        
+
         /// <summary>
         /// Add a tile to the tilefield on location (x,y).
         /// </summary>

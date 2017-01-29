@@ -29,6 +29,13 @@ public class GameEnvironment : Game
         assetManager = new AssetManager(Content);
         gameSettingsManager = new GameSettingsManager();
         instance = this;
+        windowSize = new Point(1024, 586);  //windowSize is moved here so it can be changed (for the settings menu)
+    }
+
+    public Point WindowSize
+    {
+        get { return windowSize; }
+        set { windowSize = value; }
     }
 
     public static Point Screen
@@ -87,7 +94,6 @@ public class GameEnvironment : Game
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
         }
-
         float targetAspectRatio = (float)screen.X / (float)screen.Y;
         int width = graphics.PreferredBackBufferWidth;
         int height = (int)(width / targetAspectRatio);
@@ -119,10 +125,6 @@ public class GameEnvironment : Game
     protected void HandleInput()
     {
         inputHelper.Update();
-        if (inputHelper.KeyPressed(Keys.Escape))
-        {
-            Exit();
-        }
         if (inputHelper.KeyPressed(Keys.F5))
         {
             FullScreen = !FullScreen;

@@ -148,7 +148,7 @@ namespace MeesGame
         /// </summary>
         public virtual bool WantsToUseInput
         {
-            get { return false; }
+            get { return MouseClicked; }
         }
 
         /// <summary>
@@ -157,8 +157,6 @@ namespace MeesGame
         /// <param name="inputHelper"></param>
         public virtual void HandleInput(InputHelper inputHelper)
         {
-            if (!visible) return;
-
             if (InputUser?.WantsToUseInput == false)
             {
                 InputUser = null;
@@ -167,6 +165,12 @@ namespace MeesGame
             children.HandleInput(inputHelper);
 
             constantComponents.HandleInput(inputHelper);
+
+            if (!Visible)
+            {
+                MouseHovering = MouseDown = MouseClicked = false;
+                return;
+            }
 
             if (!InputUsed)
             {
@@ -182,6 +186,7 @@ namespace MeesGame
                     if (inputHelper.MouseLeftButtonPressed())
                     {
                         MouseClicked = true;
+                        InputUser = this;
                         InvokeClickEvent();
                     }
                     else
@@ -381,6 +386,8 @@ namespace MeesGame
             set
             {
                 permanentInvalid = value;
+                if (value == false)
+                    Invalidate();
                 Parent?.UpdatePermanentInvalidProperty();
             }
         }
@@ -571,7 +578,7 @@ namespace MeesGame
         /// </summary>
         public bool InputUsed
         {
-            get { return !(InputUser == null || ContainsComponent(InputUser)); }
+            get { return !(InputUser == null || inputUser == this || ContainsComponent(InputUser)); }
         }
 
         public bool ContainsComponent(UIComponent component)

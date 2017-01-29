@@ -41,6 +41,12 @@
     <Setting Name="BoxInnerColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Silver</Value>
     </Setting>
+    <Setting Name="SliderBarColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="SliderColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+	</Setting>
     <Setting Name="RadioButtonDimen1" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
     </Setting>

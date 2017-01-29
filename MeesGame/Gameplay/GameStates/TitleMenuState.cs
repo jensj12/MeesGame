@@ -18,13 +18,14 @@ namespace MeesGame
                 ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateLevelExplorer();
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             }));
-            MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(500, 715), null, Strings.map_editor, (UIComponent o) =>
+
+            //Settings button
+            MenuContainer.AddChild(new SpriteSheetButton(new CenteredLocation(0, 715, true, false), null, Strings.settings, (UIComponent o) =>
             {
-                //reset the gamestate to open blank;
-                GameEnvironment.GameStateManager.GetGameState("EditorState").Reset();
-                GameEnvironment.GameStateManager.SwitchTo("EditorState");
+                GameEnvironment.GameStateManager.SwitchTo("SettingsMenuState");
             }));
-            MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(1000, 715), null, Strings.exit, (UIComponent o) =>
+
+            MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(1055, 715), null, Strings.exit, (UIComponent o) =>
             {
                 GameEnvironment.Instance.Exit();
             }));
