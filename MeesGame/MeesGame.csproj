@@ -212,19 +212,22 @@
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Gameplay\Content\walls%4016.png" />
-    <Content Include="Content\levels\00 demo.lvl">
+    <Content Include="Content\levels\Demo.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\levels\01 introduction.lvl">
+    <Content Include="Content\levels\01 Introduction.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\levels\02 danger.lvl">
+    <Content Include="Content\levels\02 Danger.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\levels\04 prison.lvl">
+    <Content Include="Content\levels\03 All together.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\levels\05 all%401ce.lvl">
+    <Content Include="Content\levels\04 Prison.lvl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\levels\05 All%401ce.lvl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="PlayerIcon.ico" />
