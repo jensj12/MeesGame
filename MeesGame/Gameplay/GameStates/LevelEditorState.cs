@@ -227,7 +227,7 @@ namespace MeesGame
         private void PlayerMoved(EditorPlayer player)
         {
             if (level.Tiles.OutOfTileField(player.Location)) return;
-            Tile playerTile = (Tile)level.Tiles.Objects[player.Location.X, player.Location.Y];
+            Tile playerTile = level.Tiles.GetTile(player.Location);
             CurrentTileChanged(playerTile);
         }
 
