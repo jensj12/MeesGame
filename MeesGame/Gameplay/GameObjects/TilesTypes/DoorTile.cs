@@ -24,7 +24,7 @@ namespace MeesGame
             set
             {
                 base.secondarySpriteColor = value;
-                doorColor = KeyColorExtensions.FromColor(value);
+                doorColor = value.ToKeyColor();
                 TileData tileData = Data;
                 tileData.AdditionalInfo = (int)doorColor;
                 Data = tileData;

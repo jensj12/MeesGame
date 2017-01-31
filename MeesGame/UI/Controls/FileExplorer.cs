@@ -100,9 +100,9 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Index of the selected button.
+        /// The button that was selected by the user.
         /// </summary>
-        public Button SelectedFile
+        public Button SelectedButton
         {
             get
             {
@@ -110,7 +110,15 @@ namespace MeesGame
             }
         }
 
-        public string GetPathFromChild(UIComponent button)
+        public string SelectedFile
+        {
+            get
+            {
+                return GetPathFromChild(selectedChild);
+            }
+        }
+
+        private string GetPathFromChild(UIComponent button)
         {
             if(childToPath.ContainsKey(button))
                 return childToPath[button];

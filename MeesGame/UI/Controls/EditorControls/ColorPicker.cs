@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
@@ -11,11 +12,11 @@ namespace MeesGame
     /// </summary>
     class ColorPicker : UIComponent
     {
-        private const int width = 200;
-        private const int height = 250;
-        private const int colorsPerRow = 3;
-        private const int colorsDistanceFromTop = 100;
-        private const int edgeThickness = 5;
+        private const int WIDTH = 200;
+        private const int HEIGHT = 250;
+        private const int COLORS_PER_ROW = 3;
+        private const int COLORS_DISTANCE_FROM_TOP = 100;
+        private const int EDGE_THICKNESS = 5;
 
 
         /// <summary>
@@ -44,28 +45,43 @@ namespace MeesGame
         {
             this.ColorProperty = ColorProperty;
             this.colorPropertyContainingObject = colorPropertyContainingObject;
-
             InitKeyColors();
 
+            Dimensions = new SimpleDimensions(WIDTH, HEIGHT);
+            Textbox colorPickerText = new Textbox(SimpleLocation.Zero, null, Strings.color_picker_text, DefaultUIValues.Default.DefaultEditorControlSpriteFont);
+            AddConstantComponent(colorPickerText);
+
+            InitColorButtons();
+        }
+
+        private void InitColorButtons()
+        {
             colorButtons = new TextureButton[colors.Count];
-
-            Dimensions = new SimpleDimensions(width, height);
-
-            AddConstantComponent(new Textbox(SimpleLocation.Zero, null, Strings.color_picker_text, DefaultUIValues.Default.DefaultEditorControlSpriteFont));
-
+            Color selectedColor = (Color)ColorProperty.GetValue(colorPropertyContainingObject);
             for (int i = 0; i < colors.Count; i++)
             {
-                Color color = colors[i];
-                colorButtons[i] = new TextureButton(new SimpleLocation(width / colorsPerRow * (i % colorsPerRow), width / colorsPerRow * (i / colorsPerRow) + colorsDistanceFromTop), new SimpleDimensions(width / colorsPerRow, width / colorsPerRow), "", Utility.SolidWhiteTexture, color, edgeThickness: edgeThickness);
-                Color tileColor = (Color)ColorProperty.GetValue(colorPropertyContainingObject);
-                if (color == tileColor)
-                {
-                    selectedButton = colorButtons[i];
-                    colorButtons[i].Selected = true;
-                }
-                colorButtons[i].Click += OnColorClick;
+                colorButtons[i] = CreateColorButton(new SimpleLocation(WIDTH / COLORS_PER_ROW * (i % COLORS_PER_ROW), WIDTH / COLORS_PER_ROW * (i / COLORS_PER_ROW) + COLORS_DISTANCE_FROM_TOP), colors[i], isSelected: colors[i] == selectedColor);
                 AddConstantComponent(colorButtons[i]);
             }
+        }
+        
+        /// <summary>
+        /// Creates a button for selecting the specified color
+        /// </summary>
+        /// <param name="location">The location for the button</param>
+        /// <param name="color">The color that this button is for</param>
+        /// <param name="isSelected">Whether the button is the selected one by default</param>
+        /// <returns></returns>
+        private TextureButton CreateColorButton(Location location, Color color, bool isSelected)
+        {
+            TextureButton colorButton = new ColorButton(location, color);
+            if(isSelected)
+            {
+                selectedButton = colorButton;
+                colorButton.Selected = true;
+            }
+            colorButton.Click += OnColorClick;
+            return colorButton;
         }
 
         /// <summary>
@@ -87,14 +103,16 @@ namespace MeesGame
         private void InitKeyColors()
         {
             colors = new List<Color>();
-
-            int amountOfColors = Enum.GetValues(typeof(KeyColor)).Length;
-
             foreach (KeyColor color in Enum.GetValues(typeof(KeyColor)))
             {
                 colors.Add(color.ToColor());
             }
-
+        }
+        private class ColorButton : TextureButton
+        {
+            public ColorButton(Location location, Color color) : base(location, new SimpleDimensions(WIDTH / COLORS_PER_ROW, WIDTH / COLORS_PER_ROW), "", Utility.SolidWhiteTexture, color, edgeThickness: EDGE_THICKNESS)
+            {
+            }
         }
     }
 }

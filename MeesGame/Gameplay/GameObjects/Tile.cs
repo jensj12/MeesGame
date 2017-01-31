@@ -110,7 +110,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public virtual Point GetLocationAfterAction(PlayerAction action)
+        protected virtual Point GetLocationAfterAction(PlayerAction action)
         {
             Point newLocation = this.Location;
             switch (action)

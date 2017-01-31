@@ -65,30 +65,13 @@ namespace MeesGame
         /// <param name="text"></param>
         public string Text
         {
-            get { return Textbox.Text; }
+            get { return textBox.Text; }
             set
             {
                 textBox.Text = value;
             }
         }
-
-        /// <summary>
-        /// Matches the button's dimensions to the measured dimensions of the string used as text.
-        /// Only matches to the current dimensions of the string, for automatic dimensions matching when the text changes set the Dimensions property to MeasuredDimensions(Button.TextBox).
-        /// </summary>
-        public void MatchDimensionsToText()
-        {
-            Dimensions = new SimpleDimensions((int)textBox.MeasuredDimensions().X, (int)textBox.MeasuredDimensions().Y);
-        }
-
-        /// <summary>
-        /// The textbox inside the button that displays the text.
-        /// </summary>
-        public Textbox Textbox
-        {
-            get { return textBox; }
-        }
-
+        
         /// <summary>
         /// Updates the hovering-backgrounds when the mouseHovering property changes.
         /// </summary>

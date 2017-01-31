@@ -14,10 +14,10 @@ namespace MeesGame
 {
     class PlayingLevelState : IGameLoopObject
     {
-        private const int inventoryWidth = 125;
-        private const int inventoryHeight = 600;
-        private const int timerDistance = 30;
-        private const int timeBackgroundOffset = 20;
+        private const int INVENTORY_WIDTH = 125;
+        private const int INVENTORY_HEIGHT = 600;
+        private const int TIMER_DISTANCE = 30;
+        private const int TIMER_BACKGROUND_OFFSET = 20;
         private PlayingState currentState = PlayingState.Playing;
 
         UIComponent overlay;
@@ -40,25 +40,27 @@ namespace MeesGame
             level.Player.OnPlayerLose += ShowDefeatScreen;
         }
 
+        private void AddTimerToOverlay()
+        {
+            elapsedTime = TimeSpan.Zero;
+            timerUI = new Textbox(CenteredLocation.All, null, "", "smallfont");
+            Texture timerUIBackground = new Texture(new DirectionLocation(TIMER_DISTANCE, TIMER_DISTANCE, false), new MeasuredDimensions(timerUI, TIMER_BACKGROUND_OFFSET, TIMER_BACKGROUND_OFFSET), Utility.SolidWhiteTexture, new Color(122, 122, 122, 122));
+            timerUIBackground.AddConstantComponent(timerUI);
+            timerUI.PermanentInvalid = true;
+            overlay.AddChild(timerUIBackground);
+        }
+
+        private void AddInventoryToOverlay()
+        {
+            inventoryUI = new SortedList(new CenteredLocation(0, verticalCenter: true), new SimpleDimensions(INVENTORY_WIDTH, INVENTORY_HEIGHT), backgroundColor: new Color(122, 122, 122, 122));
+            overlay.AddChild(inventoryUI);
+        }
+
         private void InitOverlay()
         {
             overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
-
-            inventoryUI = new SortedList(new CenteredLocation(0, verticalCenter: true), new SimpleDimensions(inventoryWidth, inventoryHeight), backgroundColor: new Color(122, 122, 122, 122));
-
-            timerUI = new Textbox(CenteredLocation.All, null, "", "smallfont");
-
-            Texture timerUIBackground = new Texture(new DirectionLocation(timerDistance, timerDistance, false), new MeasuredDimensions(timerUI, timeBackgroundOffset, timeBackgroundOffset), Utility.SolidWhiteTexture, new Color(122, 122, 122, 122));
-
-            timerUIBackground.AddConstantComponent(timerUI);
-
-            elapsedTime = TimeSpan.Zero;
-
-            timerUI.PermanentInvalid = true;
-
-            overlay.AddChild(inventoryUI);
-
-            overlay.AddChild(timerUIBackground);
+            AddInventoryToOverlay();
+            AddTimerToOverlay();
         }
 
         private void OnPlayerAction(PlayerGameObject player)
@@ -69,39 +71,32 @@ namespace MeesGame
         private void UpdateInventoryUI()
         {
             inventoryUI.Reset();
-
             foreach (InventoryItem item in level.Player.Inventory.Items)
             {
                 inventoryUI.AddChild(new UISpriteSheet(new CenteredLocation(horizontalCenter: true), new SimpleDimensions(80, 80), new string[] { "KeyOverlay" }, item.type.ToKeyColorType().ToColor(), false));
             }
         }
 
-        public void ShowVictoryScreen(PlayerGameObject player)
+        private void ShowGameOverState(string backgroundName)
         {
-            this.currentState = PlayingState.Victory;
-
-            GameOverState gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState);
-
-            gameOverStateOverlay.overlay.AddChild(new Background(new SpriteSheet("winScreenOverlay").Sprite));
-
+            UIComponent gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState).Overlay;
+            gameOverStateOverlay.AddChild(new Background(new SpriteSheet(backgroundName).Sprite));
             //add the child to the overlay of the GameOverState here because you need the currrentstate.
-            gameOverStateOverlay.overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
+            gameOverStateOverlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
 
-        public void ShowDefeatScreen(PlayerGameObject player)
+        private void ShowVictoryScreen(PlayerGameObject player)
         {
-            this.currentState = PlayingState.Defeat;
+            currentState = PlayingState.Victory;
+            ShowGameOverState("winScreenOverlay");
+        }
 
-            GameOverState gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState);
-
-            gameOverStateOverlay.overlay.AddChild(new Background(new SpriteSheet("loseScreenOverlay").Sprite));
-
-            //add the child to the overlay of the GameOverState here because you need the currrentstate.
-            gameOverStateOverlay.overlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
-                GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
-            GameEnvironment.GameStateManager.SwitchTo("GameOverState");
+        private void ShowDefeatScreen(PlayerGameObject player)
+        {
+            currentState = PlayingState.Defeat;
+            ShowGameOverState("loseScreenOverlay");
         }
 
         public void HandleInput(InputHelper inputHelper)

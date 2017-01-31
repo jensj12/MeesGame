@@ -18,7 +18,7 @@ namespace MeesGame
         {
             Dimensions = WrapperDimensions.All;
 
-            SetRadiogroup(radioGroup);
+            RadioGroup = radioGroup;
 
             button = new Button(SimpleLocation.Zero, new SimpleDimensions(DefaultUIValues.Default.RadioButtonDimen, DefaultUIValues.Default.RadioButtonDimen), "");
 
@@ -26,13 +26,6 @@ namespace MeesGame
 
             AddConstantComponent(button);
             AddConstantComponent(textbox);
-        }
-
-        public void SetRadiogroup(List<RadioButton> radioGroup)
-        {
-            this.radioGroup?.Remove(this);
-            radioGroup.Add(this);
-            this.radioGroup = radioGroup;
         }
 
         public override void HandleInput(InputHelper inputHelper)
@@ -72,10 +65,14 @@ namespace MeesGame
         /// <summary>
         /// Contains the group of radiobuttons. Only one radiobutton in the group can be selected at any given time.
         /// </summary>
-        public List<RadioButton> RadioGroup
+        private List<RadioButton> RadioGroup
         {
             get { return radioGroup; }
-            set { radioGroup = value; }
+            set {
+                radioGroup?.Remove(this);
+                radioGroup = value;
+                radioGroup.Add(this);
+            }
         }
     }
 }

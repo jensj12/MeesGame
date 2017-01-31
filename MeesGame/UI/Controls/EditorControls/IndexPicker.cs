@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
@@ -10,62 +11,90 @@ namespace MeesGame
     /// </summary>
     class IndexPicker : UIComponent
     {
-        private const int width = 200;
-        private const int height = 250;
-        private const int indecesPerRow = 3;
-        private const int indexDistanceFromTop = 100;
-        private const int edgeThickness = 5;
+        private const int WIDTH = 200;
+        private const int HEIGHT = 250;
+        private const int INDICES_PER_ROW = 3;
+        private const int INDEX_DISTANCE_FROM_TOP = 100;
+        private const int EDGE_THICKNESS = 5;
+        private const int NUMBER_OF_INDICES = 6;
 
-        PropertyInfo IndexProperty;
+        PropertyInfo indexProperty;
         private TextureButton[] indexButtons;
         TextureButton selectedButton;
-        private List<int> selectableIndeces;
+        private List<int> selectableIndices;
         object indexPropertyContainingObject;
 
-        public IndexPicker(Location location, PropertyInfo IndexProperty, object indexPropertyContainingObject) : base(location, null)
+        public IndexPicker(Location location, PropertyInfo indexProperty, object indexPropertyContainingObject) : base(location, null)
         {
-            this.IndexProperty = IndexProperty;
+            this.indexProperty = indexProperty;
             this.indexPropertyContainingObject = indexPropertyContainingObject;
 
             InitIndices();
 
-            indexButtons = new TextureButton[selectableIndeces.Count];
+            indexButtons = new TextureButton[selectableIndices.Count];
 
-            Dimensions = new SimpleDimensions(width, height);
+            Dimensions = new SimpleDimensions(WIDTH, HEIGHT);
             AddConstantComponent(new Textbox(SimpleLocation.Zero, null, Strings.index_picker_text, DefaultUIValues.Default.DefaultEditorControlSpriteFont));
 
-            for (int i = 0; i < selectableIndeces.Count; i++)
+            InitIndexButtons();
+        }
+
+        /// <summary>
+        /// Initialize the index buttons
+        /// </summary>
+        private void InitIndexButtons()
+        {
+            int selectedIndex = (int)indexProperty.GetValue(indexPropertyContainingObject);
+            for (int i = 0; i < selectableIndices.Count; i++)
             {
-                int index = selectableIndeces[i];
-                indexButtons[i] = new TextureButton(new SimpleLocation(width / indecesPerRow * (i % indecesPerRow), width / indecesPerRow * (i / indecesPerRow) + indexDistanceFromTop),
-                    new SimpleDimensions(width / indecesPerRow, width / indecesPerRow), (i + 1).ToString(), Utility.SolidWhiteTexture, Color.Black, edgeThickness: edgeThickness);
-                int tileIndex = (int)IndexProperty.GetValue(indexPropertyContainingObject);
-                if (index == tileIndex)
-                {
-                    selectedButton = indexButtons[i];
-                    indexButtons[i].Selected = true;
-                }
-                indexButtons[i].Click += OnIndexSelected;
+                int index = selectableIndices[i];
+                indexButtons[i] = CreateIndexButton(new SimpleLocation(WIDTH / INDICES_PER_ROW * (i % INDICES_PER_ROW), WIDTH / INDICES_PER_ROW * (i / INDICES_PER_ROW) + INDEX_DISTANCE_FROM_TOP), index, isSelected: index == selectedIndex);
                 AddConstantComponent(indexButtons[i]);
             }
         }
 
-        public void OnIndexSelected(UIComponent Component)
+        /// <summary>
+        /// Creates a button for selecting the specified color
+        /// </summary>
+        /// <param name="location">The location for the button</param>
+        /// <param name="index">The index that this button is for</param>
+        /// <param name="isSelected">Whether the button is the selected one by default</param>
+        /// <returns></returns>
+        private TextureButton CreateIndexButton(Location location, int index, bool isSelected)
+        {
+            TextureButton indexButton = new IndexButton(location, index);
+            if (isSelected)
+            {
+                selectedButton = indexButton;
+                indexButton.Selected = true;
+            }
+            indexButton.Click += OnIndexSelected;
+            return indexButton;
+        }
+
+        private void OnIndexSelected(UIComponent Component)
         {
             if (selectedButton != null)
                 selectedButton.Selected = false;
             selectedButton = (TextureButton)Component;
             selectedButton.Selected = true;
-            IndexProperty.SetValue(indexPropertyContainingObject, int.Parse(((TextureButton)Component).Text));
+            indexProperty.SetValue(indexPropertyContainingObject, int.Parse(((TextureButton)Component).Text));
         }
 
         private void InitIndices()
         {
-            selectableIndeces = new List<int>();
+            selectableIndices = new List<int>();
 
-            for (int i = 1; i < 7; i++)
+            for (int i = 1; i <= NUMBER_OF_INDICES; i++)
             {
-                selectableIndeces.Add(i);
+                selectableIndices.Add(i);
+            }
+        }
+
+        private class IndexButton : TextureButton
+        {
+            public IndexButton(Location location, int index) : base(location, new SimpleDimensions(WIDTH / INDICES_PER_ROW, WIDTH / INDICES_PER_ROW), index.ToString(), Utility.SolidWhiteTexture, Color.Black, edgeThickness: EDGE_THICKNESS)
+            {
             }
         }
     }

@@ -76,7 +76,7 @@ namespace MeesGame
         {
             PlayingLevelState state = (PlayingLevelState)GameEnvironment.GameStateManager.GetGameState("PlayingLevelState");
             TileField tileField;
-            if (levelExplorer.SelectedFile == randomButton)
+            if (levelExplorer.SelectedButton == randomButton)
             {
                 tileField = MeesGen.MazeGenerator.GenerateMaze(difficulty: DifficultyIndex() + 1);
             }
@@ -84,7 +84,7 @@ namespace MeesGame
             {
                 try
                 {
-                    tileField = FileIO.Load(levelExplorer.GetPathFromChild(levelExplorer.SelectedFile));
+                    tileField = FileIO.Load(levelExplorer.SelectedFile);
                 }
                 catch (Exception)
                 {
@@ -99,45 +99,41 @@ namespace MeesGame
         }
 
         /// <summary>
+        /// Creates a setting box, for selecting a setting from a set of options
+        /// </summary>
+        /// <param name="title">The title that should be displayed</param>
+        /// <param name="options">The options to choose from</param>
+        /// <param name="selected">The index that should be selected by default</param>
+        /// <param name="settingBox">The setting box</param>
+        /// <returns>The radio group of the items</returns>
+        private List<RadioButton> InitSettingBox(string title, Dictionary<int,string> options, int selected, out UIComponent settingBox)
+        {
+            settingBox = new UIComponent(SimpleLocation.Zero, WrapperDimensions.All);
+            List<RadioButton>  settingRadioGroup = new List<RadioButton>();
+
+            Textbox titleText = new Textbox(SimpleLocation.Zero, null, title, textColor: Color.Black);
+            settingBox.AddChild(titleText);
+
+            for (int i = 0; i < PlayerTypes.Count; i++)
+            {
+                RadioButton radioButton = new RadioButton(new RelativeToLocation(((i == 0) ? titleText : (UIComponent)settingRadioGroup[i - 1]), (i == 0) ? settingsDistance : 0, settingsDistance, relativeToTop: false), options[i], settingRadioGroup);
+                if (i == selected)
+                    radioButton.Selected = true;
+                settingBox.AddChild(radioButton);
+            }
+
+            levelSettings.AddChild(settingBox);
+            return settingRadioGroup;
+        }
+
+        /// <summary>
         /// Fills the levelsettings box.
         /// </summary>
         private void InitializeLevelSettingsMenu()
         {
-            UIComponent playerSelectBox = new UIComponent(SimpleLocation.Zero, WrapperDimensions.All);
-
-            playerRadioGroup = new List<RadioButton>();
-
-            Textbox playerSelectText = new Textbox(SimpleLocation.Zero, null, "Player", textColor: Color.Black);
-
-            playerSelectBox.AddChild(playerSelectText);
-
-            for (int i = 0; i < PlayerTypes.Count; i++)
-            {
-                RadioButton radioBotton = new RadioButton(new RelativeToLocation(((i == 0) ? playerSelectText : (UIComponent)playerRadioGroup[i - 1]), (i == 0) ? settingsDistance : 0, settingsDistance, relativeToTop: false), PlayerTypes[i], playerRadioGroup);
-                if (i == 0)
-                    radioBotton.Selected = true;
-                playerSelectBox.AddChild(radioBotton);
-            }
-
-            levelSettings.AddChild(playerSelectBox);
-
-            difficultyBox = new UIComponent(SimpleLocation.Zero, WrapperDimensions.All);
-
-            difficultyRadioGroup = new List<RadioButton>();
-
-            Textbox difficutlyText = new Textbox(SimpleLocation.Zero, null, "Maze Difficulty", textColor: Color.Black);
-
-            difficultyBox.AddChild(difficutlyText);
-
-            for (int i = 0; i < difficultyLevels.Count; i++)
-            {
-                RadioButton radioBotton = new RadioButton(new RelativeToLocation((i == 0) ? difficutlyText : (UIComponent)difficultyRadioGroup[i - 1], (i == 0) ? settingsDistance : 0, settingsDistance, relativeToTop: false), difficultyLevels[i], difficultyRadioGroup);
-                if(i == 2)
-                    radioBotton.Selected = true;
-                difficultyBox.AddChild(radioBotton);
-            }
-
-            levelSettings.AddChild(difficultyBox);
+            UIComponent playerBox;
+            playerRadioGroup = InitSettingBox("Player", PlayerTypes, 0, out playerBox);
+            difficultyRadioGroup = InitSettingBox("Maze Difficulty", difficultyLevels, 2, out difficultyBox);
         }
 
         public void UpdateLevelExplorer()

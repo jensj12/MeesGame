@@ -22,7 +22,7 @@ namespace MeesGame
             set
             {
                 base.secondarySpriteColor = value;
-                keyColor = KeyColorExtensions.FromColor(value);
+                keyColor = value.ToKeyColor();
                 TileData tileData = Data;
                 tileData.AdditionalInfo = (int)keyColor;
                 Data = tileData;

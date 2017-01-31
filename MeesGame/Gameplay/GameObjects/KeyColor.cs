@@ -57,7 +57,7 @@ namespace MeesGame
             }
         }
 
-        public static KeyColor FromColor(Color color)
+        public static KeyColor ToKeyColor(this Color color)
         {
             if (color == Color.Blue) return KeyColor.KeyBlue;
             if (color == Color.Cyan) return KeyColor.KeyCyan;

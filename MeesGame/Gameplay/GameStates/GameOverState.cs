@@ -6,30 +6,30 @@ namespace MeesGame
 {
     class GameOverState : IGameLoopObject
     {
-        public UIComponent overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
+        public UIComponent Overlay { get; set; } = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
         public GameOverState()
         {
-            overlay.AddChild(new UIComponent(SimpleLocation.Zero, InheritDimensions.All));
+            Overlay.AddChild(new UIComponent(SimpleLocation.Zero, InheritDimensions.All));
         }
 
-        //Upon pressing space, return to the menu/editor
-        //TODO: Make the user go back to the editor if he came from there
         public void HandleInput(InputHelper inputHelper)
         {
+            //Upon pressing space, return to the menu/editor
             if (inputHelper.KeyPressed(Keys.Space))
                 GameEnvironment.GameStateManager.SwitchTo(GameEnvironment.GameStateManager.PreviousGameState);
-            overlay.HandleInput(inputHelper);
+
+            Overlay.HandleInput(inputHelper);
         }
 
         public void Update(GameTime gameTime)
         {
-            overlay.Update(gameTime);
+            Overlay.Update(gameTime);
         }
 
         //Draw the correct gameover overlay
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            overlay.Draw(gameTime, spriteBatch);
+            Overlay.Draw(gameTime, spriteBatch);
         }
 
         public void Reset()

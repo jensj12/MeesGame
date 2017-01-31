@@ -130,6 +130,11 @@ namespace MeesGame
             StoppedMoving?.Invoke(this);
         }
 
+        private bool isMovementComplete(GameTime gameTime)
+        {
+            return gameTime.TotalGameTime - startOfCurrentMovement >= TravelTime;
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (justStartedMoving)
@@ -138,14 +143,8 @@ namespace MeesGame
                 justStartedMoving = false;
                 IsMoving = true;
             }
-            if (IsMoving)
-            {
-                bool isMovementComplete = gameTime.TotalGameTime - startOfCurrentMovement >= TravelTime;
-                if (isMovementComplete)
-                {
-                    JumpToAnchorPosition();
-                }
-            }
+            if (IsMoving && isMovementComplete(gameTime))
+                JumpToAnchorPosition();
             base.Update(gameTime);
         }
     }

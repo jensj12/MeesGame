@@ -16,28 +16,30 @@ namespace MeesGame
             timeBetweenAnimations = TimeSpan.FromSeconds(travelTime.TotalSeconds / Sprite.NumberColumns);
         }
 
+        private void UseNextAnimationSprite(GameTime gameTime)
+        {
+            if (IsSliding)
+                Sprite.SheetRowIndex++;
+            else
+                Sprite.SheetColIndex++;
+            lastAnimationTime = gameTime.TotalGameTime;
+        }
+
+        private bool isTimeForNextAnimation(GameTime gameTime)
+        {
+            return (gameTime.TotalGameTime - lastAnimationTime) >= timeBetweenAnimations;
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             if (IsMoving)
             {
-                if (gameTime.TotalGameTime - lastAnimationTime >= timeBetweenAnimations)
-                {
-                    if (IsSliding)
-                    {
-                        Sprite.SheetRowIndex++;
-                    }
-                    else
-                    {
-                        Sprite.SheetColIndex++;
-                    }
-                    lastAnimationTime = gameTime.TotalGameTime;
-                }
+                if (isTimeForNextAnimation(gameTime))
+                    UseNextAnimationSprite(gameTime);
             }
             else
-            {
-                Sprite.SheetIndex = Sprite.SheetRowIndex * Sprite.NumberColumns;
-            }
+                Sprite.SheetColIndex = 0;
         }
 
         protected virtual bool IsSliding

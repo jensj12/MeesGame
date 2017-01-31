@@ -12,7 +12,7 @@ namespace MeesGame
         protected int numColumns = DEFAULT_NUM_COLS;
         protected const int CELL_HEIGHT = 64;
         protected const int CELL_WIDTH = 64;
-        protected TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(210);
+        protected readonly TimeSpan timeBetweenActions = TimeSpan.FromMilliseconds(210);
         protected Point start;
         protected AnimatedMovingGameObject player;
         private TileField tiles;

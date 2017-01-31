@@ -8,7 +8,6 @@ namespace MeesGame
     class InputBox : Textbox
     {
         public delegate void OnTextChangedEventhandler(InputBox inputBox);
-        public event OnTextChangedEventhandler TextChanged;
 
         /// <summary>
         /// If the inputbox should use the input
@@ -96,25 +95,6 @@ namespace MeesGame
                     PermanentInvalid = value;
                 }
             }
-        }
-
-        public bool TextInput
-        {
-            get { return textInput; }
-            set
-            {
-                if (textInput != value)
-                {
-                    textInput = value;
-                    TextChanged?.Invoke(this);
-                }
-            }
-        }
-
-        public bool NumberInput
-        {
-            get { return numberInput; }
-            set { numberInput = value; }
         }
     }
 }

@@ -76,8 +76,8 @@
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\GuardTile.cs" />
     <Compile Include="Gameplay\Generator\DifficultySettings.cs" />
-    <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
-    <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
+    <Compile Include="Gameplay\Generator\Helpers.cs" />
+    <Compile Include="Gameplay\Generator\Main.cs" />
     <Compile Include="Gameplay\GameStates\SettingsMenuState.cs" />
     <Compile Include="Gameplay\GameManagement\Camera.cs" />
     <Compile Include="Gameplay\GameObjects\Player\EditorPlayer.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="Gameplay\GameObjects\TilesTypes\WallTile.cs" />
     <Compile Include="Gameplay\GameStates\GameOverState.cs" />
     <Compile Include="Gameplay\GameStates\PlayingLevelState.cs" />
-    <Compile Include="Gameplay\Generator\MazeGeneratorInit.cs" />
+    <Compile Include="Gameplay\Generator\Init.cs" />
     <Compile Include="Gameplay\Level\EditorLevel.cs" />
     <Compile Include="Gameplay\Level\FileIO.cs" />
     <Compile Include="Gameplay\Level\Level.cs" />

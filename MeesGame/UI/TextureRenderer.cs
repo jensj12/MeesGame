@@ -15,7 +15,7 @@ namespace MeesGame
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="graphicsDevice">Graphicsdevice the spritebatch should use.</param>
-        /// <param name="task">The RenderTaskt that is to be rendered to a texture.</param>
+        /// <param name="task">The RenderTask that is to be rendered to a texture.</param>
         /// <param name="renderTarget">The target to render to.</param>
         public static void Render(GameTime gameTime, RenderTask task, SpriteBatch spriteBatch, RenderTarget2D renderTarget)
         {

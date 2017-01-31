@@ -60,7 +60,7 @@ namespace MeesGame
         /// <summary>
         /// Go to the other portal when a special action is performed.
         /// </summary>
-        public override Point GetLocationAfterAction(PlayerAction action)
+        protected override Point GetLocationAfterAction(PlayerAction action)
         {
             if (action == PlayerAction.SPECIAL)
                 return destination;

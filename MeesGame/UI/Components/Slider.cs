@@ -9,9 +9,9 @@ namespace MeesGame
         public delegate void OnValueChangedHandler(int value);
         public event OnValueChangedHandler ValueChanged;
 
-        private const int sliderWidth = 40;
-        private const int sliderHeight = 20;
-        private const int sliderBarHeight = 10;
+        private const int SLIDER_WIDTH = 40;
+        private const int SLIDER_HEIGHT = 20;
+        private const int SLIDER_BAR_HEIGHT = 10;
 
         /// <summary>
         /// Lower bound.
@@ -127,7 +127,7 @@ namespace MeesGame
         {
             get
             {
-                return new Vector2((SliderBarDimensions.X) * ((value - min) / (float)(max - min)), sliderBarHeight);
+                return new Vector2((SliderBarDimensions.X) * ((value - min) / (float)(max - min)), SLIDER_BAR_HEIGHT);
             }
         }
 
@@ -149,7 +149,7 @@ namespace MeesGame
         {
             get
             {
-                return new Point(sliderWidth, sliderHeight);
+                return new Point(SLIDER_WIDTH, SLIDER_HEIGHT);
             }
         }
 
@@ -160,7 +160,7 @@ namespace MeesGame
         {
             get
             {
-                return new Vector2(sliderWidth / 2, sliderHeight / 2 + sliderBarHeight / 2);
+                return new Vector2(SLIDER_WIDTH / 2, SLIDER_HEIGHT / 2 + SLIDER_BAR_HEIGHT / 2);
             }
         }
 
@@ -182,7 +182,7 @@ namespace MeesGame
         {
             get
             {
-                return new Point(CurrentDimensions.X - sliderWidth, sliderBarHeight);
+                return new Point(CurrentDimensions.X - SLIDER_WIDTH, SLIDER_BAR_HEIGHT);
             }
         }
     }
