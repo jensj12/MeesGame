@@ -13,20 +13,20 @@ namespace MeesGame
 
         public static readonly Dictionary<int, string> PlayerTypes = new Dictionary<int, string>()
         {
-            {0, "Human" },
-            {1, "Random" },
-            {2, "A*" },
-            {3, "MonteCarlo" },
-            {4, "Flood Fill" }
+            {0, Strings.playertype_human },
+            {1, Strings.playertype_random },
+            {2, Strings.playertype_astar },
+            {3, Strings.playertype_monte_carlo },
+            {4, Strings.playertype_floodfill }
         };
 
         public static readonly Dictionary<int, string> difficultyLevels = new Dictionary<int, string>()
         {
-            {0, "Mega Easy" },
-            {1, "Easy" },
-            {2, "Medium" },
-            {3, "Hard" },
-            {4, "Legendary" }
+            {0, Strings.mazegen_difficulty_easiest },
+            {1, Strings.mazegen_difficulty_easy },
+            {2, Strings.mazegen_difficulty_medium },
+            {3, Strings.mazegen_difficulty_hard },
+            {4, Strings.mazegen_difficulty_hardest }
         };
 
         //we need to use a container, because only elements in a container can eat the input of the other elements

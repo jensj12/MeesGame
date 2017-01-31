@@ -16,28 +16,23 @@ namespace MeesGen
         public static TileField GenerateMaze(int numRows = DEFAULT_NUM_ROWS, int numCols = DEFAULT_NUM_COLS, int difficulty = 3)
         {
             MazeGenerator mazeGen = new MazeGenerator();
-            mazeGen.InitMazeGen(numRows, numCols, difficulty);
+            mazeGen.InitMazeGen(difficulty);
             mazeGen.MazeGenMain();
             return mazeGen.Finish();
         }
 
         private void MazeGenMain()
         {
-            // Add the startTile, this makes sure no keys are placed there.
-            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
-
             // Add hallways until all tiles are filled (main algorithm).
             while (nodesToDo.Count != 0)
             {
-                nodesDone += 1;
-
                 // Continue from the last node, or take a random one
                 DetermineNextPositionToExpandFrom();
 
                 current = nodesToDo[position];
 
                 // Make an arrray and fill it with 0-3 in a random order.
-                int[] possible = getZeroToThreeInRandomOrder();
+                int[] possible = getZeroToNInRandomOrder(4);
 
                 // Set randomNext to true, it gets set to false if we can extend the hallway
                 didAddHallway = false;
@@ -67,6 +62,8 @@ namespace MeesGen
                         continue;
                     }
 
+                    nodesDone += 1;
+
                     // We can add another hallway, so try to continue from there in the next iteration
                     didAddHallway = true;
                     randomNext = false;
@@ -78,7 +75,6 @@ namespace MeesGen
                     // Add the two tiles, the tile in between first to prevent a door being placed in front of the corresponding key
                     AddTileInBetween();
                     AddNextTile();
-
                     UpdateBestExit(next);
 
                     // Don't continue searching for more pathways from this point
@@ -114,6 +110,12 @@ namespace MeesGen
                     // Once a key has been placed, a door can be placed.
                     tileToAdd = new KeyTile();
                     (tileToAdd as KeyTile).SecondarySpriteColor = ChooseColor(keysPlaced);
+                    keyBehindDoorInfo[keysPlaced] = behindDoorInfo[next.X, next.Y];
+                    foreach (behindDoorFlags flag in Enum.GetValues(typeof(behindDoorFlags)))
+                    {
+                        if ((flag & behindDoorInfo[next.X,next.Y]) != 0)
+                            keyBehindDoorInfo[keysPlaced] |= keyBehindDoorInfo[(int)Math.Log((int)flag, 2)];
+                    }
                     keysPlaced++;
                     placeDoors = true;
                     // Choosing a random position next time generally makes it harder to find keys
@@ -122,7 +124,7 @@ namespace MeesGen
             }
 
             // Exitscore is higher the further you are from the start, following the paths.
-            exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + 1;
+            UpdateBestExitScore(current, 1, next);
 
             // Only place portals if we haven't placed a key
             if (randomChance(portalChance) && !randomNext)
@@ -139,7 +141,8 @@ namespace MeesGen
 
                     portalsPlaced++;
                     nodesToDo.Add(secondPortalPosition);
-                    exitScore[secondPortalPosition.X, secondPortalPosition.Y] = exitScore[next.X, next.Y] + portalScore;
+                    UpdateBestExitScore(next, portalScore, secondPortalPosition);
+                    UpdateBestExit(secondPortalPosition);
                     behindDoorInfo[secondPortalPosition.X, secondPortalPosition.Y] = behindDoorInfo[next.X, next.Y];
                 }
             }
@@ -158,27 +161,23 @@ namespace MeesGen
                 tileToAdd = new DoorTile();
                 (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(doorsPlaced);
                 doorsPlaced++;
-                // If there's a door between the tiles, a key is needed to pass, so the exit score should increase by more.
-                exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + firstDoorScore;
             }
             // Always have a chance to place a door after a key has been placed
             else if (placeDoors && randomChance(doorChance))
             {
                 tileToAdd = new DoorTile();
-                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(keysPlaced, true);
-                // If there's a door between the tiles, a key is needed to pass, so the exit score should increase by more.
-                exitScore[next.X, next.Y] = exitScore[current.X, current.Y] + extraDoorScore;
+                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor(keysPlaced, true, true);
             }
             tiles.Add(tileToAdd, pointBetween.X, pointBetween.Y);
 
             behindDoorInfo[next.X, next.Y] = behindDoorInfo[current.X, current.Y];
-            if(tiles.GetType(pointBetween) == TileType.Door)
+            if (tiles.GetType(pointBetween) == TileType.Door)
             {
                 // If a door is placed, next is behind all the doors it is currently behind as well as the newly placed door.
                 behindDoorInfo[next.X, next.Y] |= GetFlagFromColor((tiles.GetTile(pointBetween.X, pointBetween.Y) as DoorTile).SecondarySpriteColor);
             }
         }
-        
+
         /// <summary>
         /// Places a tile between the two points, creating the loop.
         /// </summary>
@@ -190,9 +189,9 @@ namespace MeesGen
             if (Enum.IsDefined(typeof(behindDoorFlags), difference))
             {
                 tileToAdd = new DoorTile();
-                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor((int)Math.Log((int)difference, 2));
-            } 
-            else if (difference != 0 || randomChance(loopHoleChance))
+                (tileToAdd as DoorTile).SecondarySpriteColor = ChooseColor((int)Math.Log((int)difference, 2), false, false);
+            }
+            if ((!Enum.IsDefined(typeof(behindDoorFlags), difference) && difference != 0) || randomChance(loopHoleChance))
             {
                 tileToAdd = new HoleTile();
                 if (randomChance(0.5))

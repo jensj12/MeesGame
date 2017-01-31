@@ -172,11 +172,41 @@ color</value>
   <data name="map_editor" xml:space="preserve">
     <value>Create level</value>
   </data>
+  <data name="mazegen_difficulty_easiest" xml:space="preserve">
+    <value>Easiest</value>
+  </data>
+  <data name="mazegen_difficulty_easy" xml:space="preserve">
+    <value>Easy</value>
+  </data>
+  <data name="mazegen_difficulty_hard" xml:space="preserve">
+    <value>Hard Holes</value>
+  </data>
+  <data name="mazegen_difficulty_hardest" xml:space="preserve">
+    <value>Legendary Ladders</value>
+  </data>
+  <data name="mazegen_difficulty_medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
   <data name="newmaze" xml:space="preserve">
     <value>New</value>
   </data>
   <data name="ok" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="playertype_astar" xml:space="preserve">
+    <value>A*</value>
+  </data>
+  <data name="playertype_floodfill" xml:space="preserve">
+    <value>Flood Fill</value>
+  </data>
+  <data name="playertype_human" xml:space="preserve">
+    <value>Human</value>
+  </data>
+  <data name="playertype_monte_carlo" xml:space="preserve">
+    <value>Monte Carlo</value>
+  </data>
+  <data name="playertype_random" xml:space="preserve">
+    <value>Random walking player</value>
   </data>
   <data name="rows_edit_text" xml:space="preserve">
     <value>rows</value>

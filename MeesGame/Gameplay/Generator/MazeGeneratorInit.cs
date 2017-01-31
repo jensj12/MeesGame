@@ -10,18 +10,16 @@ namespace MeesGen
         private const int DEFAULT_NUM_ROWS = Level.DEFAULT_NUM_ROWS;
         private const int DEFAULT_NUM_COLS = Level.DEFAULT_NUM_COLS;
 
-        private double loopChance = 0;
-        private double loopHoleChance = 0;
-        private double splitChance = 0;
-        private double portalChance = 0;
-        private double doorChance = 0;
         private TileField tiles;
         private Point bestExit;
         private int[,] exitScore;
+        private int bestExitScore;
         private behindDoorFlags[,] behindDoorInfo;
+        private behindDoorFlags[] keyBehindDoorInfo;
         private IList<Point> nodesToDo;
         private int totalNodesToDo;
         private int[] keyNodes;
+        private int[] keyColorOrder;
         private Point start;
         private Point current;
         private Point next;
@@ -32,83 +30,37 @@ namespace MeesGen
         private Tile tileToAdd;
         private int nodesDone;
         private int position;
-        private int numKeys;
-        private int portalScore = 10, firstDoorScore = 50, extraDoorScore = 25;
-        private int keysPlaced, doorsPlaced, portalsPlaced;
-        private int numRows, numCols;
+        private int keysPlaced;
+        private int doorsPlaced;
+        private int portalsPlaced;
 
-        private void InitMazeGen(int numRows, int numCols, int difficulty)
+        private void InitMazeGen(int difficulty)
         {
-            InitialiseVariables(numRows, numCols);
             SetDifficultyParameters(difficulty);
             InitialiseTileField();
+            InitialiseVariables();
             InitialiseKeys();
             InitialiseStart();
-            InitialiseExitSearch();
         }
 
-        private void SetDifficultyParameters(int difficulty)
-        {
-            difficulty = MathHelper.Clamp(difficulty, 1, 5);
-            switch (difficulty)
-            {
-                case 1:
-                    loopChance = 0.04;
-                    loopHoleChance = 0.55;
-                    splitChance = 0.03;
-                    portalChance = 0;
-                    doorChance = 0;
-                    numKeys = 2;
-                    break;
-                case 2:
-                    loopChance = 0.03;
-                    loopHoleChance = 0.6;
-                    splitChance = 0.04;
-                    portalChance = 0.005;
-                    doorChance = 0.01;
-                    numKeys = 3;
-                    break;
-                case 3:
-                    loopChance = 0.025;
-                    loopHoleChance = 0.7;
-                    splitChance = 0.03;
-                    portalChance = 0.01;
-                    doorChance = 0.03;
-                    numKeys = 4;
-                    break;
-                case 4:
-                    loopChance = 0.02;
-                    loopHoleChance = 0.75;
-                    splitChance = 0.03;
-                    portalChance = 0.015;
-                    doorChance = 0.05;
-                    numKeys = 5;
-                    break;
-                case 5:
-                    loopChance = 0.01;
-                    loopHoleChance = 0.9;
-                    splitChance = 0.02;
-                    portalChance = 0.02;
-                    doorChance = 0.08;
-                    numKeys = 6;
-                    break;
-            }
-        }
-
+        /// <summary>
+        /// Make sure the dimensions of the maze are odd and reasonable.
+        /// </summary>
         private void ValidateDimensions()
         {
-            // Make sure the dimensions of the maze are odd and reasonable.
-            numRows = MathHelper.Clamp(numRows, 7, 101);
-            numCols = MathHelper.Clamp(numCols, 7, 101);
+            numRows = MathHelper.Clamp(numRows, 11, 99);
+            numCols = MathHelper.Clamp(numCols, 15, 99);
             if (numRows % 2 == 0) numRows += 1;
             if (numCols % 2 == 0) numCols += 1;
         }
 
+        /// <summary>
+        /// Create a tilefield filled with walls.
+        /// </summary>
         private void InitialiseTileField()
         {
             ValidateDimensions();
 
-            // Create a tilefield filled with walls with the specified dimensions.
             tiles = new TileField(numRows, numCols);
             for (int y = 0; y < tiles.Rows; y++)
             {
@@ -119,10 +71,9 @@ namespace MeesGen
             }
         }
 
-        private void InitialiseVariables(int numRows, int numCols)
+        private void InitialiseVariables()
         {
-            this.numRows = numRows;
-            this.numCols = numCols;
+            // A list of all nodes that still need to be considered. Generator is finished once this is empty.
             nodesToDo = new List<Point>();
 
             // Only place doors after a key has been placed.
@@ -133,11 +84,24 @@ namespace MeesGen
 
             // Makes it 0 in the first iteration.
             nodesDone = -1;
+
+            // The exit will be placed at the hardest to reach tile, so keep an array for that.
+            exitScore = new int[numCols, numRows];
+            bestExitScore = 0;
+
+            // Keep track of which keys are needed to reach a tile or key
+            behindDoorInfo = new behindDoorFlags[numCols, numRows];
+            keyBehindDoorInfo = new behindDoorFlags[6];
         }
 
+        /// <summary>
+        /// Decides at which steps in the generating process keys are placed
+        /// </summary>
         private void InitialiseKeys()
         {
             totalNodesToDo = (tiles.Rows - 1) * (tiles.Columns - 1) / 4;
+            // Portals make the algorithm add two tiles in one loop.
+            totalNodesToDo -= (int)(totalNodesToDo * portalChance);
 
             // Keys are placed in a specified step in the generating process, so first determine which step.
             keyNodes = new int[numKeys];
@@ -145,23 +109,23 @@ namespace MeesGen
             {
                 do
                 {
-                    keyNodes[i] = (random.Next(totalNodesToDo - 1) + random.Next(totalNodesToDo - 1)) / 2 + 1; // Try to get it halfway.
+                    // Try to spread the keys while keeping them away from the exit and start.
+                    keyNodes[i] = ((4 * random.Next(totalNodesToDo - 2) + random.Next(totalNodesToDo - 2)) / 5) + 1;
                 } while (isDuplicate(keyNodes, i)); // Every value has to be different.
             }
+
+            // Make the order of keys random so blue isn't always the first
+            keyColorOrder = getZeroToNInRandomOrder(6);
         }
 
+        /// <summary>
+        /// Pick a random starting point. Add the start tile to the TileField and as entry point for the main algorithm.
+        /// </summary>
         private void InitialiseStart()
         {
-            // Decide a random point to start.
             start = new Point(random.Next(tiles.Columns / 2 - 1) * 2 + 1, random.Next(tiles.Rows / 2 - 1) * 2 + 1);
             nodesToDo.Add(start);
-        }
-
-        private void InitialiseExitSearch()
-        {
-            // The exit will be placed at the hardest to reach tile, so keep an array for that.
-            exitScore = new int[numCols, numRows];
-            behindDoorInfo = new behindDoorFlags[numCols, numRows];
+            tiles.Add(new StartTile(0, "playerstart"), start.X, start.Y);
             bestExit = start;
         }
     }

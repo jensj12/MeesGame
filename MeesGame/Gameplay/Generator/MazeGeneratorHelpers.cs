@@ -20,36 +20,18 @@ namespace MeesGen
         /// <summary>
         /// Returns the behindDoorFlags from the specified color.
         /// </summary>
-        /// <param name="color"> color </param>
-        /// <returns></returns>
+        /// <param name="color"> color to be turned into a flag </param>
         private behindDoorFlags GetFlagFromColor(Color color)
         {
-            //series of if / else if / ... 
-            //because color can not be used in a switch
-            if(color == Color.Blue)
-            {
-                return behindDoorFlags.behindBlue;
-            } else if(color == Color.Cyan)
-            {
-                return behindDoorFlags.behindCyan;
-            }
-            else if (color == Color.Green)
-            {
-                return behindDoorFlags.behindGreen;
-            }
-            else if (color == Color.Magenta)
-            {
-                return behindDoorFlags.behindMagenta;
-            }
-            else if (color == Color.Red)
-            {
-                return behindDoorFlags.behindRed;
-            }
-            else if (color == Color.Yellow)
-            {
-                return behindDoorFlags.behindYellow;
-            }
+            // Color can't be used in a switch, so use if instead
+            if (color == Color.Blue) return behindDoorFlags.behindBlue;
+            if (color == Color.Cyan) return behindDoorFlags.behindCyan;
+            if (color == Color.Green) return behindDoorFlags.behindGreen;
+            if (color == Color.Magenta) return behindDoorFlags.behindMagenta;
+            if (color == Color.Red) return behindDoorFlags.behindRed;
+            if (color == Color.Yellow) return behindDoorFlags.behindYellow;
 
+            // Default
             return behindDoorFlags.behindBlue;
         }
 
@@ -79,17 +61,21 @@ namespace MeesGen
         }
 
         /// <summary>
-        /// Create an array filled with 0-3 in a random order.
+        /// Create an array filled with 0-n in a random order.
         /// </summary>
-        /// <returns>Array containing 0 to 3 in a random order.</returns>
-        private static int[] getZeroToThreeInRandomOrder()
+        /// <returns>Array containing 0 to n in a random order.</returns>
+        private static int[] getZeroToNInRandomOrder(int n)
         {
-            int[] ints = { -1, -1, -1, -1 };
-            for (int i = 0; i < 4; i++)
+            int[] ints = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                ints[i] = -1;
+            }
+            for (int i = 0; i < n; i++)
             {
                 while (true)
                 {
-                    int pos = random.Next(4);
+                    int pos = random.Next(n);
                     if (ints[pos] != -1) continue;
                     ints[pos] = i;
                     break;
@@ -150,12 +136,13 @@ namespace MeesGen
         /// <param name="max"> Maximum int to make sure there are no doors placed for which there is no key. </param>
         /// <param name="randomly"> In case of a door, whether the color of the door may be chosen randomly. </param>
         /// <returns> Color of the door/key </returns>
-        private Color ChooseColor(int max, bool randomly = false)
+        private Color ChooseColor(int max, bool randomly = false, bool applyKeyColorOrder = true)
         {
             if (randomly)
-            {
                 max = random.Next(max);
-            }
+            if (applyKeyColorOrder)
+                max = keyColorOrder[max];
+
             switch (max)
             {
                 case 0:
@@ -195,15 +182,49 @@ namespace MeesGen
         }
 
         /// <summary>
+        /// Updates the score of next according to the current score + extra score, preserving highest.
+        /// </summary>
+        /// <param name="current">Base tile</param>
+        /// <param name="addedScore">Score added to that of the base tile</param>
+        /// <param name="next">Tile that has its score updated</param>
+        private void UpdateBestExitScore(Point current, int addedScore, Point next)
+        {
+            exitScore[next.X, next.Y] = MathHelper.Max(exitScore[next.X, next.Y], exitScore[current.X, current.Y] + addedScore);
+        }
+
+        /// <summary>
         /// Checks if the new exit point is better than the current exit.
         /// </summary>
         private void UpdateBestExit(Point newPoint)
         {
+            // The best exit tile has to be next to the edge of the tilefield, the exit will be placed on the edge next to it.
+            if (!tiles.NearEdgeOfTileField(newPoint.X, newPoint.Y)) return;
+
             // The best exit is the one hardest to reach from the start.
-            // It also has to be next to the edge of the tilefield, it will never be on the edge itself.
-            if (exitScore[newPoint.X, newPoint.Y] > exitScore[bestExit.X, bestExit.Y] && tiles.NearEdgeOfTileField(newPoint.X, newPoint.Y))
+            // Start with the distance from the start tile.
+            int score = exitScore[newPoint.X, newPoint.Y];
+            behindDoorFlags primaryFlags = behindDoorInfo[newPoint.X, newPoint.Y];
+            behindDoorFlags secondaryFlags = primaryFlags;
+
+            // For each door the exit is hidden behind, add the doors the key is hidden behind
+            foreach (behindDoorFlags flag in Enum.GetValues(typeof(behindDoorFlags)))
+            {
+                if ((flag & primaryFlags) != 0)
+                    secondaryFlags |= keyBehindDoorInfo[(int)Math.Log((int)flag, 2)];
+            }
+
+            // Add some points for each required key.
+            foreach (behindDoorFlags flag in Enum.GetValues(typeof(behindDoorFlags)))
+            {
+                if ((flag & secondaryFlags) != 0)
+                    score += doorScore;
+            }
+
+            // Update the best exit if it's better.
+            if (score > bestExitScore)
             {
                 bestExit = newPoint;
+                bestExitScore = score;
             }
         }
 

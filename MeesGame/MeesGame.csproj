@@ -74,6 +74,7 @@
     <Compile Include="Gameplay\GameObjects\Player\ITileFieldPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\Player\UntimedPlayer.cs" />
     <Compile Include="Gameplay\GameObjects\TilesTypes\GuardTile.cs" />
+    <Compile Include="Gameplay\Generator\DifficultySettings.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorHelpers.cs" />
     <Compile Include="Gameplay\Generator\MazeGeneratorMain.cs" />
     <Compile Include="Gameplay\GameStates\SettingsMenuState.cs" />

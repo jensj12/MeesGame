@@ -233,6 +233,51 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Easiest.
+        /// </summary>
+        internal static string mazegen_difficulty_easiest {
+            get {
+                return ResourceManager.GetString("mazegen_difficulty_easiest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy.
+        /// </summary>
+        internal static string mazegen_difficulty_easy {
+            get {
+                return ResourceManager.GetString("mazegen_difficulty_easy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hard Holes.
+        /// </summary>
+        internal static string mazegen_difficulty_hard {
+            get {
+                return ResourceManager.GetString("mazegen_difficulty_hard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legendary Ladders.
+        /// </summary>
+        internal static string mazegen_difficulty_hardest {
+            get {
+                return ResourceManager.GetString("mazegen_difficulty_hardest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        internal static string mazegen_difficulty_medium {
+            get {
+                return ResourceManager.GetString("mazegen_difficulty_medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Main Menu.
         /// </summary>
         internal static string menu {
@@ -251,11 +296,56 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start Level!.
+        ///   Looks up a localized string similar to OK.
         /// </summary>
-        internal static string start {
+        internal static string ok {
             get {
-                return ResourceManager.GetString("start", resourceCulture);
+                return ResourceManager.GetString("ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A*.
+        /// </summary>
+        internal static string playertype_astar {
+            get {
+                return ResourceManager.GetString("playertype_astar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flood Fill.
+        /// </summary>
+        internal static string playertype_floodfill {
+            get {
+                return ResourceManager.GetString("playertype_floodfill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Human.
+        /// </summary>
+        internal static string playertype_human {
+            get {
+                return ResourceManager.GetString("playertype_human", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monte Carlo.
+        /// </summary>
+        internal static string playertype_monte_carlo {
+            get {
+                return ResourceManager.GetString("playertype_monte_carlo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random walking player.
+        /// </summary>
+        internal static string playertype_random {
+            get {
+                return ResourceManager.GetString("playertype_random", resourceCulture);
             }
         }
         
@@ -276,13 +366,12 @@ namespace MeesGame {
                 return ResourceManager.GetString("resolution", resourceCulture);
             }
         }
-
-        /// <summary>		
-        ///   Looks up a localized string similar to rows.		
-        /// </summary>		
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rows.
+        /// </summary>
         internal static string rows_edit_text {
-            get
-            {
+            get {
                 return ResourceManager.GetString("rows_edit_text", resourceCulture);
             }
         }
