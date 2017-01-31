@@ -64,7 +64,12 @@ namespace AI
                 case MeesGame.TileType.Start:
                     return AStarTileType.passable;
                 case MeesGame.TileType.Key:
-                    return AStarTileType.passable;
+                    if (inventoryKeys != null)
+                        foreach (KeyColor key in inventoryKeys)
+                            if ((tile as KeyTile).KeyColor == key)
+                                return AStarTileType.passable;
+                    return AStarTileType.target;
+
                 case MeesGame.TileType.Door:
                     if(inventoryKeys != null)
                         foreach (KeyColor key in inventoryKeys)
@@ -154,11 +159,6 @@ namespace AI
         internal List<AStarTile> OpenTiles;
 
         /// <summary>
-        /// Tiles which contain a key of a color that hasn't been picked up yet.
-        /// </summary>
-        internal HashSet<AStarTile> PotentialKeys;
-
-        /// <summary>
         /// Keys that have been reached while solving this level, and can thus be used as a starting point next level.
         /// </summary>
         internal HashSet<AStarTile> ReachedKeys;
@@ -167,6 +167,11 @@ namespace AI
         /// The finish tile, null if it hasn't been reached yet.
         /// </summary>
         internal AStarTile Finish = null;
+
+        /// <summary>
+        /// AStarLevel that contains the optimal path from this level.
+        /// </summary>
+        internal AStarLevel optimalField = null;
 
         /// <summary>
         /// Tile from which the level started.
@@ -182,23 +187,11 @@ namespace AI
             }
         }
 
-        /// <summary>
-        /// The path that requires the least amount of actions to reach the finish or the next key leading to the finish.
-        /// </summary>
-        public Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>> OptimalPath;
-
-        /// <summary>
-        /// Keys which have been reached while solving the level.
-        /// </summary>
-        private HashSet<KeyColor> obtainedKeys;
-
         public AStarLevel(TileField tileField)
         {
             OpenTiles = new List<AStarTile>();
-            PotentialKeys = new HashSet<AStarTile>();
             ReachedKeys = new HashSet<AStarTile>();
             obtainedKeys = new HashSet<KeyColor>();
-            OptimalPath = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>(HashSet<KeyColor>.CreateSetComparer());
 
             Field = new AStarTile[tileField.Objects.GetLength(0), tileField.Objects.GetLength(1)];
 
@@ -216,8 +209,6 @@ namespace AI
                     else
                         convertedTile = new AStarTile(tileAtLocation);
                     Field[x, y] = convertedTile;
-                    if (tileAtLocation.TileType == TileType.Key)
-                        PotentialKeys.Add(convertedTile);
                 }
             }
         }
@@ -225,10 +216,8 @@ namespace AI
         public AStarLevel(AStarLevel oldField, AStarTile newKey)
         {
             OpenTiles = new List<AStarTile>();
-            PotentialKeys = new HashSet<AStarTile>();
             ReachedKeys = new HashSet<AStarTile>();
             obtainedKeys = new HashSet<KeyColor>();
-            OptimalPath = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>();
 
             Field = new AStarTile[oldField.Field.GetLength(0), oldField.Field.GetLength(1)];
             for (int x = 0; x < Field.GetLength(0); x++)
@@ -237,10 +226,6 @@ namespace AI
 
             Start = Field[newKey.Location.X, newKey.Location.Y];
             Start.Score = newKey.Score;
-
-            foreach (AStarTile key in oldField.PotentialKeys)
-                if (key.Color != newKey.Color)
-                    PotentialKeys.Add(Field[key.Location.X, key.Location.Y]);
 
             foreach (KeyColor key in oldField.obtainedKeys)
                 obtainedKeys.Add(key);
@@ -258,13 +243,7 @@ namespace AI
                 VisitTile(OpenTiles[0]);
             }
 
-            foreach(AStarTile key in PotentialKeys)
-                if (key.PreviousTile != null)
-                    ReachedKeys.Add(key);
-
             HashSet<AStarLevel> innerFields = new HashSet<AStarLevel>();
-
-            AStarLevel optimalField = null;
 
             foreach (AStarTile t in ReachedKeys)
             {
@@ -277,15 +256,26 @@ namespace AI
                     optimalField = newField;
                 }
             }
+        }
 
+        /// <summary>
+        /// Keys which have been reached while solving the level.
+        /// </summary>
+        public HashSet<KeyColor> obtainedKeys;
+
+        /// <summary>
+        /// Inserts the optimal path into a dictionary.
+        /// </summary>
+        /// <param name="path"></param>
+        public void FillPath(Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>> path)
+        {
             if (optimalField != null)
             {
-                OptimalPath.Add(obtainedKeys, CreateOptimalPath(Start, Field[(int)optimalField?.Start.Location.X, (int)optimalField?.Start.Location.Y]));
-                foreach (HashSet<KeyColor> keys in optimalField.OptimalPath.Keys)
-                    OptimalPath.Add(keys, optimalField.OptimalPath[keys]);
+                optimalField.FillPath(path);
+                path.Add(obtainedKeys, CreateOptimalPath(Start, Field[(int)optimalField?.Start.Location.X, (int)optimalField?.Start.Location.Y]));
             }
             else if (Finish != null)
-                OptimalPath.Add(obtainedKeys, CreateOptimalPath(Start, Field[(int)Finish?.Location.X, (int)Finish?.Location.Y]));
+                path.Add(obtainedKeys, CreateOptimalPath(Start, Field[(int)Finish?.Location.X, (int)Finish?.Location.Y]));
         }
 
         /// <summary>
@@ -325,7 +315,7 @@ namespace AI
         /// <param name="startTile">Tile from which the new tile is entered</param>
         /// <param name="dx"></param>
         /// <param name="dy"></param>
-        private void TestTileInDirection(AStarTile startTile, int dx, int dy)
+        private void TestTileInDirection(AStarTile startTile, int dx, int dy, bool specialAction = false)
         {
             if (startTile.Location.X + dx > -1 && startTile.Location.Y + dy > -1 && startTile.Location.X + dx < Field.GetLength(0) && startTile.Location.Y + dy < Field.GetLength(1))
             {
@@ -350,17 +340,15 @@ namespace AI
                             break;
                         case AStarTileType.passable:
                             newTile.Score = startTile.Score + 1;
-                            newTile.SetOldTile(startTile, dx, dy);
+                            if(specialAction)
+                                newTile.SetOldTile(startTile, 0, 0);
+                            else
+                                newTile.SetOldTile(startTile, dx, dy);
                             OpenTiles.Add(newTile);
                             break;
                         case AStarTileType.target:
                             newTile.Score = startTile.Score + 1;
-                            foreach (AStarTile t in PotentialKeys)
-                                if (t.Location == newTile.Location)
-                                {
-                                    ReachedKeys.Add(t);
-                                    break;
-                                }
+                            ReachedKeys.Add(newTile);
                             newTile.SetOldTile(startTile, dx, dy);
                             break;
                         case AStarTileType.portal:
@@ -368,9 +356,8 @@ namespace AI
                             AStarTile destination = Field[newTile.Destination.X, newTile.Destination.Y];
                             if (newTile.Score + 1 < destination.Score)
                             {
-                                destination.Score = newTile.Score + 1;
-                                destination.SetOldTile(newTile, 0, 0);
                                 OpenTiles.Add(destination);
+                                TestTileInDirection(newTile, destination.Location.X - newTile.Location.X, destination.Location.Y - newTile.Location.Y, true);
                             }
                             goto case AStarTileType.passable;
                     }
@@ -423,8 +410,10 @@ namespace AI
         private Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>> FindPath()
         {
             Level = new AStarLevel(player.TileField);
+            Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>> path = new Dictionary<HashSet<KeyColor>, Dictionary<Point, PlayerAction>>(HashSet<KeyColor>.CreateSetComparer());
             Level.SolveLevel();
-            return Level.OptimalPath;
+            Level.FillPath(path);
+            return path;
         }
 
         public void UpdateNextAction()
