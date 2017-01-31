@@ -23,32 +23,6 @@ namespace MeesGame
         }
 
         /// <summary>
-        /// Return the type of the tile on location (x,y).
-        /// </summary>
-        /// <param name="x"> x-coordinate </param>
-        /// <param name="y"> y-coordinate </param>
-        /// <returns> type of the tile on location (x,y)</returns>
-        public TileType GetType(int x, int y)
-        {
-            if (x < 0 || y < 0 || x >= base.Columns || y >= base.Rows)
-            {
-                return TileType.Wall;
-            }
-            Tile tile = Get(x, y) as Tile;
-            return tile.TileType;
-        }
-
-        /// <summary>
-        /// Return the type of the tile on the given location
-        /// </summary>
-        /// <param name="location"> Coordinates </param>
-        /// <returns> Type of the tile on the given location </returns>
-        public TileType GetType(Point location)
-        {
-            return GetType(location.X, location.Y);
-        }
-
-        /// <summary>
         /// Add a tile to the tilefield on location (x,y).
         /// </summary>
         /// <param name="obj"> type of tile to add </param>
@@ -97,13 +71,15 @@ namespace MeesGame
                     if (y < oldGrid.GetLength(1) && x < oldGrid.GetLength(0))
                         grid[x, y] = oldGrid[x, y];
                     else
-                        Add(new FloorTile(), x, y);
+                        Add(new WallTile(), x, y);
                 }
             }
         }
 
+        #region get tile methods
+
         /// <summary>
-        /// Return the tile on the given location.
+        /// Return the tile on the given location. Tile is guaranteed to be valid.
         /// </summary>
         /// <param name="x"> x-coordinate </param>
         /// <param name="y"> y-coordinate </param>
@@ -112,8 +88,46 @@ namespace MeesGame
         {
             if (OutOfTileField(x, y))
                 return new WallTile();
-            return (Tile)Get(x, y);
+            Tile tile = (Tile)Get(x, y);
+            if (tile == null)
+            {
+                tile = new WallTile();
+                Add(tile, x, y);
+            }
+            return tile;
         }
+
+        /// <summary>
+        /// Return the tile on the given location. Tile is guaranteed to be valid.
+        /// </summary>
+        public Tile GetTile(Point location)
+        {
+            return GetTile(location.X, location.Y);
+        }
+
+        /// <summary>
+        /// Return the type of the tile on location (x,y).
+        /// </summary>
+        /// <param name="x"> x-coordinate </param>
+        /// <param name="y"> y-coordinate </param>
+        /// <returns> type of the tile on location (x,y)</returns>
+        public TileType GetType(int x, int y)
+        {
+            Tile tile = GetTile(x, y);
+            return tile.TileType;
+        }
+
+        /// <summary>
+        /// Return the type of the tile on the given location
+        /// </summary>
+        /// <param name="location"> Coordinates </param>
+        /// <returns> Type of the tile on the given location </returns>
+        public TileType GetType(Point location)
+        {
+            return GetType(location.X, location.Y);
+        }
+
+        #endregion
 
         #region tile position methods
 
@@ -173,10 +187,7 @@ namespace MeesGame
 
         #endregion
 
-        public Tile GetTile(Point location)
-        {
-            return GetTile(location.X, location.Y);
-        }
+        #region update tile methods
 
         /// <summary>
         /// Update the graphics of all tiles to match the surroundings.
@@ -185,6 +196,7 @@ namespace MeesGame
         {
             foreach (Tile tile in Objects)
             {
+                if (tile == null) continue;
                 tile.UpdateGraphicsToMatchSurroundings();
             }
         }
@@ -199,7 +211,7 @@ namespace MeesGame
                 for (int y = -1; y < 2; y++)
                 {
                     if (OutOfTileField(location.X + x, location.Y + y)) continue;
-                    (Objects[location.X + x, location.Y + y] as Tile).UpdateGraphicsToMatchSurroundings();
+                    GetTile(location.X + x, location.Y + y).UpdateGraphicsToMatchSurroundings();
                 }
             }
         }
@@ -211,17 +223,24 @@ namespace MeesGame
         {
             foreach (Tile tile in Objects)
             {
+                if (tile == null) continue;
                 tile.UpdateGraphics();
             }
         }
 
+        /// <summary>
+        /// Update the distination of all portal tiles.
+        /// </summary>
         public void UpdatePortals()
         {
             foreach (Tile tile in Objects)
             {
+                if (tile == null) continue;
                 tile.UpdatePortals();
             }
         }
+
+        #endregion
 
         #region reveal area methods
 
@@ -273,7 +292,7 @@ namespace MeesGame
             //check if you're still on the map, while that is the case, vision is not obstructed, 
             //and the distance limit has not been reached reveal the area around the tile.
             if (!OutOfTileField((point.X += direction.X), (point.Y += direction.Y))
-                && !GetTile(point.X, point.Y).ObstructsVision
+                && !GetTile(point).ObstructsVision
                 && limit > 0)
             {
                 // Don't reveal the corners beacuse it looks better.

@@ -89,9 +89,9 @@ namespace AI
             // GuardTile is subclass of HoleTile so this will return for both.
             // Can't use the same for walls because DoorTile is a subclass of WallTile.
             // Can't use doors for which you don't have the key.
-            if (tileField.GetTile(p.X, p.Y) is HoleTile ||
-                tileField.GetType(p.X, p.Y) == TileType.Wall ||
-                (tileField.GetType(p.X, p.Y) == TileType.Door && (keyIndex & keys[(tileField.GetTile(p.X, p.Y) as DoorTile).DoorColor]) == 0))
+            if (tileField.GetTile(p) is HoleTile ||
+                tileField.GetType(p) == TileType.Wall ||
+                (tileField.GetType(p) == TileType.Door && (keyIndex & keys[(tileField.GetTile(p) as DoorTile).DoorColor]) == 0))
                 return;
 
             // The current tile has been visited.
@@ -102,7 +102,7 @@ namespace AI
 
             // If this is the exit, the algorithm is done. 
             // Make sure this is after pushing p to route, otherwise you will stand still before the exit.
-            if (tileField.GetTile(p.X, p.Y).TileType == TileType.End)
+            if (tileField.GetType(p) == TileType.End)
             {
                 exitFound = true;
                 return;
@@ -110,14 +110,14 @@ namespace AI
 
             // Check if the current tile is a keytile,
             // and whether we have already picked up a key of this color.
-            if (tileField.GetTile(p.X, p.Y).TileType == TileType.Key)
+            if (tileField.GetType(p) == TileType.Key)
             {
                 // Add the key to the keyIndex
-                keyIndex |= keys[(tileField.GetTile(p.X, p.Y) as KeyTile).KeyColor];
+                keyIndex |= keys[(tileField.GetTile(p) as KeyTile).KeyColor];
             }
 
             // If we're on an ice tile, we need the sliding direction to see if we can change direction.
-            if (tileField.GetType(p.X, p.Y) == TileType.Ice)
+            if (tileField.GetType(p) == TileType.Ice)
             {
                 // Retrieve the current and previous point in the route.
                 Point current = route.Pop();
@@ -132,7 +132,7 @@ namespace AI
             }
 
             //If you can move onto the tile behind the ice tile, you can't change direction
-            if (tileField.GetType(p.X, p.Y) == TileType.Ice &&
+            if (tileField.GetType(p) == TileType.Ice &&
                 !(tileField.GetTile(p.X + slidingDirection.X, p.Y + slidingDirection.Y) is WallTile))
             {
                 //Only keep going in this direction
@@ -143,7 +143,7 @@ namespace AI
             {
                 foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
                 {
-                    if (action == PlayerAction.SPECIAL && tileField.GetTile(p.X, p.Y).TileType == TileType.Portal)
+                    if (action == PlayerAction.SPECIAL && tileField.GetType(p) == TileType.Portal)
                         Flood((tileField.GetTile(p) as PortalTile).Destination, keyIndex, 0);
                     else if (action.IsDirection())
                     {

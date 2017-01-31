@@ -174,7 +174,7 @@ namespace MeesGen
             if (tiles.GetType(pointBetween) == TileType.Door)
             {
                 // If a door is placed, next is behind all the doors it is currently behind as well as the newly placed door.
-                behindDoorInfo[next.X, next.Y] |= GetFlagFromColor((tiles.GetTile(pointBetween.X, pointBetween.Y) as DoorTile).SecondarySpriteColor);
+                behindDoorInfo[next.X, next.Y] |= GetFlagFromColor((tiles.GetTile(pointBetween) as DoorTile).SecondarySpriteColor);
             }
         }
 
