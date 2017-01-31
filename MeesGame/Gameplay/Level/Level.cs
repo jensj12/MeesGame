@@ -46,23 +46,25 @@ namespace MeesGame
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Camera camera = Find("camera") as Camera;
+            Camera camera = Camera;
             camera.UpdateCamera();
             base.Draw(gameTime, spriteBatch);
             camera.ResetCamera();
         }
 
-        protected void usePlayer(AnimatedMovingGameObject player, int screenWidth = -1, int screenHeight = -1)
+        protected virtual void usePlayer(AnimatedMovingGameObject player)
         {
             this.player = player;
 
-            if (screenWidth == -1) screenWidth = GameEnvironment.Screen.X;
-            if (screenHeight == -1) screenHeight = GameEnvironment.Screen.Y;
-
-            Camera camera = new Camera(new Point(screenWidth, screenHeight), player);
+            Camera camera = new Camera(null, player);
             camera.Add(this.Tiles);
             camera.Add(this.player);
             Add(camera);
+        }
+
+        public Camera Camera
+        {
+            get { return Find("camera") as Camera; }
         }
     }
 }

@@ -13,31 +13,29 @@ namespace MeesGame
 
             MenuContainer.AddChild(new Background(new SpriteSheet("mainMenuOverlay").Sprite));
 
-            MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(10, 715), null, Strings.begin, (UIComponent o) =>
+            SpriteSheetButton begin = new SpriteSheetButton(new DirectionLocation(10, 10, true, false), null, Strings.begin, (UIComponent o) =>
             {
                 ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateLevelExplorer();
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
-            }));
+            });
 
-            //Level Editor button
-            MenuContainer.AddChild(new SpriteSheetButton(new CenteredLocation(-54, 715, true), null, Strings.map_editor, (UIComponent o) =>
-            {
-                GameEnvironment.GameStateManager.SwitchTo("LevelEditorState");
-                //reset the gamestate to open blank;
-                GameEnvironment.GameStateManager.CurrentGameState.Reset();
-            }));
-
-            //Settings button
-            MenuContainer.AddChild(new SpriteSheetButton(new CenteredLocation(359, 715, true), null, Strings.settings, (UIComponent o) =>
+            SpriteSheetButton settings = new SpriteSheetButton(new CombinationLocation(new CenteredLocation(horizontalCenter: true), new DirectionLocation(yOffset: 10, topToBottom: false)), null, Strings.settings, (UIComponent o) =>
             {
                 GameEnvironment.GameStateManager.PreviousGameState = GameEnvironment.GameStateManager.CurrentGameState.ToString();
                 GameEnvironment.GameStateManager.SwitchTo("SettingsMenuState");
-            }));
+            });
 
-            MenuContainer.AddChild(new SpriteSheetButton(new SimpleLocation(1280, 715), null, Strings.exit, (UIComponent o) =>
+            SpriteSheetButton quit = new SpriteSheetButton(new DirectionLocation(10, 10, false, false), null, Strings.exit, (UIComponent o) =>
             {
                 GameEnvironment.Instance.Exit();
-            }));
+            });
+
+            MenuContainer.AddChild(begin);
+
+            //Settings button
+            MenuContainer.AddChild(settings);
+
+            MenuContainer.AddChild(quit);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

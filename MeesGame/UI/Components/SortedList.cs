@@ -141,7 +141,7 @@ namespace MeesGame
             {
                 if (children.Count > 0)
                 {
-                    int childrenHeight = Children[Children.Count - 1].RelativeRectangle.Bottom  + ChildOffset;
+                    int childrenHeight = Children[Children.Count - 1].RelativeRectangle.Bottom + ChildOffset;
                     if (childrenHeight > CachedDimensions.Y)
                     {
                         scrollBar.Visible = true;

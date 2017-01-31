@@ -5,11 +5,13 @@ using System;
 
 public class GameEnvironment : Game
 {
+    public static event EventHandler ScreenChanged;
+
     protected GraphicsDeviceManager graphics;
     protected SpriteBatch spriteBatch;
     protected InputHelper inputHelper;
     protected Matrix spriteScale;
-    protected Point windowSize;
+    protected Point preferredWindowSize;
     protected bool fullScreen;
 
     protected static Point screen;
@@ -30,18 +32,27 @@ public class GameEnvironment : Game
         assetManager = new AssetManager(Content);
         gameSettingsManager = new GameSettingsManager();
         instance = this;
+
+        screen = new Point(1024, 586);
+        preferredWindowSize = screen;
+
+        Window.ClientSizeChanged += OnClientSizeChanged;
     }
 
-    public Point WindowSize
+    public Point PreferedWindowSize
     {
-        get { return windowSize; }
-        set { windowSize = value; }
+        get { return preferredWindowSize; }
+        set { preferredWindowSize = value; }
     }
 
     public static Point Screen
     {
         get { return screen; }
-        set { screen = value; }
+        set
+        {
+            Point minScreenSize = new Point(1440, 825);
+            screen = (value.X < minScreenSize.X || value.Y < minScreenSize.Y) ? minScreenSize : value;
+        }
     }
 
     public static Random Random
@@ -71,7 +82,7 @@ public class GameEnvironment : Game
 
     public bool FullScreen
     {
-        get { return fullScreen; }
+        get { return Window.IsBorderless; }
         set
         {
             ApplyResolutionSettings(value);
@@ -80,40 +91,58 @@ public class GameEnvironment : Game
 
     public void ApplyResolutionSettings(bool fullScreen = false)
     {
-        if (!fullScreen)
+        if (fullScreen)
         {
-            graphics.PreferredBackBufferWidth = windowSize.X;
-            graphics.PreferredBackBufferHeight = windowSize.Y;
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            Screen = new Point(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            graphics.PreferredBackBufferWidth = screen.X;
+            graphics.PreferredBackBufferHeight = screen.Y;
+
+            Window.Position = Point.Zero;
         }
         else
         {
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
+            Screen = PreferedWindowSize;
+            graphics.PreferredBackBufferWidth = preferredWindowSize.X;
+            graphics.PreferredBackBufferHeight = preferredWindowSize.Y;
+
+
+            Point windowPosition = new Point();
+            windowPosition.X = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2 - preferredWindowSize.X / 2;
+            windowPosition.Y = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2 - preferredWindowSize.Y / 2;
+            Window.Position = windowPosition;
         }
-        float targetAspectRatio = (float)screen.X / (float)screen.Y;
-        int width = graphics.PreferredBackBufferWidth;
-        int height = (int)(width / targetAspectRatio);
-        if (height > graphics.PreferredBackBufferHeight)
-        {
-            height = graphics.PreferredBackBufferHeight;
-            width = (int)(height * targetAspectRatio);
-        }
+
+        Window.IsBorderless = fullScreen;
+
 
         Viewport viewport = new Viewport();
-        viewport.X = (graphics.PreferredBackBufferWidth / 2) - (width / 2);
-        viewport.Y = (graphics.PreferredBackBufferHeight / 2) - (height / 2);
-        viewport.Width = width;
-        viewport.Height = height;
+        viewport.Width = Screen.X;
+        viewport.Height = Screen.Y;
         GraphicsDevice.Viewport = viewport;
 
-        inputHelper.Scale = new Vector2((float)GraphicsDevice.Viewport.Width / screen.X,
-                                        (float)GraphicsDevice.Viewport.Height / screen.Y);
-        inputHelper.Offset = new Vector2(viewport.X, viewport.Y);
-        spriteScale = Matrix.CreateScale(inputHelper.Scale.X, inputHelper.Scale.Y, 1);
+        graphics.ApplyChanges();
+
+        ScreenChanged?.Invoke(this, null);
+    }
+
+    public void OnClientSizeChanged(object sender, EventArgs args)
+    {
+        if (screen != Point.Zero)
+        {
+            Vector2 scale = GetScale();
+
+            inputHelper.Scale = scale;
+            inputHelper.Offset = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+
+            spriteScale = Matrix.CreateScale(scale.X, scale.Y, 1.0f);
+        }
+    }
+
+    public Vector2 GetScale()
+    {
+        float scaleX = (float)Window.ClientBounds.Width / Screen.X;
+        float scaleY = (float)Window.ClientBounds.Height / Screen.Y;
+        return new Vector2(scaleX, scaleY);
     }
 
     protected override void LoadContent()
