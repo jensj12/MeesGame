@@ -123,7 +123,7 @@ namespace AI
         /// </summary>
         public AStarTile Clone
         {
-            get { return new AStarTile(Location, TileType, Kills); }
+            get { return new AStarTile(Location, TileType, Kills, Destination); }
         }
     }
 
