@@ -53,7 +53,7 @@ namespace MeesGame
             obj.Dispose();
         }
 
-        public void UpdateBounds()
+        public void RefreshCachedBounds()
         {
             for (int i = 0; i < children.Count; i++)
                 children[i].RefreshCachedBounds();

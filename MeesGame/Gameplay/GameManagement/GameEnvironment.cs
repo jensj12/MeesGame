@@ -10,6 +10,7 @@ public class GameEnvironment : Game
     protected InputHelper inputHelper;
     protected Matrix spriteScale;
     protected Point windowSize;
+    protected bool fullScreen;
 
     protected static Point screen;
     protected static GameStateManager gameStateManager;
@@ -70,7 +71,7 @@ public class GameEnvironment : Game
 
     public bool FullScreen
     {
-        get { return graphics.IsFullScreen; }
+        get { return fullScreen; }
         set
         {
             ApplyResolutionSettings(value);

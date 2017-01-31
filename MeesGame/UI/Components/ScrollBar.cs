@@ -45,21 +45,21 @@ namespace MeesGame
 
         public override void HandleInput(InputHelper inputHelper)
         {
-            if (!Visible) return;
+            base.HandleInput(inputHelper);
+
             //Use the input if it isn't used already and is hovering over the scrollbar.
-            if (!InputUsed && AbsoluteRectangle.Contains(inputHelper.MousePosition))
+            if (MouseHovering)
             {
-                Parent.InputUser = this;
+                InputUser = this;
                 //If we press the mouse button on the scrollbar we start dragging.
-                if (inputHelper.MouseLeftButtonDown() && AbsoluteScrollbarRectangle.Contains(inputHelper.MousePosition))
+                if (MouseDown && AbsoluteScrollbarRectangle.Contains(inputHelper.MousePosition))
                 {
                     mouseStartDragLocation = inputHelper.MousePosition.ToPoint();
                     scollBeforeDrag = ScrollDistance;
-                    beingDragged = true;
-                    PermanentInvalid = true;
+                    BeingDragged = true;
                 }
             }
-            else if (beingDragged)
+            else if (BeingDragged)
             {
                 Invalidate();
                 if (inputHelper.MouseLeftButtonDown())
@@ -68,7 +68,7 @@ namespace MeesGame
                 }
                 else
                 {
-                    beingDragged = false;
+                    BeingDragged = false;
                     PermanentInvalid = false;
                 }
             }
@@ -78,8 +78,24 @@ namespace MeesGame
         {
             get
             {
-                //If we are dragging we want to keep using the input.
-                return beingDragged;
+                //If we are dragging or hovering we want to keep using the input.
+                return BeingDragged || MouseHovering;
+            }
+        }
+
+        public override void RefreshCachedBounds()
+        {
+            base.RefreshCachedBounds();
+            Visible = ((SortedList)Parent).IsScrollbarVisible;
+        }
+
+        public bool BeingDragged
+        {
+            get { return beingDragged; }
+            set
+            {
+                PermanentInvalid = value;
+                beingDragged = value;
             }
         }
 
@@ -151,11 +167,6 @@ namespace MeesGame
                     return CachedDimensions.Y;
                 return (int)(CachedDimensions.Y * CachedDimensions.Y / (float)((SortedList)Parent).HeightWhenExpanded);
             }
-        }
-
-        public bool BeingDragged
-        {
-            get { return beingDragged; }
         }
     }
 }

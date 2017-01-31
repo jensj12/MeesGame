@@ -108,6 +108,12 @@ namespace MeesGame
             }
         }
 
+        public override void RefreshCachedBounds()
+        {
+            base.RefreshCachedBounds();
+            scrollBar.RefreshCachedBounds();
+        }
+
         /// <summary>
         /// Distance from the parent at which the children should be drawn.
         /// </summary>
@@ -135,16 +141,25 @@ namespace MeesGame
             {
                 if (children.Count > 0)
                 {
-                    int childrenHeight = Children[Children.Count - 1].RelativeRectangle.Bottom - Children[0].RelativeRectangle.Top;
+                    int childrenHeight = Children[Children.Count - 1].RelativeRectangle.Bottom  + ChildOffset;
                     if (childrenHeight > CachedDimensions.Y)
                     {
                         scrollBar.Visible = true;
                         return childrenHeight;
-
                     }
                 }
                 scrollBar.Visible = false;
                 return CachedDimensions.Y;
+            }
+        }
+
+        public bool IsScrollbarVisible
+        {
+            get
+            {
+                if (HeightWhenExpanded > CachedDimensions.Y)
+                    return true;
+                return false;
             }
         }
 

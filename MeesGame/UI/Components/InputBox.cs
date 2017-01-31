@@ -90,8 +90,11 @@ namespace MeesGame
             get { return selected; }
             set
             {
-                selected = value;
-                PermanentInvalid = value;
+                if(selected != value)
+                {
+                    selected = value;
+                    PermanentInvalid = value;
+                }
             }
         }
 

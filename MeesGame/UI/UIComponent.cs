@@ -135,12 +135,17 @@ namespace MeesGame
         /// <summary>
         /// Refreshes the bounds of the UIComponent and it's children and it's component's bounds.
         /// </summary>
-        public void RefreshCachedBounds()
+        public virtual void RefreshCachedBounds()
         {
-            cachedDimensions = CurrentDimensions;
+            Point newDimensions = CurrentDimensions;
+            if(newDimensions != cachedDimensions)
+            {
+                Invalidate();
+                cachedDimensions = newDimensions;
+            }
             cachedLocation = CurrentRelativeLocation;
-            children.UpdateBounds();
-            constantComponents.UpdateBounds();
+            children.RefreshCachedBounds();
+            constantComponents.RefreshCachedBounds();
         }
 
         /// <summary>
@@ -157,7 +162,7 @@ namespace MeesGame
         /// <param name="inputHelper"></param>
         public virtual void HandleInput(InputHelper inputHelper)
         {
-            if (InputUser?.WantsToUseInput == false)
+            if (InputUser == this && !WantsToUseInput)
             {
                 InputUser = null;
             }
@@ -166,41 +171,38 @@ namespace MeesGame
 
             constantComponents.HandleInput(inputHelper);
 
-            if (!Visible)
+            if (!Visible || !CanUseInput)
             {
                 MouseHovering = MouseDown = MouseClicked = false;
                 return;
             }
 
-            if (!InputUsed)
-            {
-                //unnecessary changes to the input properties is prevented to avoid repeatedly calling the InputPropertieChanged() method.
+            //unnecessary changes to the input properties is prevented to avoid repeatedly calling the InputPropertieChanged() method.
+            InterpretInput(inputHelper);
+        }
 
-                if (AbsoluteRectangle.Contains(inputHelper.MousePosition))
-                {
-                    MouseHovering = true;
-                    if (inputHelper.MouseLeftButtonDown())
-                        MouseDown = true;
-                    else
-                        MouseDown = false;
-                    if (inputHelper.MouseLeftButtonPressed())
-                    {
-                        MouseClicked = true;
-                        InputUser = this;
-                        InvokeClickEvent();
-                    }
-                    else
-                        MouseClicked = false;
-                }
-                else
-                    MouseHovering = false;
-            }
-            else
+        protected virtual void InterpretInput(InputHelper inputHelper)
+        {
+            bool mouseHovering = false;
+            bool mouseDown = false;
+            bool mouseClicked = false;
+
+            if (AbsoluteRectangle.Contains(inputHelper.MousePosition))
             {
-                MouseHovering = false;
-                MouseDown = false;
-                MouseClicked = false;
+                mouseHovering = true;
+                if (inputHelper.MouseLeftButtonDown())
+                    mouseDown = true;
+                if (inputHelper.MouseLeftButtonPressed())
+                {
+                    mouseClicked = true;
+                    InputUser = this;
+                    InvokeClickEvent();
+                }
             }
+
+            MouseHovering = mouseHovering;
+            MouseDown = mouseDown;
+            MouseClicked = mouseClicked;
         }
 
         public void InvokeClickEvent(UIComponent component = null)
@@ -233,7 +235,7 @@ namespace MeesGame
         {
             if (!Visible) return;
 
-            //Starts the uiSpritebatch if it hadn't been started already and draws the component through a texture to the screen, again to prevent graphical glitches.
+            //Starts the uiSpritebatch if it hadn't been started already and draws the component through a texture to the screen to prevent graphical glitches.
             if (!uiSpriteBatchBegun)
             {
                 RefreshCachedBounds();
@@ -385,10 +387,13 @@ namespace MeesGame
             get { return permanentInvalid; }
             set
             {
-                permanentInvalid = value;
-                if (value == false)
-                    Invalidate();
-                Parent?.UpdatePermanentInvalidProperty();
+                if (permanentInvalid != value)
+                {
+                    if (value == false)
+                        Invalidate();
+                    permanentInvalid = value;
+                    Parent?.UpdatePermanentInvalidProperty();
+                }
             }
         }
 
@@ -419,6 +424,7 @@ namespace MeesGame
         /// </summary>
         public void Invalidate()
         {
+            if (!invalid)
             {
                 invalid = true;
                 if (Parent != null)
@@ -560,10 +566,11 @@ namespace MeesGame
             }
             set
             {
-                if (Parent == null)
-                    inputUser = value;
-                else
-                    Parent.InputUser = value;
+                if(InputUser == null || value == null)
+                    if (Parent == null)
+                        inputUser = value;
+                    else
+                        Parent.InputUser = value;
             }
         }
 
@@ -576,9 +583,9 @@ namespace MeesGame
         /// <summary>
         /// If the input is already in use by another UIComponent
         /// </summary>
-        public bool InputUsed
+        public bool CanUseInput
         {
-            get { return !(InputUser == null || inputUser == this || ContainsComponent(InputUser)); }
+            get { return InputUser == null || inputUser == this || ContainsComponent(InputUser); }
         }
 
         public bool ContainsComponent(UIComponent component)

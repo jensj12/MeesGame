@@ -20,12 +20,19 @@ namespace MeesGame
 
         public override void DrawTask(GameTime gameTime, SpriteBatch spriteBatch, Vector2 anchorPoint)
         {
-            if (CurrentTexture == null || CurrentTexture.Bounds.Size != CachedDimensions)
-            {
-                CurrentTexture?.Dispose();
-                CurrentTexture = Utility.EdgeTexture(CachedDimensions.X, CachedDimensions.Y, edgeThickness, edgeColor, innerColor);
-            }
+            CurrentTexture?.Dispose();
+            CurrentTexture = Utility.EdgeTexture(CachedDimensions.X, CachedDimensions.Y, edgeThickness, edgeColor, innerColor);
             base.DrawTask(gameTime, spriteBatch, anchorPoint);
+        }
+
+        public Color? EdgeColor
+        {
+            get { return edgeColor; }
+            set
+            {
+                edgeColor = value;
+                Invalidate();
+            }
         }
     }
 }

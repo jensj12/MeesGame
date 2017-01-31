@@ -1,7 +1,6 @@
 ﻿using MeesGame.UI;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MeesGame
 {
@@ -45,6 +44,9 @@ namespace MeesGame
             }
             if ((button.MouseClicked || MouseClicked) && !Selected && radioGroup != null)
             {
+                //Make the click sound even if the button wasn't clicked.
+                if(!button.MouseClicked)
+                    Button.InvokeClickEvent(this);
                 foreach(RadioButton radioButton in radioGroup)
                 {
                     radioButton.Selected = false;

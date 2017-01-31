@@ -172,32 +172,30 @@ namespace MeesGame
         public void HandleInput(InputHelper inputHelper)
         {
             //prevents the player from moving when the newlevelbox is visible.
-            if (newLevelBox.Visible)
-            {
-                newLevelBox.HandleInput(inputHelper);
-            }
-            else
-            {
+            if (!newLevelBox.Visible)
                 level.HandleInput(inputHelper);
-                overlay.HandleInput(inputHelper);
+            else if (inputHelper.MouseLeftButtonPressed() && !newLevelBox.AbsoluteRectangle.Contains(inputHelper.MousePosition))
+                newLevelBox.Visible = false;
 
-                //When space is pressed, we set a tile
-                if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+
+            overlay.HandleInput(inputHelper);
+
+            //When space is pressed, we set a tile
+            if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+            {
+                if (tileTypeList[selectedTileIndex] == TileType.Start)
                 {
-                    if (tileTypeList[selectedTileIndex] == TileType.Start)
+                    if (level.Tiles.UpdateStart())
                     {
-                        if (level.Tiles.UpdateStart())
-                        {
-                            return;
-                        }
+                        return;
                     }
-                    Point playerLocation = level.Player.Location;
-                    Tile CurrentTile = Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]);
-                    level.Tiles.Add(CurrentTile, playerLocation.X, playerLocation.Y);
-                    //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
-                    level.Tiles.UpdateGraphicsToMatchSurroundings(playerLocation);
-                    CurrentTileChanged(level.Tiles.GetTile(playerLocation));
                 }
+                Point playerLocation = level.Player.Location;
+                Tile CurrentTile = Tile.CreateTileFromTileType(tileTypeList[selectedTileIndex]);
+                level.Tiles.Add(CurrentTile, playerLocation.X, playerLocation.Y);
+                //We need to update the tile graphics, otherwise we might see wrongly displayed tiles (such as not connected wall tiles)
+                level.Tiles.UpdateGraphicsToMatchSurroundings(playerLocation);
+                CurrentTileChanged(level.Tiles.GetTile(playerLocation));
             }
         }
 
