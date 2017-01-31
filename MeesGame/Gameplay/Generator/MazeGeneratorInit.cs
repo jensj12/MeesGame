@@ -115,7 +115,7 @@ namespace MeesGen
             }
 
             // Make the order of keys random so blue isn't always the first
-            keyColorOrder = getZeroToNInRandomOrder(6);
+            keyColorOrder = Helpers.getZeroToNInRandomOrder(6);
         }
 
         /// <summary>

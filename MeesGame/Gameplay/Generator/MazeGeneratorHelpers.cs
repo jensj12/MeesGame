@@ -60,30 +60,6 @@ namespace MeesGen
             list[pos2] = save;
         }
 
-        /// <summary>
-        /// Create an array filled with 0-n in a random order.
-        /// </summary>
-        /// <returns>Array containing 0 to n in a random order.</returns>
-        private static int[] getZeroToNInRandomOrder(int n)
-        {
-            int[] ints = new int[n];
-            for (int i = 0; i < n; i++)
-            {
-                ints[i] = -1;
-            }
-            for (int i = 0; i < n; i++)
-            {
-                while (true)
-                {
-                    int pos = random.Next(n);
-                    if (ints[pos] != -1) continue;
-                    ints[pos] = i;
-                    break;
-                }
-            }
-            return ints;
-        }
-
         private static Random random
         {
             get { return GameEnvironment.Random; }

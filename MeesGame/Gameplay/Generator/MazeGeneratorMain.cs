@@ -32,7 +32,7 @@ namespace MeesGen
                 current = nodesToDo[position];
 
                 // Make an arrray and fill it with 0-3 in a random order.
-                int[] possible = getZeroToNInRandomOrder(4);
+                int[] possible = Helpers.getZeroToNInRandomOrder(4);
 
                 // Set randomNext to true, it gets set to false if we can extend the hallway
                 didAddHallway = false;

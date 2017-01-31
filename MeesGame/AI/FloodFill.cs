@@ -141,16 +141,18 @@ namespace AI
             // Otherwise we can move in all directions.
             else
             {
-                foreach (PlayerAction action in Enum.GetValues(typeof(PlayerAction)))
+                PlayerAction[] action = getActionsInRandomOrder();
+
+                for (int i = 0; i < 5; i++)
                 {
-                    if (action == PlayerAction.SPECIAL && tileField.GetType(p) == TileType.Portal)
+                    if (action[i] == PlayerAction.SPECIAL && tileField.GetType(p) == TileType.Portal)
                         Flood((tileField.GetTile(p) as PortalTile).Destination, keyIndex, 0);
-                    else if (action.IsDirection())
+                    else if (action[i].IsDirection())
                     {
                         // Obstacles are checked earlier in Flood() so we only need to check whether the new point is in the tilefield.
-                        if (!tileField.OutOfTileField(p + action.ToDirection().ToPoint()))
+                        if (!tileField.OutOfTileField(p + action[i].ToDirection().ToPoint()))
                         {
-                            Flood(p + action.ToDirection().ToPoint(), keyIndex, 0);
+                            Flood(p + action[i].ToDirection().ToPoint(), keyIndex, 0);
                         }
                     }
                 }
@@ -207,6 +209,24 @@ namespace AI
 
             // Default for error message.
             return Direction.NORTH;
+        }
+
+        /// <summary>
+        /// Returns the PlayerActions in a random order.
+        /// </summary>
+        /// <returns> PlayerAction[5] in a random order </returns>
+        private static PlayerAction[] getActionsInRandomOrder()
+        {
+            PlayerAction[] actions = { PlayerAction.NORTH, PlayerAction.SOUTH, PlayerAction.EAST, PlayerAction.WEST, PlayerAction.SPECIAL };
+            PlayerAction[] result = new PlayerAction[5];
+            int[] random = Helpers.getZeroToNInRandomOrder(5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                result[i] = actions[random[i]];
+            }
+
+            return result;
         }
     }
 }
