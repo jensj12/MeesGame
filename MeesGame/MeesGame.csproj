@@ -137,6 +137,7 @@
     <Compile Include="UI\Properties\Location\CombinationLocation.cs" />
     <Compile Include="UI\Properties\Location\DirectionLocation.cs" />
     <Compile Include="UI\Properties\Location\RelativeToLocation.cs" />
+    <Compile Include="UI\Properties\Location\SharedLocation.cs" />
     <Compile Include="UI\Properties\Location\SimpleLocation.cs" />
     <Compile Include="UI\Components\ScrollBar.cs" />
     <Compile Include="UI\TextureRenderer.cs" />

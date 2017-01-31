@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MeesGame
 {
@@ -13,26 +14,45 @@ namespace MeesGame
 
             MenuContainer.AddChild(new Background(new SpriteSheet("mainMenuOverlay").Sprite));
 
-            SpriteSheetButton begin = new SpriteSheetButton(new DirectionLocation(10, 10, true, false), null, Strings.begin, (UIComponent o) =>
+            List<UIComponent> buttons = new List<UIComponent>();
+
+            CombinationLocation buttonLocation = new CombinationLocation(new SharedLocation(buttons, -40, 0), new DirectionLocation(yOffset: 10, topToBottom: false));
+
+            SpriteSheetButton begin = new SpriteSheetButton(buttonLocation, null, Strings.begin, (UIComponent o) =>
             {
                 ((LoadMenuState)GameEnvironment.GameStateManager.GetGameState("LoadMenuState")).UpdateLevelExplorer();
                 GameEnvironment.GameStateManager.SwitchTo("LoadMenuState");
             });
 
-            SpriteSheetButton settings = new SpriteSheetButton(new CombinationLocation(new CenteredLocation(horizontalCenter: true), new DirectionLocation(yOffset: 10, topToBottom: false)), null, Strings.settings, (UIComponent o) =>
+            SpriteSheetButton createLevel = new SpriteSheetButton(buttonLocation, null, Strings.map_editor, (UIComponent o) =>
+            {
+                GameEnvironment.GameStateManager.SwitchTo("LevelEditorState");
+                //reset the gamestate to open blank;		
+                GameEnvironment.GameStateManager.CurrentGameState.Reset();
+            });
+
+            SpriteSheetButton settings = new SpriteSheetButton(buttonLocation, null, Strings.settings, (UIComponent o) =>
             {
                 GameEnvironment.GameStateManager.PreviousGameState = GameEnvironment.GameStateManager.CurrentGameState.ToString();
                 GameEnvironment.GameStateManager.SwitchTo("SettingsMenuState");
             });
 
-            SpriteSheetButton quit = new SpriteSheetButton(new DirectionLocation(10, 10, false, false), null, Strings.exit, (UIComponent o) =>
+            SpriteSheetButton quit = new SpriteSheetButton(buttonLocation, null, Strings.exit, (UIComponent o) =>
             {
                 GameEnvironment.Instance.Exit();
             });
 
+            buttons.Add(begin);
+            buttons.Add(createLevel);
+            buttons.Add(settings);
+            buttons.Add(quit);
+
+
+            //Level Editor button;
             MenuContainer.AddChild(begin);
 
-            //Settings button
+            MenuContainer.AddChild(createLevel);
+
             MenuContainer.AddChild(settings);
 
             MenuContainer.AddChild(quit);
