@@ -96,7 +96,10 @@ namespace MeesGame
         /// <param name="player">The player at this Tile that wants to perform the action</param>
         /// <param name="action">The action to check</param>
         /// <returns>true if the action is forbidden by this Tile. false otherwise.</returns>
-        public abstract bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action);
+        public virtual bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
+        {
+            return action == PlayerAction.SPECIAL || !TileField.GetTile(GetLocationAfterAction(action)).CanPlayerMoveHere(player);
+        }
 
         /// <summary>
         /// Checks if the player can move to this tile when he is next to it.
@@ -181,7 +184,7 @@ namespace MeesGame
         /// <summary>
         /// Updates the graphics of the tile to match the surroundings, should be called after every change in the TileField.
         /// </summary>
-        public abstract void UpdateGraphicsToMatchSurroundings();
+        public virtual void UpdateGraphicsToMatchSurroundings() { }
 
         /// <summary>
         /// Updates the information of the portals to set the destination after a special action.
@@ -233,9 +236,7 @@ namespace MeesGame
             return new FloorTile();
         }
 
-        public virtual void EnterTile(ITileFieldPlayer player)
-        {
-        }
+        public virtual void EnterTile(ITileFieldPlayer player) { }
 
         public static Tile CreateTileFromTileData(TileData data)
         {
@@ -288,7 +289,7 @@ namespace MeesGame
         /// <summary>
         /// Updates the graphics of the tile according to things happening while playing.
         /// </summary>
-        public abstract void UpdateGraphics();
+        public virtual void UpdateGraphics() { }
 
         public virtual void UpdateToAdditionalInfo() { }
 

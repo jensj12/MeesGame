@@ -89,5 +89,15 @@ namespace MeesGame
             }
             throw new NotImplementedException();
         }
+
+        public static bool IsVertical(this Direction direction)
+        {
+            return direction == Direction.NORTH || direction == Direction.SOUTH;
+        }
+
+        public static bool IsHorizontal(this Direction direction)
+        {
+            return !direction.IsVertical();
+        }
     }
 }

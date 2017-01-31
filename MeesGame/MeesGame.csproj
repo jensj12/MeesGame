@@ -214,24 +214,11 @@
     <Content Include="Gameplay\Content\verticalDoorOverlay.png" />
     <Content Include="Gameplay\Content\verticalEnd.png" />
     <Content Include="Gameplay\Content\walls%4016.png" />
-    <Content Include="Content\levels\Demo.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\levels\01 Introduction.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\levels\02 Danger.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\levels\03 All together.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\levels\04 Prison.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\levels\05 All%401ce.lvl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\levels\Demo.lvl" />
+    <Content Include="Content\levels\01 Introduction.lvl" />
+    <Content Include="Content\levels\02 Danger.lvl" />
+    <Content Include="Content\levels\04 Prison.lvl" />
+    <Content Include="Content\levels\05 All%401ce.lvl" />
     <Content Include="PlayerIcon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -279,8 +266,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release "C:\Program Files (x86)\NSIS\makensis.exe" $(ProjectDir)\Installer.nsi
-</PostBuildEvent>
+    <PostBuildEvent>if exist "$(ProjectDir)\bin\Windows\x86\Release\Install The A-Maze-ing Escape.exe" del "$(ProjectDir)\bin\Windows\x86\Release\Install The A-Maze-ing Escape.exe"
+if $(ConfigurationName) == Release "C:\Program Files (x86)\NSIS\makensis.exe" "$(ProjectDir)\Installer.nsi"
+mkdir "%25appdata%25\TheAMazeIngEscape\levels"
+xcopy "$(ProjectDir)\Content\levels" "%25appdata%25/TheAMazeIngEscape/levels" /E /Y /I /H</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

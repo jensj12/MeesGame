@@ -49,8 +49,7 @@ namespace MeesGame
             //check if the directory for levels exists and if not create it
             //for now it reads  (and creates) \MeesGame\bin\Windows\x86\Debug\Content\levels
             //the reading does work, you can check by adding a .lvl (left column) or a .ai (right column) to the \levels directory. Just make sure it isn't a txt file
-            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "\\levels";
-            DirectoryInfo info = Directory.CreateDirectory(directory);
+            string directory = FileIO.LEVEL_DIRECTORY;
 
             menuContainer = new UIComponent(SimpleLocation.Zero, null);
 

@@ -39,6 +39,10 @@ Section "The A-Maze-ing Escape (required)"
   
   ; Put file there
   File /r "bin\Windows\x86\Release\*"
+
+  SetOutPath "$APPDATA\TheAMazeIngEscape\levels"
+
+  File /r "Content\levels\*"
   
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\TheAMazeIngEscape "Install_Dir" "$INSTDIR"
@@ -74,5 +78,6 @@ Section "Uninstall"
   ; Remove directories used
   RMDir /r "$SMPROGRAMS\The A-Maze-ing Escape"
   RMDir /r "$INSTDIR"
+  RMDir /r "$APPDATA\TheAMazeIngEscape"
 
 SectionEnd

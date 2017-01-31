@@ -15,18 +15,5 @@
             //A player is allowed to move onto floors
             return true;
         }
-
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
-        {
-            return action == PlayerAction.SPECIAL || !TileField.GetTile(GetLocationAfterAction(action)).CanPlayerMoveHere(player);
-        }
-
-        public override void UpdateGraphicsToMatchSurroundings()
-        {
-        }
-
-        public override void UpdateGraphics()
-        {
-        }
     }
 }

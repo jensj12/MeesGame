@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.ComponentModel;
 using static MeesGame.PlayerAction;
+using System;
 
 namespace MeesGame
 {
@@ -31,51 +32,41 @@ namespace MeesGame
             }
         }
 
+        private bool IsComingFromAllowedDirection(ITileFieldPlayer player)
+        {
+            if (isHorizontal)
+                // A player is allowed to move onto a horizontalDoor from the tile above or below it.
+                return player.Location.X == Location.X;
+            else
+                // A player is allowed to move onto a verticalDoor from the Tile to the left or to the right of it.
+                return player.Location.Y == Location.Y;
+        }
+
         public override bool CanPlayerMoveHere(ITileFieldPlayer player)
         {
-            // A player is allowed to move onto a horizontalDoor from the tile above or below it.
-            // A player is allowed to move onto a verticalDoor from the Tile to the left or to the right of it.
-            if ((isHorizontal && player.Location.X == Location.X) || (!isHorizontal && player.Location.Y == Location.Y))
-            {
-                //A player is allowed to move onto a door tile if the door is open.
-                if (CanMoveOntoDoor(player))
-                    return true;
-                else
-                    return false;
-            }
-            else return false;
+            //A player is allowed to move onto a door tile if he comes from the correct direction and 
+            //the door is open.
+            return IsComingFromAllowedDirection(player) && IsDoorOpenFor(player);
         }
 
         public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
         {
-            //A player can only move back to where he came from or into the opposite direction
-            if (action == EAST || action == WEST)
-            {
-                if (player.LastAction == EAST || player.LastAction == WEST)
-                    return false;
-                else
-                    return true;
-            }
-            else if (action == NORTH || action == SOUTH)
-            {
-                if (player.LastAction == NORTH || player.LastAction == SOUTH)
-                    return false;
-                else
-                    return true;
-            }
+            // only directional actions are allowed
+            if (!action.IsDirection()) return true;
+
+            //A player can move only in the directions that the door allows
+            if (isHorizontal)
+                //on horizontal doors only vertical actions are allowed
+                return !action.ToDirection().IsVertical() || base.IsActionForbiddenFromHere(player, action);
             else
-                return true;
+                //on vertical doors only horizontal actions are allowed
+                return !action.ToDirection().IsHorizontal() || base.IsActionForbiddenFromHere(player, action);
         }
 
-        public bool CanMoveOntoDoor(ITileFieldPlayer player)
+        public bool IsDoorOpenFor(ITileFieldPlayer player)
         {
             //A player is only allowed to open a door if he has the right key.
-            if (player.HasItem(doorColor.ToInventeryItemType()))
-            {
-                return true;
-            }
-            else
-                return false;
+            return player.HasItem(doorColor.ToInventeryItemType());
         }
 
         public override void EnterTile(ITileFieldPlayer player)

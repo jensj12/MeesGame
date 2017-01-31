@@ -9,15 +9,18 @@ namespace MeesGame
     static class FileIO
     {
         /// <summary>
-        /// Shows a Dialog to select a file location for saving
+        /// The directory from which levels are saved / loaded by default
+        /// </summary>
+        public static string LEVEL_DIRECTORY = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\TheAMazeIngEscape\\levels";
+
+        /// <summary>
+        /// Shows a Dialog to select a file location for saving a level
         /// </summary>
         /// <returns>The selected file name. Null if the dialog is cancelled by the user.</returns>
         public static string ShowSaveFileDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
-            DirectoryInfo info = Directory.CreateDirectory(directory);
-            saveFileDialog.InitialDirectory = info.FullName;
+            saveFileDialog.InitialDirectory = Directory.CreateDirectory(LEVEL_DIRECTORY).FullName;
             saveFileDialog.Filter = Strings.file_dialog_filter_lvl;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 return saveFileDialog.FileName;
@@ -28,29 +31,37 @@ namespace MeesGame
         /// <summary>
         /// Saves the level to a file with the specified name.
         /// </summary>
-        /// <param name="level"> The level being saved. </param>
-        public static void Save(TileField tilefield)
+        /// <param name="tileField">The level being saved.</param>
+        /// <param name="fileName">The file to save to.</param>
+        public static void Save(TileField tileField, string fileName)
         {
-            string fileName = ShowSaveFileDialog();
-            if (fileName != null)
+            try
             {
-                try
-                {
-                    using (Stream stream = new FileStream(fileName, FileMode.Create))
-                    using (XmlWriter writer = XmlWriter.Create(stream))
-                        new XmlSerializer(typeof(LevelData)).Serialize(writer, new LevelData(tilefield));
-                }
-                catch (IOException e)
-                {
-                    MessageBox.Show(Strings.save_file_error_with_comment + e.Message);
-                }
+                using (Stream stream = new FileStream(fileName, FileMode.Create))
+                using (XmlWriter writer = XmlWriter.Create(stream))
+                    new XmlSerializer(typeof(LevelData)).Serialize(writer, new LevelData(tileField));
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show(Strings.save_file_error_with_comment + e.Message);
             }
         }
 
         /// <summary>
-        /// Loads a level from a file with the specified name.
-        /// <param name = "filename"> The name of the file the level is being loaded from. </param>
+        /// Shows a file dialog to choose a file to which the tileField will be saved.
         /// </summary>
+        /// <param name="tileField"> The level being saved. </param>
+        public static void Save(TileField tileField)
+        {
+            string fileName = ShowSaveFileDialog();
+            if (fileName != null)
+                Save(tileField, fileName);
+        }
+
+        /// <summary>
+        /// Loads a level from a file with the specified name.
+        /// </summary>
+        /// <param name="filename"> The name of the file the level is being loaded from. </param>
         public static LevelData Load(string filename)
         {
             try

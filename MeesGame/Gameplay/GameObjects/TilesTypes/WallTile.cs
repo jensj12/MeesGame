@@ -18,12 +18,9 @@
             return false;
         }
 
-        public override bool IsActionForbiddenFromHere(ITileFieldPlayer player, PlayerAction action)
-        {
-            //A player should never even be on a Wall Tile
-            return true;
-        }
-
+        /// <summary>
+        /// Update the graphics of the walls so adjacent wall tiles look like they are connected.
+        /// </summary>
         public override void UpdateGraphicsToMatchSurroundings()
         {
             int sheetIndex = 0;
@@ -35,10 +32,6 @@
             if (tileField.GetTile(x, y + 1) is WallTile) sheetIndex += 4;
             if (tileField.GetTile(x - 1, y) is WallTile) sheetIndex += 8;
             sprite = new SpriteSheet(GetAssetNamesFromTileType(TileType.Wall)[0], sheetIndex);
-        }
-
-        public override void UpdateGraphics()
-        {
         }
 
         public override bool StopsSliding
