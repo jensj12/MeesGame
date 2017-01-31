@@ -43,7 +43,6 @@ namespace MeesGame
 
         private Button startButton;
         private Button randomButton;
-        private Button editorButton;
 
         public LoadMenuState()
         {
@@ -65,18 +64,10 @@ namespace MeesGame
                 BeginLevel();
             });
 
-            editorButton = new SpriteSheetButton(new CenteredLocation(0, 25, true, false), null, Strings.map_editor, (UIComponent o) =>
-            {
-                GameEnvironment.GameStateManager.SwitchTo("EditorState");
-                //reset the gamestate to open blank;
-                GameEnvironment.GameStateManager.CurrentGameState.Reset();
-            });
-
             centerContainer.AddChild(levelExplorer);
             centerContainer.AddChild(levelSettings);
             menuContainer.AddChild(centerContainer);
             menuContainer.AddChild(startButton);
-            menuContainer.AddChild(editorButton);
 
             InitializeLevelSettingsMenu();
         }

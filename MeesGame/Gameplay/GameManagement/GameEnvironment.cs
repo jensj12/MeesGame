@@ -29,7 +29,6 @@ public class GameEnvironment : Game
         assetManager = new AssetManager(Content);
         gameSettingsManager = new GameSettingsManager();
         instance = this;
-        windowSize = new Point(1024, 586);  //windowSize is moved here so it can be changed (for the settings menu)
     }
 
     public Point WindowSize

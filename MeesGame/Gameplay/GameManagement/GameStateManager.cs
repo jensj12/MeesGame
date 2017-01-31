@@ -27,6 +27,8 @@ public class GameStateManager : IGameLoopObject
 
     public void SwitchTo(string name)
     {
+        name = name.Replace("MeesGame.", "");
+
         if (gameStates.ContainsKey(name))
         {
             currentGameState = gameStates[name];
@@ -53,9 +55,19 @@ public class GameStateManager : IGameLoopObject
 
     public void HandleInput(InputHelper inputHelper)
     {
+        //If P is pressed, and you're not currently in the settings menu, the settings menu will be opened, 
+        //and the gamestate where you came from will be stored for potential use
         if (inputHelper.KeyPressed(Keys.P))
         {
-            SwitchTo("SettingsMenuState");
+            if (currentGameState.ToString() == "MeesGame.SettingsMenuState")
+            {
+                SwitchTo(previousGameState);
+            }
+            else
+            {
+                previousGameState = currentGameState.ToString();
+                SwitchTo("SettingsMenuState");
+            }
         }
         if (inputHelper.KeyPressed(Keys.Escape))
         {

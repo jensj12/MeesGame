@@ -61,7 +61,25 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Begin game.
+        ///   Looks up a localized string similar to - Use the Arrow Keys.
+        /// </summary>
+        internal static string arrows {
+            get {
+                return ResourceManager.GetString("arrows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        internal static string back {
+            get {
+                return ResourceManager.GetString("back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play Game.
         /// </summary>
         internal static string begin {
             get {
@@ -98,16 +116,16 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default.
+        ///   Looks up a localized string similar to Controls:.
         /// </summary>
-        internal static string def {
+        internal static string controls {
             get {
-                return ResourceManager.GetString("def", resourceCulture);
+                return ResourceManager.GetString("controls", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quit Game.
+        ///   Looks up a localized string similar to Quit.
         /// </summary>
         internal static string exit {
             get {
@@ -134,38 +152,11 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1080p (Full HD).
-        /// </summary>
-        internal static string full_hd {
-            get {
-                return ResourceManager.GetString("full_hd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fullscreen.
-        /// </summary>
-        internal static string fullscreen {
-            get {
-                return ResourceManager.GetString("fullscreen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Generate random maze.
         /// </summary>
         internal static string generate_random_maze {
             get {
                 return ResourceManager.GetString("generate_random_maze", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 720p (HD).
-        /// </summary>
-        internal static string hd {
-            get {
-                return ResourceManager.GetString("hd", resourceCulture);
             }
         }
         
@@ -224,7 +215,7 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create level.
+        ///   Looks up a localized string similar to Level Editor.
         /// </summary>
         internal static string map_editor {
             get {
@@ -287,6 +278,15 @@ namespace MeesGame {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to to move.
+        /// </summary>
+        internal static string move {
+            get {
+                return ResourceManager.GetString("move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         internal static string newmaze {
@@ -301,6 +301,15 @@ namespace MeesGame {
         internal static string ok {
             get {
                 return ResourceManager.GetString("ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Press P to acces the.
+        /// </summary>
+        internal static string p {
+            get {
+                return ResourceManager.GetString("p", resourceCulture);
             }
         }
         
@@ -350,11 +359,11 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1440p (Quad HD).
+        ///   Looks up a localized string similar to Quit Game.
         /// </summary>
-        internal static string qhd {
+        internal static string quit {
             get {
-                return ResourceManager.GetString("qhd", resourceCulture);
+                return ResourceManager.GetString("quit", resourceCulture);
             }
         }
         
@@ -404,11 +413,29 @@ namespace MeesGame {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2160p (Ultra HD).
+        ///   Looks up a localized string similar to Settings Menu.
         /// </summary>
-        internal static string uhd {
+        internal static string settingsmenu {
             get {
-                return ResourceManager.GetString("uhd", resourceCulture);
+                return ResourceManager.GetString("settingsmenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Press Spacebar to.
+        /// </summary>
+        internal static string space {
+            get {
+                return ResourceManager.GetString("space", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to perform a special action.
+        /// </summary>
+        internal static string specialaction {
+            get {
+                return ResourceManager.GetString("specialaction", resourceCulture);
             }
         }
         

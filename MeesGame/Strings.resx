@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="begin" xml:space="preserve">
-    <value>Begin game</value>
+    <value>Play Game</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -131,16 +131,10 @@ color</value>
     <value>columns</value>
   </data>
   <data name="exit" xml:space="preserve">
-    <value>Quit Game</value>
+    <value>Quit</value>
   </data>
   <data name="fow" xml:space="preserve">
     <value>Fog of War</value>
-  </data>
-  <data name="fullscreen" xml:space="preserve">
-    <value>Fullscreen</value>
-  </data>
-  <data name="full_hd" xml:space="preserve">
-    <value>1080p (Full HD)</value>
   </data>
   <data name="file_dialog_filter_lvl" xml:space="preserve">
     <value>Level files| *.lvl</value>
@@ -150,9 +144,6 @@ color</value>
   </data>
   <data name="index_picker_text" xml:space="preserve">
     <value>Choose an index</value>
-  </data>
-  <data name="hd" xml:space="preserve">
-    <value>720p (HD)</value>
   </data>
   <data name="level_complete" xml:space="preserve">
     <value>Level complete</value>
@@ -170,7 +161,7 @@ color</value>
     <value>An error occurred trying to load the level: </value>
   </data>
   <data name="map_editor" xml:space="preserve">
-    <value>Create level</value>
+    <value>Level Editor</value>
   </data>
   <data name="mazegen_difficulty_easiest" xml:space="preserve">
     <value>Easiest</value>
@@ -220,25 +211,43 @@ color</value>
   <data name="menu" xml:space="preserve">
     <value>Main Menu</value>
   </data>
-  <data name="qhd" xml:space="preserve">
-    <value>1440p (Quad HD)</value>
-  </data>
   <data name="resolution" xml:space="preserve">
     <value>Set custom resolution</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="uhd" xml:space="preserve">
-    <value>2160p (Ultra HD)</value>
-  </data>
   <data name="victory" xml:space="preserve">
     <value>Victory!</value>
   </data>
-  <data name="def" xml:space="preserve">
-    <value>Default</value>
-  </data>
   <data name="volume" xml:space="preserve">
     <value>Volume Level</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="quit" xml:space="preserve">
+    <value>Quit Game</value>
+  </data>
+  <data name="arrows" xml:space="preserve">
+    <value>- Use the Arrow Keys</value>
+  </data>
+  <data name="controls" xml:space="preserve">
+    <value>Controls:</value>
+  </data>
+  <data name="move" xml:space="preserve">
+    <value>to move</value>
+  </data>
+  <data name="p" xml:space="preserve">
+    <value>- Press P to acces the</value>
+  </data>
+  <data name="settingsmenu" xml:space="preserve">
+    <value>Settings Menu</value>
+  </data>
+  <data name="space" xml:space="preserve">
+    <value>- Press Spacebar to</value>
+  </data>
+  <data name="specialaction" xml:space="preserve">
+    <value>perform a special action</value>
   </data>
 </root>
