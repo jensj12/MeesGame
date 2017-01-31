@@ -138,7 +138,7 @@ namespace MeesGame
         public virtual void RefreshCachedBounds()
         {
             Point newDimensions = CurrentDimensions;
-            if(newDimensions != cachedDimensions)
+            if (newDimensions != cachedDimensions)
             {
                 Invalidate();
                 cachedDimensions = newDimensions;
@@ -566,7 +566,7 @@ namespace MeesGame
             }
             set
             {
-                if(InputUser == null || value == null)
+                if (InputUser == null || value == null)
                     if (Parent == null)
                         inputUser = value;
                     else

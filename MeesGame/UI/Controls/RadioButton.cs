@@ -14,7 +14,7 @@ namespace MeesGame
 
         private Textbox textbox;
 
-        public RadioButton(Location location, string text = "", List<RadioButton> radioGroup = null, OnClickEventHandler onClick = null) : base(location, null) 
+        public RadioButton(Location location, string text = "", List<RadioButton> radioGroup = null, OnClickEventHandler onClick = null) : base(location, null)
         {
             Dimensions = WrapperDimensions.All;
 
@@ -38,9 +38,9 @@ namespace MeesGame
             if ((button.MouseClicked || MouseClicked) && !Selected && radioGroup != null)
             {
                 //Make the click sound even if the button wasn't clicked.
-                if(!button.MouseClicked)
+                if (!button.MouseClicked)
                     Button.InvokeClickEvent(this);
-                foreach(RadioButton radioButton in radioGroup)
+                foreach (RadioButton radioButton in radioGroup)
                 {
                     radioButton.Selected = false;
                 }

@@ -6,7 +6,7 @@ namespace MeesGame
     {
         private const string tileFieldName = "editorTiles";
 
-        public EditorLevel(TileField tileField, int levelindex = 0, int screenWidth = -1, int screenHeight = -1)
+        public EditorLevel(TileField tileField, int levelindex = 0, Point? screenSize = null)
         {
             start = new Point(1, 1);
             numRows = tileField.Rows;
@@ -14,7 +14,9 @@ namespace MeesGame
             Tiles = tileField;
             Tiles.UpdateGraphicsToMatchSurroundings();
             Tiles.FogOfWar = false;
-            usePlayer(new EditorPlayer(this, start), screenWidth, screenHeight);
+            usePlayer(new EditorPlayer(this, start));
+
+            Camera.SetScreenSize(screenSize);
         }
 
         public static void FillWithEmptyTiles(TileField tf)

@@ -28,6 +28,19 @@ namespace MeesGame
                 return null;
         }
 
+        public static LevelData ShowLoadFileDialog()
+        {
+            OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            DirectoryInfo info = Directory.CreateDirectory(LEVEL_DIRECTORY);
+            openFileDialog.InitialDirectory = info.FullName;
+            openFileDialog.Filter = Strings.file_dialog_filter_lvl;
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                return Load(openFileDialog.FileName);
+            }
+            else return null;
+        }
+
         /// <summary>
         /// Saves the level to a file with the specified name.
         /// </summary>

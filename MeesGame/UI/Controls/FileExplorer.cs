@@ -13,7 +13,7 @@ namespace MeesGame
         /// <summary>
         /// Distance between each of the buttons in the file explorer.
         /// </summary>
-        private const int DistanceBetweenChildren = 20;
+        private const int DISTANCE_BETWEEN_CHILDREN = 20;
 
         /// <summary>
         /// The files with the extension "EG. .txt" the fileExplorer shows.
@@ -42,7 +42,7 @@ namespace MeesGame
         /// <param name="dimensions"></param>
         /// <param name="fileExtension">Extension the file explorer looks for, for example .txt</param>
         /// <param name="path">path of the folder the files are located in</param>
-        public FileExplorer(Location location = null, Dimensions dimensions = null, string fileExtension = "", string path = "", Background background = null) : base(location, dimensions, DistanceBetweenChildren: DistanceBetweenChildren)
+        public FileExplorer(Location location = null, Dimensions dimensions = null, string fileExtension = "", string path = "", Background background = null) : base(location, dimensions, DistanceBetweenChildren: DISTANCE_BETWEEN_CHILDREN)
         {
             Background uiBackground = background ?? new Background(Utility.SolidWhiteTexture, Utility.DrawingColorToXNAColor(DefaultUIValues.Default.FileExplorerBackground));
 

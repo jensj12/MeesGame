@@ -52,6 +52,8 @@ namespace MeesGame
         /// </summary>
         public LevelEditorState()
         {
+            GameEnvironment.ScreenChanged += OnScreenSizeChanged;
+
             InitLevel();
 
             InitUI();
@@ -73,7 +75,7 @@ namespace MeesGame
             if (tf == null) tf = CreateTileField();
 
             //Resize and reposition the level to prevent it from overlapping with the controls
-            level = new EditorLevel(tf, 0, GameEnvironment.Screen.X - (TILES_LIST_WIDTH + PROPERTIES_LIST_WIDTH), GameEnvironment.Screen.Y);
+            level = new EditorLevel(tf, 0, VisibleLevelArea);
             level.Position += new Vector2(TILES_LIST_WIDTH, 0);
             level.Player.OnMove += PlayerMoved;
         }
@@ -95,14 +97,14 @@ namespace MeesGame
         private void InitUI()
         {
             overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
-            tilesList = new SortedList(SimpleLocation.Zero, new SimpleDimensions(TILES_LIST_WIDTH, GameEnvironment.Screen.Y));
+            tilesList = new SortedList(SimpleLocation.Zero, new InheritDimensions(false, true, TILES_LIST_WIDTH));
             tilePropertiesList = new SortedList(new DirectionLocation(leftToRight: false), new InheritDimensions(false, true, PROPERTIES_LIST_WIDTH));
-            saveLevel = new SpriteSheetButton(new DirectionLocation(20, 720, false), null, Strings.save, SaveLevel);
-            loadLevel = new SpriteSheetButton(new DirectionLocation(20, 600, false), null, Strings.load, LoadLevel);
-            newLevel = new SpriteSheetButton(new DirectionLocation(20, 480, false), null, Strings.newmaze, (UIComponent component) =>
+            newLevel = new SpriteSheetButton(new DirectionLocation(10, 230, false, false), null, Strings.newmaze, (UIComponent component) =>
             {
                 newLevelBox.Visible = true;
             });
+            loadLevel = new SpriteSheetButton(new CombinationLocation(new DirectionLocation(10, 0, false), new RelativeToLocation(newLevel, yOffset: 10, relativeToTop: false)), null, Strings.load, LoadLevel);
+            saveLevel = new SpriteSheetButton(new CombinationLocation(new DirectionLocation(10, 0, false), new RelativeToLocation(loadLevel, yOffset: 10, relativeToTop: false)), null, Strings.save, SaveLevel);
 
             InitNewLevelBox();
 
@@ -127,16 +129,8 @@ namespace MeesGame
         {
             try
             {
-                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-                string directory = GameEnvironment.AssetManager.Content.RootDirectory + "/levels";
-                DirectoryInfo info = Directory.CreateDirectory(directory);
-                openFileDialog.InitialDirectory = info.FullName;
-                openFileDialog.Filter = Strings.file_dialog_filter_lvl;
-                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    InitLevel(FileIO.Load(openFileDialog.FileName));
-                    PlayerMoved(level.Player);
-                }
+                InitLevel(FileIO.ShowLoadFileDialog());
+                PlayerMoved(level.Player);
             }
             catch (Exception) { }
         }
@@ -218,6 +212,19 @@ namespace MeesGame
         {
             level.Update(gameTime);
             overlay.Update(gameTime);
+        }
+
+        public void OnScreenSizeChanged(object o, EventArgs args)
+        {
+            level.Camera.SetScreenSize(VisibleLevelArea);
+        }
+
+        /// <summary>
+        /// Returns the dimensions which fill the visible level.
+        /// </summary>
+        private Point VisibleLevelArea
+        {
+            get { return new Point(GameEnvironment.Screen.X - (TILES_LIST_WIDTH + PROPERTIES_LIST_WIDTH), GameEnvironment.Screen.Y); }
         }
 
         /// <summary>
