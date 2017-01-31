@@ -124,12 +124,15 @@ public class GameEnvironment : Game
 
     protected void HandleInput()
     {
-        inputHelper.Update();
-        if (inputHelper.KeyPressed(Keys.F5))
+        if (IsActive)
         {
-            FullScreen = !FullScreen;
+            inputHelper.Update();
+            if (inputHelper.KeyPressed(Keys.F5))
+            {
+                FullScreen = !FullScreen;
+            }
+            gameStateManager.HandleInput(inputHelper);
         }
-        gameStateManager.HandleInput(inputHelper);
     }
 
     protected override void Update(GameTime gameTime)
