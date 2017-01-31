@@ -9,13 +9,13 @@ namespace AI
     {
         public static int SCOREMULTIPLIER = 100;
 
-        private Node entryPoint;
         private MeesGame.IAIPlayer AIplayer;
         private MeesGame.IPlayer player;
         private Point startLocation;
         private bool[,] visited;
         private Point gridSize;
         private Node[,] nodeGrid;
+        private MeesGame.PlayerAction actionToDo = NONE;
 
         /// <summary>
         /// At the end of the treesearch, the nodes in the nodestack will have their score updated.
@@ -71,9 +71,9 @@ namespace AI
 
         private void Reset()
         {
-            entryPoint = new Node(AIplayer.DummyPlayer.Location);
             visited = new bool[gridSize.X, gridSize.Y];
             nodeGrid = new Node[gridSize.X, gridSize.Y];
+            nodeGrid[startLocation.X, startLocation.Y] = new Node(startLocation);
         }
 
         /// <summary>
@@ -81,32 +81,31 @@ namespace AI
         /// </summary>
         public void UpdateNextAction()
         {
-            player = AIplayer.DummyPlayer;
-
-            visited[player.Location.X, player.Location.Y] = true;
-
-            MeesGame.PlayerAction action = NONE;
-            foreach (NodeActionPair NAP in entryPoint.next)
-            {
-                if (NAP.Value.maxScore > entryPoint.maxScore)
-                {
-                    action = NAP.Key;
-                    entryPoint = NAP.Value;
-                    if (!AIplayer.DummyPlayer.PossibleActions.Contains(action)) breakpoint();
-                    break;
-                }
-            }
-            AIplayer.NextAIAction = action;
-            return;
+            AIplayer.NextAIAction = actionToDo;
+            actionToDo = NONE;
         }
 
         public void ThinkAboutNextAction()
         {
+            if (actionToDo != NONE) return;
+
             player = AIplayer.DummyPlayer;
 
             visited[player.Location.X, player.Location.Y] = true;
 
             BuildTree(BUILDTREEPERACTION);
+
+            // Decide next action
+            MeesGame.PlayerAction action = NONE;
+            foreach (NodeActionPair NAP in entryPoint.next)
+            {
+                if (NAP.Value.maxScore > entryPoint.maxScore && AIplayer.DummyPlayer.PossibleActions.Contains(action))
+                {
+                    action = NAP.Key;
+                    break;
+                }
+            }
+            actionToDo = action;
         }
 
         /// <summary>
@@ -154,6 +153,7 @@ namespace AI
             Node curNode = entryPoint;
             nodeStack = new Stack<Node>();
             nodeStack.Push(curNode);
+            MeesGame.PlayerAction lastAction = NONE;
 
             while (iterations < MAXITERATIONS)
             {
@@ -172,6 +172,7 @@ namespace AI
                     curNode.maxScore = getScore(curLoc);
                     break;
                 }
+                lastAction = chosenAction;
             }
 
             //max number of iterations reached, or broken out of the loop
@@ -192,7 +193,6 @@ namespace AI
             {
                 if (NAP.Key == usedAction)
                 {
-                    if (NAP.Value.location != nextLocation) breakpoint();
                     return NAP.Value;
                 }
             }
@@ -250,9 +250,9 @@ namespace AI
             }
         }
 
-        private void breakpoint()
+        private Node entryPoint
         {
-            return;
+            get { return nodeGrid[player.Location.X, player.Location.Y]; }
         }
     }
 
