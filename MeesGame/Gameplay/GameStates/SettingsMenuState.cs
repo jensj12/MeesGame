@@ -15,8 +15,11 @@ namespace MeesGame
         {
             overlay = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
 
-            slider = new Slider(new SimpleLocation(0, 75), new InheritDimensions(false, false, 500, 50));
-            textbox = new Textbox(new SimpleLocation(25, 0), InheritDimensions.All, Strings.volume);
+            //Add the background for the menu
+            overlay.AddChild(new Background(new SpriteSheet("settingsScreenOverlay").Sprite));
+
+            slider = new Slider(new SimpleLocation(0, 275), new InheritDimensions(false, false, 500, 50));
+            textbox = new Textbox(new SimpleLocation(25, 200), InheritDimensions.All, Strings.volume);
             controls = new UIComponent(SimpleLocation.Zero, InheritDimensions.All);
 
             overlay.AddChild(slider);
@@ -24,31 +27,31 @@ namespace MeesGame
             overlay.AddChild(controls);
 
             //Button for returning to the titlemenu
-            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 120), null, Strings.menu, (UIComponent o) =>
+            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 320), null, Strings.menu, (UIComponent o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState");
             }));
 
             //Button for quitting the game
-            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 230), null, Strings.quit, (UIComponent o) =>
+            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 430), null, Strings.quit, (UIComponent o) =>
             {
                 GameEnvironment.Instance.Exit();
             }));
 
             //Button for returning to the previous gamestate
-            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 340), null, Strings.back, (UIComponent o) =>
+            overlay.AddChild(new SpriteSheetButton(new SimpleLocation(25, 540), null, Strings.back, (UIComponent o) =>
             {
                 GameEnvironment.GameStateManager.SwitchTo(GameEnvironment.GameStateManager.PreviousGameState);
             }));
 
             //Adds the lines of text for the controls guide
-            controls.AddChild(new Textbox(new SimpleLocation(576, 0), InheritDimensions.All, Strings.controls));
-            controls.AddChild(new Textbox(new SimpleLocation(580, 75), InheritDimensions.All, Strings.arrows));
-            controls.AddChild(new Textbox(new SimpleLocation(626, 150), InheritDimensions.All, Strings.move));
-            controls.AddChild(new Textbox(new SimpleLocation(580, 225), InheritDimensions.All, Strings.space));
-            controls.AddChild(new Textbox(new SimpleLocation(626, 300), InheritDimensions.All, Strings.specialaction));
-            controls.AddChild(new Textbox(new SimpleLocation(580, 375), InheritDimensions.All, Strings.p));
-            controls.AddChild(new Textbox(new SimpleLocation(626, 450), InheritDimensions.All, Strings.settingsmenu));
+            controls.AddChild(new Textbox(new SimpleLocation(576, 200), InheritDimensions.All, Strings.controls));
+            controls.AddChild(new Textbox(new SimpleLocation(580, 275), InheritDimensions.All, Strings.arrows));
+            controls.AddChild(new Textbox(new SimpleLocation(626, 350), InheritDimensions.All, Strings.move));
+            controls.AddChild(new Textbox(new SimpleLocation(580, 425), InheritDimensions.All, Strings.space));
+            controls.AddChild(new Textbox(new SimpleLocation(626, 500), InheritDimensions.All, Strings.specialaction));
+            controls.AddChild(new Textbox(new SimpleLocation(580, 575), InheritDimensions.All, Strings.p));
+            controls.AddChild(new Textbox(new SimpleLocation(626, 650), InheritDimensions.All, Strings.settingsmenu));
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

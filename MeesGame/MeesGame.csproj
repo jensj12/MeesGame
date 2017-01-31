@@ -206,6 +206,7 @@
     <Content Include="Gameplay\Content\money.png" />
     <Content Include="Gameplay\Content\open_door.wav" />
     <Content Include="Gameplay\Content\player%404x4.png" />
+    <Content Include="Gameplay\Content\settingsScreenOverlay.png" />
     <Content Include="Gameplay\Content\start.png" />
     <Content Include="Gameplay\Content\scream.wav" />
     <Content Include="Gameplay\Content\Theme_Song.wav" />
