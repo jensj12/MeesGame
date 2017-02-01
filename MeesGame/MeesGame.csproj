@@ -218,8 +218,12 @@
     <Content Include="Content\levels\Demo.lvl" />
     <Content Include="Content\levels\01 Introduction.lvl" />
     <Content Include="Content\levels\02 Danger.lvl" />
+	<Content Include="Content\levels\03 All together.lvl" />
     <Content Include="Content\levels\04 Prison.lvl" />
     <Content Include="Content\levels\05 All%401ce.lvl" />
+	<Content Include="Content\levels\06 Giant labyrinth.lvl" />
+	<Content Include="Content\levels\Wet floors.lvl" />
+	<Content Include="Content\levels\Dangerous depths.lvl" />
     <Content Include="PlayerIcon.ico" />
   </ItemGroup>
   <ItemGroup>
