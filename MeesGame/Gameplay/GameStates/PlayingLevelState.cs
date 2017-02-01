@@ -82,7 +82,7 @@ namespace MeesGame
             UIComponent gameOverStateOverlay = ((GameEnvironment.GameStateManager.GetGameState("GameOverState") as GameOverState) as GameOverState).Overlay;
             gameOverStateOverlay.AddChild(new Background(new SpriteSheet(backgroundName).Sprite));
             //add the child to the overlay of the GameOverState here because you need the currrentstate.
-            gameOverStateOverlay.AddChild(new SpriteSheetButton(new SimpleLocation(600, 600), null, currentState.ToString(), (UIComponent o) =>
+            gameOverStateOverlay.AddChild(new SpriteSheetButton(new CenteredLocation(0, 200, true, true), null, currentState.ToString(), (UIComponent o) =>
                 GameEnvironment.GameStateManager.SwitchTo("TitleMenuState")));
             GameEnvironment.GameStateManager.SwitchTo("GameOverState");
         }
